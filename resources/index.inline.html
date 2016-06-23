@@ -1,0 +1,736 @@
+<!-- Emails use the XHTML Strict doctype -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" style="background: #f9f9f9; font-family: Domine-Regular, Georgia, serif;">
+<head>
+  <!-- The character set should be utf-8 -->
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <!-- Enables media queries -->
+  <meta name="viewport" content="width=device-width">
+  <!-- Link to the email's CSS, which will be inlined into the email -->
+  <style>
+@media only screen {
+  html {
+    min-height: 100%;
+    background: #f3f3f3;
+  }
+}
+
+
+@media only screen and (max-width: 596px) {
+  .small-float-center {
+    margin: 0 auto !important;
+    float: none !important;
+    text-align: center !important;
+  }
+  .small-text-center {
+    text-align: center !important;
+  }
+  .small-text-left {
+    text-align: left !important;
+  }
+  .small-text-right {
+    text-align: right !important;
+  }
+}
+
+
+@media only screen and (max-width: 596px) {
+  table.body table.container .hide-for-large {
+    display: block !important;
+    width: auto !important;
+    overflow: visible !important;
+  }
+}
+
+
+@media only screen and (max-width: 596px) {
+  table.body table.container .row.hide-for-large,
+  table.body table.container .row.hide-for-large {
+    display: table !important;
+    width: 100% !important;
+  }
+}
+
+
+@media only screen and (max-width: 596px) {
+  table.body table.container .show-for-large {
+    display: none !important;
+    width: 0;
+    mso-hide: all;
+    overflow: hidden;
+  }
+}
+
+
+@media only screen and (max-width: 596px) {
+  table.body img {
+    width: auto !important;
+    height: auto !important;
+  }
+  table.body center {
+    min-width: 0 !important;
+  }
+  table.body .container {
+    width: 95% !important;
+  }
+  table.body .columns,
+  table.body .column {
+    height: auto !important;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  table.body .columns .column,
+    table.body .columns .columns,
+    table.body .column .column,
+    table.body .column .columns {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  table.body .collapse .columns,
+  table.body .collapse .column {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  td.small-1,
+  th.small-1 {
+    display: inline-block !important;
+    width: 8.33333% !important;
+  }
+  td.small-2,
+  th.small-2 {
+    display: inline-block !important;
+    width: 16.66667% !important;
+  }
+  td.small-3,
+  th.small-3 {
+    display: inline-block !important;
+    width: 25% !important;
+  }
+  td.small-4,
+  th.small-4 {
+    display: inline-block !important;
+    width: 33.33333% !important;
+  }
+  td.small-5,
+  th.small-5 {
+    display: inline-block !important;
+    width: 41.66667% !important;
+  }
+  td.small-6,
+  th.small-6 {
+    display: inline-block !important;
+    width: 50% !important;
+  }
+  td.small-7,
+  th.small-7 {
+    display: inline-block !important;
+    width: 58.33333% !important;
+  }
+  td.small-8,
+  th.small-8 {
+    display: inline-block !important;
+    width: 66.66667% !important;
+  }
+  td.small-9,
+  th.small-9 {
+    display: inline-block !important;
+    width: 75% !important;
+  }
+  td.small-10,
+  th.small-10 {
+    display: inline-block !important;
+    width: 83.33333% !important;
+  }
+  td.small-11,
+  th.small-11 {
+    display: inline-block !important;
+    width: 91.66667% !important;
+  }
+  td.small-12,
+  th.small-12 {
+    display: inline-block !important;
+    width: 100% !important;
+  }
+  .columns td.small-12,
+  .column td.small-12,
+  .columns th.small-12,
+  .column th.small-12 {
+    display: block !important;
+    width: 100% !important;
+  }
+  table.body td.small-offset-1,
+  table.body th.small-offset-1 {
+    margin-left: 8.33333% !important;
+    Margin-left: 8.33333% !important;
+  }
+  table.body td.small-offset-2,
+  table.body th.small-offset-2 {
+    margin-left: 16.66667% !important;
+    Margin-left: 16.66667% !important;
+  }
+  table.body td.small-offset-3,
+  table.body th.small-offset-3 {
+    margin-left: 25% !important;
+    Margin-left: 25% !important;
+  }
+  table.body td.small-offset-4,
+  table.body th.small-offset-4 {
+    margin-left: 33.33333% !important;
+    Margin-left: 33.33333% !important;
+  }
+  table.body td.small-offset-5,
+  table.body th.small-offset-5 {
+    margin-left: 41.66667% !important;
+    Margin-left: 41.66667% !important;
+  }
+  table.body td.small-offset-6,
+  table.body th.small-offset-6 {
+    margin-left: 50% !important;
+    Margin-left: 50% !important;
+  }
+  table.body td.small-offset-7,
+  table.body th.small-offset-7 {
+    margin-left: 58.33333% !important;
+    Margin-left: 58.33333% !important;
+  }
+  table.body td.small-offset-8,
+  table.body th.small-offset-8 {
+    margin-left: 66.66667% !important;
+    Margin-left: 66.66667% !important;
+  }
+  table.body td.small-offset-9,
+  table.body th.small-offset-9 {
+    margin-left: 75% !important;
+    Margin-left: 75% !important;
+  }
+  table.body td.small-offset-10,
+  table.body th.small-offset-10 {
+    margin-left: 83.33333% !important;
+    Margin-left: 83.33333% !important;
+  }
+  table.body td.small-offset-11,
+  table.body th.small-offset-11 {
+    margin-left: 91.66667% !important;
+    Margin-left: 91.66667% !important;
+  }
+  table.body table.columns td.expander,
+  table.body table.columns th.expander {
+    display: none !important;
+  }
+  table.body .right-text-pad,
+  table.body .text-pad-right {
+    padding-left: 10px !important;
+  }
+  table.body .left-text-pad,
+  table.body .text-pad-left {
+    padding-right: 10px !important;
+  }
+  table.menu {
+    width: 100% !important;
+  }
+  table.menu td,
+    table.menu th {
+    width: auto !important;
+    display: inline-block !important;
+  }
+  table.menu.vertical td,
+    table.menu.vertical th, table.menu.small-vertical td,
+    table.menu.small-vertical th {
+    display: block !important;
+  }
+  table.menu[align="center"] {
+    width: auto !important;
+  }
+}
+</style>
+  
+  <!-- Link to web fonts -->
+  <style type="text/css">
+@font-face {
+    font-family: 'Domine';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Domine'), local('Domine-Regular'), url(http://fonts.gstatic.com/s/domine/v4/4wfhKe93QxmsFlDQSCQ5wg.ttf) format('truetype');
+}
+</style>
+  <style type="text/css">
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Open Sans'), local('OpenSans'), url(http://fonts.gstatic.com/s/opensans/v13/cJZKeOuBrn4kERxqtaUH3aCWcynf_cDxXwCLxiixG1c.ttf) format('truetype');
+}
+</style>
+</head>
+
+<body style="-webkit-box-sizing: border-box; width: 100%; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; margin: 0; Margin: 0; padding: 0; -moz-box-sizing: border-box; min-width: 100%; box-sizing: border-box; color: #0a0a0a; font-size: 16px; font-weight: normal; text-align: left; line-height: 19px; font-family: Domine-Regular, Georgia, serif; background: #f9f9f9;">
+  <!-- Wrapper for the body of the email -->
+  <table class="body" data-made-with-foundation="" style="border-spacing: 0; vertical-align: top; border-collapse: collapse; font-size: 16px; text-align: left; line-height: 19px; height: 100%; padding: 0; color: #0a0a0a; Margin: 0; font-weight: normal; margin: 0; width: 100%; font-family: Domine-Regular, Georgia, serif; background: #f9f9f9;" width="100%" height="100%" valign="top" align="left">
+    <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+      <!-- The class, align, and <center> tag center the container -->
+      <td class="center" align="left" valign="top" style="text-align: left; word-wrap: break-word; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse; padding: 0; vertical-align: top; -webkit-hyphens: auto; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; margin: 0; Margin: 0; line-height: 19px; font-size: 16px;">
+        <center style="width: 100%; min-width: 580px;">
+          <!-- The content of your email goes here. -->
+
+          <table class="container" style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: inherit; background: #fefefe; width: 580px; margin: 0 auto; Margin: 0 auto;" width="580" valign="top" align="inherit">
+            <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+              <td style="text-align: left; word-wrap: break-word; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse; padding: 0; vertical-align: top; -webkit-hyphens: auto; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; margin: 0; Margin: 0; line-height: 19px; font-size: 16px;" valign="top" align="left">
+
+                <table class="row header" style="border-spacing: 0; border-collapse: collapse; vertical-align: top; text-align: left; background: #f9f9f9; padding: 0; width: 100%; position: relative; display: table;" width="100%" valign="top" align="left">
+                  <tbody>
+                    <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                      <th class="small-12 large-12 columns first last" style="color: #0a0a0a; font-size: 16px; line-height: 19px; text-align: left; padding: 0; font-weight: normal; font-family: Helvetica, Arial, sans-serif; Margin: 0 auto; width: 564px; margin: 0 auto; padding-right: 16px; padding-left: 16px; padding-bottom: 0px;" align="left">
+                        <table style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                          <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                            <th style="color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; padding: 0; margin: 0; Margin: 0; text-align: left; line-height: 19px; font-size: 16px;" align="left">
+                              <table class="spacer" style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                                <tbody>
+                                  <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                                    <td height="52px" style="padding: 0; Margin: 0; word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse; margin: 0; vertical-align: top; text-align: left; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; line-height: 52px; font-size: 52px;" valign="top" align="left">&#xA0;</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </th><th class="expander" style="font-weight: normal; font-size: 16px; line-height: 19px; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; text-align: left; margin: 0; Margin: 0; width: 0; padding: 0; visibility: hidden;" align="left"></th>
+                          </tr>
+                        </table>
+                      </th>
+                    </tr>
+                  </tbody>
+                </table> <!-- 52px spacer -->
+
+                <table class="row header" style="border-spacing: 0; border-collapse: collapse; vertical-align: top; text-align: left; background: #f9f9f9; padding: 0; width: 100%; position: relative; display: table;" width="100%" valign="top" align="left">
+                  <tbody>
+                    <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                      <th class="small-6 large-6 first columns" style="color: #0a0a0a; font-size: 16px; line-height: 19px; text-align: left; padding: 0; font-weight: normal; font-family: Helvetica, Arial, sans-serif; Margin: 0 auto; padding-right: 8px; width: 274px; margin: 0 auto; padding-left: 16px; padding-bottom: 0px;" align="left">
+                        <img class="float-right logo" style="outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; width: auto; clear: both; display: block; max-width: 50px; max-height: 50px; text-align: right; float: right; border: solid 1px rgba(78,90,107,0.2); background-color: #ffffff;" height="50" width="50" src="https://open-company-assets.s3.amazonaws.com/buffer.png">
+                      </th>
+                      <th class="small-6 large-6 last columns" style="color: #0a0a0a; font-size: 16px; line-height: 19px; text-align: left; padding: 0; font-weight: normal; font-family: Helvetica, Arial, sans-serif; Margin: 0 auto; width: 274px; padding-left: 8px; margin: 0 auto; padding-right: 16px; padding-bottom: 0px;" align="left">
+                        <h4 class="name" style="text-align: left; padding: 0; margin: 0; Margin: 0; font-size: 24px; line-height: 1.3; word-wrap: normal; Margin-bottom: 10px; font-weight: bold; padding-top: 13px; margin-bottom: 0px; font-family: Domine-Regular, Georgia, serif; color: #4e5a6b;">Buffer</h4>
+                      </th>
+                    </tr>
+                  </tbody>
+                </table> <!-- Company Logo/Name Header -->
+
+                <table class="row header" style="border-spacing: 0; border-collapse: collapse; vertical-align: top; text-align: left; background: #f9f9f9; padding: 0; width: 100%; position: relative; display: table;" width="100%" valign="top" align="left">
+                  <tbody>
+                    <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                      <th class="small-12 large-12 columns first last" style="color: #0a0a0a; font-size: 16px; line-height: 19px; text-align: left; padding: 0; font-weight: normal; font-family: Helvetica, Arial, sans-serif; Margin: 0 auto; width: 564px; margin: 0 auto; padding-right: 16px; padding-left: 16px; padding-bottom: 0px;" align="left">
+                        <table style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                          <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                            <th style="color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; padding: 0; margin: 0; Margin: 0; text-align: left; line-height: 19px; font-size: 16px;" align="left">
+                              <table class="spacer" style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                                <tbody>
+                                  <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                                    <td height="37px" style="padding: 0; Margin: 0; word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse; margin: 0; vertical-align: top; text-align: left; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; line-height: 37px; font-size: 37px;" valign="top" align="left">&#xA0;</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </th><th class="expander" style="font-weight: normal; font-size: 16px; line-height: 19px; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; text-align: left; margin: 0; Margin: 0; width: 0; padding: 0; visibility: hidden;" align="left"></th>
+                          </tr>
+                        </table>
+                      </th>
+                    </tr>
+                  </tbody>
+                </table> <!-- 37px spacer -->
+
+                <table class="row header" style="border-spacing: 0; border-collapse: collapse; vertical-align: top; text-align: left; background: #f9f9f9; padding: 0; width: 100%; position: relative; display: table;" width="100%" valign="top" align="left">
+                  <tbody>
+                    <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                      <th class="small-12 large-12 first last columns" style="color: #0a0a0a; font-size: 16px; line-height: 19px; text-align: left; padding: 0; font-weight: normal; font-family: Helvetica, Arial, sans-serif; Margin: 0 auto; width: 564px; margin: 0 auto; padding-right: 16px; padding-left: 16px; padding-bottom: 0px;" align="left">
+                        <p class="text-center title" style="font-weight: normal; margin: 0; margin-bottom: 10px; line-height: 19px; padding: 0; Margin: 0; Margin-bottom: 10px; text-align: center; font-family: Domine-Regular, Georgia, serif; color: #4e5a6b; font-size: 20px;">February 2016 Update
+                      </p></th>
+                    </tr>
+                  </tbody>
+                </table> <!-- Title -->
+
+                <table class="row header" style="border-spacing: 0; border-collapse: collapse; vertical-align: top; text-align: left; background: #f9f9f9; padding: 0; width: 100%; position: relative; display: table;" width="100%" valign="top" align="left">
+                  <tbody>
+                    <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                      <th class="small-12 large-12 columns first last" style="color: #0a0a0a; font-size: 16px; line-height: 19px; text-align: left; padding: 0; font-weight: normal; font-family: Helvetica, Arial, sans-serif; Margin: 0 auto; width: 564px; margin: 0 auto; padding-right: 16px; padding-left: 16px; padding-bottom: 0px;" align="left">
+                        <table style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                          <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                            <th style="color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; padding: 0; margin: 0; Margin: 0; text-align: left; line-height: 19px; font-size: 16px;" align="left">
+                              <table class="spacer" style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                                <tbody>
+                                  <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                                    <td height="23px" style="padding: 0; Margin: 0; word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse; margin: 0; vertical-align: top; text-align: left; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; line-height: 23px; font-size: 23px;" valign="top" align="left">&#xA0;</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </th><th class="expander" style="font-weight: normal; font-size: 16px; line-height: 19px; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; text-align: left; margin: 0; Margin: 0; width: 0; padding: 0; visibility: hidden;" align="left"></th>
+                          </tr>
+                        </table>
+                      </th>
+                    </tr>
+                  </tbody>
+                </table> <!-- 23px spacer -->
+
+                <table class="row header" style="border-spacing: 0; border-collapse: collapse; vertical-align: top; text-align: left; background: #f9f9f9; padding: 0; width: 100%; position: relative; display: table;" width="100%" valign="top" align="left">
+                  <tbody>
+                    <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                      <th class="small-12 large-12 first last columns content" style="font-weight: normal; padding: 0; text-align: left; line-height: 19px; margin: 0 auto; width: 564px; Margin: 0 auto; padding-left: 16px; padding-right: 16px; padding-bottom: 0px; font-size: 12px; font-family: Domine-Regular; color: #4e5a6b;" align="left">
+                        Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.
+                      </th>
+                    </tr>
+                  </tbody>
+                </table> <!-- Message -->
+
+                <table class="row header" style="border-spacing: 0; border-collapse: collapse; vertical-align: top; text-align: left; background: #f9f9f9; padding: 0; width: 100%; position: relative; display: table;" width="100%" valign="top" align="left">
+                  <tbody>
+                    <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                      <th class="small-12 large-12 columns first last" style="color: #0a0a0a; font-size: 16px; line-height: 19px; text-align: left; padding: 0; font-weight: normal; font-family: Helvetica, Arial, sans-serif; Margin: 0 auto; width: 564px; margin: 0 auto; padding-right: 16px; padding-left: 16px; padding-bottom: 0px;" align="left">
+                        <table style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                          <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                            <th style="color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; padding: 0; margin: 0; Margin: 0; text-align: left; line-height: 19px; font-size: 16px;" align="left">
+                              <table class="spacer" style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                                <tbody>
+                                  <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                                    <td height="16px" style="padding: 0; Margin: 0; word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse; margin: 0; vertical-align: top; text-align: left; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; line-height: 16px; font-size: 16px;" valign="top" align="left">&#xA0;</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </th><th class="expander" style="font-weight: normal; font-size: 16px; line-height: 19px; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; text-align: left; margin: 0; Margin: 0; width: 0; padding: 0; visibility: hidden;" align="left"></th>
+                          </tr>
+                        </table>
+                      </th>
+                    </tr>
+                  </tbody>
+                </table> <!-- 16px spacer -->
+
+                <table class="row header" style="border-spacing: 0; border-collapse: collapse; vertical-align: top; text-align: left; background: #f9f9f9; padding: 0; width: 100%; position: relative; display: table;" width="100%" valign="top" align="left">
+                  <tbody>
+                    <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                      <th class="small-12 large-12 first last columns" style="color: #0a0a0a; font-size: 16px; line-height: 19px; text-align: left; padding: 0; font-weight: normal; font-family: Helvetica, Arial, sans-serif; Margin: 0 auto; width: 564px; margin: 0 auto; padding-right: 16px; padding-left: 16px; padding-bottom: 0px;" align="left">
+                        <p class="text-center content" style="font-weight: normal; margin: 0; margin-bottom: 10px; line-height: 19px; padding: 0; Margin: 0; Margin-bottom: 10px; text-align: center; font-family: Domine-Regular; color: #4e5a6b; font-size: 12px;">— Joel / February 3, 2016
+                      </p></th>
+                    </tr>
+                  </tbody>
+                </table> <!-- Attribution -->
+
+                <table class="row header" style="border-spacing: 0; border-collapse: collapse; vertical-align: top; text-align: left; background: #f9f9f9; padding: 0; width: 100%; position: relative; display: table;" width="100%" valign="top" align="left">
+                  <tbody>
+                    <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                      <th class="small-12 large-12 columns first last" style="color: #0a0a0a; font-size: 16px; line-height: 19px; text-align: left; padding: 0; font-weight: normal; font-family: Helvetica, Arial, sans-serif; Margin: 0 auto; width: 564px; margin: 0 auto; padding-right: 16px; padding-left: 16px; padding-bottom: 0px;" align="left">
+                        <table style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                          <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                            <th style="color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; padding: 0; margin: 0; Margin: 0; text-align: left; line-height: 19px; font-size: 16px;" align="left">
+                              <table class="spacer" style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                                <tbody>
+                                  <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                                    <td height="49px" style="padding: 0; Margin: 0; word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse; margin: 0; vertical-align: top; text-align: left; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; line-height: 49px; font-size: 49px;" valign="top" align="left">&#xA0;</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </th><th class="expander" style="font-weight: normal; font-size: 16px; line-height: 19px; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; text-align: left; margin: 0; Margin: 0; width: 0; padding: 0; visibility: hidden;" align="left"></th>
+                          </tr>
+                        </table>
+                      </th>
+                    </tr>
+                  </tbody>
+                </table> <!-- 49px spacer -->
+
+                <table class="row topic" style="border-spacing: 0; vertical-align: top; text-align: left; border-collapse: collapse; padding: 0; margin-bottom: 5px; position: relative; box-shadow: 1px 2px 2px 0 rgba(0,0,0,0.2), inset 0 1px 3px 0 #ffffff; border-radius: 2px; width: 100%; display: table;" width="100%" valign="top" align="left">
+                  <tbody>
+                    <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                      <th class="small-12 large-12 columns first last" style="color: #0a0a0a; font-size: 16px; line-height: 19px; text-align: left; padding: 0; font-weight: normal; font-family: Helvetica, Arial, sans-serif; Margin: 0 auto; width: 564px; margin: 0 auto; padding-right: 16px; padding-left: 16px; padding-bottom: 0px;" align="left">
+
+                        <table class="row" style="border-spacing: 0; border-collapse: collapse; vertical-align: top; text-align: left; padding: 0; position: relative; width: 100%; display: table;" width="100%" valign="top" align="left">
+                          <tbody>
+                            <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                              <th class="small-12 large-12 columns first last" style="color: #0a0a0a; font-size: 16px; line-height: 19px; text-align: left; padding: 0; font-weight: normal; font-family: Helvetica, Arial, sans-serif; Margin: 0 auto; margin: 0 auto; padding-right: 16px; padding-left: 16px; width: 100%; padding-bottom: 0px;" align="left">
+                                <table style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                                  <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                                    <th style="color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; padding: 0; margin: 0; Margin: 0; text-align: left; line-height: 19px; font-size: 16px;" align="left">
+                                      <table class="spacer" style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                                        <tbody>
+                                          <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                                            <td height="24px" style="padding: 0; Margin: 0; word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse; margin: 0; vertical-align: top; text-align: left; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; line-height: 24px; font-size: 24px;" valign="top" align="left">&#xA0;</td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </th><th class="expander" style="font-weight: normal; font-size: 16px; line-height: 19px; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; text-align: left; margin: 0; Margin: 0; width: 0; padding: 0; visibility: hidden;" align="left"></th>
+                                  </tr>
+                                </table>
+                              </th>
+                            </tr>
+                          </tbody>
+                        </table> <!-- 24px spacer -->
+                
+                        <p class="topic-title" style="text-align: left; margin: 0; Margin-bottom: 10px; Margin: 0; padding: 0; font-weight: bold; font-family: OpenSans, Helvetica, sans-serif; line-height: 1.5; font-size: 12px; margin-bottom: 10px; color: #4e5a6b; letter-spacing: 1px; opacity: 0.5;">TEAM</p>
+
+                        <table class="row" style="border-spacing: 0; border-collapse: collapse; vertical-align: top; text-align: left; padding: 0; position: relative; width: 100%; display: table;" width="100%" valign="top" align="left">
+                          <tbody>
+                            <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                              <th class="small-12 large-12 columns first last" style="color: #0a0a0a; font-size: 16px; line-height: 19px; text-align: left; padding: 0; font-weight: normal; font-family: Helvetica, Arial, sans-serif; Margin: 0 auto; margin: 0 auto; padding-right: 16px; padding-left: 16px; width: 100%; padding-bottom: 0px;" align="left">
+                                <table style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                                  <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                                    <th style="color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; padding: 0; margin: 0; Margin: 0; text-align: left; line-height: 19px; font-size: 16px;" align="left">
+                                      <table class="spacer" style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                                        <tbody>
+                                          <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                                            <td height="1px" style="padding: 0; Margin: 0; word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse; margin: 0; vertical-align: top; text-align: left; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; line-height: 1px; font-size: 1px;" valign="top" align="left">&#xA0;</td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </th><th class="expander" style="font-weight: normal; font-size: 16px; line-height: 19px; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; text-align: left; margin: 0; Margin: 0; width: 0; padding: 0; visibility: hidden;" align="left"></th>
+                                  </tr>
+                                </table>
+                              </th>
+                            </tr>
+                          </tbody>
+                        </table> <!-- 1px spacer -->
+
+                        <p class="topic-headline" style="padding: 0; margin: 0; margin-bottom: 10px; line-height: 19px; font-weight: normal; Margin: 0; text-align: left; Margin-bottom: 10px; font-family: Domine-Regular, Georgia, serif; font-size: 20px; color: #4e5a6b;">
+                          We reached 50 team members mark in September! 🙌
+                        </p>
+
+                        <table class="row" style="border-spacing: 0; border-collapse: collapse; vertical-align: top; text-align: left; padding: 0; position: relative; width: 100%; display: table;" width="100%" valign="top" align="left">
+                          <tbody>
+                            <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                              <th class="small-12 large-12 columns first last" style="color: #0a0a0a; font-size: 16px; line-height: 19px; text-align: left; padding: 0; font-weight: normal; font-family: Helvetica, Arial, sans-serif; Margin: 0 auto; margin: 0 auto; padding-right: 16px; padding-left: 16px; width: 100%; padding-bottom: 0px;" align="left">
+                                <table style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                                  <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                                    <th style="color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; padding: 0; margin: 0; Margin: 0; text-align: left; line-height: 19px; font-size: 16px;" align="left">
+                                      <table class="spacer" style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                                        <tbody>
+                                          <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                                            <td height="2px" style="padding: 0; Margin: 0; word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse; margin: 0; vertical-align: top; text-align: left; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; line-height: 2px; font-size: 2px;" valign="top" align="left">&#xA0;</td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </th><th class="expander" style="font-weight: normal; font-size: 16px; line-height: 19px; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; text-align: left; margin: 0; Margin: 0; width: 0; padding: 0; visibility: hidden;" align="left"></th>
+                                  </tr>
+                                </table>
+                              </th>
+                            </tr>
+                          </tbody>
+                        </table> <!-- 2px spacer -->
+
+                        <p class="content" style="padding: 0; margin: 0; margin-bottom: 10px; line-height: 19px; font-weight: normal; Margin: 0; text-align: left; Margin-bottom: 10px; font-family: Domine-Regular; font-size: 12px; color: #4e5a6b;">This feels like a big milestone and a special moment to reflect on.</p>
+
+                        <table class="row" style="border-spacing: 0; border-collapse: collapse; vertical-align: top; text-align: left; padding: 0; position: relative; width: 100%; display: table;" width="100%" valign="top" align="left">
+                          <tbody>
+                            <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                              <th class="small-12 large-12 columns first last" style="color: #0a0a0a; font-size: 16px; line-height: 19px; text-align: left; padding: 0; font-weight: normal; font-family: Helvetica, Arial, sans-serif; Margin: 0 auto; margin: 0 auto; padding-right: 16px; padding-left: 16px; width: 100%; padding-bottom: 0px;" align="left">
+                                <table style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                                  <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                                    <th style="color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; padding: 0; margin: 0; Margin: 0; text-align: left; line-height: 19px; font-size: 16px;" align="left">
+                                      <table class="spacer" style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                                        <tbody>
+                                          <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                                            <td height="20px" style="padding: 0; Margin: 0; word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse; margin: 0; vertical-align: top; text-align: left; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; line-height: 20px; font-size: 20px;" valign="top" align="left">&#xA0;</td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </th><th class="expander" style="font-weight: normal; font-size: 16px; line-height: 19px; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; text-align: left; margin: 0; Margin: 0; width: 0; padding: 0; visibility: hidden;" align="left"></th>
+                                  </tr>
+                                </table>
+                              </th>
+                            </tr>
+                          </tbody>
+                        </table> <!-- 20px spacer -->
+
+                        <a class="topic-read-more" href="http://cnn.com/" style="text-align: left; padding: 0; margin: 0; Margin: 0; font-weight: bold; color: #4e5a6b; font-family: OpenSans, Helvetica, sans-serif; line-height: 1.5; text-decoration: underline; font-size: 12px; letter-spacing: 1px; opacity: 0.5; margin-bottom: 10px;">READ MORE</a>
+
+                        <table class="row" style="border-spacing: 0; border-collapse: collapse; vertical-align: top; text-align: left; padding: 0; position: relative; width: 100%; display: table;" width="100%" valign="top" align="left">
+                          <tbody>
+                            <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                              <th class="small-12 large-12 columns first last" style="color: #0a0a0a; font-size: 16px; line-height: 19px; text-align: left; padding: 0; font-weight: normal; font-family: Helvetica, Arial, sans-serif; Margin: 0 auto; margin: 0 auto; padding-right: 16px; padding-left: 16px; width: 100%; padding-bottom: 0px;" align="left">
+                                <table style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                                  <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                                    <th style="color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; padding: 0; margin: 0; Margin: 0; text-align: left; line-height: 19px; font-size: 16px;" align="left">
+                                      <table class="spacer" style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                                        <tbody>
+                                          <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                                            <td height="30px" style="padding: 0; Margin: 0; word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse; margin: 0; vertical-align: top; text-align: left; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; line-height: 30px; font-size: 30px;" valign="top" align="left">&#xA0;</td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </th><th class="expander" style="font-weight: normal; font-size: 16px; line-height: 19px; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; text-align: left; margin: 0; Margin: 0; width: 0; padding: 0; visibility: hidden;" align="left"></th>
+                                  </tr>
+                                </table>
+                              </th>
+                            </tr>
+                          </tbody>
+                        </table> <!-- 30px spacer -->
+
+                      </th>
+                      <th class="expander" style="font-weight: normal; font-size: 16px; line-height: 19px; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; text-align: left; margin: 0; Margin: 0; width: 0; padding: 0; visibility: hidden;" align="left"></th>
+                    </tr>
+                  </tbody>
+                </table> <!-- Topic -->
+
+                <table class="row header" style="border-spacing: 0; border-collapse: collapse; vertical-align: top; text-align: left; background: #f9f9f9; padding: 0; width: 100%; position: relative; display: table;" width="100%" valign="top" align="left">
+                  <tbody>
+                    <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                      <th class="small-12 large-12 columns first last" style="color: #0a0a0a; font-size: 16px; line-height: 19px; text-align: left; padding: 0; font-weight: normal; font-family: Helvetica, Arial, sans-serif; Margin: 0 auto; width: 564px; margin: 0 auto; padding-right: 16px; padding-left: 16px; padding-bottom: 0px;" align="left">
+                        <table style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                          <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                            <th style="color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; padding: 0; margin: 0; Margin: 0; text-align: left; line-height: 19px; font-size: 16px;" align="left">
+                              <table class="spacer" style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                                <tbody>
+                                  <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                                    <td height="30px" style="padding: 0; Margin: 0; word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse; margin: 0; vertical-align: top; text-align: left; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; line-height: 30px; font-size: 30px;" valign="top" align="left">&#xA0;</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </th><th class="expander" style="font-weight: normal; font-size: 16px; line-height: 19px; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; text-align: left; margin: 0; Margin: 0; width: 0; padding: 0; visibility: hidden;" align="left"></th>
+                          </tr>
+                        </table>
+                      </th>
+                    </tr>
+                  </tbody>
+                </table> <!-- 25px spacer -->
+
+                <table class="row topic" style="border-spacing: 0; vertical-align: top; text-align: left; border-collapse: collapse; padding: 0; margin-bottom: 5px; position: relative; box-shadow: 1px 2px 2px 0 rgba(0,0,0,0.2), inset 0 1px 3px 0 #ffffff; border-radius: 2px; width: 100%; display: table;" width="100%" valign="top" align="left">
+                  <tbody>
+                    
+                    <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                      <th style="color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; padding: 0; margin: 0; Margin: 0; text-align: left; line-height: 19px; font-size: 16px;" align="left">
+                        <img src="https://open.buffer.com/wp-content/uploads/2015/11/Pablo-2-launch-social-media-images-800x643.png" style="outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; width: auto; max-width: 100%; clear: both; display: block;">
+                      </th><th style="color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; padding: 0; margin: 0; Margin: 0; text-align: left; line-height: 19px; font-size: 16px;" align="left">
+                    </th></tr>
+
+                    <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                      <th class="small-12 large-12 columns first last" style="color: #0a0a0a; font-size: 16px; line-height: 19px; text-align: left; padding: 0; font-weight: normal; font-family: Helvetica, Arial, sans-serif; Margin: 0 auto; width: 564px; margin: 0 auto; padding-right: 16px; padding-left: 16px; padding-bottom: 0px;" align="left">
+
+                        <table class="row" style="border-spacing: 0; border-collapse: collapse; vertical-align: top; text-align: left; padding: 0; position: relative; width: 100%; display: table;" width="100%" valign="top" align="left">
+                          <tbody>
+                            <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                              <th class="small-12 large-12 columns first last" style="color: #0a0a0a; font-size: 16px; line-height: 19px; text-align: left; padding: 0; font-weight: normal; font-family: Helvetica, Arial, sans-serif; Margin: 0 auto; margin: 0 auto; padding-right: 16px; padding-left: 16px; width: 100%; padding-bottom: 0px;" align="left">
+                                <table style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                                  <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                                    <th style="color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; padding: 0; margin: 0; Margin: 0; text-align: left; line-height: 19px; font-size: 16px;" align="left">
+                                      <table class="spacer" style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                                        <tbody>
+                                          <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                                            <td height="24px" style="padding: 0; Margin: 0; word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse; margin: 0; vertical-align: top; text-align: left; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; line-height: 24px; font-size: 24px;" valign="top" align="left">&#xA0;</td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </th><th class="expander" style="font-weight: normal; font-size: 16px; line-height: 19px; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; text-align: left; margin: 0; Margin: 0; width: 0; padding: 0; visibility: hidden;" align="left"></th>
+                                  </tr>
+                                </table>
+                              </th>
+                            </tr>
+                          </tbody>
+                        </table> <!-- 24px spacer -->
+                
+                        <p class="topic-title" style="text-align: left; margin: 0; Margin-bottom: 10px; Margin: 0; padding: 0; font-weight: bold; font-family: OpenSans, Helvetica, sans-serif; line-height: 1.5; font-size: 12px; margin-bottom: 10px; color: #4e5a6b; letter-spacing: 1px; opacity: 0.5;">PRODUCT</p>
+
+                        <table class="row" style="border-spacing: 0; border-collapse: collapse; vertical-align: top; text-align: left; padding: 0; position: relative; width: 100%; display: table;" width="100%" valign="top" align="left">
+                          <tbody>
+                            <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                              <th class="small-12 large-12 columns first last" style="color: #0a0a0a; font-size: 16px; line-height: 19px; text-align: left; padding: 0; font-weight: normal; font-family: Helvetica, Arial, sans-serif; Margin: 0 auto; margin: 0 auto; padding-right: 16px; padding-left: 16px; width: 100%; padding-bottom: 0px;" align="left">
+                                <table style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                                  <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                                    <th style="color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; padding: 0; margin: 0; Margin: 0; text-align: left; line-height: 19px; font-size: 16px;" align="left">
+                                      <table class="spacer" style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                                        <tbody>
+                                          <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                                            <td height="1px" style="padding: 0; Margin: 0; word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse; margin: 0; vertical-align: top; text-align: left; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; line-height: 1px; font-size: 1px;" valign="top" align="left">&#xA0;</td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </th><th class="expander" style="font-weight: normal; font-size: 16px; line-height: 19px; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; text-align: left; margin: 0; Margin: 0; width: 0; padding: 0; visibility: hidden;" align="left"></th>
+                                  </tr>
+                                </table>
+                              </th>
+                            </tr>
+                          </tbody>
+                        </table> <!-- 1px spacer -->
+
+                        <p class="topic-headline" style="padding: 0; margin: 0; margin-bottom: 10px; line-height: 19px; font-weight: normal; Margin: 0; text-align: left; Margin-bottom: 10px; font-family: Domine-Regular, Georgia, serif; font-size: 20px; color: #4e5a6b;">
+                          We launched Pablo 2.0 🚀😃
+                        </p>
+
+                        <table class="row" style="border-spacing: 0; border-collapse: collapse; vertical-align: top; text-align: left; padding: 0; position: relative; width: 100%; display: table;" width="100%" valign="top" align="left">
+                          <tbody>
+                            <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                              <th class="small-12 large-12 columns first last" style="color: #0a0a0a; font-size: 16px; line-height: 19px; text-align: left; padding: 0; font-weight: normal; font-family: Helvetica, Arial, sans-serif; Margin: 0 auto; margin: 0 auto; padding-right: 16px; padding-left: 16px; width: 100%; padding-bottom: 0px;" align="left">
+                                <table style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                                  <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                                    <th style="color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; padding: 0; margin: 0; Margin: 0; text-align: left; line-height: 19px; font-size: 16px;" align="left">
+                                      <table class="spacer" style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                                        <tbody>
+                                          <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                                            <td height="2px" style="padding: 0; Margin: 0; word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse; margin: 0; vertical-align: top; text-align: left; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; line-height: 2px; font-size: 2px;" valign="top" align="left">&#xA0;</td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </th><th class="expander" style="font-weight: normal; font-size: 16px; line-height: 19px; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; text-align: left; margin: 0; Margin: 0; width: 0; padding: 0; visibility: hidden;" align="left"></th>
+                                  </tr>
+                                </table>
+                              </th>
+                            </tr>
+                          </tbody>
+                        </table> <!-- 2px spacer -->
+
+                        <p class="content" style="padding: 0; margin: 0; margin-bottom: 10px; line-height: 19px; font-weight: normal; Margin: 0; text-align: left; Margin-bottom: 10px; font-family: Domine-Regular; font-size: 12px; color: #4e5a6b;">We launched Pablo 2.0! More than 500,000 Pablo images have been
+                        created so far, and we're excited to keep going with our quick images tool.</p>
+
+                        <table class="row" style="border-spacing: 0; border-collapse: collapse; vertical-align: top; text-align: left; padding: 0; position: relative; width: 100%; display: table;" width="100%" valign="top" align="left">
+                          <tbody>
+                            <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                              <th class="small-12 large-12 columns first last" style="color: #0a0a0a; font-size: 16px; line-height: 19px; text-align: left; padding: 0; font-weight: normal; font-family: Helvetica, Arial, sans-serif; Margin: 0 auto; margin: 0 auto; padding-right: 16px; padding-left: 16px; width: 100%; padding-bottom: 0px;" align="left">
+                                <table style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                                  <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                                    <th style="color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; padding: 0; margin: 0; Margin: 0; text-align: left; line-height: 19px; font-size: 16px;" align="left">
+                                      <table class="spacer" style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                                        <tbody>
+                                          <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                                            <td height="20px" style="padding: 0; Margin: 0; word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse; margin: 0; vertical-align: top; text-align: left; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; line-height: 20px; font-size: 20px;" valign="top" align="left">&#xA0;</td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </th><th class="expander" style="font-weight: normal; font-size: 16px; line-height: 19px; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; text-align: left; margin: 0; Margin: 0; width: 0; padding: 0; visibility: hidden;" align="left"></th>
+                                  </tr>
+                                </table>
+                              </th>
+                            </tr>
+                          </tbody>
+                        </table> <!-- 20px spacer -->
+
+                        <a class="topic-read-more" href="http://cnn.com/" style="text-align: left; padding: 0; margin: 0; Margin: 0; font-weight: bold; color: #4e5a6b; font-family: OpenSans, Helvetica, sans-serif; line-height: 1.5; text-decoration: underline; font-size: 12px; letter-spacing: 1px; opacity: 0.5; margin-bottom: 10px;">READ MORE</a>
+
+                        <table class="row" style="border-spacing: 0; border-collapse: collapse; vertical-align: top; text-align: left; padding: 0; position: relative; width: 100%; display: table;" width="100%" valign="top" align="left">
+                          <tbody>
+                            <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                              <th class="small-12 large-12 columns first last" style="color: #0a0a0a; font-size: 16px; line-height: 19px; text-align: left; padding: 0; font-weight: normal; font-family: Helvetica, Arial, sans-serif; Margin: 0 auto; margin: 0 auto; padding-right: 16px; padding-left: 16px; width: 100%; padding-bottom: 0px;" align="left">
+                                <table style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                                  <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                                    <th style="color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; padding: 0; margin: 0; Margin: 0; text-align: left; line-height: 19px; font-size: 16px;" align="left">
+                                      <table class="spacer" style="border-spacing: 0; border-collapse: collapse; padding: 0; vertical-align: top; text-align: left; width: 100%;" width="100%" valign="top" align="left">
+                                        <tbody>
+                                          <tr style="padding: 0; vertical-align: top; text-align: left;" valign="top" align="left">
+                                            <td height="30px" style="padding: 0; Margin: 0; word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse; margin: 0; vertical-align: top; text-align: left; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-weight: normal; line-height: 30px; font-size: 30px;" valign="top" align="left">&#xA0;</td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </th><th class="expander" style="font-weight: normal; font-size: 16px; line-height: 19px; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; text-align: left; margin: 0; Margin: 0; width: 0; padding: 0; visibility: hidden;" align="left"></th>
+                                  </tr>
+                                </table>
+                              </th>
+                            </tr>
+                          </tbody>
+                        </table> <!-- 30px spacer -->
+
+                      </th>
+                      <th class="expander" style="font-weight: normal; font-size: 16px; line-height: 19px; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; text-align: left; margin: 0; Margin: 0; width: 0; padding: 0; visibility: hidden;" align="left"></th>
+                    </tr>
+                  </tbody>
+                </table> <!-- Topic -->
+
+              </td>
+            </tr>
+          </table> <!-- container -->
+
+        </center>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
