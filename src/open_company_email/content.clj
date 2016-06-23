@@ -65,9 +65,9 @@
           (spacer 2)
           [:p {:class "content"} "This feels like a big milestone and a special moment to reflect on."]
           (spacer 20)
-          [:a {:class "topic-read-more", :href "http://cnn.com/"} "READ MORE"]]
+          [:a {:class "topic-read-more", :href "http://cnn.com/"} "READ MORE"]
           (spacer 30)
-        [:th {:class "expander"}]]]])
+          [:th {:class "expander"}]]]]])
 
 (defn- content
   [snapshot]
