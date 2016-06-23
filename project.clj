@@ -21,6 +21,7 @@
     [amazonica "0.3.61"] ; A comprehensive Clojure client for the entire Amazon AWS api https://github.com/mcohen01/amazonica
     [hiccup "1.0.5"] ; HTML rendering https://github.com/weavejester/hiccup
     [cheshire "5.6.2"] ; JSON encoding / decoding https://github.com/dakrone/cheshire
+    [clj-time "0.12.0"] ; Date and time lib https://github.com/clj-time/clj-time
   ]
 
   ;; All profile plugins
@@ -75,6 +76,8 @@
                  '[clojure.stacktrace :refer (print-stack-trace)]
                  '[clojure.string :as s]
                  '[cheshire.core :as json]
+                 '[clj-time.core :as t]
+                 '[clj-time.format :as f]
                  '[hiccup.core :as h]
                  '[hickory.core :as hickory])
       ]
