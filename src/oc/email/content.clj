@@ -1,5 +1,6 @@
-(ns open-company-email.content
-  (:require [hiccup.core :as h]
+(ns oc.email.content
+  (:require [clojure.string :as s]
+            [hiccup.core :as h]
             [clj-time.format :as f]
             [clojure.walk :refer (keywordize-keys)]))
 
@@ -30,7 +31,7 @@
     [:tbody
       [:tr
         [:th {:class "small-12 large-12 first last columns content"}
-          "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week."]]]])
+          (:note snapshot)]]]])
 
 (defn- attribution [snapshot]
   (let [author (get-in snapshot [:author :name])
@@ -59,19 +60,19 @@
                               :style (str "font-size:" pixels "px;line-height:" pixels "px;")} " "]]]]]
                 [:th {:class "expander"}]]]]]]]]))
 
-(defn- topic [snapshot]
+(defn- topic [topic]
   [:table {:class "row topic"}
     [:tbody
       [:tr
         [:th {:class "small-12 large-12 columns first last"}
           (spacer 24)
-          [:p {:class "topic-title"} "TEAM"]
+          [:p {:class "topic-title"} (s/upper-case (:title topic))]
           (spacer 1)
-          [:p {:class "topic-headline"} "We reached 50 team members mark in September! 🙌"]
+          [:p {:class "topic-headline"} (:headline topic)]
           (spacer 2)]]
       [:tr
         [:th {:class "small-12 large-12 columns first last topic"}
-          [:p "This feels like a big milestone and a special moment to reflect on."]
+          (:body topic)
           (spacer 20)]]
       [:tr
         [:th {:class "small-12 large-12 columns first last"}
@@ -91,9 +92,13 @@
     (spacer 16 "header")
     (attribution snapshot)
     (spacer 49 "header")
-    (topic snapshot)
-    (spacer 25 "header")
-    (topic snapshot)])
+    [:table
+      [:tbody
+        [:tr
+          (into [:td] 
+            (interleave
+              (map #(topic (snapshot (keyword %))) (:sections snapshot))
+              (repeat (spacer 25 "header"))))]]]])
 
 (defn- body
   [snapshot]
@@ -114,8 +119,8 @@
     [:head 
       [:meta {:http-equiv "Content-Type", :content "text/html; charset=utf-8"}]
       [:meta {:name "viewport", :content "width=device-width"}]
-      [:link {:rel "stylesheet", :href "css/foundation.css"}]
-      [:link {:rel "stylesheet", :href "css/opencompany.css"}]
+      [:link {:rel "stylesheet", :href "resources/css/foundation.css"}]
+      [:link {:rel "stylesheet", :href "resources/css/opencompany.css"}]
       [:link {:href "http://fonts.googleapis.com/css?family=Domine", :rel "stylesheet", :type "text/css"}]
       [:link {:href "http://fonts.googleapis.com/css?family=Open+Sans", :rel "stylesheet", :type "text/css"}]
       (body snapshot)]])
@@ -127,6 +132,7 @@
     (h/html (head (keywordize-keys snapshot)))))
 
 (comment
+  ;; For REPL testing
 
   ;; Recreate hiccup from various HTML fragments
 
@@ -154,16 +160,16 @@
   (def data (slurp "./resources/topic.html"))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (require '[open-company-email.content :as email] :reload)
   (spit "./resources/hiccup.html" (email/html {}))
 
   ;; Generate test email HTML content from various snapshots
 
-  (require '[open-company-email.content :as email] :reload)
+  (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
   (def snapshot (json/decode (slurp "./resources/snapshots/buffer.json")))
-  (spit "./resources/hiccup.html" (email/html snapshot))
+  (spit "./resources/hiccup.html" (email/html (assoc snapshot :note note)))
 
+  (def note "All there is to know about OpenCompany.")
   (def snapshot (json/decode (slurp "./resources/snapshots/open.json")))
-  (spit "./resources/hiccup.html" (email/html snapshot))
+  (spit "./resources/hiccup.html" (email/html (assoc snapshot :note note)))
 
   )

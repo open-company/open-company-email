@@ -22,6 +22,7 @@
     [hiccup "1.0.5"] ; HTML rendering https://github.com/weavejester/hiccup
     [cheshire "5.6.2"] ; JSON encoding / decoding https://github.com/dakrone/cheshire
     [clj-time "0.12.0"] ; Date and time lib https://github.com/clj-time/clj-time
+    [manifold "0.1.5-alpha1"] ; Async programming tools https://github.com/ztellman/manifold
   ]
 
   ;; All profile plugins
@@ -49,7 +50,9 @@
       :env ^:replace {
         :aws-access-key-id "CHANGE-ME"
         :aws-secret-access-key "CHANGE-ME"
-        :aws-sqs-queue "https://sqs.REGION.amazonaws.com/CHANGE/ME" 
+        :endpoint "us-east-1"
+        :aws-sqs-email-queue "https://sqs.REGION.amazonaws.com/CHANGE/ME"
+        :email-from-domain "change-me.com"
       }
       :dependencies [
         [hickory "0.6.0"] ; HTML as data https://github.com/davidsantiago/hickory
@@ -91,13 +94,14 @@
   }
 
   :repl-options {
-    :welcome (println (str "\n" (slurp (clojure.java.io/resource "open_company_email/assets/ascii_art.txt")) "\n"
+    :welcome (println (str "\n" (slurp (clojure.java.io/resource "oc/assets/ascii_art.txt")) "\n"
                       "OpenCompany Email Service REPL\n"))
   }
 
   :aliases {
     "build" ["do" "clean," "deps," "compile"] ; clean and build code
     "repl" ["with-profile" "+repl-config" "repl"]
+    "start" ["run" "-m" "oc.email"]
     "spell!" ["spell" "-n"] ; check spelling in docs and docstrings
     "bikeshed!" ["bikeshed" "-v" "-m" "120"] ; code check with max line length warning of 120 characters
     "ancient" ["ancient" ":all" ":allow-qualified"] ; check for out of date dependencies
