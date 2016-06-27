@@ -1,25 +1,25 @@
 (ns oc.email.mailer
   (require [clojure.java.shell :as shell]
            [clojure.java.io :as io]
-           [environ.core :as e]
+           [oc.email.config :as c]
            [taoensso.timbre :as timbre]
            [amazonica.aws.simpleemail :as ses]
            [oc.email.content :as content]))
 
 (def creds
-  {:access-key (e/env :aws-access-key-id)
-   :secret-key (e/env :aws-secret-access-key)
-   :endpoint   (e/env :end-point)})
+  {:access-key c/aws-access-key-id
+   :secret-key c/aws-secret-access-key
+   :endpoint   c/aws-endpoint})
 
 (defn- send-email [to subject body]
   (timbre/info "Sending email.")
   (ses/send-email creds
                   :destination {:to-addresses [to]}
-                  :source (str "snapshot@" (e/env :email-from-domain))
+                  :source (str "snapshot@" c/email-from-domain)
                   :message {:subject subject
                             :body {:html body}}))
 
-(defn send-snapshot [{:keys [snapshot to subject note]}]
+(defn send-snapshot [{api-token :api-token snapshot :snapshot to :to subject :subject note :note :as msg}]
   (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
         html-file (str uuid-fragment ".html")
         inline-file (str uuid-fragment ".inline.html")]

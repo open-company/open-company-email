@@ -5,11 +5,11 @@
             [manifold.stream :as s]
             [manifold.time :as t]
             [manifold.deferred :as d]
-            [environ.core :as e]))
+            [oc.email.config :as c]))
 
 (def creds
-  {:access-key (e/env :aws-access-key-id)
-   :secret-key (e/env :aws-secret-access-key)})
+  {:access-key c/aws-access-key-id
+   :secret-key c/aws-secret-access-key})
 
 (defn get-message
   "Get a single message from SQS"
@@ -23,7 +23,7 @@
 (defn delete-message!
   "Delete a previously received message so it cannot be retrieved by other consumers"
   [creds queue-url msg]
-  (timbre/trace "Deleteing message from queue:" queue-url)
+  (timbre/debug "Deleteing message from queue:" queue-url)
   (sqs/delete-message creds (assoc msg :queue-url queue-url)))
 
 (defn process
@@ -40,9 +40,9 @@
   "Check for a message and, if one is available, put it into the given deferrred"
   [queue-url deferred]
   (try
-    (timbre/debug "Checking for message in queue:" queue-url)
+    (timbre/trace "Checking for message in queue:" queue-url)
     (when-let [m (get-message queue-url)]
-      (timbre/debug "Got message from queue:" queue-url)
+      (timbre/trace "Got message from queue:" queue-url)
       (d/success! deferred m))
     (catch Throwable e
       (timbre/error "Exception while polling SQS:" e)

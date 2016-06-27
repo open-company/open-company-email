@@ -24,7 +24,6 @@
   "Create a Sentry timbre appender.
    (make-sentry-appender \"YOUR SENTRY DSN\")"
   [dsn]
-  (println dsn)
   (assert dsn "sentry-appender requires a dsn")
   (merge
    {:doc "A timbre appender that sends errors to getsentry.com"

@@ -48,9 +48,10 @@
     ;; Dev environment and dependencies
     :dev [:qa {
       :env ^:replace {
+        :open-company-auth-passphrase "this_is_a_dev_secret" ; JWT secret
         :aws-access-key-id "CHANGE-ME"
         :aws-secret-access-key "CHANGE-ME"
-        :endpoint "us-east-1"
+        :aws-endpoint "us-east-1"
         :aws-sqs-email-queue "https://sqs.REGION.amazonaws.com/CHANGE/ME"
         :email-from-domain "change-me.com"
       }
@@ -82,7 +83,8 @@
                  '[clj-time.core :as t]
                  '[clj-time.format :as f]
                  '[hiccup.core :as h]
-                 '[hickory.core :as hickory])
+                 '[hickory.core :as hickory]
+                 '[oc.email.config :as c])
       ]
     }]
 
