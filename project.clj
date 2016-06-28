@@ -23,6 +23,7 @@
     [cheshire "5.6.2"] ; JSON encoding / decoding https://github.com/dakrone/cheshire
     [clj-time "0.12.0"] ; Date and time lib https://github.com/clj-time/clj-time
     [manifold "0.1.5-alpha1"] ; Async programming tools https://github.com/ztellman/manifold
+    [com.kcthota/emoji4j "5.0"] ; Emoji library https://github.com/kcthota/emoji4j
   ]
 
   ;; All profile plugins

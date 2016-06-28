@@ -6,6 +6,22 @@
 
 (def pretty-date (f/formatter "MMMM dd, yyyy"))
 
+
+(defn- escape-accidental-emoticon [text]
+  "Replace any :/ with to avoid emojifying links and images."
+  (s/replace text #":\/\/" ":this-is-not-an-emoji-silly-library:"))
+
+(defn- unescape-accidental-emoticon [text]
+  "Replace any  with :/ to restore links and images."
+  (s/replace text #":this-is-not-an-emoji-silly-library:" "://"))
+
+(defn- emojify [text]
+  "Replace emoji shortcodes or ASCII with Unicode."
+  (-> text
+    (escape-accidental-emoticon)
+    (emoji4j.EmojiUtils/emojify)
+    (unescape-accidental-emoticon)))
+
 (defn- logo-name [snapshot]
   [:table {:class "row header"}
     [:tbody
@@ -26,14 +42,14 @@
     [:tbody
       [:tr
         [:th {:class "small-12 large-12 first last columns"}
-          [:p {:class "text-center title"} (:title snapshot)]]]]])
+          [:p {:class "text-center title"} (emojify (:title snapshot))]]]]])
 
 (defn- message [snapshot]
   [:table {:class "row header"}
     [:tbody
       [:tr
         [:th {:class "small-12 large-12 first last columns content"}
-          [:p {:class "text-center content"} (:note snapshot)]]]]])
+          [:p {:class "text-center content"} (emojify (:note snapshot))]]]]])
 
 (defn- attribution [snapshot]
   (let [author (get-in snapshot [:author :name])
@@ -70,11 +86,11 @@
           (spacer 24)
           [:p {:class "topic-title"} (s/upper-case (:title topic))]
           (spacer 1)
-          [:p {:class "topic-headline"} (:headline topic)]
+          [:p {:class "topic-headline"} (emojify (:headline topic))]
           (spacer 2)]]
       [:tr
         [:th {:class "small-12 large-12 columns first last topic"}
-          (:body topic)
+          (emojify (:body topic))
           (spacer 20)]]
       [:tr
         [:th {:class "small-12 large-12 columns first last"}
@@ -123,8 +139,8 @@
       [:meta {:name "viewport", :content "width=device-width"}]
       [:link {:rel "stylesheet", :href "resources/css/foundation.css"}] ; Regular use
       [:link {:rel "stylesheet", :href "resources/css/opencompany.css"}] ; Regular use
-      ;[:link {:rel "stylesheet", :href "css/foundation.css"}] ; REPL testing
-      ;[:link {:rel "stylesheet", :href "css/opencompany.css"}] ; REPL testing
+      ;;[:link {:rel "stylesheet", :href "css/foundation.css"}] ; REPL testing
+      ;;[:link {:rel "stylesheet", :href "css/opencompany.css"}] ; REPL testing
       [:link {:href "http://fonts.googleapis.com/css?family=Domine", :rel "stylesheet", :type "text/css"}]
       [:link {:href "http://fonts.googleapis.com/css?family=Open+Sans", :rel "stylesheet", :type "text/css"}]
       (body snapshot)]])
