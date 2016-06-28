@@ -99,8 +99,6 @@ juice -V
 
 #### Required Secrets
 
-A secret is shared between the [OpenCompany Authentication Service](https://github.com/open-company/open-company-auth) and the email service for validating [JSON Web Tokens](https://jwt.io/).
-
 An [AWS SQS queue](https://aws.amazon.com/sqs/) is used to pass messages from other OpenCompany services to the email service. Setup an SQS Queue and key/secret/endpoint access to the queue using the AWS Web Console or API.
 
 Make sure you update the section in `project.clj` that looks like this to contain your actual JWT and AWS SQS secrets, and your email domain configuration:
@@ -108,7 +106,6 @@ Make sure you update the section in `project.clj` that looks like this to contai
 ```clojure
 :dev [:qa {
   :env ^:replace {
-    :open-company-auth-passphrase "this_is_a_dev_secret" ; JWT secret
     :aws-access-key-id "CHANGE-ME"
     :aws-secret-access-key "CHANGE-ME"
     :endpoint "us-east-1"

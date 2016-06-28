@@ -20,10 +20,6 @@
 
 (defonce email-from-domain (env :email-from-domain))
 
-;; ----- JWT -----
-
-(defonce passphrase (env :open-company-auth-passphrase))
-
 ;; ----- Logging (see https://github.com/ptaoussanis/timbre) -----
 
 (def log-config
