@@ -10,14 +10,16 @@
   [:table {:class "row header"}
     [:tbody
       [:tr
-        [:th {:class "small-6 large-6 first columns"}
-          [:img {:class "float-right logo"
-                 :style "background-color: #ffffff;border: solid 1px rgba(78, 90, 107, 0.2);"
-                 :height "50"
-                 :width "50"
-                 :src (:logo snapshot)}]]
-        [:th {:class "small-6 large-6 last columns"}
-          [:h4 {:class "name"} (:name snapshot)]]]]])
+        [:th {:class "small-12 large-12 first last columns"}
+          [:center {:data-parsed ""}
+              [:img {:class "logo float-center"
+                     :alt (str (:name snapshot) " logo")
+                     :style "display: inline; background-color: #ffffff;border: solid 1px rgba(78, 90, 107, 0.2);"
+                     :height "50"
+                     :width "50"
+                     :align "center"
+                     :src (:logo snapshot)}]
+              [:h4 {:class "name float-center" :style "padding-left: 18px; display: inline;"} (:name snapshot)]]]]]])
 
 (defn- title [snapshot]
   [:table {:class "row header"}
@@ -31,7 +33,7 @@
     [:tbody
       [:tr
         [:th {:class "small-12 large-12 first last columns content"}
-          (:note snapshot)]]]])
+          [:p {:class "text-center content"} (:note snapshot)]]]]])
 
 (defn- attribution [snapshot]
   (let [author (get-in snapshot [:author :name])
@@ -119,8 +121,10 @@
     [:head 
       [:meta {:http-equiv "Content-Type", :content "text/html; charset=utf-8"}]
       [:meta {:name "viewport", :content "width=device-width"}]
-      [:link {:rel "stylesheet", :href "resources/css/foundation.css"}]
-      [:link {:rel "stylesheet", :href "resources/css/opencompany.css"}]
+      [:link {:rel "stylesheet", :href "resources/css/foundation.css"}] ; Regular use
+      [:link {:rel "stylesheet", :href "resources/css/opencompany.css"}] ; Regular use
+      ;[:link {:rel "stylesheet", :href "css/foundation.css"}] ; REPL testing
+      ;[:link {:rel "stylesheet", :href "css/opencompany.css"}] ; REPL testing
       [:link {:href "http://fonts.googleapis.com/css?family=Domine", :rel "stylesheet", :type "text/css"}]
       [:link {:href "http://fonts.googleapis.com/css?family=Open+Sans", :rel "stylesheet", :type "text/css"}]
       (body snapshot)]])
