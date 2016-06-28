@@ -1,5 +1,6 @@
 (ns oc.email.mailer
-  (require [clojure.java.shell :as shell]
+  (require [clojure.string :as s]
+           [clojure.java.shell :as shell]
            [clojure.java.io :as io]
            [oc.email.config :as c]
            [taoensso.timbre :as timbre]
@@ -12,12 +13,16 @@
    :endpoint   c/aws-endpoint})
 
 (defn- send-email [to subject body]
-  (timbre/info "Sending email.")
-  (ses/send-email creds
-                  :destination {:to-addresses [to]}
-                  :source (str "snapshot@" c/email-from-domain)
-                  :message {:subject subject
-                            :body {:html body}}))
+  "Send emails to all to recipients in parallel."
+  (doall (pmap 
+    #(do 
+      (timbre/info "Sending email: " %)
+      (ses/send-email creds
+        :destination {:to-addresses [%]}
+        :source (str "snapshot@" c/email-from-domain)
+        :message {:subject subject
+                  :body {:html body}}))
+      (s/split to #","))))
 
 (defn send-snapshot [{api-token :api-token snapshot :snapshot to :to subject :subject note :note :as msg}]
   (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
@@ -34,16 +39,18 @@
 
 (comment
 
+  ;; For REPL testing
+
   (require '[oc.email.mailer :as mailer] :reload)
 
   (def snapshot (json/decode (slurp "./resources/snapshots/buffer.json")))
   (mailer/send-snapshot {:to "change@me.com"
                          :subject "[Buffer] Latest Update"
-                         :note "Enjoy!"
+                         :note "Enjoy this groovy update!"
                          :snapshot snapshot})
 
   (def snapshot (json/decode (slurp "./resources/snapshots/open.json")))
-  (mailer/send-snapshot {:to "change@me.com"
+  (mailer/send-snapshot {:to "change@me.com,change+1@me.com,change+2@me.com"
                          :subject "[OpenCompany] Check it"
                          :note "Hot diggity!"
                          :snapshot snapshot})

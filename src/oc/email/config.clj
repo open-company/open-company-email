@@ -14,7 +14,7 @@
 (defonce aws-secret-access-key (env :aws-secret-access-key))
 (defonce aws-endpoint (env :aws-endpoint))
 
-(defonce aws-sqs-queue (env :aws-sqs-email-queue))
+(defonce aws-sqs-email-queue (env :aws-sqs-email-queue))
 
 ;; ----- Email -----
 

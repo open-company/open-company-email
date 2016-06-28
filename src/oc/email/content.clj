@@ -152,7 +152,10 @@
     (h/html (head (keywordize-keys snapshot)))))
 
 (comment
+  
   ;; For REPL testing
+
+  (require '[oc.email.content :as email] :reload)
 
   ;; Recreate hiccup from various HTML fragments
 
