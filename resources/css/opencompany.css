@@ -5,6 +5,10 @@ html,
   font-family: Domine-Regular, Georgia, serif !important;
 }
 
+.note {
+  background: #fff;
+}
+
 .header {
   background: #f9f9f9;
 }

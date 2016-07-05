@@ -44,21 +44,20 @@
         [:th {:class "small-12 large-12 first last columns"}
           [:p {:class "text-center title"} (emojify (:title snapshot))]]]]])
 
-(defn- message [snapshot]
-  [:table {:class "row header"}
+(defn- note [snapshot]
+  [:table {:class "row note"}
     [:tbody
       [:tr
         [:th {:class "small-12 large-12 first last columns content"}
-          [:p {:class "text-center content"} (emojify (:note snapshot))]]]]])
+          (emojify (:note snapshot))]]]])
 
 (defn- attribution [snapshot]
-  (let [author (get-in snapshot [:author :name])
-        date (f/unparse pretty-date (f/parse (:created-at snapshot)))]
-    [:table {:class "row header"}
+  (let [author (get-in snapshot [:author :name])]
+    [:table {:class "row note"}
       [:tbody
         [:tr
           [:th {:class "small-12 large-12 first last columns"}
-            [:p {:class "text-center content"} (str "— " author " / " date)]]]]]))
+            [:p {:class "content"} (str "— " author)]]]]]))
 
 (defn- spacer
   ([pixels] (spacer pixels ""))
@@ -101,15 +100,11 @@
 (defn- content
   [snapshot]
   [:td
-    (spacer 52 "header")
+    (spacer 60 "header")
     (logo-name snapshot)
-    (spacer 37 "header")
+    (spacer 17 "header")
     (title snapshot)
-    (spacer 23 "header")
-    (message snapshot)
-    (spacer 16 "header")
-    (attribution snapshot)
-    (spacer 49 "header")
+    (spacer 42 "header")
     [:table
       [:tbody
         [:tr
@@ -121,11 +116,16 @@
 (defn- body
   [snapshot]
   [:body
-    [:table {:class "body", :snapshot-made-with-foundation ""}
+    [:table {:class "body"}
       [:tbody
         [:tr
           [:td {:class "center", :align "center", :valign "top"}
             [:center
+              (spacer 55 "note")
+              (note snapshot)
+              (spacer 16 "note")
+              (attribution snapshot)
+              (spacer 57 "note")
               [:table {:class "container"}
                 [:tbody
                   [:tr
@@ -137,10 +137,10 @@
     [:head 
       [:meta {:http-equiv "Content-Type", :content "text/html; charset=utf-8"}]
       [:meta {:name "viewport", :content "width=device-width"}]
-      [:link {:rel "stylesheet", :href "resources/css/foundation.css"}] ; Regular use
-      [:link {:rel "stylesheet", :href "resources/css/opencompany.css"}] ; Regular use
-      ;;[:link {:rel "stylesheet", :href "css/foundation.css"}] ; REPL testing
-      ;;[:link {:rel "stylesheet", :href "css/opencompany.css"}] ; REPL testing
+      ;;[:link {:rel "stylesheet", :href "resources/css/foundation.css"}] ; Regular use
+      ;;[:link {:rel "stylesheet", :href "resources/css/opencompany.css"}] ; Regular use
+      [:link {:rel "stylesheet", :href "css/foundation.css"}] ; REPL testing
+      [:link {:rel "stylesheet", :href "css/opencompany.css"}] ; REPL testing
       [:link {:href "http://fonts.googleapis.com/css?family=Domine", :rel "stylesheet", :type "text/css"}]
       [:link {:href "http://fonts.googleapis.com/css?family=Open+Sans", :rel "stylesheet", :type "text/css"}]
       (body snapshot)]])
@@ -155,7 +155,7 @@
   
   ;; For REPL testing
 
-  (require '[oc.email.content :as email] :reload)
+  (require '[oc.email.content :as content] :reload)
 
   ;; Recreate hiccup from various HTML fragments
 
@@ -189,10 +189,10 @@
 
   (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
   (def snapshot (json/decode (slurp "./resources/snapshots/buffer.json")))
-  (spit "./resources/hiccup.html" (email/html (assoc snapshot :note note)))
+  (spit "./resources/hiccup.html" (content/html (assoc snapshot :note note)))
 
   (def note "All there is to know about OpenCompany.")
   (def snapshot (json/decode (slurp "./resources/snapshots/open.json")))
-  (spit "./resources/hiccup.html" (email/html (assoc snapshot :note note)))
+  (spit "./resources/hiccup.html" (content/html (assoc snapshot :note note)))
 
   )
