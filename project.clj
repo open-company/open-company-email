@@ -13,16 +13,16 @@
 
   ;; All profile dependencies
   :dependencies [
-    [org.clojure/clojure "1.9.0-alpha7"] ; Lisp on the JVM http://clojure.org/documentation
+    [org.clojure/clojure "1.9.0-alpha9"] ; Lisp on the JVM http://clojure.org/documentation
     [environ "1.0.3"] ; Environment settings from different sources https://github.com/weavejester/environ
-    [com.taoensso/timbre "4.5.0-RC4"] ; Logging https://github.com/ptaoussanis/timbre
+    [com.taoensso/timbre "4.6.0-alpha2"] ; Logging https://github.com/ptaoussanis/timbre
     [raven-clj "1.4.2"] ; Interface to Sentry error reporting https://github.com/sethtrain/raven-clj
     [com.stuartsierra/component "0.3.1"] ; Component Lifecycle
-    [amazonica "0.3.61"] ; A comprehensive Clojure client for the entire Amazon AWS api https://github.com/mcohen01/amazonica
+    [amazonica "0.3.64"] ; A comprehensive Clojure client for the entire Amazon AWS api https://github.com/mcohen01/amazonica
     [hiccup "1.0.5"] ; HTML rendering https://github.com/weavejester/hiccup
-    [cheshire "5.6.2"] ; JSON encoding / decoding https://github.com/dakrone/cheshire
+    [cheshire "5.6.3"] ; JSON encoding / decoding https://github.com/dakrone/cheshire
     [clj-time "0.12.0"] ; Date and time lib https://github.com/clj-time/clj-time
-    [manifold "0.1.5-alpha1"] ; Async programming tools https://github.com/ztellman/manifold
+    [manifold "0.1.5-alpha2"] ; Async programming tools https://github.com/ztellman/manifold
     [com.kcthota/emoji4j "5.0"] ; Emoji library https://github.com/kcthota/emoji4j
   ]
 
