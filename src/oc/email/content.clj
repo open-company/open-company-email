@@ -97,8 +97,7 @@
           (spacer 30)
           [:th {:class "expander"}]]]]])
 
-(defn- content
-  [snapshot]
+(defn- content [snapshot]
   [:td
     (spacer 60 "header")
     (logo-name snapshot)
@@ -113,26 +112,30 @@
               (map #(topic (snapshot (keyword %))) (:sections snapshot))
               (repeat (spacer 25 "header"))))]]]])
 
-(defn- body
-  [snapshot]
+(defn- message [snapshot]
+  [:table
+    [:tbody
+      [:tr
+        (spacer 55 "note")
+        (note snapshot)
+        (spacer 16 "note")
+        (attribution snapshot)
+        (spacer 57 "note")]]])
+
+(defn- body [snapshot]
   [:body
     [:table {:class "body"}
       [:tbody
         [:tr
           [:td {:class "center", :align "center", :valign "top"}
             [:center
-              (spacer 55 "note")
-              (note snapshot)
-              (spacer 16 "note")
-              (attribution snapshot)
-              (spacer 57 "note")
+              (when-not (s/blank? (:note snapshot)) (message snapshot))
               [:table {:class "container"}
                 [:tbody
                   [:tr
                     (content snapshot)]]]]]]]]])
 
-(defn- head
-  [snapshot]
+(defn- head [snapshot]
   [:html {:xmlns "http://www.w3.org/1999/xhtml"} 
     [:head 
       [:meta {:http-equiv "Content-Type", :content "text/html; charset=utf-8"}]
@@ -145,8 +148,7 @@
       [:link {:href "http://fonts.googleapis.com/css?family=Open+Sans", :rel "stylesheet", :type "text/css"}]
       (body snapshot)]])
 
-(defn html
-  [snapshot]
+(defn html [snapshot]
   (str
     "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">"
     (h/html (head (keywordize-keys snapshot)))))
@@ -192,6 +194,10 @@
   (spit "./resources/hiccup.html" (content/html (assoc snapshot :note note)))
 
   (def note "All there is to know about OpenCompany.")
+  (def snapshot (json/decode (slurp "./resources/snapshots/open.json")))
+  (spit "./resources/hiccup.html" (content/html (assoc snapshot :note note)))
+
+  (def note "")
   (def snapshot (json/decode (slurp "./resources/snapshots/open.json")))
   (spit "./resources/hiccup.html" (content/html (assoc snapshot :note note)))
 
