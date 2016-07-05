@@ -88,7 +88,7 @@ npm -v
 The Node.js package manager, `npm`, can be used to install juice:
 
 ```console
-npm install juice -g
+npm install -g juice
 ```
 
 You can verify your juice installation by running:
@@ -97,7 +97,7 @@ You can verify your juice installation by running:
 juice -V
 ```
 
-#### Required Secrets
+#### Required Configuration & Secrets
 
 An [AWS SQS queue](https://aws.amazon.com/sqs/) is used to pass messages from other OpenCompany services to the email service. Setup an SQS Queue and key/secret/endpoint access to the queue using the AWS Web Console or API.
 

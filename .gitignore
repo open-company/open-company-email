@@ -13,3 +13,6 @@ pom.xml.asc
 /resources/templates/*
 /resources/hiccup.html
 /resources/hiccup.inline.html
+
+.ruby-gemset
+.ruby-version
