@@ -53,6 +53,8 @@
     {:subject "Buffer Update"
      :to "change@changeme.com,change2@changeme.com"
      :note "Howdy folks!"
+     :reply-to "joel@buffer.com"
+     :company-slug "buffer"
      :snapshot snapshot})
 
   ;; SQS message payload
@@ -61,6 +63,8 @@
     {:subject "OpenCompany Update"
      :to "sean@opencompany.com"
      :note "Look at this!"
+     :reply-to "stuart@opencompany.com"
+     :company-slug "open"
      :snapshot snapshot})
 
   (require '[amazonica.aws.sqs :as sqs])
@@ -69,7 +73,7 @@
   (sqs/send-message
      {:access-key c/aws-access-key-id
       :secret-key c/aws-secret-access-key}
-    c/aws-sqs-queue
+    c/aws-sqs-email-queue
     message)
 
   )

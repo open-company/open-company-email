@@ -12,26 +12,29 @@
    :secret-key c/aws-secret-access-key
    :endpoint   c/aws-endpoint})
 
-(defn- send-email [to subject body]
+(def source (str "snapshot@" c/email-from-domain))
+
+(defn- send-email [to reply-to subject body]
   "Send emails to all to recipients in parallel."
   (doall (pmap 
     #(do 
       (timbre/info "Sending email: " %)
       (ses/send-email creds
         :destination {:to-addresses [%]}
-        :source (str "snapshot@" c/email-from-domain)
-        :message {:subject subject
+        :source source
+        :message {:reply-to (if (s/blank? reply-to) source reply-to)
+                  :subject subject
                   :body {:html body}}))
       (s/split to #","))))
 
-(defn send-snapshot [{api-token :api-token snapshot :snapshot to :to subject :subject note :note :as msg}]
+(defn send-snapshot [{snapshot :snapshot to :to reply-to :reply-to subject :subject note :note}]
   (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
         html-file (str uuid-fragment ".html")
         inline-file (str uuid-fragment ".inline.html")]
     (try
       (spit html-file (content/html (assoc snapshot :note note))) ; create the email in a tmp file
       (shell/sh "juice" html-file inline-file) ; inline the CSS
-      (send-email to subject (slurp inline-file)) ; email it to the recipients
+      (send-email to reply-to subject (slurp inline-file)) ; email it to the recipients
       (finally
         ; remove the tmp files
         (io/delete-file html-file true)

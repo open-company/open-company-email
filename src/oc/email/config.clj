@@ -8,6 +8,10 @@
 
 (defonce dsn (or (env :open-company-sentry-api) false))
 
+;; ------ OC Web -----
+
+(defonce web-url (or (env :oc-web-server-url) "http://localhost:3559"))
+
 ;; ----- AWS SQS / SES -----
 
 (defonce aws-access-key-id (env :aws-access-key-id))

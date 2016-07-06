@@ -1,4 +1,4 @@
-(defproject open-company-email "0.0.1-SNAPSHOT"
+(defproject open-company-email "0.1.0-SNAPSHOT"
   :description "OpenCompany Email Service"
   :url "https://opencompany.com/"
   :license {
@@ -21,7 +21,6 @@
     [amazonica "0.3.64"] ; A comprehensive Clojure client for the entire Amazon AWS api https://github.com/mcohen01/amazonica
     [hiccup "1.0.5"] ; HTML rendering https://github.com/weavejester/hiccup
     [cheshire "5.6.3"] ; JSON encoding / decoding https://github.com/dakrone/cheshire
-    [clj-time "0.12.0"] ; Date and time lib https://github.com/clj-time/clj-time
     [manifold "0.1.5-alpha2"] ; Async programming tools https://github.com/ztellman/manifold
     [com.kcthota/emoji4j "5.0"] ; Emoji library https://github.com/kcthota/emoji4j
   ]
@@ -80,8 +79,6 @@
                  '[clojure.stacktrace :refer (print-stack-trace)]
                  '[clojure.string :as s]
                  '[cheshire.core :as json]
-                 '[clj-time.core :as t]
-                 '[clj-time.format :as f]
                  '[hiccup.core :as h]
                  '[hickory.core :as hickory]
                  '[oc.email.config :as c])

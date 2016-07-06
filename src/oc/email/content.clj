@@ -1,11 +1,8 @@
 (ns oc.email.content
   (:require [clojure.string :as s]
             [hiccup.core :as h]
-            [clj-time.format :as f]
-            [clojure.walk :refer (keywordize-keys)]))
-
-(def pretty-date (f/formatter "MMMM dd, yyyy"))
-
+            [clojure.walk :refer (keywordize-keys)]
+            [oc.email.config :as config]))
 
 (defn- escape-accidental-emoticon [text]
   "Replace any :/ with to avoid emojifying links and images."
@@ -77,25 +74,29 @@
                               :style (str "font-size:" pixels "px;line-height:" pixels "px;")} " "]]]]]
                 [:th {:class "expander"}]]]]]]]]))
 
-(defn- topic [topic]
-  [:table {:class "row topic"}
-    [:tbody
-      [:tr
-        [:th {:class "small-12 large-12 columns first last"}
-          (spacer 24)
-          [:p {:class "topic-title"} (s/upper-case (:title topic))]
-          (spacer 1)
-          [:p {:class "topic-headline"} (emojify (:headline topic))]
-          (spacer 2)]]
-      [:tr
-        [:th {:class "small-12 large-12 columns first last topic"}
-          (emojify (:body topic))
-          (spacer 20)]]
-      [:tr
-        [:th {:class "small-12 large-12 columns first last"}
-          [:a {:class "topic-read-more", :href "http://cnn.com/"} "READ MORE"]
-          (spacer 30)
-          [:th {:class "expander"}]]]]])
+(defn- topic [snapshot topic-name topic]
+  (let [body? (not (s/blank? (:body topic)))
+        company-slug (:company-slug snapshot)
+        snapshot-slug (:slug snapshot)
+        topic-url (s/join "/" [config/web-url company-slug "updates" snapshot-slug topic-name])]
+    [:table {:class "row topic"}
+      [:tbody
+        [:tr
+          [:th {:class "small-12 large-12 columns first last"}
+            (spacer 24)
+            [:p {:class "topic-title"} (s/upper-case (:title topic))]
+            (spacer 1)
+            [:p {:class "topic-headline"} (emojify (:headline topic))]
+            (spacer 2)]]
+        [:tr
+          [:th {:class "small-12 large-12 columns first last topic"}
+            (emojify (:body topic))
+            (when body? (spacer 20))]]
+        [:tr
+          [:th {:class "small-12 large-12 columns first last"}
+            (when body? [:a {:class "topic-read-more", :href topic-url} "READ MORE"])
+            (spacer 30)
+            [:th {:class "expander"}]]]]]))
 
 (defn- content [snapshot]
   [:td
@@ -109,7 +110,7 @@
         [:tr
           (into [:td] 
             (interleave
-              (map #(topic (snapshot (keyword %))) (:sections snapshot))
+              (map #(topic snapshot % (snapshot (keyword %))) (:sections snapshot))
               (repeat (spacer 25 "header"))))]]]])
 
 (defn- message [snapshot]
@@ -191,14 +192,14 @@
 
   (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
   (def snapshot (json/decode (slurp "./resources/snapshots/buffer.json")))
-  (spit "./resources/hiccup.html" (content/html (assoc snapshot :note note)))
+  (spit "./resources/hiccup.html" (content/html (-> snapshot (assoc :note note) (assoc :company-slug "buffer"))))
 
   (def note "All there is to know about OpenCompany.")
   (def snapshot (json/decode (slurp "./resources/snapshots/open.json")))
-  (spit "./resources/hiccup.html" (content/html (assoc snapshot :note note)))
+  (spit "./resources/hiccup.html" (content/html (-> snapshot (assoc :note note) (assoc :company-slug "open"))))
 
   (def note "")
   (def snapshot (json/decode (slurp "./resources/snapshots/open.json")))
-  (spit "./resources/hiccup.html" (content/html (assoc snapshot :note note)))
+  (spit "./resources/hiccup.html" (content/html (-> snapshot (assoc :note note) (assoc :company-slug "buffer"))))
 
   )
