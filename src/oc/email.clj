@@ -1,12 +1,12 @@
 (ns oc.email
+  (:gen-class)
   (:require [com.stuartsierra.component :as component]
             [manifold.stream :as stream]
             [taoensso.timbre :as timbre]
             [oc.email.config :as c]
             [oc.lib.sentry-appender :as sentry]
             [oc.lib.sqs :as sqs]
-            [oc.email.mailer :as mailer])
-  (:gen-class))
+            [oc.email.mailer :as mailer]))
 
 (defn system [config-options]
   (let [{:keys [sqs-queue sqs-msg-handler]} config-options]
@@ -25,7 +25,7 @@
     (timbre/merge-config!
       {:level     :info
        :appenders {:sentry (sentry/sentry-appender c/dsn)}})
-    (timbre/merge-config! {:level :debug})))
+    (timbre/merge-config! {:level :debug}))
 
   (Thread/setDefaultUncaughtExceptionHandler
    (reify Thread$UncaughtExceptionHandler
@@ -34,11 +34,11 @@
 
   (println (str "\n" (slurp (clojure.java.io/resource "oc/assets/ascii_art.txt")) "\n"
     "OpenCompany Email Service\n\n"
-    "AWS SQS queue: " c/aws-sqs-queue "\n"
+    "AWS SQS queue: " c/aws-sqs-email-queue "\n"
     "Sentry: " c/dsn "\n\n"
     "Ready to serve...\n"))
 
-  (component/start (system {:sqs-queue c/aws-sqs-queue
+  (component/start (system {:sqs-queue c/aws-sqs-email-queue
                             :sqs-msg-handler sqs-handler}))
 
   (deref (stream/take! (stream/stream)))) ; block forever

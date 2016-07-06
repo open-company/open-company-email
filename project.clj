@@ -87,8 +87,10 @@
 
     ;; Production environment
     :prod {
-      :env {
-      }
+    }
+
+    :uberjar {
+      :aot :all
     }
   }
 
@@ -98,7 +100,7 @@
   }
 
   :aliases {
-    "build" ["do" "clean," "deps," "compile"] ; clean and build code
+    "build" ["with-profile" "prod" "do" "clean," "uberjar"] ; clean and build code
     "repl" ["with-profile" "+repl-config" "repl"]
     "start" ["run" "-m" "oc.email"]
     "spell!" ["spell" "-n"] ; check spelling in docs and docstrings
@@ -106,4 +108,5 @@
     "ancient" ["ancient" ":all" ":allow-qualified"] ; check for out of date dependencies
   }
 
+  :main oc.email
 )
