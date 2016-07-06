@@ -79,24 +79,26 @@
         company-slug (:company-slug snapshot)
         snapshot-slug (:slug snapshot)
         topic-url (s/join "/" [config/web-url company-slug "updates" snapshot-slug topic-name])]
-    [:table {:class "row topic"}
-      [:tbody
-        [:tr
-          [:th {:class "small-12 large-12 columns first last"}
-            (spacer 24)
-            [:p {:class "topic-title"} (s/upper-case (:title topic))]
-            (spacer 1)
-            [:p {:class "topic-headline"} (emojify (:headline topic))]
-            (spacer 2)]]
-        [:tr
-          [:th {:class "small-12 large-12 columns first last topic"}
-            (emojify (:body topic))
-            (when body? (spacer 20))]]
-        [:tr
-          [:th {:class "small-12 large-12 columns first last"}
-            (when body? [:a {:class "topic-read-more", :href topic-url} "READ MORE"])
-            (spacer 30)
-            [:th {:class "expander"}]]]]]))
+    (if (:data topic)
+      [:table]
+      [:table {:class "row topic"}
+        [:tbody
+          [:tr
+            [:th {:class "small-12 large-12 columns first last"}
+              (spacer 24)
+              [:p {:class "topic-title"} (s/upper-case (:title topic))]
+              (spacer 1)
+              [:p {:class "topic-headline"} (emojify (:headline topic))]
+              (spacer 2)]]
+          [:tr
+            [:th {:class "small-12 large-12 columns first last topic"}
+              (emojify (:body topic))
+              (when body? (spacer 20))]]
+          [:tr
+            [:th {:class "small-12 large-12 columns first last"}
+              (when body? [:a {:class "topic-read-more", :href topic-url} "READ MORE"])
+              (spacer 30)
+              [:th {:class "expander"}]]]]])))
 
 (defn- content [snapshot]
   [:td
@@ -141,10 +143,10 @@
     [:head 
       [:meta {:http-equiv "Content-Type", :content "text/html; charset=utf-8"}]
       [:meta {:name "viewport", :content "width=device-width"}]
-      [:link {:rel "stylesheet", :href "resources/css/foundation.css"}] ; Regular use
-      [:link {:rel "stylesheet", :href "resources/css/opencompany.css"}] ; Regular use
-      ;;[:link {:rel "stylesheet", :href "css/foundation.css"}] ; REPL testing
-      ;;[:link {:rel "stylesheet", :href "css/opencompany.css"}] ; REPL testing
+      ;;[:link {:rel "stylesheet", :href "resources/css/foundation.css"}] ; Regular use
+      ;;[:link {:rel "stylesheet", :href "resources/css/opencompany.css"}] ; Regular use
+      [:link {:rel "stylesheet", :href "css/foundation.css"}] ; REPL testing
+      [:link {:rel "stylesheet", :href "css/opencompany.css"}] ; REPL testing
       [:link {:href "http://fonts.googleapis.com/css?family=Domine", :rel "stylesheet", :type "text/css"}]
       [:link {:href "http://fonts.googleapis.com/css?family=Open+Sans", :rel "stylesheet", :type "text/css"}]
       (body snapshot)]])

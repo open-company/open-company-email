@@ -1,5 +1,6 @@
 {
   "slug" : "june-2016-update-ffbe",
+  "currency": "USD",
   "sections" : [ "team", "challenges", "update", "fundraising", "values", "finances" ],
   "logo" : "https://open-company-assets.s3.amazonaws.com/open-company.png",
   "challenges" : {
