@@ -6,7 +6,7 @@
 
 ;; ----- Sentry -----
 
-(defonce dsn (or (env :open-company-sentry-api) false))
+(defonce dsn (or (env :sentry-dsn) false))
 
 ;; ------ OC Web -----
 
