@@ -53,7 +53,7 @@
     {:subject "Buffer Update"
      :to "change@changeme.com,change2@changeme.com"
      :note "Howdy folks!"
-     :reply-to "joel@buffer.com"
+     :reply-to "hange@changeme.com"
      :company-slug "buffer"
      :snapshot snapshot})
 
@@ -61,9 +61,9 @@
   (def snapshot (json/decode (slurp "./resources/snapshots/open.json")))
   (def message 
     {:subject "OpenCompany Update"
-     :to "sean@opencompany.com"
+     :to "change@changeme.com"
      :note "Look at this!"
-     :reply-to "stuart@opencompany.com"
+     :reply-to "change@changeme.com"
      :company-slug "open"
      :snapshot snapshot})
 

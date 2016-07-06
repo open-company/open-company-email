@@ -22,12 +22,12 @@
       (ses/send-email creds
         :destination {:to-addresses [%]}
         :source source
-        :message {:reply-to (if (s/blank? reply-to) source reply-to)
-                  :subject subject
+        :reply-to-addresses [(if (s/blank? reply-to) source reply-to)]
+        :message {:subject subject
                   :body {:html body}}))
       (s/split to #","))))
 
-(defn send-snapshot [{snapshot :snapshot to :to reply-to :reply-to subject :subject note :note}]
+(defn send-snapshot [{to :to reply-to :reply-to subject :subject note :note snapshot :snapshot}]
   (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
         html-file (str uuid-fragment ".html")
         inline-file (str uuid-fragment ".inline.html")]
@@ -48,14 +48,16 @@
 
   (def snapshot (json/decode (slurp "./resources/snapshots/buffer.json")))
   (mailer/send-snapshot {:to "change@me.com"
+                         :reply-to "change@me.com"
                          :subject "[Buffer] Latest Update"
                          :note "Enjoy this groovy update!"
                          :snapshot snapshot})
 
   (def snapshot (json/decode (slurp "./resources/snapshots/open.json")))
   (mailer/send-snapshot {:to "change@me.com,change+1@me.com,change+2@me.com"
+                         :reply-to "change@me.com"
                          :subject "[OpenCompany] Check it"
                          :note "Hot diggity!"
                          :snapshot snapshot})
 
-  )
+)

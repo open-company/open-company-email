@@ -141,10 +141,10 @@
     [:head 
       [:meta {:http-equiv "Content-Type", :content "text/html; charset=utf-8"}]
       [:meta {:name "viewport", :content "width=device-width"}]
-      ;;[:link {:rel "stylesheet", :href "resources/css/foundation.css"}] ; Regular use
-      ;;[:link {:rel "stylesheet", :href "resources/css/opencompany.css"}] ; Regular use
-      [:link {:rel "stylesheet", :href "css/foundation.css"}] ; REPL testing
-      [:link {:rel "stylesheet", :href "css/opencompany.css"}] ; REPL testing
+      [:link {:rel "stylesheet", :href "resources/css/foundation.css"}] ; Regular use
+      [:link {:rel "stylesheet", :href "resources/css/opencompany.css"}] ; Regular use
+      ;;[:link {:rel "stylesheet", :href "css/foundation.css"}] ; REPL testing
+      ;;[:link {:rel "stylesheet", :href "css/opencompany.css"}] ; REPL testing
       [:link {:href "http://fonts.googleapis.com/css?family=Domine", :rel "stylesheet", :type "text/css"}]
       [:link {:href "http://fonts.googleapis.com/css?family=Open+Sans", :rel "stylesheet", :type "text/css"}]
       (body snapshot)]])
