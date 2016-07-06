@@ -40,7 +40,7 @@ Most of the dependencies are internal, meaning [Leiningen](https://github.com/te
 
 * [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/index.html) - a Java 8+ JRE is needed to run Clojure
 * [Leiningen](https://github.com/technomancy/leiningen) 2.5.1+ - Clojure's build and dependency management tool
-* [Node.js](https://nodejs.org/en/) 4.4.5+ - JavaScript runtime
+* [Node.js](https://nodejs.org/en/) v0.10.25+ - JavaScript runtime
 * [Juice](https://github.com/Automattic/juice) 2.0.0+ - Inlines CSS into HTML
 
 #### Java
@@ -74,7 +74,7 @@ lein deps
 
 For Mac OS X, download the latest long-term support (LTS) `.pkg` installer from the [Node.js download page](https://nodejs.org/en/download/). Double click the package to run it.
 
-For Linux, install nodejs with your distribution's preferred package manager, e.g. `sudo apt-get install build-essential nodejs`.
+For Linux, install nodejs with your distribution's preferred package manager, e.g. `sudo apt-get install build-essential nodejs nodejs-legacy npm`.
 
 You can verify your Node.js installation by running:
 
