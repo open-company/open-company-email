@@ -1,5 +1,5 @@
 {
-  "slug" : "may-2016-update-5ccc",
+  "slug" : "june-2016-update-7ae4",
   "customer-service" : {
     "author" : {
       "image" : "https://secure.gravatar.com/avatar/46c1c756f36549c2dea0253e1e025053?s=96&d=mm&r=g",
@@ -13,7 +13,7 @@
     "title" : "Happiness",
     "updated-at" : "2015-11-20T08:00:46.000Z"
   },
-  "sections" : [ "team", "product", "customer-service", "marketing", "help", "update", "values", "mission", "diversity" ],
+  "sections" : [ "team", "product", "customer-service", "marketing", "help", "update", "values", "mission", "diversity", "growth", "finances" ],
   "logo" : "https://open-company-assets.s3.amazonaws.com/buffer.png",
   "name" : "Buffer",
   "mission" : {
@@ -55,9 +55,9 @@
     "title" : "Diversity",
     "updated-at" : "2015-08-24T16:11:12.000Z"
   },
-  "title" : "May 2016 Update",
+  "title" : "June 2016 Update",
   "author" : {
-    "image" : "https://secure.gravatar.com/avatar/f5b8fc1affa266c8072068f811f63e04.jpg?s=192&d=https%3A%2F%2Fa.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0020-192.png",
+    "image" : "https://secure.gravatar.com/avatar/866a6350e399e67e749c6f2aef0b96c0.jpg?s=192&d=https%3A%2F%2Fa.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0020-192.png",
     "name" : "Sean Johnson",
     "user-id" : "slack:U06SBTXJR"
   },
@@ -100,6 +100,69 @@
     "title" : "Values",
     "updated-at" : "2015-06-08T12:35:19.000Z"
   },
+  "finances" : {
+    "author" : {
+      "image" : "https://secure.gravatar.com/avatar/46c1c756f36549c2dea0253e1e025053?s=96&d=mm&r=g",
+      "name" : "Joel Gascoigne",
+      "user-id" : "123456"
+    },
+    "created-at" : "2015-11-20T08:00:46.000Z",
+    "data" : [ {
+      "cash" : 2084935,
+      "costs" : 444710,
+      "period" : "2015-01",
+      "revenue" : 441108
+    }, {
+      "cash" : 1827750,
+      "costs" : 719421,
+      "period" : "2015-02",
+      "revenue" : 462236
+    }, {
+      "cash" : 2084003,
+      "costs" : 232518,
+      "period" : "2015-03",
+      "revenue" : 488771
+    }, {
+      "cash" : 2165528,
+      "costs" : 427636,
+      "period" : "2015-04",
+      "revenue" : 509161
+    }, {
+      "cash" : 2267067,
+      "costs" : 430811,
+      "period" : "2015-05",
+      "revenue" : 532350
+    }, {
+      "cash" : 2578881,
+      "costs" : 238715,
+      "period" : "2015-06",
+      "revenue" : 550529
+    }, {
+      "cash" : 2655505,
+      "costs" : 494907,
+      "period" : "2015-07",
+      "revenue" : 571532
+    }, {
+      "cash" : 2789388,
+      "costs" : 490313,
+      "period" : "2015-08",
+      "revenue" : 624196
+    }, {
+      "cash" : 2757998,
+      "costs" : 675382,
+      "period" : "2015-09",
+      "revenue" : 643992
+    }, {
+      "cash" : 2546589,
+      "costs" : 861887,
+      "period" : "2015-10",
+      "revenue" : 650478
+    } ],
+    "description" : "Cash on hand, burn and runway",
+    "headline" : "",
+    "title" : "Finances",
+    "updated-at" : "2015-11-20T08:00:46.000Z"
+  },
   "help" : {
     "author" : {
       "image" : "https://secure.gravatar.com/avatar/46c1c756f36549c2dea0253e1e025053?s=96&d=mm&r=g",
@@ -113,8 +176,215 @@
     "title" : "Asks",
     "updated-at" : "2015-11-20T08:00:46.000Z"
   },
+  "growth" : {
+    "description" : "Growth metrics and key performance indicators",
+    "updated-at" : "2015-11-20T08:00:46.000Z",
+    "headline" : "Seeing an impact from our move from 7 to 30-day trials for Buffer for Business",
+    "title" : "Key metrics",
+    "author" : {
+      "image" : "https://secure.gravatar.com/avatar/46c1c756f36549c2dea0253e1e025053?s=96&d=mm&r=g",
+      "name" : "Joel Gascoigne",
+      "user-id" : "123456"
+    },
+    "notes" : {
+      "author" : {
+        "image" : "https://secure.gravatar.com/avatar/46c1c756f36549c2dea0253e1e025053?s=96&d=mm&r=g",
+        "name" : "Joel Gascoigne",
+        "user-id" : "123456"
+      },
+      "body" : "<p>It can clearly be seen :see_no_evil: in the numbers here that our move from 7-day to 30-day trials for Buffer\n          for Business has significantly impacted metrics (most noticeably MRR).</p>\n          <p>The reason this has stalled our revenue growth is that it created a 30-day gap with no expiring trials\n          and therefore no new converting Buffer for Business customers.</p>\n          <p>This is an expected outcome that we decided was the right move for us to grow Buffer for Business.</p>\n          <p>I'm happy to share that from the trend we've seen for the first week of November, we are seeing an\n          increase in both the number of trials and the conversion rate of trials as a result of moving from 7-day\n          to 30-day trials.</p>\n          </p>",
+      "updated-at" : "2015-11-20T08:00:46.000Z"
+    },
+    "created-at" : "2015-11-20T08:00:46.000Z",
+    "metrics" : [ {
+      "description" : "Total number of registered users",
+      "interval" : "monthly",
+      "name" : "Users",
+      "slug" : "total-registered-users",
+      "unit" : "number"
+    }, {
+      "description" : "Monthly Active Users",
+      "interval" : "monthly",
+      "name" : "MAU",
+      "slug" : "mau",
+      "unit" : "number"
+    }, {
+      "description" : "Average Daily Active Users",
+      "interval" : "monthly",
+      "name" : "Avg DAU",
+      "slug" : "dau",
+      "unit" : "number"
+    }, {
+      "description" : "Annual Recurring Revenue",
+      "interval" : "monthly",
+      "name" : "ARR",
+      "slug" : "arr",
+      "unit" : "currency"
+    } ],
+    "data" : [ {
+      "period" : "2015-01",
+      "slug" : "total-registered-users",
+      "value" : 2090805
+    }, {
+      "period" : "2015-01",
+      "slug" : "mau",
+      "value" : 183638
+    }, {
+      "period" : "2015-01",
+      "slug" : "dau",
+      "value" : 44790
+    }, {
+      "period" : "2015-01",
+      "slug" : "arr",
+      "value" : 5290000
+    }, {
+      "period" : "2015-02",
+      "slug" : "total-registered-users",
+      "value" : 2171877
+    }, {
+      "period" : "2015-02",
+      "slug" : "mau",
+      "value" : 189216
+    }, {
+      "period" : "2015-02",
+      "slug" : "dau",
+      "value" : 47937
+    }, {
+      "period" : "2015-02",
+      "slug" : "arr",
+      "value" : 5550000
+    }, {
+      "period" : "2015-03",
+      "slug" : "total-registered-users",
+      "value" : 2261641
+    }, {
+      "period" : "2015-03",
+      "slug" : "mau",
+      "value" : 207035
+    }, {
+      "period" : "2015-03",
+      "slug" : "dau",
+      "value" : 50538
+    }, {
+      "period" : "2015-03",
+      "slug" : "arr",
+      "value" : 5870000
+    }, {
+      "period" : "2015-04",
+      "slug" : "total-registered-users",
+      "value" : 2351405
+    }, {
+      "period" : "2015-04",
+      "slug" : "mau",
+      "value" : 200125
+    }, {
+      "period" : "2015-04",
+      "slug" : "dau",
+      "value" : 49728
+    }, {
+      "period" : "2015-04",
+      "slug" : "arr",
+      "value" : 6110000
+    }, {
+      "period" : "2015-05",
+      "slug" : "total-registered-users",
+      "value" : 2432382
+    }, {
+      "period" : "2015-05",
+      "slug" : "mau",
+      "value" : 203449
+    }, {
+      "period" : "2015-05",
+      "slug" : "dau",
+      "value" : 49202
+    }, {
+      "period" : "2015-05",
+      "slug" : "arr",
+      "value" : 6390000
+    }, {
+      "period" : "2015-06",
+      "slug" : "total-registered-users",
+      "value" : 2511292
+    }, {
+      "period" : "2015-07",
+      "slug" : "total-registered-users",
+      "value" : 2592194
+    }, {
+      "period" : "2015-08",
+      "slug" : "total-registered-users",
+      "value" : 2673418
+    }, {
+      "period" : "2015-09",
+      "slug" : "total-registered-users",
+      "value" : 2757998
+    }, {
+      "period" : "2015-10",
+      "slug" : "total-registered-users",
+      "value" : 2841519
+    }, {
+      "period" : "2015-06",
+      "slug" : "mau",
+      "value" : 206464
+    }, {
+      "period" : "2015-07",
+      "slug" : "mau",
+      "value" : 208667
+    }, {
+      "period" : "2015-08",
+      "slug" : "mau",
+      "value" : 211520
+    }, {
+      "period" : "2015-09",
+      "slug" : "mau",
+      "value" : 219744
+    }, {
+      "period" : "2015-10",
+      "slug" : "mau",
+      "value" : 226445
+    }, {
+      "period" : "2015-06",
+      "slug" : "dau",
+      "value" : 52229
+    }, {
+      "period" : "2015-07",
+      "slug" : "dau",
+      "value" : 51491
+    }, {
+      "period" : "2015-08",
+      "slug" : "dau",
+      "value" : 50489
+    }, {
+      "period" : "2015-09",
+      "slug" : "dau",
+      "value" : 54357
+    }, {
+      "period" : "2015-10",
+      "slug" : "dau",
+      "value" : 55460
+    }, {
+      "period" : "2015-06",
+      "slug" : "arr",
+      "value" : 6610000
+    }, {
+      "period" : "2015-07",
+      "slug" : "arr",
+      "value" : 6860000
+    }, {
+      "period" : "2015-08",
+      "slug" : "arr",
+      "value" : 7490000
+    }, {
+      "period" : "2015-09",
+      "slug" : "arr",
+      "value" : 7730000
+    }, {
+      "period" : "2015-10",
+      "slug" : "arr",
+      "value" : 7810000
+    } ]
+  },
   "logo-width" : 313,
-  "created-at" : "2016-06-23T19:27:46.471Z",
+  "created-at" : "2016-07-06T13:36:26.921Z",
   "logo-height" : 319,
   "marketing" : {
     "author" : {
@@ -132,7 +402,7 @@
   "links" : [ {
     "rel" : "self",
     "method" : "GET",
-    "href" : "/companies/buffer/updates/may-2016-update-5ccc",
+    "href" : "/companies/buffer/updates/june-2016-update-7ae4",
     "type" : "application/vnd.open-company.stakeholder-update.v1+json"
   }, {
     "rel" : "company",
@@ -142,6 +412,6 @@
   }, {
     "rel" : "delete",
     "method" : "DELETE",
-    "href" : "/companies/buffer/updates/may-2016-update-5ccc"
+    "href" : "/companies/buffer/updates/june-2016-update-7ae4"
   } ]
 }
