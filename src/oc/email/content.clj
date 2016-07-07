@@ -45,7 +45,7 @@
   [:table {:class "row note"}
     [:tbody
       [:tr
-        [:th {:class "small-12 large-12 first last columns content"}
+        [:th {:class "small-12 large-12 first last columns"}
           (emojify (:note snapshot))]]]])
 
 (defn- attribution [snapshot]
@@ -54,7 +54,7 @@
       [:tbody
         [:tr
           [:th {:class "small-12 large-12 first last columns"}
-            [:p {:class "content"} (str "— " author)]]]]]))
+            [:p (str "— " author)]]]]]))
 
 (defn- spacer
   ([pixels] (spacer pixels ""))
