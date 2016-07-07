@@ -10,7 +10,7 @@
 
 ;; ------ OC Web -----
 
-(defonce web-url (or (env :oc-web-server-url) "http://localhost:3559"))
+(defonce web-url (or (env :oc-web-url) "http://localhost:3559"))
 
 ;; ----- AWS SQS / SES -----
 
