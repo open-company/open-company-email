@@ -45,7 +45,7 @@
   [:table {:class "row note"}
     [:tbody
       [:tr
-        [:th {:class "small-12 large-12 first last columns"}
+        [:th {:class "small-12 large-12 first last columns note"}
           (emojify (:note snapshot))]]]])
 
 (defn- attribution [snapshot]
@@ -53,8 +53,8 @@
     [:table {:class "row note"}
       [:tbody
         [:tr
-          [:th {:class "small-12 large-12 first last columns"}
-            [:p (str "— " author)]]]]]))
+          [:th {:class "small-12 large-12 first last columns note"}
+            [:p {:class "note"} (str "— " author)]]]]]))
 
 (defn- spacer
   ([pixels] (spacer pixels ""))
@@ -145,8 +145,8 @@
       [:meta {:name "viewport", :content "width=device-width"}]
       [:link {:rel "stylesheet", :href "resources/css/foundation.css"}] ; Regular use
       [:link {:rel "stylesheet", :href "resources/css/opencompany.css"}] ; Regular use
-      ;;[:link {:rel "stylesheet", :href "css/foundation.css"}] ; REPL testing
-      ;;[:link {:rel "stylesheet", :href "css/opencompany.css"}] ; REPL testing
+      ;; [:link {:rel "stylesheet", :href "css/foundation.css"}] ; REPL testing
+      ;; [:link {:rel "stylesheet", :href "css/opencompany.css"}] ; REPL testing
       [:link {:href "http://fonts.googleapis.com/css?family=Domine", :rel "stylesheet", :type "text/css"}]
       [:link {:href "http://fonts.googleapis.com/css?family=Open+Sans", :rel "stylesheet", :type "text/css"}]
       (body snapshot)]])
