@@ -143,10 +143,8 @@
     [:head 
       [:meta {:http-equiv "Content-Type", :content "text/html; charset=utf-8"}]
       [:meta {:name "viewport", :content "width=device-width"}]
-      [:link {:rel "stylesheet", :href "resources/css/foundation.css"}] ; Regular use
-      [:link {:rel "stylesheet", :href "resources/css/opencompany.css"}] ; Regular use
-      ;; [:link {:rel "stylesheet", :href "css/foundation.css"}] ; REPL testing
-      ;; [:link {:rel "stylesheet", :href "css/opencompany.css"}] ; REPL testing
+      [:link {:rel "stylesheet", :href "resources/css/foundation.css"}]
+      [:link {:rel "stylesheet", :href "resources/css/opencompany.css"}]
       [:link {:href "http://fonts.googleapis.com/css?family=Domine", :rel "stylesheet", :type "text/css"}]
       [:link {:href "http://fonts.googleapis.com/css?family=Open+Sans", :rel "stylesheet", :type "text/css"}]
       (body snapshot)]])
@@ -188,20 +186,20 @@
   (def data (slurp "./resources/topic.html"))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (spit "./resources/hiccup.html" (email/html {}))
+  (spit "./hiccup.html" (email/html {}))
 
   ;; Generate test email HTML content from various snapshots
 
   (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
-  (def snapshot (json/decode (slurp "./resources/snapshots/buffer.json")))
-  (spit "./resources/hiccup.html" (content/html (-> snapshot (assoc :note note) (assoc :company-slug "buffer"))))
+  (def snapshot (json/decode (slurp "./opt/samples/buffer.json")))
+  (spit "./hiccup.html" (content/html (-> snapshot (assoc :note note) (assoc :company-slug "buffer"))))
 
   (def note "All there is to know about OpenCompany.")
-  (def snapshot (json/decode (slurp "./resources/snapshots/open.json")))
-  (spit "./resources/hiccup.html" (content/html (-> snapshot (assoc :note note) (assoc :company-slug "open"))))
+  (def snapshot (json/decode (slurp "./opt/samples/open.json")))
+  (spit "./hiccup.html" (content/html (-> snapshot (assoc :note note) (assoc :company-slug "open"))))
 
   (def note "")
-  (def snapshot (json/decode (slurp "./resources/snapshots/open.json")))
-  (spit "./resources/hiccup.html" (content/html (-> snapshot (assoc :note note) (assoc :company-slug "buffer"))))
+  (def snapshot (json/decode (slurp "./opt/samples/open.json")))
+  (spit "./hiccup.html" (content/html (-> snapshot (assoc :note note) (assoc :company-slug "buffer"))))
 
   )

@@ -48,7 +48,7 @@
 
 
   ;; SQS message payload
-  (def snapshot (json/decode (slurp "./resources/snapshots/buffer.json")))
+  (def snapshot (json/decode (slurp "./opt/samples/buffer.json")))
   (def message 
     {:subject "Buffer Update"
      :to "change@changeme.com,change2@changeme.com"
@@ -58,7 +58,7 @@
      :snapshot snapshot})
 
   ;; SQS message payload
-  (def snapshot (json/decode (slurp "./resources/snapshots/open.json")))
+  (def snapshot (json/decode (slurp "./opt/samples/open.json")))
   (def message 
     {:subject "OpenCompany Update"
      :to "change@changeme.com"

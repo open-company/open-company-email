@@ -10,9 +10,8 @@ pom.xml.asc
 .hgignore
 .hg/
 
-/resources/templates/*
-/resources/hiccup.html
-/resources/hiccup.inline.html
+/hiccup.html
+/hiccup.inline.html
 
 .ruby-gemset
 .ruby-version
