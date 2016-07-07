@@ -12,17 +12,17 @@
    :secret-key c/aws-secret-access-key
    :endpoint   c/aws-endpoint})
 
-(def source (str "snapshot@" c/email-from-domain))
+(def default-reply-to (str "hello@" c/email-from-domain))
 
-(defn- send-email [to reply-to subject body]
+(defn- send-email [to reply-to subject company-slug body]
   "Send emails to all to recipients in parallel."
   (doall (pmap 
     #(do 
       (timbre/info "Sending email: " %)
       (ses/send-email creds
         :destination {:to-addresses [%]}
-        :source source
-        :reply-to-addresses [(if (s/blank? reply-to) source reply-to)]
+        :source (str company-slug "@" c/email-from-domain)
+        :reply-to-addresses [(if (s/blank? reply-to) default-reply-to reply-to)]
         :message {:subject subject
                   :body {:html body}}))
       (s/split to #","))))
@@ -34,7 +34,7 @@
     (try
       (spit html-file (content/html (assoc snapshot :note note))) ; create the email in a tmp file
       (shell/sh "juice" html-file inline-file) ; inline the CSS
-      (send-email to reply-to subject (slurp inline-file)) ; email it to the recipients
+      (send-email to reply-to subject (:company-slug snapshot) (slurp inline-file)) ; email it to the recipients
       (finally
         ; remove the tmp files
         (io/delete-file html-file true)
@@ -51,13 +51,13 @@
                          :reply-to "change@me.com"
                          :subject "[Buffer] Latest Update"
                          :note "Enjoy this groovy update!"
-                         :snapshot snapshot})
+                         :snapshot (assoc snapshot :company-slug "buffer")})
 
   (def snapshot (json/decode (slurp "./resources/snapshots/open.json")))
   (mailer/send-snapshot {:to "change@me.com,change+1@me.com,change+2@me.com"
                          :reply-to "change@me.com"
                          :subject "[OpenCompany] Check it"
                          :note "Hot diggity!"
-                         :snapshot snapshot})
+                         :snapshot (assoc snapshot :company-slug "open")})
 
 )
