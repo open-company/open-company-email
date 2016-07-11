@@ -25,7 +25,7 @@
         (timbre/info "Sending email: " %)
         (ses/send-email creds
           :destination {:to-addresses [%]}
-          :source (str company-name " Update <" company-slug "@" c/email-from-domain ">")
+          :source (str company-name "<" company-slug "@" c/email-from-domain ">")
           :reply-to-addresses [(if (s/blank? reply-to) default-reply-to reply-to)]
           :message {:subject subject
                     :body {:html body}}))

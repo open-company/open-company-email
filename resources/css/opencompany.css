@@ -5,6 +5,11 @@ html,
   font-family: Domine-Regular, Georgia, serif !important;
 }
 
+table.message {
+  display: table;
+  width: 100%;
+}
+
 .note, p.note {
   background: #fff;
   font-family: Arial, sans-serif !important;

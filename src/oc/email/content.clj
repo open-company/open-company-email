@@ -24,15 +24,14 @@
     [:tbody
       [:tr
         [:th {:class "small-12 large-12 first last columns"}
-          [:center {:data-parsed ""}
-              [:img {:class "logo float-center"
-                     :alt (str (:name snapshot) " logo")
-                     :style "display: inline; background-color: #ffffff;border: solid 1px rgba(78, 90, 107, 0.2);"
-                     :height "50"
-                     :width "50"
-                     :align "center"
-                     :src (:logo snapshot)}]
-              [:h4 {:class "name float-center" :style "padding-left: 18px; display: inline;"} (:name snapshot)]]]]]])
+          [:img {:class "logo float-center"
+                 :alt (str (:name snapshot) " logo")
+                 :style "display: inline; background-color: #ffffff;border: solid 1px rgba(78, 90, 107, 0.2);"
+                 :height "50px"
+                 :width "50px"
+                 :align "center"
+                 :src (:logo snapshot)}]
+          [:h4 {:class "name float-center" :style "padding-left: 18px; display: inline;"} (:name snapshot)]]]]])
 
 (defn- title [snapshot]
   [:table {:class "row header"}
@@ -70,8 +69,7 @@
                   [:table {:class "spacer"}
                     [:tbody
                       [:tr
-                        [:td {:height (str pixels "px")
-                              :style (str "font-size:" pixels "px;line-height:" pixels "px;")} " "]]]]]
+                        [:td {:style (str "font-size:" pixels "px;line-height:" pixels "px;")} " "]]]]]
                 [:th {:class "expander"}]]]]]]]]))
 
 (defn- topic [snapshot topic-name topic]
@@ -80,7 +78,7 @@
         snapshot-slug (:slug snapshot)
         topic-url (s/join "/" [config/web-url company-slug "updates" snapshot-slug topic-name])]
     (if (:data topic)
-      [:table]
+      [:span]
       [:table {:class "row topic"}
         [:tbody
           [:tr
@@ -97,33 +95,35 @@
           [:tr
             [:th {:class "small-12 large-12 columns first last"}
               (when body? [:a {:class "topic-read-more", :href topic-url} "READ MORE"])
-              (spacer 30)
-              [:th {:class "expander"}]]]]])))
+              (spacer 30)]
+            [:th {:class "expander"}]]]])))
 
 (defn- content [snapshot]
-  [:td
-    (spacer 60 "header")
-    (logo-name snapshot)
-    (spacer 17 "header")
-    (title snapshot)
-    (spacer 42 "header")
-    [:table
-      [:tbody
-        [:tr
-          (into [:td] 
-            (interleave
-              (map #(topic snapshot % (snapshot (keyword %))) (:sections snapshot))
-              (repeat (spacer 25 "header"))))]]]])
+  [:tr
+    [:td
+      (spacer 60 "header")
+      (logo-name snapshot)
+      (spacer 17 "header")
+      (title snapshot)
+      (spacer 42 "header")
+      [:table
+        [:tbody
+          [:tr
+            (into [:td] 
+              (interleave
+                (map #(topic snapshot % (snapshot (keyword %))) (:sections snapshot))
+                (repeat (spacer 25 "header"))))]]]]])
 
 (defn- message [snapshot]
-  [:table
+  [:table {:class "message"}
     [:tbody
       [:tr
-        (spacer 55 "note")
-        (note snapshot)
-        (spacer 16 "note")
-        (attribution snapshot)
-        (spacer 57 "note")]]])
+        [:td
+          (spacer 55 "note")
+          (note snapshot)
+          (spacer 16 "note")
+          (attribution snapshot)
+          (spacer 57 "note")]]]])
 
 (defn- body [snapshot]
   [:body
@@ -131,23 +131,22 @@
       [:tbody
         [:tr
           [:td {:class "center", :align "center", :valign "top"}
-            [:center
-              (when-not (s/blank? (:note snapshot)) (message snapshot))
-              [:table {:class "container"}
-                [:tbody
-                  [:tr
-                    (content snapshot)]]]]]]]]])
+            (when-not (s/blank? (:note snapshot)) (message snapshot))
+            [:table {:class "container"}
+              [:tbody
+                (content snapshot)]]]]]]])
 
 (defn- head [snapshot]
   [:html {:xmlns "http://www.w3.org/1999/xhtml"} 
     [:head 
       [:meta {:http-equiv "Content-Type", :content "text/html; charset=utf-8"}]
       [:meta {:name "viewport", :content "width=device-width"}]
+      [:title (str (:name snapshot) " Update")]
       [:link {:rel "stylesheet", :href "resources/css/foundation.css"}]
       [:link {:rel "stylesheet", :href "resources/css/opencompany.css"}]
       [:link {:href "http://fonts.googleapis.com/css?family=Domine", :rel "stylesheet", :type "text/css"}]
-      [:link {:href "http://fonts.googleapis.com/css?family=Open+Sans", :rel "stylesheet", :type "text/css"}]
-      (body snapshot)]])
+      [:link {:href "http://fonts.googleapis.com/css?family=Open+Sans", :rel "stylesheet", :type "text/css"}]]
+    (body snapshot)])
 
 (defn html [snapshot]
   (str
