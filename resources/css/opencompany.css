@@ -6,24 +6,18 @@ html,
 }
 
 table.message {
+  background: #fff;
   display: table;
   width: 100%;
 }
 
-.note, p.note {
-  background: #fff;
-  font-family: Arial, sans-serif !important;
-  font-size: 13px !important;
+table.note th, table.note th p {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
 }
 
 .header {
   background: #f9f9f9;
-}
-
-h4 {
-  font-family: Domine-Regular, Georgia, serif !important;
-  color: #4e5a6b;
-  margin-bottom: 0px !important;
 }
 
 img.logo {
@@ -32,6 +26,10 @@ img.logo {
 }
 
 h4.name {
+  font-family: Domine-Regular, Georgia, serif !important;
+  font-size: 26px;
+  color: #4e5a6b;
+  margin-bottom: 0px !important;
   padding-top: 13px;
   font-weight: bold;
 }
@@ -47,15 +45,16 @@ table.topic {
 }
 
 p.title, p.topic-headline {
-  font-size: 20px;
+  font-size: 26px;
   color: #4e5a6b;
   font-family: Domine-Regular, Georgia, serif !important;
+  line-height: 1.5;
 }
 
 p.topic-title, a.topic-read-more {
   font-family: OpenSans, Arial, sans-serif !important;
   font-weight: bold;
-  font-size: 12px;
+  font-size: 16px;
   line-height: 1.5 !important;
   letter-spacing: 1px;
   color: #4e5a6b;
@@ -63,20 +62,20 @@ p.topic-title, a.topic-read-more {
   margin-bottom: 10px;
 }
 
-p.metric {
+th.topic p.metric {
   font-family: OpenSans, Arial, sans-serif !important;
   font-weight: bold;
-  font-size: 24px !important;
+  font-size: 32px !important;
   line-height: 1.5 !important;
   color: #4e5a6b;
   opacity: 0.75;
   margin-bottom: 0 !important;
 }
 
-p.label {
+th.topic p.label {
   font-family: OpenSans, Arial, sans-serif !important;
   font-weight: bold;
-  font-size: 12px;
+  font-size: 16px;
   line-height: 1.5;
   letter-spacing: 1px;
   color: #4e5a6b;
@@ -89,19 +88,18 @@ a.topic-read-more {
 }
 
 th.topic, th.topic p, th.topic ul, .content {
-  font-size: 12px;
+  font-size: 16px;
   color: #4e5a6b;
   font-family: Domine-Regular !important;
-  line-height: 1.3;
+  line-height: 1.5;
 }
 
 th.topic h3 {
   font-family: Domine-Regular, Georgia, serif !important;
   font-weight: 800;
-  font-size: 14px;
-  line-height: 1.8;
+  font-size: 18px;
+  line-height: 1.5;
   color: #4e5a6b;
-
 }
 
 a {

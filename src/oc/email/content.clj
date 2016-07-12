@@ -23,15 +23,16 @@
   [:table {:class "row header"}
     [:tbody
       [:tr
-        [:th {:class "small-12 large-12 first last columns"}
-          [:img {:class "logo float-center"
+        [:th {:class "small-6 large-6 first first columns"}
+          [:img {:class "logo float-right"
                  :alt (str (:name snapshot) " logo")
                  :style "display: inline; background-color: #ffffff;border: solid 1px rgba(78, 90, 107, 0.2);"
                  :height "50px"
                  :width "50px"
                  :align "center"
-                 :src (:logo snapshot)}]
-          [:h4 {:class "name float-center" :style "padding-left: 18px; display: inline;"} (:name snapshot)]]]]])
+                 :src (:logo snapshot)}]]
+        [:th {:class "small-6 large-6 last columns"}
+          [:h4 {:class "name"} (:name snapshot)]]]]])
 
 (defn- title [snapshot]
   [:table {:class "row header"}
@@ -132,7 +133,7 @@
         [:tr
           [:td {:class "center", :align "center", :valign "top"}
             (when-not (s/blank? (:note snapshot)) (message snapshot))
-            [:table {:class "container"}
+            [:table {:align "center" :class "container"}
               [:tbody
                 (content snapshot)]]]]]]])
 
