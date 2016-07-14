@@ -107,7 +107,7 @@
             (spacer 1)
             [:p {:class "topic-headline"} (emojify (:headline topic))]
             (spacer 2)
-            (emojify (:body topic))
+            (emojify (:snippet topic))
             (when body? (spacer 20))
             (when body? [:a {:class "topic-read-more" :href topic-url} "READ MORE"])
             (spacer 30)]
@@ -136,13 +136,13 @@
           [:td
             (when cash? (metric (str "CASH - " date) (:cash finances)))
             (when revenue? (metric (str "REVENUE - " date) (:revenue finances)))
-            (when costs? (metric (str "COSTS - " date) (:costs finances)))
-            (when (or cash-flow? burn-rate?)
-              [:p {:class "metric"} "$-211K"]
-              [:p {:class "label"} "CASH FLOW - OCT 2016"])
-            (when (and cash? burn-rate?)
-              [:p {:class "metric"} "1 year"]
-              [:p {:class "label"} "RUNWAY - OCT 2016"])]]]]))
+            (when costs? (metric (str "COSTS - " date) (:costs finances)))]]]]))
+            ; (when (or cash-flow? burn-rate?)
+            ;   [:p {:class "metric"} "$-211K"]
+            ;   [:p {:class "label"} "CASH FLOW - OCT 2016"])
+            ; (when (and cash? burn-rate?)
+            ;   [:p {:class "metric"} "1 year"]
+            ;   [:p {:class "label"} "RUNWAY - OCT 2016"])]]]]))
 
 (defn- growth-data [topic currency]
   [:table {:class "growth-metrics"}
