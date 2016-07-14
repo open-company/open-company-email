@@ -5,38 +5,73 @@ html,
   font-family: Domine-Regular, Georgia, serif !important;
 }
 
+a {
+  color: #4e5a6b !important;
+  font-family: Domine-Regular, Georgia, serif !important;
+  text-decoration: underline !important;
+  text-decoration-color: #f9d748 !important; /* OC yellow, new CSS3, won't work most places */
+}
+
+a:visited {
+  color: #4e5a6b !important;
+}
+
+a:hover {
+  color: #4e5a6b !important;
+}
+
+/* === Sender message === */
+
 table.message {
   background: #fff;
   display: table;
   width: 100%;
 }
 
-table.note th, table.note th p {
+table.note {
+  background: #fff;
+}
+
+table.note th,
+table.note th p {
   font-family: Arial, sans-serif;
   font-size: 16px;
 }
 
-.header {
-  background: #f9f9f9;
-}
-
-img.logo {
-  max-height: 50px;
-  max-width: 50px;
-}
-
-h4.name {
-  font-family: Domine-Regular, Georgia, serif !important;
-  font-size: 26px;
-  color: #4e5a6b;
-  margin-bottom: 0px !important;
-  padding-top: 13px;
-  font-weight: bold;
-}
+/* === Company Update === */
 
 th.columns {
   padding-bottom: 0px !important;
 }
+
+table.header {
+  background: #f9f9f9;
+}
+
+/* Header */
+
+table.header img.logo {
+  max-height: 50px;
+  max-width: 50px;
+}
+
+table.header p.company-name {
+  font-family: Domine-Regular, Georgia, serif !important;
+  font-size: 32px;
+  color: #4e5a6b;
+  margin-bottom: 0px !important;
+  font-weight: bold;
+  line-height: 1.5;
+}
+
+table.header p.title {
+  font-size: 26px;
+  color: #4e5a6b;
+  font-family: Domine-Regular, Georgia, serif !important;
+  line-height: 1.5;
+}
+
+/* Topic */
 
 table.topic {
   border-radius: 2px;
@@ -44,14 +79,15 @@ table.topic {
   margin-bottom: 5px;
 }
 
-p.title, p.topic-headline {
+table.topic p.topic-headline {
   font-size: 26px;
   color: #4e5a6b;
   font-family: Domine-Regular, Georgia, serif !important;
   line-height: 1.5;
 }
 
-p.topic-title, a.topic-read-more {
+table.topic p.topic-title,
+table.topic a.topic-read-more {
   font-family: OpenSans, Arial, sans-serif !important;
   font-weight: bold;
   font-size: 16px;
@@ -62,7 +98,33 @@ p.topic-title, a.topic-read-more {
   margin-bottom: 10px;
 }
 
-th.topic p.metric {
+table.topic a.topic-read-more {
+  text-decoration: underline !important;
+}
+
+table.topic,
+table.topic p,
+table.topic ul {
+  font-size: 16px;
+  color: #4e5a6b;
+  font-family: Domine-Regular;
+  line-height: 1.5;
+}
+
+table.topic h1,
+table.topic h2,
+table.topic h3,
+table.topic h4 {
+  font-family: Domine-Regular, Georgia, serif !important;
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 1.5;
+  color: #4e5a6b;
+}
+
+/* Data Topic */
+
+table.topic p.metric {
   font-family: OpenSans, Arial, sans-serif !important;
   font-weight: bold;
   font-size: 32px !important;
@@ -72,7 +134,7 @@ th.topic p.metric {
   margin-bottom: 0 !important;
 }
 
-th.topic p.label {
+table.topic p.label {
   font-family: OpenSans, Arial, sans-serif !important;
   font-weight: bold;
   font-size: 16px;
@@ -81,38 +143,4 @@ th.topic p.label {
   color: #4e5a6b;
   opacity: 0.75;
   margin-bottom: 20px;
-}
-
-a.topic-read-more {
-  text-decoration: underline !important;
-}
-
-th.topic, th.topic p, th.topic ul, .content {
-  font-size: 16px;
-  color: #4e5a6b;
-  font-family: Domine-Regular !important;
-  line-height: 1.5;
-}
-
-th.topic h3 {
-  font-family: Domine-Regular, Georgia, serif !important;
-  font-weight: 800;
-  font-size: 18px;
-  line-height: 1.5;
-  color: #4e5a6b;
-}
-
-a {
-  color: #4e5a6b;
-  font-family: Domine-Regular, Georgia, serif !important;
-  text-decoration: underline;
-  text-decoration-color: #f9d748; /* OC yellow, new CSS3, won't work most places */
-}
-
-a:visited {
-  color: #4e5a6b;
-}
-
-a:hover {
-  color: #4e5a6b;
 }

@@ -19,20 +19,30 @@
     (emoji4j.EmojiUtils/emojify)
     (unescape-accidental-emoticon)))
 
-(defn- logo-name [snapshot]
+(defn- logo [snapshot]
+  [:table {:class "row header"} 
+    [:tbody
+      [:tr
+        [:th {:class "small-12 large-12 first last columns"} 
+          [:table
+            [:tbody
+              [:tr
+                [:th
+                  [:center {:data-parsed ""}
+                    [:img {:class "float-center logo"
+                           :align "center"
+                           :style "background-color: #ffffff;border: solid 1px rgba(78, 90, 107, 0.2);"
+                           :height "50px"
+                           :width "50px"
+                           :src (:logo snapshot)
+                           :alt (str (:name snapshot) " logo")}]]]]]]]]]])
+
+(defn- company-name [snapshot]
   [:table {:class "row header"}
     [:tbody
       [:tr
-        [:th {:class "small-6 large-6 first first columns"}
-          [:img {:class "logo float-right"
-                 :alt (str (:name snapshot) " logo")
-                 :style "display: inline; background-color: #ffffff;border: solid 1px rgba(78, 90, 107, 0.2);"
-                 :height "50px"
-                 :width "50px"
-                 :align "center"
-                 :src (:logo snapshot)}]]
-        [:th {:class "small-6 large-6 last columns"}
-          [:h4 {:class "name"} (:name snapshot)]]]]])
+        [:th {:class "small-12 large-12 first last columns"}
+          [:p {:class "text-center company-name"} (:name snapshot)]]]]])
 
 (defn- title [snapshot]
   [:table {:class "row header"}
@@ -58,11 +68,11 @@
 
 (defn- spacer
   ([pixels] (spacer pixels ""))
-  ([pixels class]
-  [:table {:class (str "row " class)}
+  ([pixels class-name]
+  [:table {:class (str "row " class-name)}
     [:tbody
       [:tr
-        [:th {:class "small-12 large-12 columns first last"}
+        [:th {:class "small-12 large-12 first last columns"}
           [:table
             [:tbody
               [:tr
@@ -70,50 +80,55 @@
                   [:table {:class "spacer"}
                     [:tbody
                       [:tr
-                        [:td {:style (str "font-size:" pixels "px;line-height:" pixels "px;")} " "]]]]]
+                        [:td {:height (str "font-size:" pixels "px")
+                              :style (str "font-size:" pixels "px;line-height:" pixels "px;")} " "]]]]]
                 [:th {:class "expander"}]]]]]]]]))
+
+(defn- image [image-url]
+  [:tr
+    [:th
+      [:img {:src image-url}]]])
 
 (defn- topic [snapshot topic-name topic]
   (let [body? (not (s/blank? (:body topic)))
         company-slug (:company-slug snapshot)
         snapshot-slug (:slug snapshot)
+        image-url (:image topic)
         topic-url (s/join "/" [config/web-url company-slug "updates" snapshot-slug topic-name])]
     (if (:data topic)
       [:span]
       [:table {:class "row topic"}
         [:tbody
-          [:tr
+          (when image-url (image image-url))
+           [:tr
             [:th {:class "small-12 large-12 columns first last"}
               (spacer 24)
               [:p {:class "topic-title"} (s/upper-case (:title topic))]
               (spacer 1)
               [:p {:class "topic-headline"} (emojify (:headline topic))]
-              (spacer 2)]]
-          [:tr
-            [:th {:class "small-12 large-12 columns first last topic"}
+              (spacer 2)
               (emojify (:body topic))
-              (when body? (spacer 20))]]
-          [:tr
-            [:th {:class "small-12 large-12 columns first last"}
-              (when body? [:a {:class "topic-read-more", :href topic-url} "READ MORE"])
+              (when body? (spacer 20))
+              (when body? [:a {:class "topic-read-more" :href topic-url} "READ MORE"])
               (spacer 30)]
             [:th {:class "expander"}]]]])))
 
 (defn- content [snapshot]
-  [:tr
-    [:td
-      (spacer 60 "header")
-      (logo-name snapshot)
-      (spacer 17 "header")
-      (title snapshot)
-      (spacer 42 "header")
-      [:table
-        [:tbody
-          [:tr
-            (into [:td] 
-              (interleave
-                (map #(topic snapshot % (snapshot (keyword %))) (:sections snapshot))
-                (repeat (spacer 25 "header"))))]]]]])
+  [:td
+    (spacer 60 "header")
+    (logo snapshot)
+    (spacer 17 "header")
+    (company-name snapshot)
+    (spacer 17 "header")
+    (title snapshot)
+    (spacer 42 "header")
+    [:table
+      [:tbody
+        [:tr
+          (into [:td] 
+            (interleave
+              (map #(topic snapshot % (snapshot (keyword %))) (:sections snapshot))
+              (repeat (spacer 25 "header"))))]]]])
 
 (defn- message [snapshot]
   [:table {:class "message"}
@@ -131,11 +146,13 @@
     [:table {:class "body"}
       [:tbody
         [:tr
-          [:td {:class "center", :align "center", :valign "top"}
+          [:td {:class "float-center", :align "center", :valign "top"}
             (when-not (s/blank? (:note snapshot)) (message snapshot))
-            [:table {:align "center" :class "container"}
-              [:tbody
-                (content snapshot)]]]]]]])
+            [:center
+              [:table {:class "container"}
+                [:tbody
+                  [:tr
+                    (content snapshot)]]]]]]]]])
 
 (defn- head [snapshot]
   [:html {:xmlns "http://www.w3.org/1999/xhtml"} 
@@ -162,28 +179,37 @@
 
   ;; Recreate hiccup from various HTML fragments
 
-  (def data (slurp "./resources/head.html"))
+  (defn clean-html [data]
+    (-> data
+      (s/replace "  " "")
+      (s/replace "\n" "")
+      (s/replace "\t" "")))
+
+  (def data (clean-html (slurp "./resources/head.html")))
   (-> (hickory/parse data) hickory/as-hiccup first)
 
-  (def data (slurp "./resources/body.html"))
+  (def data (clean-html (slurp "./resources/body.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3))
 
-  (def data (slurp "./resources/spacer.html"))
+  (def data (clean-html (slurp "./resources/spacer.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (slurp "./resources/logo-name.html"))
+  (def data (clean-html (slurp "./resources/note.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (slurp "./resources/title.html"))
+  (def data (clean-html (slurp "./resources/attribution.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (slurp "./resources/message.html"))
+  (def data (clean-htnml (slurp "./resources/logo.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (slurp "./resources/attribution.html"))
+  (def data (clean-html (slurp "./resources/name.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (slurp "./resources/topic.html"))
+  (def data (clean-html (slurp "./resources/title.html")))
+  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
+
+  (def data (clean-html (slurp "./resources/topic.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
   (spit "./hiccup.html" (email/html {}))
