@@ -1,8 +1,13 @@
 (ns oc.email.content
   (:require [clojure.string :as s]
+            [clj-time.format :as f]
             [hiccup.core :as h]
             [clojure.walk :refer (keywordize-keys)]
             [oc.email.config :as config]))
+
+(def monthly-period (f/formatter "YYYY-MM"))
+
+(def finance-date (f/formatter "MMM YYYY"))
 
 (defn- escape-accidental-emoticon [text]
   "Replace any :/ with to avoid emojifying links and images."
@@ -84,34 +89,106 @@
                               :style (str "font-size:" pixels "px;line-height:" pixels "px;")} " "]]]]]
                 [:th {:class "expander"}]]]]]]]]))
 
-(defn- image [image-url]
+(defn- topic-image [image-url]
   [:tr
     [:th
       [:img {:src image-url}]]])
 
-(defn- topic [snapshot topic-name topic]
+(defn- content-topic [snapshot topic-name topic topic-url]
   (let [body? (not (s/blank? (:body topic)))
-        company-slug (:company-slug snapshot)
+        image-url (:image topic)]
+    [:table {:class "row topic"}
+      [:tbody
+        (when image-url (topic-image image-url))
+         [:tr
+          [:th {:class "small-12 large-12 columns first last"}
+            (spacer 24)
+            [:p {:class "topic-title"} (s/upper-case (:title topic))]
+            (spacer 1)
+            [:p {:class "topic-headline"} (emojify (:headline topic))]
+            (spacer 2)
+            (emojify (:body topic))
+            (when body? (spacer 20))
+            (when body? [:a {:class "topic-read-more" :href topic-url} "READ MORE"])
+            (spacer 30)]
+          [:th {:class "expander"}]]]]))
+
+(defn- metric [label value]
+  [:table {:class "metric"}
+    [:tbody
+      [:tr
+        [:td
+          [:p {:class "metric"} (.format (java.text.NumberFormat/getInstance java.util.Locale/US) (int value))]
+          [:p {:class "label"} label]]]]])
+
+(defn- finance-data [topic currency]
+  (let [finances (last (sort-by :period (:data topic)))
+        period (f/parse monthly-period (:period finances))
+        date (s/upper-case (f/unparse finance-date period))
+        cash? (:cash finances)
+        revenue? (:revenue finances)
+        costs? (and (not revenue?) (:costs finances))
+        cash-flow? (and revenue? costs?)
+        burn-rate? (and cash? (or costs? cash-flow?))]
+    [:table {:class "finances-metrics"}
+      [:tboody
+        [:tr
+          [:td
+            (when cash? (metric (str "CASH - " date) (:cash finances)))
+            (when revenue? (metric (str "REVENUE - " date) (:revenue finances)))
+            (when costs? (metric (str "COSTS - " date) (:costs finances)))
+            (when (or cash-flow? burn-rate?)
+              [:p {:class "metric"} "$-211K"]
+              [:p {:class "label"} "CASH FLOW - OCT 2016"])
+            (when (and cash? burn-rate?)
+              [:p {:class "metric"} "1 year"]
+              [:p {:class "label"} "RUNWAY - OCT 2016"])]]]]))
+
+(defn- growth-data [topic currency]
+  [:table {:class "growth-metrics"}
+    [:tboody
+      [:tr
+        [:td
+          [:p {:class "metric"} "2,841,519"]
+          [:p {:class "label"} "Users - OCT 2016"]
+          [:p {:class "metric"} "226,445"]
+          [:p {:class "label"} "MAU - OCT 2016"]
+          [:p {:class "metric"} "55,460"]
+          [:p {:class "label"} "Avg DAU - OCT 2016"]
+          [:p {:class "metric"} "$7,810,000"]
+          [:p {:class "label"} "ARR - OCT 2016"]]]]])
+
+(defn- data-topic [snapshot topic-name topic topic-url]
+  (let [currency (:currency snapshot)
+        data? (empty? (:data snapshot))
+        snippet? (s/blank? (:snippet topic))]
+    [:table {:class "row topic"}
+      [:tbody
+        [:tr
+          [:th {:class "small-12 large-12 columns first last"}
+            (spacer 24)
+            [:p {:class "topic-title"} (s/upper-case (:title topic))]
+            (spacer 1)
+            [:p {:class "topic-headline"} (emojify (:headline topic))]
+            (when data? (spacer 15))
+            (when data?
+              (if (= topic-name "finances")
+                (finance-data topic currency)
+                (growth-data topic currency)))
+            (when snippet? (spacer 20))
+            (when snippet? [:p (:snippet topic)])
+            (spacer 20)
+            [:a {:class "topic-read-more", :href topic-url} "SEE MORE"]
+            (spacer 30)]
+          [:th {:class "expander"}]]]]))
+
+(defn- topic [snapshot topic-name topic]
+  (let [company-slug (:company-slug snapshot)
         snapshot-slug (:slug snapshot)
-        image-url (:image topic)
         topic-url (s/join "/" [config/web-url company-slug "updates" snapshot-slug topic-name])]
     (if (:data topic)
-      [:span]
-      [:table {:class "row topic"}
-        [:tbody
-          (when image-url (image image-url))
-           [:tr
-            [:th {:class "small-12 large-12 columns first last"}
-              (spacer 24)
-              [:p {:class "topic-title"} (s/upper-case (:title topic))]
-              (spacer 1)
-              [:p {:class "topic-headline"} (emojify (:headline topic))]
-              (spacer 2)
-              (emojify (:body topic))
-              (when body? (spacer 20))
-              (when body? [:a {:class "topic-read-more" :href topic-url} "READ MORE"])
-              (spacer 30)]
-            [:th {:class "expander"}]]]])))
+      (data-topic snapshot topic-name topic topic-url)
+      (content-topic snapshot topic-name topic topic-url))))
 
 (defn- content [snapshot]
   [:td
@@ -128,7 +205,8 @@
           (into [:td] 
             (interleave
               (map #(topic snapshot % (snapshot (keyword %))) (:sections snapshot))
-              (repeat (spacer 25 "header"))))]]]])
+              (repeat (spacer 25 "header"))))]]]
+    (spacer 60 "header")])
 
 (defn- message [snapshot]
   [:table {:class "message"}
@@ -210,6 +288,9 @@
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
   (def data (clean-html (slurp "./resources/topic.html")))
+  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
+
+  (def data (clean-html (slurp "./resources/data-topic.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
   (spit "./hiccup.html" (email/html {}))

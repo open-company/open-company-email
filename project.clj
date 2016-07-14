@@ -23,6 +23,7 @@
     [cheshire "5.6.3"] ; JSON encoding / decoding https://github.com/dakrone/cheshire
     [manifold "0.1.5-alpha2"] ; Async programming tools https://github.com/ztellman/manifold
     [com.kcthota/emoji4j "5.0"] ; Emoji library https://github.com/kcthota/emoji4j
+    [clj-time "0.12.0"] ; Date and time lib https://github.com/clj-time/clj-time
   ]
 
   ;; All profile plugins
@@ -78,6 +79,8 @@
         (require '[aprint.core :refer (aprint ap)]
                  '[clojure.stacktrace :refer (print-stack-trace)]
                  '[clojure.string :as s]
+                 '[clj-time.core :as t]
+                 '[clj-time.format :as f]
                  '[cheshire.core :as json]
                  '[hiccup.core :as h]
                  '[hickory.core :as hickory]
