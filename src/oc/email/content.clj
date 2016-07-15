@@ -96,7 +96,8 @@
 
 (defn- content-topic [snapshot topic-name topic topic-url]
   (let [body? (not (s/blank? (:body topic)))
-        image-url (:image topic)]
+        image-url (:image-url topic)
+        snippet? (not (s/blank? (:snippet topic)))]
     [:table {:class "row topic"}
       [:tbody
         (when image-url (topic-image image-url))
@@ -106,8 +107,8 @@
             [:p {:class "topic-title"} (s/upper-case (:title topic))]
             (spacer 1)
             [:p {:class "topic-headline"} (emojify (:headline topic))]
-            (spacer 2)
-            (emojify (:snippet topic))
+            (when snippet? (spacer 2))
+            (when snippet? (emojify (:snippet topic)))
             (when body? (spacer 20))
             (when body? [:a {:class "topic-read-more" :href topic-url} "READ MORE"])
             (spacer 30)]
@@ -191,22 +192,23 @@
       (content-topic snapshot topic-name topic topic-url))))
 
 (defn- content [snapshot]
-  [:td
-    (spacer 60 "header")
-    (logo snapshot)
-    (spacer 17 "header")
-    (company-name snapshot)
-    (spacer 17 "header")
-    (title snapshot)
-    (spacer 42 "header")
-    [:table
-      [:tbody
-        [:tr
-          (into [:td] 
-            (interleave
-              (map #(topic snapshot % (snapshot (keyword %))) (:sections snapshot))
-              (repeat (spacer 25 "header"))))]]]
-    (spacer 60 "header")])
+  (let [logo? (not (s/blank? (:logo snapshot)))]
+    [:td
+      (spacer 60 "header")
+      (when logo? (logo snapshot))
+      (when logo? (spacer 17 "header"))
+      (company-name snapshot)
+      (spacer 17 "header")
+      (title snapshot)
+      (spacer 42 "header")
+      [:table
+        [:tbody
+          [:tr
+            (into [:td] 
+              (interleave
+                (map #(topic snapshot % (snapshot (keyword %))) (:sections snapshot))
+                (repeat (spacer 25 "header"))))]]]
+      (spacer 60 "header")]))
 
 (defn- message [snapshot]
   [:table {:class "message"}
