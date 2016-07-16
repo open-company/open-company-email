@@ -22,14 +22,10 @@ a:hover {
 
 /* === Sender message === */
 
-table.message {
+table.note {
   background: #fff;
   display: table;
   width: 100%;
-}
-
-table.note {
-  background: #fff;
 }
 
 table.note th,
@@ -143,4 +139,50 @@ table.topic p.label {
   color: #4e5a6b;
   opacity: 0.75;
   margin-bottom: 20px;
+}
+
+/* === Footer === */
+
+table.footer {
+  background: #fff;
+  display: table;
+  width: 100%;
+}
+
+table.footer p {
+  font-size: 18px;
+  line-height: 1.3;
+  font-family: Domine-Regular, Georgia, serif !important;
+  color: #4e5a6b;
+}
+
+table.footer p a {
+  font-weight: bold;
+}
+
+table.footer table.button a {
+  font-size: 18px;
+  line-height: 1.5;
+  font-family: OpenSans, Arial, sans-serif !important;
+  font-weight: bold;
+  color: #4e5a6b;
+  opacity: 0.5;
+  text-decoration: none !important;
+}
+
+table.button.learn table a {
+  border: 0px solid white; 
+}
+
+table.button.learn table td {
+  background: white;
+  border: solid 3px rgba(78, 90, 107, 0.5);
+}
+
+table.button.learn:hover table td {
+  background: #FCFCFC; 
+}
+
+table.button.learn:hover table a {
+  border: 0px solid rgba(78, 90, 107, 0.5);
 }

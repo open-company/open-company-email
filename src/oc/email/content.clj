@@ -211,7 +211,7 @@
       (spacer 60 "header")]))
 
 (defn- message [snapshot]
-  [:table {:class "message"}
+  [:table {:class "note"}
     [:tbody
       [:tr
         [:td
@@ -220,6 +220,45 @@
           (spacer 16 "note")
           (attribution snapshot)
           (spacer 57 "note")]]]])
+
+(defn- footer []
+  [:table {:class "footer"}
+    [:tbody
+      [:tr
+        [:td
+          [:center
+            [:table {:class "container"}
+              [:tbody
+                [:tr
+                  [:td
+                    (spacer 51 "footer")
+                    [:table {:class "row footer"}
+                      [:tbody
+                        [:tr
+                          [:th {:class "small-2 large-2 first columns"}]
+                          [:th {:class "small-8 large-8 columns"} 
+                            [:p {:class "text-center"}
+                              "Powered by "
+                              [:a {:href "http://opencompany.com/"} "OpenCompany"]
+                              ", a simple way to share the big picture."]]
+                          [:th {:class "small-2 large-2 last columns"}]]]]
+                    (spacer 24 "footer")
+                    [:table {:class "row footer"}
+                      [:tbody
+                        [:tr
+                          [:th {:class "small-2 large-2 first columns"}]
+                          [:th {:class "small-8 large-8 columns"}
+                            [:table {:class "button expanded learn"}
+                              [:tbody
+                                [:tr
+                                  [:td
+                                    [:table
+                                      [:tbody
+                                        [:tr
+                                          [:td
+                                            [:a {:href "https://opencompany.com/"} "LEARN MORE ➞"]]]]]]]]]]
+                          [:th {:class "small-2 large-2 last columns"}]]]]
+                    (spacer 22 "footer")]]]]]]]]])
 
 (defn- body [snapshot]
   [:body
@@ -232,7 +271,8 @@
               [:table {:class "container"}
                 [:tbody
                   [:tr
-                    (content snapshot)]]]]]]]]])
+                    (content snapshot)]]]]
+            (footer)]]]]])
 
 (defn- head [snapshot]
   [:html {:xmlns "http://www.w3.org/1999/xhtml"} 
@@ -293,6 +333,9 @@
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
   (def data (clean-html (slurp "./resources/data-topic.html")))
+  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
+
+  (def data (clean-html (slurp "./resources/footer.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
   (spit "./hiccup.html" (email/html {}))
