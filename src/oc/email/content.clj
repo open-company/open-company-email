@@ -235,29 +235,31 @@
                     [:table {:class "row footer"}
                       [:tbody
                         [:tr
-                          [:th {:class "small-2 large-2 first columns"}]
-                          [:th {:class "small-8 large-8 columns"} 
+                          [:th {:class "small-1 large-2 first columns"}]
+                          [:th {:class "small-11 large-8 columns"} 
                             [:p {:class "text-center"}
                               "Powered by "
                               [:a {:href "http://opencompany.com/"} "OpenCompany"]
                               ", a simple way to share the big picture."]]
-                          [:th {:class "small-2 large-2 last columns"}]]]]
+                          [:th {:class "small-1 large-2 last columns"}]]]]
                     (spacer 24 "footer")
                     [:table {:class "row footer"}
                       [:tbody
                         [:tr
-                          [:th {:class "small-2 large-2 first columns"}]
-                          [:th {:class "small-8 large-8 columns"}
-                            [:table {:class "button expanded learn"}
-                              [:tbody
-                                [:tr
-                                  [:td
-                                    [:table
-                                      [:tbody
-                                        [:tr
-                                          [:td
-                                            [:a {:href "https://opencompany.com/"} "LEARN MORE ➞"]]]]]]]]]]
-                          [:th {:class "small-2 large-2 last columns"}]]]]
+                          [:th {:class "small-1 large-2 first columns"}]
+                          [:th {:class "small-11 large-8 columns"}
+                            [:table
+                              [:tr
+                                [:th
+                                  [:center
+                                    [:table {:class "button float-center expanded learn"}
+                                      [:tr
+                                        [:td
+                                          [:table
+                                            [:tr
+                                              [:td
+                                                [:a {:href "https://opencompany.com/"} "LEARN MORE ➞"]]]]]]]]]]]]
+                          [:th {:class "small-1 large-2 last columns"}]]]]
                     (spacer 22 "footer")]]]]]]]]])
 
 (defn- body [snapshot]
