@@ -9,16 +9,19 @@
 
 (def monthly-date (f/formatter "MMM YYYY"))
 
-(defn- escape-accidental-emoticon [text]
+(defn- escape-accidental-emoticon
   "Replace any :/ with to avoid emojifying links and images."
+  [text]
   (s/replace text #":\/\/" ":this-is-not-an-emoji-silly-library:"))
 
-(defn- unescape-accidental-emoticon [text]
+(defn- unescape-accidental-emoticon
   "Replace any  with :/ to restore links and images."
+  [text]
   (s/replace text #":this-is-not-an-emoji-silly-library:" "://"))
 
-(defn- emojify [text]
+(defn- emojify
   "Replace emoji shortcodes or ASCII with Unicode."
+  [text]
   (-> text
     (escape-accidental-emoticon)
     (emoji4j.EmojiUtils/emojify)
@@ -109,6 +112,7 @@
   ([label value currency]
   (let [formatted-value (.format (java.text.NumberFormat/getInstance java.util.Locale/US) (int value))
         final-value (if currency (str currency formatted-value) formatted-value)] ; TODO negative currency
+                                                                                  ; TODO max 3 digits
     [:table {:class "metric"}
       [:tr
         [:td

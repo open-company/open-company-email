@@ -1,12 +1,12 @@
 (ns oc.email.mailer
-  (require [clojure.string :as s]
-           [clojure.java.shell :as shell]
-           [clojure.java.io :as io]
-           [clojure.walk :refer (keywordize-keys)]
-           [oc.email.config :as c]
-           [taoensso.timbre :as timbre]
-           [amazonica.aws.simpleemail :as ses]
-           [oc.email.content :as content]))
+  (:require [clojure.string :as s]
+            [clojure.java.shell :as shell]
+            [clojure.java.io :as io]
+            [clojure.walk :refer (keywordize-keys)]
+            [oc.email.config :as c]
+            [taoensso.timbre :as timbre]
+            [amazonica.aws.simpleemail :as ses]
+            [oc.email.content :as content]))
 
 (def creds
   {:access-key c/aws-access-key-id
@@ -15,8 +15,9 @@
 
 (def default-reply-to (str "hello@" c/email-from-domain))
 
-(defn- send-email [{to :to reply-to :reply-to subject :subject snap :snapshot} body]
+(defn- send-email
   "Send emails to all to recipients in parallel."
+  [{to :to reply-to :reply-to subject :subject snap :snapshot} body]
   (let [snapshot (keywordize-keys snap)
         company-slug (:company-slug snapshot)
         company-name (:name snapshot)]

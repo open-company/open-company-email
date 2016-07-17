@@ -1,0 +1,21 @@
+language: clojure
+jdk:
+- oraclejdk8
+lein: lein2
+before_script:
+  - "export JAVA_OPTS=-Xmx512m"
+  - "echo $JAVA_OPTS"
+  - lein2 clean
+sudo: false
+cache:
+  directories:
+  - "$HOME/.m2"
+script:
+- lein2 eastwood
+- lein2 kibit
+branches:
+  only:
+  - master
+  - mainline
+notifications:
+  slack: opencompanyio:l9T1PLLksnKJMuqsjWzRRN63
