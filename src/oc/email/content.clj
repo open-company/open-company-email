@@ -7,7 +7,7 @@
 
 (def monthly-period (f/formatter "YYYY-MM"))
 
-(def finance-date (f/formatter "MMM YYYY"))
+(def monthly-date (f/formatter "MMM YYYY"))
 
 (defn- escape-accidental-emoticon [text]
   "Replace any :/ with to avoid emojifying links and images."
@@ -104,17 +104,45 @@
           (spacer 30)]
         [:th {:class "expander"}]]]))
 
-(defn- metric [label value]
-  [:table {:class "metric"}
-    [:tr
-      [:td
-        [:p {:class "metric"} (.format (java.text.NumberFormat/getInstance java.util.Locale/US) (int value))]
-        [:p {:class "label"} label]]]])
+(defn- metric
+  ([label value] (metric label value false))
+  ([label value currency]
+  (let [formatted-value (.format (java.text.NumberFormat/getInstance java.util.Locale/US) (int value))
+        final-value (if currency (str currency formatted-value) formatted-value)] ; TODO negative currency
+    [:table {:class "metric"}
+      [:tr
+        [:td
+          [:p {:class "metric"} final-value]
+          [:p {:class "label"} label]]]])))
 
-(defn- finance-data [topic currency]
+(defn- growth-metric [growth-metric metadata]
+  (let [slug (:slug growth-metric)
+        metadatum (first (filter #(= (:slug %) slug) metadata))
+        interval (:interval metadatum)
+        unit (:unit metadatum)
+        metric-name (:name metadatum)
+        currency (if (= unit "currency") "$" false) ; TODO other currencies
+        period (f/parse monthly-period (:period growth-metric)) ; TODO weekly, quarterly
+        date (s/upper-case (f/unparse monthly-date period)) ; TODO weekly, quarterly
+        label (str metric-name " - " date)
+        value (:value growth-metric)] ; TODO %
+    (when (number? value)
+      (metric label value currency))))
+
+(defn growth-metrics [topic currency]
+  (let [data (:data topic)
+        metadata (:metrics topic)
+        period (last (sort (set (map :period data)))) ; latest period
+        metrics (filter #(= period (:period %)) data)] ; metrics for latest period
+    [:table {:class "growth-metrics"}
+      [:tr
+        (into [:td]
+          (map #(growth-metric % metadata) metrics))]]))
+
+(defn- finance-metrics [topic currency]
   (let [finances (last (sort-by :period (:data topic)))
         period (f/parse monthly-period (:period finances))
-        date (s/upper-case (f/unparse finance-date period))
+        date (s/upper-case (f/unparse monthly-date period))
         cash? (:cash finances)
         revenue? (:revenue finances)
         costs? (and (not revenue?) (:costs finances))
@@ -123,28 +151,15 @@
     [:table {:class "finances-metrics"}
       [:tr
         [:td
-          (when cash? (metric (str "CASH - " date) (:cash finances)))
-          (when revenue? (metric (str "REVENUE - " date) (:revenue finances)))
-          (when costs? (metric (str "COSTS - " date) (:costs finances)))]]]))
+          (when cash? (metric (str "CASH - " date) (:cash finances) "$")) ; TODO other currencies
+          (when revenue? (metric (str "REVENUE - " date) (:revenue finances) "$")) ; TODO other currencies
+          (when costs? (metric (str "COSTS - " date) (:costs finances) "$"))]]])) ; TODO other currencies
           ; (when (or cash-flow? burn-rate?)
           ;   [:p {:class "metric"} "$-211K"]
           ;   [:p {:class "label"} "CASH FLOW - OCT 2016"])
           ; (when (and cash? burn-rate?)
           ;   [:p {:class "metric"} "1 year"]
           ;   [:p {:class "label"} "RUNWAY - OCT 2016"])]]]))
-
-(defn- growth-data [topic currency]
-  [:table {:class "growth-metrics"}
-    [:tr
-      [:td
-        [:p {:class "metric"} "2,841,519"]
-        [:p {:class "label"} "Users - OCT 2016"]
-        [:p {:class "metric"} "226,445"]
-        [:p {:class "label"} "MAU - OCT 2016"]
-        [:p {:class "metric"} "55,460"]
-        [:p {:class "label"} "Avg DAU - OCT 2016"]
-        [:p {:class "metric"} "$7,810,000"]
-        [:p {:class "label"} "ARR - OCT 2016"]]]])
 
 (defn- data-topic [snapshot topic-name topic topic-url]
   (let [currency (:currency snapshot)
@@ -160,8 +175,8 @@
           (when data? (spacer 15))
           (when data?
             (if (= topic-name "finances")
-              (finance-data topic currency)
-              (growth-data topic currency)))
+              (finance-metrics topic currency)
+              (growth-metrics topic currency)))
           (when snippet? (spacer 20))
           (when snippet? [:p (:snippet topic)])
           (spacer 20)
