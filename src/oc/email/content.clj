@@ -110,7 +110,9 @@
 (defn- metric
   ([label value] (metric label value false))
   ([label value currency]
-  (let [formatted-value (.format (java.text.NumberFormat/getInstance java.util.Locale/US) (int value))
+  (let [formatted-value (if (number? value)
+                          (.format (java.text.NumberFormat/getInstance java.util.Locale/US) (int value))
+                          value)
         final-value (if currency (str currency formatted-value) formatted-value)] ; TODO negative currency
                                                                                   ; TODO max 3 digits
     [:table {:class "metric"}
@@ -149,7 +151,7 @@
         date (s/upper-case (f/unparse monthly-date period))
         cash? (:cash finances)
         revenue? (:revenue finances)
-        costs? (and (not revenue?) (:costs finances))
+        costs? (:costs finances)
         cash-flow? (and revenue? costs?)
         burn-rate? (and cash? (or costs? cash-flow?))]
     [:table {:class "finances-metrics"}
@@ -157,13 +159,13 @@
         [:td
           (when cash? (metric (str "CASH - " date) (:cash finances) "$")) ; TODO other currencies
           (when revenue? (metric (str "REVENUE - " date) (:revenue finances) "$")) ; TODO other currencies
-          (when costs? (metric (str "COSTS - " date) (:costs finances) "$"))]]])) ; TODO other currencies
-          ; (when (or cash-flow? burn-rate?)
-          ;   [:p {:class "metric"} "$-211K"]
-          ;   [:p {:class "label"} "CASH FLOW - OCT 2016"])
-          ; (when (and cash? burn-rate?)
-          ;   [:p {:class "metric"} "1 year"]
-          ;   [:p {:class "label"} "RUNWAY - OCT 2016"])]]]))
+          (when costs? (metric (str "COSTS - " date) (:costs finances) "$")) ; TODO other currencies
+          (when (or cash-flow? burn-rate?)
+            (if cash-flow?
+              (metric (str "CASH FLOW - " date) 25 "$") ; TODO other currencies
+              (metric (str "BURN RATE - " date) 50 "$"))) ; TODO other currenciesk
+          (when (and cash? burn-rate?)
+            (metric (str "RUNWAY - " date) "1 year"))]]]))
 
 (defn- data-topic [snapshot topic-name topic topic-url]
   (let [currency (:currency snapshot)
