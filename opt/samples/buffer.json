@@ -1,60 +1,41 @@
 {
-  "slug" : "june-2016-update-7ae4",
-  "currency": "USD",
+  "slug" : "june-2016-update-41efb",
   "customer-service" : {
+    "description" : "Customer service update",
+    "updated-at" : "2015-11-20T08:00:46.000Z",
+    "image-url" : null,
+    "headline" : "Continued to focus on speed for customers.",
+    "image-width" : 0,
+    "snippet" : "<p>In October, the Happiness teams continued to focus on speed for customers who reach out. With response time\n        as our primary success metric, we're prioritizing hiring in November.</p>",
+    "image-height" : 0,
+    "title" : "Happiness",
     "author" : {
       "image" : "https://secure.gravatar.com/avatar/46c1c756f36549c2dea0253e1e025053?s=96&d=mm&r=g",
       "name" : "Joel Gascoigne",
       "user-id" : "123456"
     },
-    "body" : "\n        <p>In October, the Happiness teams continued to focus on speed for customers who reach out. With response time\n        as our primary success metric, we're prioritizing hiring in November. We also added more specialized roles in\n        the team, for example, having one liaison between each of the Product and Happiness teams in order to\n        streamline some meetings (and cancel others!), as well as one team member focusing on self-help resources.\n        We're now hiring to form a Twitter-specific team, too.</p>\n        <p>We also separated out business support last month. The new business support and customer success teams\n        will focus on the specific needs of customers using Buffer as part of their business strategy. Key metrics\n        for this area will include increased customer engagement, reduced churn, NPS score and customer satisfaction\n        score to mention a few. We're excited to incorporate new tools and continue to hire in this area as well!</p>\n        <ul>\n          <li>12,282 replies sent</li>\n          <li>Customer Happiness Percentage: 95%</li>\n          <li>67% of emails got a reply within 1 hour</li>\n          <li>85% within 6 hours</li>\n          <li>54% of Tweets got a reply within 15 minutes</li>\n        </ul>",
-    "created-at" : "2015-11-20T08:00:46.000Z",
-    "description" : "Customer service update",
-    "headline" : "Continued to focus on speed for customers.",
-    "title" : "Happiness",
-    "updated-at" : "2015-11-20T08:00:46.000Z"
+    "body" : "\n        <p>We also added more specialized roles in\n        the team, for example, having one liaison between each of the Product and Happiness teams in order to\n        streamline some meetings (and cancel others!), as well as one team member focusing on self-help resources.\n        We're now hiring to form a Twitter-specific team, too.</p>\n        <p>We also separated out business support last month. The new business support and customer success teams\n        will focus on the specific needs of customers using Buffer as part of their business strategy. Key metrics\n        for this area will include increased customer engagement, reduced churn, NPS score and customer satisfaction\n        score to mention a few. We're excited to incorporate new tools and continue to hire in this area as well!</p>\n        <ul>\n          <li>12,282 replies sent</li>\n          <li>Customer Happiness Percentage: 95%</li>\n          <li>67% of emails got a reply within 1 hour</li>\n          <li>85% within 6 hours</li>\n          <li>54% of Tweets got a reply within 15 minutes</li>\n        </ul>",
+    "created-at" : "2015-11-20T08:00:46.000Z"
   },
-  "sections" : [ "team", "product", "customer-service", "marketing", "help", "update", "values", "mission", "diversity", "growth", "finances" ],
+  "sections" : [ "update", "product", "team", "growth", "finances", "customer-service", "marketing", "help" ],
   "logo" : "https://open-company-assets.s3.amazonaws.com/buffer.png",
   "name" : "Buffer",
-  "mission" : {
-    "author" : {
-      "image" : "https://secure.gravatar.com/avatar/46c1c756f36549c2dea0253e1e025053?s=96&d=mm&r=g",
-      "name" : "Joel Gascoigne",
-      "user-id" : "123456"
-    },
-    "body" : "Our vision at Buffer is to build the simplest and most powerful social media tool, and to set the bar\n        for great customer support. In addition to these product and service goals, we have a focus on building one\n        of the most unique and fulfilling workplaces that exist, by rethinking a lot of traditional practices.",
-    "created-at" : "2015-06-22T18:33:41.000Z",
-    "description" : "Why the company exists",
-    "headline" : "",
-    "title" : "Mission",
-    "updated-at" : "2015-06-22T18:33:41.000Z"
-  },
   "update" : {
-    "author" : {
-      "image" : "https://secure.gravatar.com/avatar/46c1c756f36549c2dea0253e1e025053?s=96&d=mm&r=g",
-      "name" : "Joel Gascoigne",
-      "user-id" : "123456"
-    },
-    "body" : "\n        <p>This feels like a big milestone and a special moment to reflect on.</p>\n        <p>For me, the most exciting part of this is that 50 people are able to join our journey of working as a fully distributed\n        team, where you choose to live and work from the place which makes you happiest and most productive.</p>\n        <p>We've had several examples of teammates moving or traveling to find their happy place, or being able to move easily to help\n        and be with their significant other for studies or a job move.</p>",
-    "created-at" : "2015-10-23T11:21:41.000Z",
     "description" : "Company update",
+    "updated-at" : "2015-10-23T11:21:41.000Z",
+    "image-url" : null,
     "headline" : "We reached the 50 team members mark in September! :boom:",
+    "image-width" : 0,
+    "snippet" : "<p>This feels like a big milestone and a special moment to reflect on.</p>",
+    "image-height" : 0,
     "title" : "Update",
-    "updated-at" : "2015-10-23T11:21:41.000Z"
-  },
-  "diversity" : {
     "author" : {
       "image" : "https://secure.gravatar.com/avatar/46c1c756f36549c2dea0253e1e025053?s=96&d=mm&r=g",
       "name" : "Joel Gascoigne",
       "user-id" : "123456"
     },
-    "body" : "\n        <p>Here's a transparent look at the overall demographic diversity of our team.</p>\n        <img src=\"http://take.ms/cTKFm\" data-height=\"448\" data-width=\"555\">\n        <img src=\"http://take.ms/3mBTC\">\n        <img src=\"http://take.ms/3zi2y\">",
-    "created-at" : "2015-08-24T16:11:12.000Z",
-    "description" : "Diversity goals and makeup",
-    "headline" : "We're building a more inclusive Buffer!",
-    "title" : "Diversity",
-    "updated-at" : "2015-08-24T16:11:12.000Z"
+    "body" : "\n        <p>For me, the most exciting part of this is that 50 people are able to join our journey of working as a fully distributed\n        team, where you choose to live and work from the place which makes you happiest and most productive.</p>\n        <p>We've had several examples of teammates moving or traveling to find their happy place, or being able to move easily to help\n        and be with their significant other for studies or a job move.</p>",
+    "created-at" : "2015-10-23T11:21:41.000Z"
   },
   "title" : "June 2016 Update",
   "author" : {
@@ -62,44 +43,40 @@
     "name" : "Sean Johnson",
     "user-id" : "slack:U06SBTXJR"
   },
+  "currency" : "USD",
   "product" : {
+    "description" : "Product release and roadmap update",
+    "updated-at" : "2015-11-20T08:00:46.000Z",
+    "image-url" : "https://open.buffer.com/wp-content/uploads/2015/11/Pablo-2-launch-social-media-images-800x643.png",
+    "headline" : "We launched :rocket: Pablo 2.0! :tada:",
+    "image-width" : 555,
+    "snippet" : "<p>We launched <a href=\"https://blog.bufferapp.com/pablo-images-for-instagram-pinterest-twitter-facebook\">Pablo 2.0!</a>\n        More than 500,000 Pablo images have been created so far, and we're excited to keep going with our quick\n        images tool.</p>",
+    "image-height" : 446,
+    "title" : "Product",
     "author" : {
       "image" : "https://secure.gravatar.com/avatar/46c1c756f36549c2dea0253e1e025053?s=96&d=mm&r=g",
       "name" : "Joel Gascoigne",
       "user-id" : "123456"
     },
-    "body" : "\n        <p>We launched <a href=\"https://blog.bufferapp.com/pablo-images-for-instagram-pinterest-twitter-facebook\">Pablo 2.0!</a>\n        More than 500,000 Pablo images have been created so far, and we're excited to keep going with our quick\n        images tool.</p>\n        <img src=\"https://open.buffer.com/wp-content/uploads/2015/11/Pablo-2-launch-social-media-images-800x643.png\" data-height=\"446\" data-width=\"555\">\n        <p>We also made several improvements to Buffer for Business, including the move from 7 day to 30 day trials,\n        a new groups UI, the ability to search profiles and improved reliability/speed of analytics.</p>\n        <ul>\n          <li>Calendar View feature in beta (and <a href=\"https://blog.bufferapp.com/social-media-calendar\">launched in November</a>)</li>\n          <li>Awesome Plan ($10/mo) MRR: $379,189 (+2.3%)</li>\n          <li>Buffer for Business ($50+/mo) MRR: $272,227 (-0.3%) (a result of our move to 30-day trials)</li>\n          <li>New landing page experiment (awaiting results)</li>\n          <li>Multiple photo upload feature for Twitter</li>\n        </ul>",
-    "created-at" : "2015-11-20T08:00:46.000Z",
-    "description" : "Product release and roadmap update",
-    "headline" : "We launched :rocket: Pablo 2.0! :tada:",
-    "title" : "Product",
-    "updated-at" : "2015-11-20T08:00:46.000Z"
+    "body" : "\n        <p>We also made several improvements to Buffer for Business, including the move from 7 day to 30 day trials,\n        a new groups UI, the ability to search profiles and improved reliability/speed of analytics.</p>\n        <ul>\n          <li>Calendar View feature in beta (and <a href=\"https://blog.bufferapp.com/social-media-calendar\">launched in November</a>)</li>\n          <li>Awesome Plan ($10/mo) MRR: $379,189 (+2.3%)</li>\n          <li>Buffer for Business ($50+/mo) MRR: $272,227 (-0.3%) (a result of our move to 30-day trials)</li>\n          <li>New landing page experiment (awaiting results)</li>\n          <li>Multiple photo upload feature for Twitter</li>\n        </ul>",
+    "created-at" : "2015-11-20T08:00:46.000Z"
   },
   "team" : {
-    "author" : {
-      "image" : "https://secure.gravatar.com/avatar/46c1c756f36549c2dea0253e1e025053?s=96&d=mm&r=g",
-      "name" : "Joel Gascoigne",
-      "user-id" : "123456"
-    },
-    "body" : "\n          <p>In October, we <a href=\"https://open.buffer.com/no-office/\">closed Buffer's physical office</a>\n          to go entirely remote and distributed.</p>\n          <p>As we grow, we started experimenting with\n          <a href=\"https://open.buffer.com/why-we-ask-our-team-to-grade-us-every-month-buffers-october-hiring-report/\">NPS</a>\n          to get the :heartbeat: of Buffer regularly.</p>\n          <p>We also evolved some of our team tools: we left HipChat & Sqwiggle for Slack & Zoom and joined Okta as a\n          security solution. On the transparency front, Leo shared more details on\n          <a href=\"https://open.buffer.com/explaining-equity/\">How We Explain Stock Options to Team Members</a>.</p>\n          <ul>\n            <li>56 team members across the world in 40 cities (full time + bootcampers)</li>\n            <li>In October, 9 teammates completed their bootcamp and 6 of them will be joining us full time. We're\n            so excited to welcome:\n            <ul>\n              <li><a href=\"https://twitter.com/kellybakes\">Kelly, Happiness Hero</a></li>\n              <li><a href=\"https://twitter.com/_alexray\">Alex, Front-End Engineer</a></li>\n              <li><a href=\"https://twitter.com/mwermuth\">Marcus, iOS Engineer</a></li>\n              <li><a href=\"https://twitter.com/dearlorenz\">Lorenz, Designer</a></li>\n              <li><a href=\"https://twitter.com/RoyBoss\">Roy, Customer Development</a></li>\n              <li><a href=\"https://twitter.com/alfred_lua\">Alfred, Community Champion</a></li>\n            </ul>8 new team members started their bootcamp in October.</li>\n            <li>At least 8 more people will be starting bootcamp throughout November.</li>\n            <li>We looked into 1,992 hiring conversations in October (+29% MoM)</li>\n          </ul>\n          <p>In November, we're hiring across <a href=\"https://buffer.com/journey\">12 open positions</a>, listed\n          on <a href=\"https://buffer.com/journey\">Buffer's Journey page</a>.</p>",
-    "created-at" : "2015-11-20T08:00:46.000Z",
     "description" : "Team and hiring update",
+    "updated-at" : "2015-11-20T08:00:46.000Z",
+    "image-url" : null,
     "headline" : "We went totally remote and distributed.",
+    "image-width" : 0,
+    "snippet" : "<p>In October, we <a href=\"https://open.buffer.com/no-office/\">closed Buffer's physical office</a>\n          to go entirely remote and distributed.</p>",
+    "image-height" : 0,
     "title" : "Team and hiring",
-    "updated-at" : "2015-11-20T08:00:46.000Z"
-  },
-  "values" : {
     "author" : {
       "image" : "https://secure.gravatar.com/avatar/46c1c756f36549c2dea0253e1e025053?s=96&d=mm&r=g",
       "name" : "Joel Gascoigne",
       "user-id" : "123456"
     },
-    "body" : "<h3>1. Choose positivity</h3>\n          <ul>\n            <li>You strive to approach things in a positive and optimistic way</li>\n            <li>You avoid criticizing or condemning team members or users</li>\n            <li>You avoid complaining</li>\n            <li>You let the other person save face, even if they are clearly wrong</li>\n            <li>You are deliberate about giving genuine appreciation</li>\n          </ul>\n          <h3>2. Default to transparency</h3>\n          <ul>\n            <li>You take pride in opportunities to share our beliefs, failures, strengths and decisions</li>\n            <li>You use transparency as a tool to help others</li>\n            <li>You always state your thoughts immediately and with honesty</li>\n            <li>You share early in the decision process, to avoid \"big revelations\"</li>\n          </ul>\n          <h3>3. Focus on self-improvement</h3>\n          <ul>\n            <li>You are conscious of your current level of productivity and happiness, and make continual change to grow</li>\n            <li>You have a higher expectation of yourself, than Buffer does of you</li>\n            <li>You regularly and deliberately do things that make you feel uncomfortable</li>\n            <li>You practice activities and develop habits that improve your mind and your body</li>\n          </ul>\n          <h3>4. Be a \"no-ego\" Doer</h3>\n          <ul>\n            <li>You don't attach your personal self to ideas</li>\n            <li>You let others have your best ideas</li>\n            <li>You approach new ideas thinking \"what can we do right now?\"</li>\n            <li>You are humble</li>\n            <li>You always ship code the moment it is better than what is live on our site - no matter what</li>\n          </ul>\n          <h3>5. Listen First, Then Listen More</h3>\n          <ul>\n            <li>You seek first to understand, then to be understood</li>\n            <li>You focus on listening rather than responding</li>\n            <li>You take the approach that everything is a hypothesis and you could be wrong</li>\n            <li>You are suggestive rather than instructive, replacing phrases such as 'certainly','undoubtedly',\n            etc with 'perhaps', 'I think', 'my intuition right now'</li>\n          </ul>\n          <h3>6. Have a Bias Towards Clarity</h3>\n          <ul>\n            <li>You talk, code, design and write in a clear way instead of being clever</li>\n            <li>You over-communicate, repeating things more times than you would intuitively</li>\n            <li>You use more words to explain, even if it feels obvious already</li>\n            <li>You don't make assumptions, you instead ask that extra question to have the full picture</li>\n          </ul>\n          <h3>7. Make Time to Reflect</h3>\n          <ul>\n            <li>You deliberately find time for reflection, because that's where your life-changing adjustments come from</li>\n            <li>You have a calm approach to discussions and ponder points in your own time</li>\n            <li>You find time to jump out of the trenches into the higher level thinking that will move the needle</li>\n            <li>You understand the value of patience and treat it as a muscle which needs practice to grow</li>\n          </ul>\n          <h3>8. Live Smarter, Not Harder</h3>\n          <ul>\n            <li>You value waking up fresh over working that extra hour</li>\n            <li>You always aim to be fully engaged in an activity, or resting</li>\n            <li>You single task your way through the day</li>\n            <li>You are at the top of your game, as you focus on expanding capacity of your mental, physical, emotional and spiritual energy</li>\n            <li>You choose to be at the single place on Earth where you are the happiest, and most productive, and you are not afraid to find out where that is</li>\n          </ul>\n          <h3>9. Show Gratitude</h3>\n          <ul>\n            <li>You regularly stop and are grateful for your circumstances</li>\n            <li>You are grateful for the work co-workers do to push the company forward and help you move faster</li>\n            <li>You approach customer conversations with humility and the knowledge that it's a privilege to\n            serve these people</li>\n            <li>You have gratitude for platforms, tools and open source that laid the foundation for the possibility\n            of the company: \"If I have seen further it is by standing on the shoulders of giants\" - Isaac Newton</li>\n          </ul>\n          <h3>10. Do the Right Thing</h3>\n          <ul>\n            <li>You choose what's best for customers and the company in the long-term</li>\n            <li>You correct the mistake even when no one would notice</li>\n            <li>You strive to provide the best solution, even if that means foregoing profit</li>\n            <li>You get excited about opportunities to help others</li>\n          </ul>",
-    "created-at" : "2015-06-08T12:35:19.000Z",
-    "description" : "Core values the company lives by",
-    "headline" : "The 10 Buffer values and how we act on them every day.",
-    "title" : "Values",
-    "updated-at" : "2015-06-08T12:35:19.000Z"
+    "body" : "\n          <p>As we grow, we started experimenting with\n          <a href=\"https://open.buffer.com/why-we-ask-our-team-to-grade-us-every-month-buffers-october-hiring-report/\">NPS</a>\n          to get the :heartbeat: of Buffer regularly.</p>\n          <p>We also evolved some of our team tools: we left HipChat & Sqwiggle for Slack & Zoom and joined Okta as a\n          security solution. On the transparency front, Leo shared more details on\n          <a href=\"https://open.buffer.com/explaining-equity/\">How We Explain Stock Options to Team Members</a>.</p>\n          <ul>\n            <li>56 team members across the world in 40 cities (full time + bootcampers)</li>\n            <li>In October, 9 teammates completed their bootcamp and 6 of them will be joining us full time. We're\n            so excited to welcome:\n            <ul>\n              <li><a href=\"https://twitter.com/kellybakes\">Kelly, Happiness Hero</a></li>\n              <li><a href=\"https://twitter.com/_alexray\">Alex, Front-End Engineer</a></li>\n              <li><a href=\"https://twitter.com/mwermuth\">Marcus, iOS Engineer</a></li>\n              <li><a href=\"https://twitter.com/dearlorenz\">Lorenz, Designer</a></li>\n              <li><a href=\"https://twitter.com/RoyBoss\">Roy, Customer Development</a></li>\n              <li><a href=\"https://twitter.com/alfred_lua\">Alfred, Community Champion</a></li>\n            </ul>8 new team members started their bootcamp in October.</li>\n            <li>At least 8 more people will be starting bootcamp throughout November.</li>\n            <li>We looked into 1,992 hiring conversations in October (+29% MoM)</li>\n          </ul>\n          <p>In November, we're hiring across <a href=\"https://buffer.com/journey\">12 open positions</a>, listed\n          on <a href=\"https://buffer.com/journey\">Buffer's Journey page</a>.</p>",
+    "created-at" : "2015-11-20T08:00:46.000Z"
   },
   "finances" : {
     "author" : {
@@ -161,26 +138,32 @@
     } ],
     "description" : "Cash on hand, burn and runway",
     "headline" : "",
+    "snippet" : "",
     "title" : "Finances",
     "updated-at" : "2015-11-20T08:00:46.000Z"
   },
   "help" : {
+    "description" : "Ask your company stakeholders for help and ideas",
+    "updated-at" : "2015-11-20T08:00:46.000Z",
+    "image-url" : null,
+    "headline" : "One quick ask.",
+    "image-width" : 0,
+    "snippet" : "<p>Recently we launched a brand new feature:\n        <a href=\"https://blog.bufferapp.com/social-media-calendar\">Social Media Calendar</a>.\n        We'd love your help to spread the word. <a href=\"https://twitter.com/intent/tweet?text=Thrilled%20to%20see%20@buffer%27s%20Social%20Media%20Calendar!%20Great%20to%20manage%20social%20media%20at-a-glance:%20https://blog.bufferapp.com/social-media-calendar%20pic.twitter.com/Y8XdRyU9ie\">Tweet</a>\n        or <a href=\"https://buffer.com/add?url=https%3A%2F%2Fblog.bufferapp.com%2Fsocial-media-calendar&text=Thrilled%20to%20see%20@buffer%27s%20Social%20Media%20Calendar!%20Great%20to%20manage%20social%20media%20at-a-glance:&picture=https%3A%2F%2Fbufferblog-wpengine.netdna-ssl.com%2Fwp-content%2Fuploads%2F2015%2F11%2Fcalendar-launch-600x410%402x.png&version=2.13.12&placement=hover_button_image\">Buffer</a>!</p>",
+    "image-height" : 0,
+    "title" : "Asks",
     "author" : {
       "image" : "https://secure.gravatar.com/avatar/46c1c756f36549c2dea0253e1e025053?s=96&d=mm&r=g",
       "name" : "Joel Gascoigne",
       "user-id" : "123456"
     },
-    "body" : "<p>Recently we launched a brand new feature:\n        <a href=\"https://blog.bufferapp.com/social-media-calendar\">Social Media Calendar</a>.\n        We'd love your help to spread the word. <a href=\"https://twitter.com/intent/tweet?text=Thrilled%20to%20see%20@buffer%27s%20Social%20Media%20Calendar!%20Great%20to%20manage%20social%20media%20at-a-glance:%20https://blog.bufferapp.com/social-media-calendar%20pic.twitter.com/Y8XdRyU9ie\">Tweet</a>\n        or <a href=\"https://buffer.com/add?url=https%3A%2F%2Fblog.bufferapp.com%2Fsocial-media-calendar&text=Thrilled%20to%20see%20@buffer%27s%20Social%20Media%20Calendar!%20Great%20to%20manage%20social%20media%20at-a-glance:&picture=https%3A%2F%2Fbufferblog-wpengine.netdna-ssl.com%2Fwp-content%2Fuploads%2F2015%2F11%2Fcalendar-launch-600x410%402x.png&version=2.13.12&placement=hover_button_image\">Buffer</a>!</p>",
-    "created-at" : "2015-11-20T08:00:46.000Z",
-    "description" : "Ask your company stakeholders for help and ideas",
-    "headline" : "One quick ask.",
-    "title" : "Asks",
-    "updated-at" : "2015-11-20T08:00:46.000Z"
+    "body" : "",
+    "created-at" : "2015-11-20T08:00:46.000Z"
   },
   "growth" : {
     "description" : "Growth metrics and key performance indicators",
     "updated-at" : "2015-11-20T08:00:46.000Z",
     "headline" : "Seeing an impact from our move from 7 to 30-day trials for Buffer for Business",
+    "snippet" : "<p>It can clearly be seen :see_no_evil: in the numbers here that our move from 7-day to 30-day trials for Buffer\n          for Business has significantly impacted metrics (most noticeably MRR).</p>",
     "title" : "Key metrics",
     "author" : {
       "image" : "https://secure.gravatar.com/avatar/46c1c756f36549c2dea0253e1e025053?s=96&d=mm&r=g",
@@ -193,7 +176,7 @@
         "name" : "Joel Gascoigne",
         "user-id" : "123456"
       },
-      "body" : "<p>It can clearly be seen :see_no_evil: in the numbers here that our move from 7-day to 30-day trials for Buffer\n          for Business has significantly impacted metrics (most noticeably MRR).</p>\n          <p>The reason this has stalled our revenue growth is that it created a 30-day gap with no expiring trials\n          and therefore no new converting Buffer for Business customers.</p>\n          <p>This is an expected outcome that we decided was the right move for us to grow Buffer for Business.</p>\n          <p>I'm happy to share that from the trend we've seen for the first week of November, we are seeing an\n          increase in both the number of trials and the conversion rate of trials as a result of moving from 7-day\n          to 30-day trials.</p>\n          </p>",
+      "body" : "\n          <p>The reason this has stalled our revenue growth is that it created a 30-day gap with no expiring trials\n          and therefore no new converting Buffer for Business customers.</p>\n          <p>This is an expected outcome that we decided was the right move for us to grow Buffer for Business.</p>\n          <p>I'm happy to share that from the trend we've seen for the first week of November, we are seeing an\n          increase in both the number of trials and the conversion rate of trials as a result of moving from 7-day\n          to 30-day trials.</p>\n          </p>",
       "updated-at" : "2015-11-20T08:00:46.000Z"
     },
     "created-at" : "2015-11-20T08:00:46.000Z",
@@ -385,25 +368,29 @@
     } ]
   },
   "logo-width" : 313,
-  "created-at" : "2016-07-06T13:36:26.921Z",
+  "created-at" : "2016-07-17T10:43:13.928Z",
   "logo-height" : 319,
   "marketing" : {
+    "description" : "Notable marketing activities and results",
+    "updated-at" : "2015-11-20T08:00:46.000Z",
+    "image-url" : null,
+    "headline" : "We bared our souls and it paid off.",
+    "image-width" : 0,
+    "snippet" : "<p>We had a really exciting month in terms of traffic and sign-ups. After we bared our souls and shared how\n        <a href=\"https://blog.bufferapp.com/lost-traffic\">we had been losing social media traffic for quite some time</a>,\n        we got a lot of great feedback, insights and encouragement.</p>",
+    "image-height" : 0,
+    "title" : "Marketing",
     "author" : {
       "image" : "https://secure.gravatar.com/avatar/46c1c756f36549c2dea0253e1e025053?s=96&d=mm&r=g",
       "name" : "Joel Gascoigne",
       "user-id" : "123456"
     },
-    "body" : "\n        <p>We had a really exciting month in terms of traffic and sign-ups. After we bared our souls and shared how\n        <a href=\"https://blog.bufferapp.com/lost-traffic\">we had been losing social media traffic for quite some time</a>,\n        we got a lot of great feedback, insights and encouragement.</p>\n        <p>In October we focused a lot on improving the calls to action on the blog, which had a lot of success.\n        We also dove in more on the paid ads side and hired someone full-time to help us with that-stay tuned for\n        updates!</p>\n        <ul>\n          <li>2,711 signups via blog content (17.2% growth)</li>\n          <li>1,252,000 unique visitors (18.4% growth)</li>\n        </ul>\n        <p><b>Break-out content hits:</b></p>\n        <ul>\n          <li><a href=\"https://blog.bufferapp.com/lost-traffic\">We've Lost Nearly Half Our Social Referral Traffic in the Last 12 Months</a></li>\n          <li><a href=\"https://blog.bufferapp.com/twitter-polls\">The Complete Guide to New Twitter Polls: What They Are, How They Work and 9 Ways to Use Them</a></li>\n          <li><a href=\"https://open.buffer.com/no-office/\">After Growing to 50 People, We're Ditching the Office Completely: Here's Why</a></li>\n        </ul>",
-    "created-at" : "2015-11-20T08:00:46.000Z",
-    "description" : "Notable marketing activities and results",
-    "headline" : "We bared our souls and it paid off.",
-    "title" : "Marketing",
-    "updated-at" : "2015-11-20T08:00:46.000Z"
+    "body" : "\n        <p>In October we focused a lot on improving the calls to action on the blog, which had a lot of success.\n        We also dove in more on the paid ads side and hired someone full-time to help us with that-stay tuned for\n        updates!</p>\n        <ul>\n          <li>2,711 signups via blog content (17.2% growth)</li>\n          <li>1,252,000 unique visitors (18.4% growth)</li>\n        </ul>\n        <p><b>Break-out content hits:</b></p>\n        <ul>\n          <li><a href=\"https://blog.bufferapp.com/lost-traffic\">We've Lost Nearly Half Our Social Referral Traffic in the Last 12 Months</a></li>\n          <li><a href=\"https://blog.bufferapp.com/twitter-polls\">The Complete Guide to New Twitter Polls: What They Are, How They Work and 9 Ways to Use Them</a></li>\n          <li><a href=\"https://open.buffer.com/no-office/\">After Growing to 50 People, We're Ditching the Office Completely: Here's Why</a></li>\n        </ul>",
+    "created-at" : "2015-11-20T08:00:46.000Z"
   },
   "links" : [ {
     "rel" : "self",
     "method" : "GET",
-    "href" : "/companies/buffer/updates/june-2016-update-7ae4",
+    "href" : "/companies/buffer/updates/june-2016-update-41efb",
     "type" : "application/vnd.open-company.stakeholder-update.v1+json"
   }, {
     "rel" : "company",
@@ -413,6 +400,6 @@
   }, {
     "rel" : "delete",
     "method" : "DELETE",
-    "href" : "/companies/buffer/updates/june-2016-update-7ae4"
+    "href" : "/companies/buffer/updates/june-2016-update-41efb"
   } ]
 }

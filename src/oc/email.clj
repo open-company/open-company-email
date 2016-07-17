@@ -57,16 +57,6 @@
      :company-slug "buffer"
      :snapshot snapshot})
 
-  ;; SQS message payload
-  (def snapshot (json/decode (slurp "./opt/samples/open.json")))
-  (def message 
-    {:subject "OpenCompany Update"
-     :to "change@changeme.com"
-     :note "Look at this!"
-     :reply-to "change@changeme.com"
-     :company-slug "open"
-     :snapshot snapshot})
-
   (require '[amazonica.aws.sqs :as sqs])
   
   ;; send a test SQS message

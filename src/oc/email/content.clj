@@ -26,68 +26,59 @@
 
 (defn- logo [snapshot]
   [:table {:class "row header"} 
-    [:tbody
-      [:tr
-        [:th {:class "small-12 large-12 first last columns"} 
-          [:table
-            [:tbody
-              [:tr
-                [:th
-                  [:center {:data-parsed ""}
-                    [:img {:class "float-center logo"
-                           :align "center"
-                           :style "background-color: #ffffff;border: solid 1px rgba(78, 90, 107, 0.2);"
-                           :height "50px"
-                           :width "50px"
-                           :src (:logo snapshot)
-                           :alt (str (:name snapshot) " logo")}]]]]]]]]]])
+    [:tr
+      [:th {:class "small-12 large-12 first last columns"} 
+        [:table
+          [:tr
+            [:th
+              [:center {:data-parsed ""}
+                [:img {:class "float-center logo"
+                       :align "center"
+                       :style "background-color: #ffffff;border: solid 1px rgba(78, 90, 107, 0.2);"
+                       :height "50px"
+                       :width "50px"
+                       :src (:logo snapshot)
+                       :alt (str (:name snapshot) " logo")}]]]]]]]])
 
 (defn- company-name [snapshot]
   [:table {:class "row header"}
-    [:tbody
-      [:tr
-        [:th {:class "small-12 large-12 first last columns"}
-          [:p {:class "text-center company-name"} (:name snapshot)]]]]])
+    [:tr
+      [:th {:class "small-12 large-12 first last columns"}
+        [:p {:class "text-center company-name"} (:name snapshot)]]]])
 
 (defn- title [snapshot]
   [:table {:class "row header"}
-    [:tbody
-      [:tr
-        [:th {:class "small-12 large-12 first last columns"}
-          [:p {:class "text-center title"} (emojify (:title snapshot))]]]]])
+    [:tr
+      [:th {:class "small-12 large-12 first last columns"}
+        [:p {:class "text-center title"} (emojify (:title snapshot))]]]])
 
 (defn- note [snapshot]
   [:table {:class "row note"}
-    [:tbody
-      [:tr
-        [:th {:class "small-12 large-12 first last columns note"}
-          (emojify (:note snapshot))]]]])
+    [:tr
+      [:th {:class "small-12 large-12 first last columns note"}
+        (emojify (:note snapshot))]]])
 
 (defn- attribution [snapshot]
   (let [author (get-in snapshot [:author :name])]
     [:table {:class "row note"}
-      [:tbody
-        [:tr
-          [:th {:class "small-12 large-12 first last columns note"}
-            [:p {:class "note"} (str "— " author)]]]]]))
+      [:tr
+        [:th {:class "small-12 large-12 first last columns note"}
+          [:p {:class "note"} (str "— " author)]]]]))
 
 (defn- spacer
   ([pixels] (spacer pixels ""))
   ([pixels class-name]
   [:table {:class (str "row " class-name)}
-    [:tbody
-      [:tr
-        [:th {:class "small-12 large-12 first last columns"}
-          [:table
-            [:tbody
-              [:tr
-                [:th
-                  [:table {:class "spacer"}
-                    [:tbody
-                      [:tr
-                        [:td {:height (str "font-size:" pixels "px")
-                              :style (str "font-size:" pixels "px;line-height:" pixels "px;")} " "]]]]]
-                [:th {:class "expander"}]]]]]]]]))
+    [:tr
+      [:th {:class "small-12 large-12 first last columns"}
+        [:table
+          [:tr
+            [:th
+              [:table {:class "spacer"}
+                [:tr
+                  [:td {:height (str "font-size:" pixels "px")
+                        :style (str "font-size:" pixels "px;line-height:" pixels "px;")} " "]]]]
+            [:th {:class "expander"}]]]]]]))
 
 (defn- topic-image [image-url]
   [:tr
@@ -99,28 +90,26 @@
         image-url (:image-url topic)
         snippet? (not (s/blank? (:snippet topic)))]
     [:table {:class "row topic"}
-      [:tbody
-        (when image-url (topic-image image-url))
-         [:tr
-          [:th {:class "small-12 large-12 columns first last"}
-            (spacer 24)
-            [:p {:class "topic-title"} (s/upper-case (:title topic))]
-            (spacer 1)
-            [:p {:class "topic-headline"} (emojify (:headline topic))]
-            (when snippet? (spacer 2))
-            (when snippet? (emojify (:snippet topic)))
-            (when body? (spacer 20))
-            (when body? [:a {:class "topic-read-more" :href topic-url} "READ MORE"])
-            (spacer 30)]
-          [:th {:class "expander"}]]]]))
+      (when image-url (topic-image image-url))
+       [:tr
+        [:th {:class "small-12 large-12 columns first last"}
+          (spacer 24)
+          [:p {:class "topic-title"} (s/upper-case (:title topic))]
+          (spacer 1)
+          [:p {:class "topic-headline"} (emojify (:headline topic))]
+          (when snippet? (spacer 2))
+          (when snippet? (emojify (:snippet topic)))
+          (when body? (spacer 20))
+          (when body? [:a {:class "topic-read-more" :href topic-url} "READ MORE"])
+          (spacer 30)]
+        [:th {:class "expander"}]]]))
 
 (defn- metric [label value]
   [:table {:class "metric"}
-    [:tbody
-      [:tr
-        [:td
-          [:p {:class "metric"} (.format (java.text.NumberFormat/getInstance java.util.Locale/US) (int value))]
-          [:p {:class "label"} label]]]]])
+    [:tr
+      [:td
+        [:p {:class "metric"} (.format (java.text.NumberFormat/getInstance java.util.Locale/US) (int value))]
+        [:p {:class "label"} label]]]])
 
 (defn- finance-data [topic currency]
   (let [finances (last (sort-by :period (:data topic)))
@@ -132,56 +121,53 @@
         cash-flow? (and revenue? costs?)
         burn-rate? (and cash? (or costs? cash-flow?))]
     [:table {:class "finances-metrics"}
-      [:tboody
-        [:tr
-          [:td
-            (when cash? (metric (str "CASH - " date) (:cash finances)))
-            (when revenue? (metric (str "REVENUE - " date) (:revenue finances)))
-            (when costs? (metric (str "COSTS - " date) (:costs finances)))]]]]))
-            ; (when (or cash-flow? burn-rate?)
-            ;   [:p {:class "metric"} "$-211K"]
-            ;   [:p {:class "label"} "CASH FLOW - OCT 2016"])
-            ; (when (and cash? burn-rate?)
-            ;   [:p {:class "metric"} "1 year"]
-            ;   [:p {:class "label"} "RUNWAY - OCT 2016"])]]]]))
+      [:tr
+        [:td
+          (when cash? (metric (str "CASH - " date) (:cash finances)))
+          (when revenue? (metric (str "REVENUE - " date) (:revenue finances)))
+          (when costs? (metric (str "COSTS - " date) (:costs finances)))]]]))
+          ; (when (or cash-flow? burn-rate?)
+          ;   [:p {:class "metric"} "$-211K"]
+          ;   [:p {:class "label"} "CASH FLOW - OCT 2016"])
+          ; (when (and cash? burn-rate?)
+          ;   [:p {:class "metric"} "1 year"]
+          ;   [:p {:class "label"} "RUNWAY - OCT 2016"])]]]))
 
 (defn- growth-data [topic currency]
   [:table {:class "growth-metrics"}
-    [:tboody
-      [:tr
-        [:td
-          [:p {:class "metric"} "2,841,519"]
-          [:p {:class "label"} "Users - OCT 2016"]
-          [:p {:class "metric"} "226,445"]
-          [:p {:class "label"} "MAU - OCT 2016"]
-          [:p {:class "metric"} "55,460"]
-          [:p {:class "label"} "Avg DAU - OCT 2016"]
-          [:p {:class "metric"} "$7,810,000"]
-          [:p {:class "label"} "ARR - OCT 2016"]]]]])
+    [:tr
+      [:td
+        [:p {:class "metric"} "2,841,519"]
+        [:p {:class "label"} "Users - OCT 2016"]
+        [:p {:class "metric"} "226,445"]
+        [:p {:class "label"} "MAU - OCT 2016"]
+        [:p {:class "metric"} "55,460"]
+        [:p {:class "label"} "Avg DAU - OCT 2016"]
+        [:p {:class "metric"} "$7,810,000"]
+        [:p {:class "label"} "ARR - OCT 2016"]]]])
 
 (defn- data-topic [snapshot topic-name topic topic-url]
   (let [currency (:currency snapshot)
         data? (empty? (:data snapshot))
         snippet? (s/blank? (:snippet topic))]
     [:table {:class "row topic"}
-      [:tbody
-        [:tr
-          [:th {:class "small-12 large-12 columns first last"}
-            (spacer 24)
-            [:p {:class "topic-title"} (s/upper-case (:title topic))]
-            (spacer 1)
-            [:p {:class "topic-headline"} (emojify (:headline topic))]
-            (when data? (spacer 15))
-            (when data?
-              (if (= topic-name "finances")
-                (finance-data topic currency)
-                (growth-data topic currency)))
-            (when snippet? (spacer 20))
-            (when snippet? [:p (:snippet topic)])
-            (spacer 20)
-            [:a {:class "topic-read-more", :href topic-url} "SEE MORE"]
-            (spacer 30)]
-          [:th {:class "expander"}]]]]))
+      [:tr
+        [:th {:class "small-12 large-12 columns first last"}
+          (spacer 24)
+          [:p {:class "topic-title"} (s/upper-case (:title topic))]
+          (spacer 1)
+          [:p {:class "topic-headline"} (emojify (:headline topic))]
+          (when data? (spacer 15))
+          (when data?
+            (if (= topic-name "finances")
+              (finance-data topic currency)
+              (growth-data topic currency)))
+          (when snippet? (spacer 20))
+          (when snippet? [:p (:snippet topic)])
+          (spacer 20)
+          [:a {:class "topic-read-more", :href topic-url} "SEE MORE"]
+          (spacer 30)]
+        [:th {:class "expander"}]]]))
 
 (defn- topic [snapshot topic-name topic]
   (let [company-slug (:company-slug snapshot)
@@ -202,79 +188,71 @@
       (title snapshot)
       (spacer 42 "header")
       [:table
-        [:tbody
-          [:tr
-            (into [:td] 
-              (interleave
-                (map #(topic snapshot % (snapshot (keyword %))) (:sections snapshot))
-                (repeat (spacer 25 "header"))))]]]
+        [:tr
+          (into [:td] 
+            (interleave
+              (map #(topic snapshot % (snapshot (keyword %))) (:sections snapshot))
+              (repeat (spacer 25 "header"))))]]
       (spacer 60 "header")]))
 
 (defn- message [snapshot]
   [:table {:class "note"}
-    [:tbody
-      [:tr
-        [:td
-          (spacer 55 "note")
-          (note snapshot)
-          (spacer 16 "note")
-          (attribution snapshot)
-          (spacer 57 "note")]]]])
+    [:tr
+      [:td
+        (spacer 55 "note")
+        (note snapshot)
+        (spacer 16 "note")
+        (attribution snapshot)
+        (spacer 57 "note")]]])
 
 (defn- footer []
   [:table {:class "footer"}
-    [:tbody
-      [:tr
-        [:td
-          [:center
-            [:table {:class "container"}
-              [:tbody
-                [:tr
-                  [:td
-                    (spacer 51 "footer")
-                    [:table {:class "row footer"}
-                      [:tbody
+    [:tr
+      [:td
+        [:center
+          [:table {:class "container"}
+            [:tr
+              [:td
+                (spacer 51 "footer")
+                [:table {:class "row footer"}
+                  [:tr
+                    [:th {:class "small-1 large-2 first columns"}]
+                    [:th {:class "small-11 large-8 columns"} 
+                      [:p {:class "text-center"}
+                        "Powered by "
+                        [:a {:href "http://opencompany.com/"} "OpenCompany"]
+                        ", a simple way to share the big picture."]]
+                    [:th {:class "small-1 large-2 last columns"}]]]
+                (spacer 24 "footer")
+                [:table {:class "row footer"}
+                  [:tr
+                    [:th {:class "small-1 large-2 first columns"}]
+                    [:th {:class "small-11 large-8 columns"}
+                      [:table
                         [:tr
-                          [:th {:class "small-1 large-2 first columns"}]
-                          [:th {:class "small-11 large-8 columns"} 
-                            [:p {:class "text-center"}
-                              "Powered by "
-                              [:a {:href "http://opencompany.com/"} "OpenCompany"]
-                              ", a simple way to share the big picture."]]
-                          [:th {:class "small-1 large-2 last columns"}]]]]
-                    (spacer 24 "footer")
-                    [:table {:class "row footer"}
-                      [:tbody
-                        [:tr
-                          [:th {:class "small-1 large-2 first columns"}]
-                          [:th {:class "small-11 large-8 columns"}
-                            [:table
-                              [:tr
-                                [:th
-                                  [:center
-                                    [:table {:class "button float-center expanded learn"}
+                          [:th
+                            [:center
+                              [:table {:class "button float-center expanded learn"}
+                                [:tr
+                                  [:td
+                                    [:table
                                       [:tr
                                         [:td
-                                          [:table
-                                            [:tr
-                                              [:td
-                                                [:a {:href "https://opencompany.com/"} "LEARN MORE ➞"]]]]]]]]]]]]
-                          [:th {:class "small-1 large-2 last columns"}]]]]
-                    (spacer 22 "footer")]]]]]]]]])
+                                          [:a {:href "https://opencompany.com/"} "LEARN MORE ➞"]]]]]]]]]]]]
+                    [:th {:class "small-1 large-2 last columns"}]]]
+                (spacer 22 "footer")]]]]]]])
 
 (defn- body [snapshot]
   [:body
     [:table {:class "body"}
-      [:tbody
-        [:tr
-          [:td {:class "float-center", :align "center", :valign "top"}
-            (when-not (s/blank? (:note snapshot)) (message snapshot))
-            [:center
-              [:table {:class "container"}
-                [:tbody
-                  [:tr
-                    (content snapshot)]]]]
-            (footer)]]]]])
+      [:tr
+        [:td {:class "float-center", :align "center", :valign "top"}
+          (when-not (s/blank? (:note snapshot)) (message snapshot))
+          [:center
+            [:table {:class "container"}
+              [:tr
+                (content snapshot)]]]
+          (footer)]]]])
 
 (defn- head [snapshot]
   [:html {:xmlns "http://www.w3.org/1999/xhtml"} 
@@ -346,14 +324,6 @@
 
   (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
   (def snapshot (json/decode (slurp "./opt/samples/buffer.json")))
-  (spit "./hiccup.html" (content/html (-> snapshot (assoc :note note) (assoc :company-slug "buffer"))))
-
-  (def note "All there is to know about OpenCompany.")
-  (def snapshot (json/decode (slurp "./opt/samples/open.json")))
-  (spit "./hiccup.html" (content/html (-> snapshot (assoc :note note) (assoc :company-slug "open"))))
-
-  (def note "")
-  (def snapshot (json/decode (slurp "./opt/samples/open.json")))
   (spit "./hiccup.html" (content/html (-> snapshot (assoc :note note) (assoc :company-slug "buffer"))))
 
   )

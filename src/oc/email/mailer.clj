@@ -57,11 +57,4 @@
                          :note "Enjoy this groovy update!"
                          :snapshot (assoc snapshot :company-slug "buffer")})
 
-  (def snapshot (json/decode (slurp "./opt/samples/open.json")))
-  (mailer/send-snapshot {:to "change@me.com,change+1@me.com,change+2@me.com"
-                         :reply-to "change@me.com"
-                         :subject "Check it"
-                         :note "Hot diggity!"
-                         :snapshot (assoc snapshot :company-slug "open")})
-
 )
