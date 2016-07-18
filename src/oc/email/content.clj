@@ -241,27 +241,9 @@
                     [:th {:class "small-11 large-8 columns"} 
                       [:p {:class "text-center"}
                         "Powered by "
-                        [:a {:href "http://opencompany.com/"} "OpenCompany"]
-                        ", a simple way to share the big picture."]]
+                        [:a {:href "http://opencompany.com/"} "OpenCompany"]]]
                     [:th {:class "small-1 large-2 last columns"}]]]
-                (spacer 24 "footer")
-                [:table {:class "row footer"}
-                  [:tr
-                    [:th {:class "small-1 large-2 first columns"}]
-                    [:th {:class "small-11 large-8 columns"}
-                      [:table
-                        [:tr
-                          [:th
-                            [:center
-                              [:table {:class "button float-center expanded learn"}
-                                [:tr
-                                  [:td
-                                    [:table
-                                      [:tr
-                                        [:td
-                                          [:a {:href "https://opencompany.com/"} "LEARN MORE ➞"]]]]]]]]]]]]
-                    [:th {:class "small-1 large-2 last columns"}]]]
-                (spacer 22 "footer")]]]]]]])
+                (spacer 28 "footer")]]]]]]])
 
 (defn- body [snapshot]
   [:body
