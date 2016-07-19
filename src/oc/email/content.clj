@@ -55,7 +55,7 @@
       [:th {:class "small-12 large-12 first last columns"}
         [:p {:class "text-center title"} (emojify (:title snapshot))]]]])
 
-(defn- note [snapshot]
+(defn- message [snapshot]
   [:table {:class "row note"}
     [:tr
       [:th {:class "small-12 large-12 first last columns note"}
@@ -199,32 +199,32 @@
       (content-topic snapshot topic-name topic topic-url))))
 
 (defn- content [snapshot]
-  (let [logo? (not (s/blank? (:logo snapshot)))]
+  (let [logo? (not (s/blank? (:logo snapshot)))
+        title? (not (s/blank? (:title snapshot)))]
     [:td
-      (spacer 60 "header")
+      (spacer 30 "header")
       (when logo? (logo snapshot))
-      (when logo? (spacer 17 "header"))
+      (when logo? (spacer 12 "header"))
       (company-name snapshot)
-      (spacer 17 "header")
-      (title snapshot)
-      (spacer 42 "header")
+      (when title? (spacer 12 "header"))
+      (when title? (title snapshot))
+      (spacer 22 "header")
       [:table
         [:tr
           (into [:td] 
             (interleave
               (map #(topic snapshot % (snapshot (keyword %))) (:sections snapshot))
-              (repeat (spacer 25 "header"))))]]
-      (spacer 60 "header")]))
+              (repeat (spacer 20 "header"))))]]]))
 
 (defn- note [snapshot]
   [:table {:class "note"}
     [:tr
       [:td
-        (spacer 55 "note")
-        (note snapshot)
+        (spacer 20 "note")
+        (message snapshot)
         (spacer 16 "note")
         (attribution snapshot)
-        (spacer 57 "note")]]])
+        (spacer 22 "note")]]])
 
 (defn- footer []
   [:table {:class "footer"}
@@ -234,7 +234,7 @@
           [:table {:class "container"}
             [:tr
               [:td
-                (spacer 51 "footer")
+                (spacer 31 "footer")
                 [:table {:class "row footer"}
                   [:tr
                     [:th {:class "small-1 large-2 first columns"}]
