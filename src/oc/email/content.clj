@@ -216,7 +216,7 @@
               (repeat (spacer 25 "header"))))]]
       (spacer 60 "header")]))
 
-(defn- message [snapshot]
+(defn- note [snapshot]
   [:table {:class "note"}
     [:tr
       [:td
@@ -250,7 +250,7 @@
     [:table {:class "body"}
       [:tr
         [:td {:class "float-center", :align "center", :valign "top"}
-          (when-not (s/blank? (:note snapshot)) (message snapshot))
+          (when-not (s/blank? (:note snapshot)) (note snapshot))
           [:center
             [:table {:class "container"}
               [:tr
