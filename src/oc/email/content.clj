@@ -204,9 +204,9 @@
     [:td
       (spacer 30 "header")
       (when logo? (logo snapshot))
-      (when logo? (spacer 12 "header"))
+      (when logo? (spacer 10 "header"))
       (company-name snapshot)
-      (when title? (spacer 12 "header"))
+      (when title? (spacer 10 "header"))
       (when title? (title snapshot))
       (spacer 22 "header")
       [:table
