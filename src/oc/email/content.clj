@@ -203,8 +203,6 @@
         title? (not (s/blank? (:title snapshot)))]
     [:td
       (spacer 30 "header")
-      (when logo? (logo snapshot))
-      (when logo? (spacer 10 "header"))
       (company-name snapshot)
       (when title? (spacer 10 "header"))
       (when title? (title snapshot))
@@ -214,7 +212,7 @@
           (into [:td] 
             (interleave
               (map #(topic snapshot % (snapshot (keyword %))) (:sections snapshot))
-              (repeat (spacer 20 "header"))))]]]))
+              (repeat (spacer 15 "header"))))]]]))
 
 (defn- note [snapshot]
   [:table {:class "note"}

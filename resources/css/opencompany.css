@@ -40,14 +40,9 @@ table.header {
 
 /* Header */
 
-table.header img.logo {
-  max-height: 50px;
-  max-width: 50px;
-}
-
 table.header p.company-name {
   font-family: Domine-Regular, Georgia, serif !important;
-  font-size: 32px;
+  font-size: 26px;
   color: #4e5a6b;
   margin-bottom: 0px !important;
   font-weight: bold;
@@ -58,10 +53,12 @@ table.header p.company-name {
 }
 
 table.header p.title {
-  font-size: 26px;
+  font-size: 18px;
+  font-weight: bold;
   color: #4e5a6b;
   font-family: Domine-Regular, Georgia, serif !important;
   line-height: 1.5;
+  letter-spacing: normal;
 }
 
 /* Topic */
