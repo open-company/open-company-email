@@ -119,7 +119,33 @@ You can also override these settings with environmental variables in the form of
 
 ## Usage
 
-TBD.
+Users of the [OpenCompany](https://opencompany.com/) platform should get started by going to [OpenCompany](https://opencompany.com/). The following usage is for developers wanting to work on the platform's email service.
+
+**Make sure you've updated `project.clj` as described above.**
+
+To start a development email service:
+
+```console
+lein start
+```
+
+Or to start a production email service:
+
+```console
+lein start!
+```
+
+To clean all compiled files:
+
+```console
+lein clean
+```
+
+To create a production build run:
+
+```console
+lein build
+```
 
 
 ## Testing
