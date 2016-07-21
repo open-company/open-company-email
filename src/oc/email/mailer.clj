@@ -30,7 +30,7 @@
           :reply-to-addresses [(if (s/blank? reply-to) default-reply-to reply-to)]
           :message {:subject subject
                     :body {:html body}}))
-        (s/split to #",")))))
+        to))))
 
 (defn send-snapshot [{note :note snapshot :snapshot :as msg}]
   (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
@@ -52,9 +52,9 @@
   (require '[oc.email.mailer :as mailer] :reload)
 
   (def snapshot (json/decode (slurp "./opt/samples/buffer.json")))
-  (mailer/send-snapshot {:to "change@me.com"
-                         :reply-to "change@me.com"
-                         :subject "Buffer Latest Update"
+  (mailer/send-snapshot {:to "sean@opencompany.com"
+                         :reply-to "sean@opencompany.com"
+                         :subject "Buffer Tweakeder Update"
                          :note "Enjoy this groovy update!"
                          :snapshot (assoc snapshot :company-slug "buffer")})
 
