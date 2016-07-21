@@ -9,7 +9,7 @@ a,
 a:hover,
 a:active,
 a:visited {
-  color: #4e5a6c;
+  color: #0A0A0A;
   font-family: Domine-Regular, Georgia, serif;
   text-decoration: underline;
 }
@@ -43,7 +43,7 @@ table.header {
 table.header p.company-name {
   font-family: Domine-Regular, Georgia, serif !important;
   font-size: 26px;
-  color: #4e5a6b;
+  color: #0A0A0A;
   margin-bottom: 0px !important;
   font-weight: bold;
   line-height: 1.5;
@@ -55,7 +55,7 @@ table.header p.company-name {
 table.header p.title {
   font-size: 18px;
   font-weight: bold;
-  color: #4e5a6b;
+  color: #0A0A0A;
   font-family: Domine-Regular, Georgia, serif !important;
   line-height: 1.5;
   letter-spacing: normal;
@@ -70,8 +70,8 @@ table.topic {
 }
 
 table.topic p.topic-headline {
-  font-size: 26px;
-  color: #4e5a6b;
+  font-size: 24px;
+  color: #0A0A0A;
   font-family: Domine-Regular, Georgia, serif !important;
   line-height: 1.5;
 }
@@ -99,7 +99,7 @@ table.topic,
 table.topic p,
 table.topic ul {
   font-size: 16px;
-  color: #4e5a6b;
+  color: #0A0A0A;
   font-family: Domine-Regular;
   line-height: 1.5;
 }
@@ -112,7 +112,7 @@ table.topic h4 {
   font-weight: 800;
   font-size: 18px;
   line-height: 1.5;
-  color: #4e5a6b;
+  color: #0A0A0A;
 }
 
 /* Data Topic */
@@ -122,18 +122,19 @@ table.topic p.metric, table.topic p.label {
   font-weight: bold;
   line-height: 1.5 !important;
   /* color: #4e5a6b; opacity: 0.75; is the same as: */
-  color: #7A838F !important;
 }
 
 table.topic p.metric {
-  font-size: 32px !important;
+  font-size: 24px !important;
   margin-bottom: 0 !important;
+  color: #0A0A0A;
 }
 
 table.topic p.label {
   font-size: 16px !important;
   letter-spacing: 1px;
   margin-bottom: 20px;
+  color: #7A838F !important;
 }
 
 /* === Footer === */
