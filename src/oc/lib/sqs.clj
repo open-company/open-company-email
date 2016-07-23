@@ -33,7 +33,8 @@
   (let [res (d/deferred)]
     (-> res
         (d/chain msg-handler msg-delete)
-        (d/catch #(timbre/error "Failed to process SQS message:" %)))
+        (d/catch #(do (timbre/error "Failed to process SQS message due to an exception.")
+                      (timbre/error %))))
     res))
 
 (defn dispatch-message

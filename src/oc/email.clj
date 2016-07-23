@@ -14,11 +14,12 @@
       :sqs (sqs/sqs-listener sqs-queue sqs-msg-handler))))
 
 (defn sqs-handler [sys msg]
-  (let [msg-body (read-string (:body msg))]
+  (let [msg-body (read-string (:body msg))
+        error (if (:test-error msg-body) (/ 1 0) false)] ; test Sentry error reporting
     (timbre/info "Received message from SQS.")
     (timbre/tracef "\nMessage from SQS: %s\n" msg-body)
-    (mailer/send-snapshot msg-body)
-    msg))
+    (mailer/send-snapshot msg-body))
+  msg)
 
 (defn -main []
   (if c/dsn
@@ -32,11 +33,12 @@
      (uncaughtException [_ thread ex]
        (timbre/error ex "Uncaught exception on" (.getName thread) (.getMessage ex)))))
 
-  (println (str "\n" (slurp (clojure.java.io/resource "oc/assets/ascii_art.txt")) "\n"
+  (println (str "\n"
+    (when c/intro? (str (slurp (clojure.java.io/resource "oc/assets/ascii_art.txt")) "\n"))
     "OpenCompany Email Service\n\n"
     "AWS SQS queue: " c/aws-sqs-email-queue "\n"
     "Sentry: " c/dsn "\n\n"
-    "Ready to serve...\n"))
+    (when c/intro? "Ready to serve...\n")))
 
   (component/start (system {:sqs-queue c/aws-sqs-email-queue
                             :sqs-msg-handler sqs-handler}))
@@ -45,7 +47,6 @@
 
 
 (comment
-
 
   ;; SQS message payload
   (def snapshot (json/decode (slurp "./opt/samples/buffer.json")))
@@ -57,13 +58,20 @@
      :company-slug "buffer"
      :snapshot snapshot})
 
-  (require '[amazonica.aws.sqs :as sqs])
+  (require '[amazonica.aws.sqs :as sqs2])
   
   ;; send a test SQS message
-  (sqs/send-message
+  (sqs2/send-message
      {:access-key c/aws-access-key-id
       :secret-key c/aws-secret-access-key}
     c/aws-sqs-email-queue
     message)
+
+  ;; send a test message that will cause an exception
+  (sqs2/send-message 
+     {:access-key c/aws-access-key-id
+      :secret-key c/aws-secret-access-key}
+    c/aws-sqs-email-queue
+    {:test-error true})
 
   )

@@ -54,6 +54,7 @@
         :aws-endpoint "us-east-1"
         :aws-sqs-email-queue "https://sqs.REGION.amazonaws.com/CHANGE/ME"
         :email-from-domain "change-me.com"
+        :intro "true"
       }
       :dependencies [
         [hickory "0.6.0"] ; HTML as data https://github.com/davidsantiago/hickory
@@ -89,8 +90,7 @@
     }]
 
     ;; Production environment
-    :prod {
-    }
+    :prod {}
 
     :uberjar {
       :aot :all
@@ -106,7 +106,7 @@
     "build" ["with-profile" "prod" "do" "clean," "uberjar"] ; clean and build code
     "repl" ["with-profile" "+repl-config" "repl"]
     "start" ["run" "-m" "oc.email"] ; start a development server
-    "start!" ["with-profile" "prod" "do" "build," "start"] ; start a server in production
+    "start!" ["with-profile" "prod" "do" "start"] ; start a server in production
     "spell!" ["spell" "-n"] ; check spelling in docs and docstrings
     "bikeshed!" ["bikeshed" "-v" "-m" "120"] ; code check with max line length warning of 120 characters
     "ancient" ["ancient" ":all" ":allow-qualified"] ; check for out of date dependencies
