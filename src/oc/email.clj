@@ -49,13 +49,13 @@
 (comment
 
   ;; SQS message payload
-  (def snapshot (json/decode (slurp "./opt/samples/buffer.json")))
+  (def snapshot (json/decode (slurp "./opt/samples/green-labs.json")))
   (def message 
-    {:subject "Buffer Update"
+    {:subject "GreenLabs Update"
      :to "change@changeme.com,change2@changeme.com"
      :note "Howdy folks!"
      :reply-to "hange@changeme.com"
-     :company-slug "buffer"
+     :company-slug "green-labs"
      :snapshot snapshot})
 
   (require '[amazonica.aws.sqs :as sqs2])

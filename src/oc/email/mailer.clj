@@ -51,11 +51,11 @@
 
   (require '[oc.email.mailer :as mailer] :reload)
 
-  (def snapshot (json/decode (slurp "./opt/samples/buffer.json")))
+  (def snapshot (json/decode (slurp "./opt/samples/green-labs.json")))
   (mailer/send-snapshot {:to ["change@me.com"]
                          :reply-to "change@me.com"
-                         :subject "Latest Buffer Update"
+                         :subject "Latest GreenLabs Update"
                          :note "Enjoy this groovy update!"
-                         :snapshot (assoc snapshot :company-slug "buffer")})
+                         :snapshot (assoc snapshot :company-slug "green-labs")})
 
 )

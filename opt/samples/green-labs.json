@@ -1,0 +1,125 @@
+{
+  "slug" : "july-2016-update-5c60d",
+  "sections" : [ "update", "highlights", "challenges", "team", "custom-89de", "help" ],
+  "logo" : "https://open-company-assets.s3.amazonaws.com/green-labs.png",
+  "challenges" : {
+    "description" : "Challenges facing the company",
+    "updated-at" : "2016-07-28T17:55:36.642Z",
+    "image-url" : "https://cdn.filestackcontent.com/b80F13kRte5FLyGIPFFN",
+    "headline" : "Recruiting; maintaining growth are focus areas",
+    "image-width" : 462,
+    "image-height" : 348,
+    "title" : "Key Challenges",
+    "author" : {
+      "image" : "https://avatars.slack-edge.com/2016-01-04/17691305283_beac02319067680e6936_192.jpg",
+      "name" : "Stuart Levinson",
+      "user-id" : "78901"
+    },
+    "body" : "<p>We've done a relatively good job onboarding 7 new hires so far this year; but just as many roles haven't been filled yet. Among them is the Chief Designer, and that's affecting our ability to iterate quickly. We're turning to recruiters to help us with at least that position.</p><p>Word of mouth has helped us to grow, but we have to find ways to build virality into the product, as well. In the meantime, we're testing a new campaign to drive growth.</p>",
+    "created-at" : "2016-07-28T17:55:36.642Z"
+  },
+  "name" : "GreenLabs",
+  "highlights" : {
+    "description" : "Company milestones and accomplishments",
+    "updated-at" : "2016-07-28T18:14:24.985Z",
+    "image-url" : "https://cdn.filestackcontent.com/vfQT7YICTgaS1xfEfJ6r",
+    "headline" : "GreenLabs featured in Slate!",
+    "image-width" : 1180,
+    "image-height" : 842,
+    "title" : "Highlights",
+    "author" : {
+      "image" : "https://avatars.slack-edge.com/2016-01-04/17691305283_beac02319067680e6936_192.jpg",
+      "name" : "Stuart Levinson",
+      "user-id" : "78901"
+    },
+    "body" : "<p><b>Can Robots Help Solve the Reproducibility Crisis? <i>Automating lab work can make results more reliable and easier to reproduce.</i></b></p><p>This was a great&nbsp;<a href=\"http://www.slate.com/articles/technology/future_tense/2016/06/automating_lab_research_could_help_resolve_the_reproducibility_crisis.html\" style=\"background-color: rgb(252, 252, 252);\">article</a>&nbsp;that helped drive a ton of attention, including from new investors interested in our next round.</p>",
+    "created-at" : "2016-07-28T18:14:24.985Z"
+  },
+  "update" : {
+    "description" : "Company update",
+    "updated-at" : "2016-07-28T18:25:03.085Z",
+    "image-url" : null,
+    "headline" : "Passing $1M in ARR :arrow_upper_right: :money_with_wings:",
+    "image-width" : 0,
+    "image-height" : 0,
+    "title" : "CEO Update",
+    "author" : {
+      "image" : "https://avatars.slack-edge.com/2016-01-04/17691305283_beac02319067680e6936_192.jpg",
+      "name" : "Stuart Levinson",
+      "user-id" : "78901"
+    },
+    "body" : "<p>We hit our targets and hit a new sales record, adding $125K in ARR so far this month!</p>",
+    "created-at" : "2016-07-28T18:25:03.085Z"
+  },
+  "title" : "July 2016 Update",
+  "author" : {
+    "image" : "https://secure.gravatar.com/avatar/866a6350e399e67e749c6f2aef0b96c0.jpg?s=192&d=https%3A%2F%2Fa.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0020-192.png",
+    "name" : "Sean Johnson",
+    "user-id" : "slack:U06SBTXJR"
+  },
+  "currency" : "USD",
+  "team" : {
+    "description" : "Team and hiring update",
+    "updated-at" : "2016-07-28T18:02:07.397Z",
+    "image-url" : null,
+    "headline" : "Welcome!",
+    "image-width" : 0,
+    "image-height" : 0,
+    "title" : "Team and Hiring",
+    "author" : {
+      "image" : "https://avatars.slack-edge.com/2016-01-04/17691305283_beac02319067680e6936_192.jpg",
+      "name" : "Stuart Levinson",
+      "user-id" : "78901"
+    },
+    "body" : "<p>With our latest three hires we're up to 25 across two offices. We're excited to have on board:</p><ul><li>Stacy Mills (dev ops)<br></li><li>Roger Arzberger (dev)</li><li>Eliza Klepsch (dev)</li></ul><p>Stacy Mills comes to us from Amazon where she spent 3 years in the dev-ops group for AWS. She's a major talent and a great edition to the team.</p><p>Roger is a recent graduate from UT and co-op'd at Google and Cisco in school. He's excited to join the team and already considers himself the office foosball, darts and ping-pong champion.</p><p>Eliza is joining the team out of CodeCamp where she was sponsored by us and was on the winning team for demo day.</p>",
+    "created-at" : "2016-07-28T18:02:07.397Z"
+  },
+  "custom-89de" : {
+    "description" : null,
+    "updated-at" : "2016-07-28T18:05:09.308Z",
+    "image-url" : null,
+    "headline" : "July 2016",
+    "image-width" : 0,
+    "image-height" : 0,
+    "title" : "KPI's",
+    "author" : {
+      "image" : "https://avatars.slack-edge.com/2016-01-04/17691305283_beac02319067680e6936_192.jpg",
+      "name" : "Stuart Levinson",
+      "user-id" : "78901"
+    },
+    "body" : "<ul><li>Total Revenue $83K<br></li><li>MRR: $79K</li><li>MRR Bookings $12.5K (goal $12K)</li><li>Revenue Churn: 4.2% (goal 3%)</li></ul>",
+    "created-at" : "2016-07-28T18:05:09.308Z"
+  },
+  "help" : {
+    "description" : "Ask your company stakeholders for help and ideas",
+    "updated-at" : "2016-07-28T18:07:42.845Z",
+    "image-url" : null,
+    "headline" : "New Office Space, Key Hires",
+    "image-width" : 0,
+    "image-height" : 0,
+    "title" : "How You Can Help",
+    "author" : {
+      "image" : "https://avatars.slack-edge.com/2016-01-04/17691305283_beac02319067680e6936_192.jpg",
+      "name" : "Stuart Levinson",
+      "user-id" : "78901"
+    },
+    "body" : "<p>Please introduce us to designers and anyone that might eventually lead us to a new Chief Designer. This is holding us back, and we need everyone's help!</p><p>We've outgrown our SF office. If you know of a sublease or reasonable deal for 5k square ft please let Rebekah know.</p><p><br></p>",
+    "created-at" : "2016-07-28T18:07:42.845Z"
+  },
+  "created-at" : "2016-08-05T14:50:38.747Z",
+  "links" : [ {
+    "rel" : "self",
+    "method" : "GET",
+    "href" : "/companies/green-labs/updates/july-2016-update-5c60d",
+    "type" : "application/vnd.open-company.stakeholder-update.v1+json"
+  }, {
+    "rel" : "company",
+    "method" : "GET",
+    "href" : "/companies/green-labs",
+    "type" : "application/vnd.open-company.company.v1+json"
+  }, {
+    "rel" : "delete",
+    "method" : "DELETE",
+    "href" : "/companies/green-labs/updates/july-2016-update-5c60d"
+  } ]
+}

@@ -1,0 +1,380 @@
+{
+  "slug" : "july-2016-update-a7ea5",
+  "customer-service" : {
+    "description" : "Customer service update",
+    "updated-at" : "2015-11-20T08:00:46.000Z",
+    "image-url" : null,
+    "headline" : "Continued to focus on speed for customers.",
+    "image-width" : 0,
+    "image-height" : 0,
+    "title" : "Happiness",
+    "author" : {
+      "image" : "https://secure.gravatar.com/avatar/46c1c756f36549c2dea0253e1e025053?s=96&d=mm&r=g",
+      "name" : "Joel Gascoigne",
+      "user-id" : "123456"
+    },
+    "body" : "<p>In October, the Happiness teams continued to focus on speed for customers who reach out. With response time\n        as our primary success metric, we're prioritizing hiring in November.</p>\n        <p>We also added more specialized roles in\n        the team, for example, having one liaison between each of the Product and Happiness teams in order to\n        streamline some meetings (and cancel others!), as well as one team member focusing on self-help resources.\n        We're now hiring to form a Twitter-specific team, too.</p>\n        <p>We also separated out business support last month. The new business support and customer success teams\n        will focus on the specific needs of customers using Buffer as part of their business strategy. Key metrics\n        for this area will include increased customer engagement, reduced churn, NPS score and customer satisfaction\n        score to mention a few. We're excited to incorporate new tools and continue to hire in this area as well!</p>\n        <ul>\n          <li>12,282 replies sent</li>\n          <li>Customer Happiness Percentage: 95%</li>\n          <li>67% of emails got a reply within 1 hour</li>\n          <li>85% within 6 hours</li>\n          <li>54% of Tweets got a reply within 15 minutes</li>\n        </ul>",
+    "created-at" : "2015-11-20T08:00:46.000Z"
+  },
+  "sections" : [ "growth", "team", "finances", "product", "customer-service", "marketing", "help" ],
+  "logo" : "https://open-company-assets.s3.amazonaws.com/buffer.png",
+  "name" : "Buffer",
+  "title" : "July 2016 Update",
+  "author" : {
+    "image" : "https://secure.gravatar.com/avatar/866a6350e399e67e749c6f2aef0b96c0.jpg?s=192&d=https%3A%2F%2Fa.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0020-192.png",
+    "name" : "Sean Johnson",
+    "user-id" : "slack:U06SBTXJR"
+  },
+  "currency" : "USD",
+  "product" : {
+    "description" : "Product release and roadmap update",
+    "updated-at" : "2015-11-20T08:00:46.000Z",
+    "image-url" : "https://open.buffer.com/wp-content/uploads/2015/11/Pablo-2-launch-social-media-images-800x643.png",
+    "headline" : "We launched :rocket: Pablo 2.0! :tada:",
+    "image-width" : 800,
+    "image-height" : 643,
+    "title" : "Product",
+    "author" : {
+      "image" : "https://secure.gravatar.com/avatar/46c1c756f36549c2dea0253e1e025053?s=96&d=mm&r=g",
+      "name" : "Joel Gascoigne",
+      "user-id" : "123456"
+    },
+    "body" : "<p>We launched <a href=\"https://blog.bufferapp.com/pablo-images-for-instagram-pinterest-twitter-facebook\">Pablo 2.0!</a>\n        More than 500,000 Pablo images have been created so far, and we're excited to keep going with our quick\n        images tool.</p>\n        <p>We also made several improvements to Buffer for Business, including the move from 7 day to 30 day trials,\n        a new groups UI, the ability to search profiles and improved reliability/speed of analytics.</p>\n        <ul>\n          <li>Calendar View feature in beta (and <a href=\"https://blog.bufferapp.com/social-media-calendar\">launched in November</a>)</li>\n          <li>Awesome Plan ($10/mo) MRR: $379,189 (+2.3%)</li>\n          <li>Buffer for Business ($50+/mo) MRR: $272,227 (-0.3%) (a result of our move to 30-day trials)</li>\n          <li>New landing page experiment (awaiting results)</li>\n          <li>Multiple photo upload feature for Twitter</li>\n        </ul>",
+    "created-at" : "2015-11-20T08:00:46.000Z"
+  },
+  "team" : {
+    "description" : "Team and hiring update",
+    "updated-at" : "2016-08-04T21:45:46.224Z",
+    "image-url" : null,
+    "headline" : "We went totally remote and distributed.😂",
+    "image-width" : 0,
+    "section" : "team",
+    "image-height" : 0,
+    "title" : "Team and hiring",
+    "author" : {
+      "image" : "https://avatars.slack-edge.com/2016-01-04/17691305283_beac02319067680e6936_192.jpg",
+      "name" : "Stuart Levinson",
+      "user-id" : "slack:U06SQLDFT"
+    },
+    "as-of" : "2016-08-04T21:43:38.219Z",
+    "read-only" : false,
+    "body" : "<p>In October, we <a href=\"https://open.buffer.com/no-office/\">closed Buffer's physical office</a>\n          to go entirely remote and distributed.</p>\n          <p>As we grow, we started experimenting with\n          <a href=\"https://open.buffer.com/why-we-ask-our-team-to-grade-us-every-month-buffers-october-hiring-report/\">NPS</a>\n          to get the 💓 of Buffer regularly.</p>\n          <p>We also evolved some of our team tools: we left HipChat &amp; Sqwiggle for Slack &amp; Zoom and joined Okta as a\n          security solution. On the transparency front, Leo shared more details on\n          <a href=\"https://open.buffer.com/explaining-equity/\">How We Explain Stock Options to Team Members</a>.</p>\n          <ul>\n            <li>56 team members across the world in 40 cities (full time + bootcampers)</li>\n            <li>In October, 9 teammates completed their bootcamp and 6 of them will be joining us full time. We're\n            so excited to welcome:\n            <ul>\n              <li><a href=\"https://twitter.com/kellybakes\">Kelly, Happiness Hero</a></li>\n              <li><a href=\"https://twitter.com/_alexray\">Alex, Front-End Engineer</a></li>\n              <li><a href=\"https://twitter.com/mwermuth\">Marcus, iOS Engineer</a></li>\n              <li><a href=\"https://twitter.com/dearlorenz\">Lorenz, Designer</a></li>\n              <li><a href=\"https://twitter.com/RoyBoss\">Roy, Customer Development</a></li>\n              <li><a href=\"https://twitter.com/alfred_lua\">Alfred, Community Champion</a></li>\n            </ul>8 new team members started their bootcamp in October.</li>\n            <li>At least 8 more people will be starting bootcamp throughout November.</li>\n            <li>We looked into 1,992 hiring conversations in October (+29% MoM)</li>\n          </ul>\n          <p>In November, we're hiring across <a href=\"https://buffer.com/journey\">12 open positions</a>, listed\n          on <a href=\"https://buffer.com/journey\">Buffer's Journey page</a>.</p><p>Testing edits on full screen view.</p><p>Testing more edits.</p>",
+    "created-at" : "2016-08-04T21:43:38.219Z"
+  },
+  "finances" : {
+    "author" : {
+      "image" : "https://secure.gravatar.com/avatar/46c1c756f36549c2dea0253e1e025053?s=96&d=mm&r=g",
+      "name" : "Joel Gascoigne",
+      "user-id" : "123456"
+    },
+    "body" : "",
+    "created-at" : "2015-11-20T08:00:46.000Z",
+    "data" : [ {
+      "cash" : 2084935,
+      "costs" : 444710,
+      "period" : "2015-01",
+      "revenue" : 441108
+    }, {
+      "cash" : 1827750,
+      "costs" : 719421,
+      "period" : "2015-02",
+      "revenue" : 462236
+    }, {
+      "cash" : 2084003,
+      "costs" : 232518,
+      "period" : "2015-03",
+      "revenue" : 488771
+    }, {
+      "cash" : 2165528,
+      "costs" : 427636,
+      "period" : "2015-04",
+      "revenue" : 509161
+    }, {
+      "cash" : 2267067,
+      "costs" : 430811,
+      "period" : "2015-05",
+      "revenue" : 532350
+    }, {
+      "cash" : 2578881,
+      "costs" : 238715,
+      "period" : "2015-06",
+      "revenue" : 550529
+    }, {
+      "cash" : 2655505,
+      "costs" : 494907,
+      "period" : "2015-07",
+      "revenue" : 571532
+    }, {
+      "cash" : 2789388,
+      "costs" : 490313,
+      "period" : "2015-08",
+      "revenue" : 624196
+    }, {
+      "cash" : 2757998,
+      "costs" : 675382,
+      "period" : "2015-09",
+      "revenue" : 643992
+    }, {
+      "cash" : 2546589,
+      "costs" : 861887,
+      "period" : "2015-10",
+      "revenue" : 650478
+    } ],
+    "description" : "Cash on hand, burn and runway",
+    "headline" : "",
+    "title" : "Finances",
+    "updated-at" : "2015-11-20T08:00:46.000Z"
+  },
+  "help" : {
+    "description" : "Ask your company stakeholders for help and ideas",
+    "updated-at" : "2015-11-20T08:00:46.000Z",
+    "image-url" : null,
+    "headline" : "One quick ask.",
+    "image-width" : 0,
+    "image-height" : 0,
+    "title" : "Asks",
+    "author" : {
+      "image" : "https://secure.gravatar.com/avatar/46c1c756f36549c2dea0253e1e025053?s=96&d=mm&r=g",
+      "name" : "Joel Gascoigne",
+      "user-id" : "123456"
+    },
+    "body" : "<p>Recently we launched a brand new feature:\n        <a href=\"https://blog.bufferapp.com/social-media-calendar\">Social Media Calendar</a>.\n        We'd love your help to spread the word. <a href=\"https://twitter.com/intent/tweet?text=Thrilled%20to%20see%20@buffer%27s%20Social%20Media%20Calendar!%20Great%20to%20manage%20social%20media%20at-a-glance:%20https://blog.bufferapp.com/social-media-calendar%20pic.twitter.com/Y8XdRyU9ie\">Tweet</a>\n        or <a href=\"https://buffer.com/add?url=https%3A%2F%2Fblog.bufferapp.com%2Fsocial-media-calendar&text=Thrilled%20to%20see%20@buffer%27s%20Social%20Media%20Calendar!%20Great%20to%20manage%20social%20media%20at-a-glance:&picture=https%3A%2F%2Fbufferblog-wpengine.netdna-ssl.com%2Fwp-content%2Fuploads%2F2015%2F11%2Fcalendar-launch-600x410%402x.png&version=2.13.12&placement=hover_button_image\">Buffer</a>!</p>",
+    "created-at" : "2015-11-20T08:00:46.000Z"
+  },
+  "growth" : {
+    "description" : "Growth metrics and key performance indicators",
+    "updated-at" : "2015-11-20T08:00:46.000Z",
+    "headline" : "Seeing an impact from our move from 7 to 30-day trials for Buffer for Business",
+    "title" : "Key metrics",
+    "author" : {
+      "image" : "https://secure.gravatar.com/avatar/46c1c756f36549c2dea0253e1e025053?s=96&d=mm&r=g",
+      "name" : "Joel Gascoigne",
+      "user-id" : "123456"
+    },
+    "body" : "<p>It can clearly be seen :see_no_evil: in the numbers here that our move from 7-day to 30-day trials for Buffer\n          for Business has significantly impacted metrics (most noticeably MRR).</p>\n          <p>The reason this has stalled our revenue growth is that it created a 30-day gap with no expiring trials\n          and therefore no new converting Buffer for Business customers.</p>\n          <p>This is an expected outcome that we decided was the right move for us to grow Buffer for Business.</p>\n          <p>I'm happy to share that from the trend we've seen for the first week of November, we are seeing an\n          increase in both the number of trials and the conversion rate of trials as a result of moving from 7-day\n          to 30-day trials.</p>\n          </p>",
+    "created-at" : "2015-11-20T08:00:46.000Z",
+    "metrics" : [ {
+      "description" : "Total number of registered users",
+      "interval" : "monthly",
+      "name" : "Users",
+      "slug" : "total-registered-users",
+      "unit" : "number"
+    }, {
+      "description" : "Monthly Active Users",
+      "interval" : "monthly",
+      "name" : "MAU",
+      "slug" : "mau",
+      "unit" : "number"
+    }, {
+      "description" : "Average Daily Active Users",
+      "interval" : "monthly",
+      "name" : "Avg DAU",
+      "slug" : "dau",
+      "unit" : "number"
+    }, {
+      "description" : "Annual Recurring Revenue",
+      "interval" : "monthly",
+      "name" : "ARR",
+      "slug" : "arr",
+      "unit" : "currency"
+    } ],
+    "data" : [ {
+      "period" : "2015-01",
+      "slug" : "total-registered-users",
+      "value" : 2090805
+    }, {
+      "period" : "2015-01",
+      "slug" : "mau",
+      "value" : 183638
+    }, {
+      "period" : "2015-01",
+      "slug" : "dau",
+      "value" : 44790
+    }, {
+      "period" : "2015-01",
+      "slug" : "arr",
+      "value" : 5290000
+    }, {
+      "period" : "2015-02",
+      "slug" : "total-registered-users",
+      "value" : 2171877
+    }, {
+      "period" : "2015-02",
+      "slug" : "mau",
+      "value" : 189216
+    }, {
+      "period" : "2015-02",
+      "slug" : "dau",
+      "value" : 47937
+    }, {
+      "period" : "2015-02",
+      "slug" : "arr",
+      "value" : 5550000
+    }, {
+      "period" : "2015-03",
+      "slug" : "total-registered-users",
+      "value" : 2261641
+    }, {
+      "period" : "2015-03",
+      "slug" : "mau",
+      "value" : 207035
+    }, {
+      "period" : "2015-03",
+      "slug" : "dau",
+      "value" : 50538
+    }, {
+      "period" : "2015-03",
+      "slug" : "arr",
+      "value" : 5870000
+    }, {
+      "period" : "2015-04",
+      "slug" : "total-registered-users",
+      "value" : 2351405
+    }, {
+      "period" : "2015-04",
+      "slug" : "mau",
+      "value" : 200125
+    }, {
+      "period" : "2015-04",
+      "slug" : "dau",
+      "value" : 49728
+    }, {
+      "period" : "2015-04",
+      "slug" : "arr",
+      "value" : 6110000
+    }, {
+      "period" : "2015-05",
+      "slug" : "total-registered-users",
+      "value" : 2432382
+    }, {
+      "period" : "2015-05",
+      "slug" : "mau",
+      "value" : 203449
+    }, {
+      "period" : "2015-05",
+      "slug" : "dau",
+      "value" : 49202
+    }, {
+      "period" : "2015-05",
+      "slug" : "arr",
+      "value" : 6390000
+    }, {
+      "period" : "2015-06",
+      "slug" : "total-registered-users",
+      "value" : 2511292
+    }, {
+      "period" : "2015-07",
+      "slug" : "total-registered-users",
+      "value" : 2592194
+    }, {
+      "period" : "2015-08",
+      "slug" : "total-registered-users",
+      "value" : 2673418
+    }, {
+      "period" : "2015-09",
+      "slug" : "total-registered-users",
+      "value" : 2757998
+    }, {
+      "period" : "2015-10",
+      "slug" : "total-registered-users",
+      "value" : 2841519
+    }, {
+      "period" : "2015-06",
+      "slug" : "mau",
+      "value" : 206464
+    }, {
+      "period" : "2015-07",
+      "slug" : "mau",
+      "value" : 208667
+    }, {
+      "period" : "2015-08",
+      "slug" : "mau",
+      "value" : 211520
+    }, {
+      "period" : "2015-09",
+      "slug" : "mau",
+      "value" : 219744
+    }, {
+      "period" : "2015-10",
+      "slug" : "mau",
+      "value" : 226445
+    }, {
+      "period" : "2015-06",
+      "slug" : "dau",
+      "value" : 52229
+    }, {
+      "period" : "2015-07",
+      "slug" : "dau",
+      "value" : 51491
+    }, {
+      "period" : "2015-08",
+      "slug" : "dau",
+      "value" : 50489
+    }, {
+      "period" : "2015-09",
+      "slug" : "dau",
+      "value" : 54357
+    }, {
+      "period" : "2015-10",
+      "slug" : "dau",
+      "value" : 55460
+    }, {
+      "period" : "2015-06",
+      "slug" : "arr",
+      "value" : 6610000
+    }, {
+      "period" : "2015-07",
+      "slug" : "arr",
+      "value" : 6860000
+    }, {
+      "period" : "2015-08",
+      "slug" : "arr",
+      "value" : 7490000
+    }, {
+      "period" : "2015-09",
+      "slug" : "arr",
+      "value" : 7730000
+    }, {
+      "period" : "2015-10",
+      "slug" : "arr",
+      "value" : 7810000
+    } ]
+  },
+  "logo-width" : 313,
+  "created-at" : "2016-08-05T14:53:27.662Z",
+  "logo-height" : 319,
+  "marketing" : {
+    "description" : "Notable marketing activities and results",
+    "updated-at" : "2016-08-04T21:55:06.551Z",
+    "image-url" : null,
+    "headline" : "We bared our souls and it paid off.😀😇",
+    "image-width" : 0,
+    "section" : "marketing",
+    "image-height" : 0,
+    "title" : "Marketing",
+    "author" : {
+      "image" : "https://avatars.slack-edge.com/2016-01-04/17691305283_beac02319067680e6936_192.jpg",
+      "name" : "Stuart Levinson",
+      "user-id" : "slack:U06SQLDFT"
+    },
+    "as-of" : "2016-08-04T21:54:51.869Z",
+    "read-only" : false,
+    "body" : "<p>We had a really exciting month in terms of traffic and sign-ups. After we bared our souls and shared how\n        <a href=\"https://blog.bufferapp.com/lost-traffic\">we had been losing social media traffic for quite some time</a>,\n        we got a lot of great feedback, insights and encouragement.</p>\n        <p>In October we focused a lot on improving the calls to action on the blog, which had a lot of success.\n        We also dove in more on the paid ads side and hired someone full-time to help us with that-stay tuned for\n        updates!</p>\n        <ul>\n          <li>2,711 signups via blog content (17.2% growth)</li>\n          <li>1,252,000 unique visitors (18.4% growth)</li>\n        </ul>\n        <p><b>Break-out content hits:</b></p>\n        <ul>\n          <li><a href=\"https://blog.bufferapp.com/lost-traffic\">We've Lost Nearly Half Our Social Referral Traffic in the Last 12 Months</a></li>\n          <li><a href=\"https://blog.bufferapp.com/twitter-polls\">The Complete Guide to New Twitter Polls: What They Are, How They Work and 9 Ways to Use Them</a></li>\n          <li><a href=\"https://open.buffer.com/no-office/\">After Growing to 50 People, We're Ditching the Office Completely: Here's Why</a></li>\n        </ul>",
+    "created-at" : "2016-08-04T21:54:51.869Z"
+  },
+  "links" : [ {
+    "rel" : "self",
+    "method" : "GET",
+    "href" : "/companies/buff/updates/july-2016-update-a7ea5",
+    "type" : "application/vnd.open-company.stakeholder-update.v1+json"
+  }, {
+    "rel" : "company",
+    "method" : "GET",
+    "href" : "/companies/buff",
+    "type" : "application/vnd.open-company.company.v1+json"
+  }, {
+    "rel" : "delete",
+    "method" : "DELETE",
+    "href" : "/companies/buff/updates/july-2016-update-a7ea5"
+  } ]
+}

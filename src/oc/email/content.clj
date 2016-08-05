@@ -90,8 +90,7 @@
 
 (defn- content-topic [snapshot topic-name topic topic-url]
   (let [body? (not (s/blank? (:body topic)))
-        image-url (:image-url topic)
-        snippet? (not (s/blank? (:snippet topic)))]
+        image-url (:image-url topic)]
     [:table {:class "row topic"}
       (when image-url (topic-image image-url))
        [:tr
@@ -100,11 +99,9 @@
           [:p {:class "topic-title"} (s/upper-case (:title topic))]
           (spacer 1)
           [:p {:class "topic-headline"} (emojify (:headline topic))]
-          (when snippet? (spacer 2))
-          (when snippet? (emojify (:snippet topic)))
-          (when body? (spacer 20))
-          (when body? [:a {:class "topic-read-more" :href topic-url} "READ MORE"])
-          (spacer 30)]
+          (when body? (spacer 2))
+          (when body? (emojify (:body topic)))
+          (spacer 20)]
         [:th {:class "expander"}]]]))
 
 (defn- metric
@@ -170,7 +167,7 @@
 (defn- data-topic [snapshot topic-name topic topic-url]
   (let [currency (:currency snapshot)
         data? (empty? (:data snapshot))
-        snippet? (s/blank? (:snippet topic))]
+        body? (s/blank? (:body topic))]
     [:table {:class "row topic"}
       [:tr
         [:th {:class "small-12 large-12 columns first last"}
@@ -183,8 +180,8 @@
             (if (= topic-name "finances")
               (finance-metrics topic currency)
               (growth-metrics topic currency)))
-          (when snippet? (spacer 20))
-          (when snippet? [:p (:snippet topic)])
+          (when body? (spacer 20))
+          (when body? [:p (:body topic)])
           (spacer 20)
           [:a {:class "topic-read-more", :href topic-url} "SEE MORE"]
           (spacer 30)]
@@ -324,7 +321,7 @@
   ;; Generate test email HTML content from various snapshots
 
   (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
-  (def snapshot (json/decode (slurp "./opt/samples/buffer.json")))
-  (spit "./hiccup.html" (content/html (-> snapshot (assoc :note note) (assoc :company-slug "buffer"))))
+  (def snapshot (json/decode (slurp "./opt/samples/green-labs.json")))
+  (spit "./hiccup.html" (content/html (-> snapshot (assoc :note note) (assoc :company-slug "green-labs"))))
 
   )
