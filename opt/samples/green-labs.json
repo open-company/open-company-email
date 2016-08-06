@@ -1,5 +1,5 @@
 {
-  "slug" : "july-2016-update-5c60d",
+  "slug" : "july-2016-update-89150",
   "sections" : [ "update", "highlights", "challenges", "team", "custom-89de", "help" ],
   "logo" : "https://open-company-assets.s3.amazonaws.com/green-labs.png",
   "challenges" : {
@@ -39,7 +39,7 @@
     "description" : "Company update",
     "updated-at" : "2016-07-28T18:25:03.085Z",
     "image-url" : null,
-    "headline" : "Passing $1M in ARR :arrow_upper_right: :money_with_wings:",
+    "headline" : "Passing $1M in ARR ↗ 💸",
     "image-width" : 0,
     "image-height" : 0,
     "title" : "CEO Update",
@@ -71,7 +71,7 @@
       "name" : "Stuart Levinson",
       "user-id" : "78901"
     },
-    "body" : "<p>With our latest three hires we're up to 25 across two offices. We're excited to have on board:</p><ul><li>Stacy Mills (dev ops)<br></li><li>Roger Arzberger (dev)</li><li>Eliza Klepsch (dev)</li></ul><p>Stacy Mills comes to us from Amazon where she spent 3 years in the dev-ops group for AWS. She's a major talent and a great edition to the team.</p><p>Roger is a recent graduate from UT and co-op'd at Google and Cisco in school. He's excited to join the team and already considers himself the office foosball, darts and ping-pong champion.</p><p>Eliza is joining the team out of CodeCamp where she was sponsored by us and was on the winning team for demo day.</p>",
+    "body" : "\n          <p>With our latest three hires we're up to 25 across two offices. We're excited to have on board:</p><ul><li>Stacy Mills (dev ops)<br></li><li>Roger Arzberger (dev)</li><li>Eliza Klepsch (dev)</li></ul>\n          <p>Stacy Mills comes to us from Amazon where she spent 3 years in the dev-ops group for AWS. She's a major talent and a great edition to the team.</p><p>Roger is a recent graduate from UT and co-op'd at Google and Cisco in school. He's excited to join the team and already considers himself the office foosball, darts and ping-pong champion.</p><p>Eliza is joining the team out of CodeCamp where she was sponsored by us and was on the winning team for demo day.</p>",
     "created-at" : "2016-07-28T18:02:07.397Z"
   },
   "custom-89de" : {
@@ -106,11 +106,11 @@
     "body" : "<p>Please introduce us to designers and anyone that might eventually lead us to a new Chief Designer. This is holding us back, and we need everyone's help!</p><p>We've outgrown our SF office. If you know of a sublease or reasonable deal for 5k square ft please let Rebekah know.</p><p><br></p>",
     "created-at" : "2016-07-28T18:07:42.845Z"
   },
-  "created-at" : "2016-08-05T14:50:38.747Z",
+  "created-at" : "2016-08-06T13:05:05.411Z",
   "links" : [ {
     "rel" : "self",
     "method" : "GET",
-    "href" : "/companies/green-labs/updates/july-2016-update-5c60d",
+    "href" : "/companies/green-labs/updates/july-2016-update-89150",
     "type" : "application/vnd.open-company.stakeholder-update.v1+json"
   }, {
     "rel" : "company",
@@ -120,6 +120,6 @@
   }, {
     "rel" : "delete",
     "method" : "DELETE",
-    "href" : "/companies/green-labs/updates/july-2016-update-5c60d"
+    "href" : "/companies/green-labs/updates/july-2016-update-89150"
   } ]
 }

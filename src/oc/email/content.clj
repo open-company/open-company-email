@@ -9,24 +9,6 @@
 
 (def monthly-date (f/formatter "MMM YYYY"))
 
-(defn- escape-accidental-emoticon
-  "Replace any :/ with to avoid emojifying links and images."
-  [text]
-  (s/replace text #":\/\/" ":this-is-not-an-emoji-silly-library:"))
-
-(defn- unescape-accidental-emoticon
-  "Replace any  with :/ to restore links and images."
-  [text]
-  (s/replace text #":this-is-not-an-emoji-silly-library:" "://"))
-
-(defn- emojify
-  "Replace emoji shortcodes or ASCII with Unicode."
-  [text]
-  (-> text
-    (escape-accidental-emoticon)
-    (emoji4j.EmojiUtils/emojify)
-    (unescape-accidental-emoticon)))
-
 (defn- logo [snapshot]
   [:table {:class "row header"} 
     [:tr
@@ -53,13 +35,13 @@
   [:table {:class "row header"}
     [:tr
       [:th {:class "small-12 large-12 first last columns"}
-        [:p {:class "text-center title"} (emojify (:title snapshot))]]]])
+        [:p {:class "text-center title"} (:title snapshot)]]]])
 
 (defn- message [snapshot]
   [:table {:class "row note"}
     [:tr
       [:th {:class "small-12 large-12 first last columns note"}
-        (emojify (:note snapshot))]]])
+        (:note snapshot)]]])
 
 (defn- attribution [snapshot]
   (let [author (get-in snapshot [:author :name])]
@@ -98,9 +80,9 @@
           (spacer 24)
           [:p {:class "topic-title"} (s/upper-case (:title topic))]
           (spacer 1)
-          [:p {:class "topic-headline"} (emojify (:headline topic))]
+          [:p {:class "topic-headline"} (:headline topic)]
           (when body? (spacer 2))
-          (when body? (emojify (:body topic)))
+          (when body? (:body topic))
           (spacer 20)]
         [:th {:class "expander"}]]]))
 
@@ -174,7 +156,7 @@
           (spacer 24)
           [:p {:class "topic-title"} (s/upper-case (:title topic))]
           (spacer 1)
-          [:p {:class "topic-headline"} (emojify (:headline topic))]
+          [:p {:class "topic-headline"} (:headline topic)]
           (when data? (spacer 15))
           (when data?
             (if (= topic-name "finances")

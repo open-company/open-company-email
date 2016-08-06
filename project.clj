@@ -22,7 +22,6 @@
     [hiccup "1.0.5"] ; HTML rendering https://github.com/weavejester/hiccup
     [cheshire "5.6.3"] ; JSON encoding / decoding https://github.com/dakrone/cheshire
     [manifold "0.1.5-alpha2"] ; Async programming tools https://github.com/ztellman/manifold
-    [com.kcthota/emoji4j "5.0"] ; Emoji library https://github.com/kcthota/emoji4j
     [clj-time "0.12.0"] ; Date and time lib https://github.com/clj-time/clj-time
   ]
 
