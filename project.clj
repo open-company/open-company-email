@@ -14,20 +14,20 @@
   ;; All profile dependencies
   :dependencies [
     [org.clojure/clojure "1.9.0-alpha10"] ; Lisp on the JVM http://clojure.org/documentation
-    [environ "1.0.3"] ; Environment settings from different sources https://github.com/weavejester/environ
-    [com.taoensso/timbre "4.7.0"] ; Logging https://github.com/ptaoussanis/timbre
+    [environ "1.1.0"] ; Environment settings from different sources https://github.com/weavejester/environ
+    [com.taoensso/timbre "4.7.3"] ; Logging https://github.com/ptaoussanis/timbre
     [raven-clj "1.4.2"] ; Interface to Sentry error reporting https://github.com/sethtrain/raven-clj
     [com.stuartsierra/component "0.3.1"] ; Component Lifecycle
-    [amazonica "0.3.67"] ; A comprehensive Clojure client for the entire Amazon AWS api https://github.com/mcohen01/amazonica
+    [amazonica "0.3.73"] ; A comprehensive Clojure client for the entire Amazon AWS api https://github.com/mcohen01/amazonica
     [hiccup "1.0.5"] ; HTML rendering https://github.com/weavejester/hiccup
     [cheshire "5.6.3"] ; JSON encoding / decoding https://github.com/dakrone/cheshire
-    [manifold "0.1.5-alpha2"] ; Async programming tools https://github.com/ztellman/manifold
+    [manifold "0.1.6-alpha1"] ; Async programming tools https://github.com/ztellman/manifold
     [clj-time "0.12.0"] ; Date and time lib https://github.com/clj-time/clj-time
   ]
 
   ;; All profile plugins
   :plugins [
-    [lein-environ "1.0.3"] ; Get environment settings from different sources https://github.com/weavejester/environ
+    [lein-environ "1.1.0"] ; Get environment settings from different sources https://github.com/weavejester/environ
   ]
 
   :profiles {
