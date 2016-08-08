@@ -43,13 +43,6 @@
       [:th {:class "small-12 large-12 first last columns note"}
         (:note snapshot)]]])
 
-(defn- attribution [snapshot]
-  (let [author (get-in snapshot [:author :name])]
-    [:table {:class "row note"}
-      [:tr
-        [:th {:class "small-12 large-12 first last columns note"}
-          [:p {:class "note"} (str "— " author)]]]]))
-
 (defn- spacer
   ([pixels] (spacer pixels ""))
   ([pixels class-name]
@@ -199,8 +192,6 @@
       [:td
         (spacer 20 "note")
         (message snapshot)
-        (spacer 16 "note")
-        (attribution snapshot)
         (spacer 22 "note")]]])
 
 (defn- footer []
@@ -275,9 +266,6 @@
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
   (def data (clean-html (slurp "./resources/note.html")))
-  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
-
-  (def data (clean-html (slurp "./resources/attribution.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
   (def data (clean-htnml (slurp "./resources/logo.html")))
