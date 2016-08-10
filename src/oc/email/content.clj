@@ -117,27 +117,31 @@
         (into [:td]
           (map #(growth-metric % metadata) metrics))]]))
 
+(defn calc-runway [cash burn-rate]
+  (int (* (/ cash burn-rate) 30)))
+
 (defn- finance-metrics [topic currency]
   (let [finances (last (sort-by :period (:data topic)))
         period (f/parse monthly-period (:period finances))
         date (s/upper-case (f/unparse monthly-date period))
         cash? (:cash finances)
+        cash (:cash finances)
         revenue? (:revenue finances)
+        revenue (:revenue finances)
         costs? (:costs finances)
+        costs (:costs finances)
         cash-flow? (and revenue? costs?)
-        burn-rate? (and cash? (or costs? cash-flow?))]
+        cash-flow (- revenue costs)
+        runway? (and cash? costs? (or (not revenue?) (> costs revenue)))
+        runway (when runway? (calc-runway cash cash-flow))]
     [:table {:class "finances-metrics"}
       [:tr
         [:td
-          (when cash? (metric (str "CASH - " date) (:cash finances) "$")) ; TODO other currencies
-          (when revenue? (metric (str "REVENUE - " date) (:revenue finances) "$")) ; TODO other currencies
-          (when costs? (metric (str "COSTS - " date) (:costs finances) "$")) ; TODO other currencies
-          (when (or cash-flow? burn-rate?)
-            (if cash-flow?
-              (metric (str "CASH FLOW - " date) 25 "$") ; TODO other currencies
-              (metric (str "BURN RATE - " date) 50 "$"))) ; TODO other currenciesk
-          (when (and cash? burn-rate?)
-            (metric (str "RUNWAY - " date) "1 year"))]]]))
+          (when cash? (metric (str "CASH - " date) cash "$")) ; TODO other currencies
+          (when revenue? (metric (str "REVENUE - " date) revenue "$")) ; TODO other currencies
+          (when costs? (metric (str "COSTS - " date) costs "$")) ; TODO other currencies
+          (when cash-flow? (metric (str "CASH FLOW - " date) cash-flow "$")) ; TODO other currencies
+          (when runway? (metric (str "RUNWAY - " date) runway))]]]))
 
 (defn- data-topic [snapshot topic-name topic topic-url]
   (let [currency (:currency snapshot)
@@ -292,6 +296,10 @@
 
   (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
   (def snapshot (json/decode (slurp "./opt/samples/green-labs.json")))
+  (spit "./hiccup.html" (content/html (-> snapshot (assoc :note note) (assoc :company-slug "green-labs"))))
+
+  (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
+  (def snapshot (json/decode (slurp "./opt/samples/buffer.json")))
   (spit "./hiccup.html" (content/html (-> snapshot (assoc :note note) (assoc :company-slug "green-labs"))))
 
   )
