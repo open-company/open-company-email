@@ -71,7 +71,7 @@
   (if-not (or (and (s/ends-with? value "0") (.contains value "."))
               (s/ends-with? value "."))
     value
-    (remove-trailing (subs value 0 (- (count value) 1)))))
+    (remove-trailing (subs value 0 (dec (count value))))))
 
 (defn truncate-decimals
   "Round and truncate to a float value to at most the specified number of decimal places,
