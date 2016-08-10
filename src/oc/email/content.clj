@@ -3,7 +3,8 @@
             [clj-time.format :as f]
             [hiccup.core :as h]
             [clojure.walk :refer (keywordize-keys)]
-            [oc.email.config :as config]))
+            [oc.email.config :as config]
+            [oc.lib.utils :as utils]))
 
 (def monthly-period (f/formatter "YYYY-MM"))
 
@@ -141,7 +142,7 @@
           (when revenue? (metric (str "REVENUE - " date) revenue "$")) ; TODO other currencies
           (when costs? (metric (str "COSTS - " date) costs "$")) ; TODO other currencies
           (when cash-flow? (metric (str "CASH FLOW - " date) cash-flow "$")) ; TODO other currencies
-          (when runway? (metric (str "RUNWAY - " date) runway))]]]))
+          (when runway? (metric (str "RUNWAY - " date) (utils/get-rounded-runway runway)))]]]))
 
 (defn- data-topic [snapshot topic-name topic topic-url]
   (let [currency (:currency snapshot)
@@ -299,7 +300,7 @@
   (spit "./hiccup.html" (content/html (-> snapshot (assoc :note note) (assoc :company-slug "green-labs"))))
 
   (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
-  (def snapshot (json/decode (slurp "./opt/samples/buffer.json")))
-  (spit "./hiccup.html" (content/html (-> snapshot (assoc :note note) (assoc :company-slug "green-labs"))))
+  (def snapshot (json/decode (slurp "./opt/samples/buff.json")))
+  (spit "./hiccup.html" (content/html (-> snapshot (assoc :note note) (assoc :company-slug "buff"))))
 
   )
