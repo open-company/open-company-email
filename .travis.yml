@@ -13,6 +13,7 @@ cache:
 script:
 - lein2 eastwood
 - lein2 kibit
+- lein2 test
 branches:
   only:
   - master

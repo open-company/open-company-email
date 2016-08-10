@@ -1,4 +1,5 @@
-(ns oc.lib.utils)
+(ns oc.lib.utils
+  (:require [clojure.string :as s]))
 
 (defn in?
   "true if seq contains elm"
@@ -10,10 +11,11 @@
     (Math/abs runway)
     0))
 
-(defn remove-trailing-zero [string]
+(defn remove-trailing-zero
   "Remove the last zero(s) in a numeric string only after the dot.
    Remote the dot too if it is the last char after removing the zeros"
-  (cond
+   [string]
+   (cond
 
     (and (not= (.indexOf string ".") -1) (= (last string) "0"))
     (remove-trailing-zero (subs string 0 (dec (count string))))
@@ -60,3 +62,58 @@
           (str fixed-years " year" (pluralize years)))
         (let [years (quot abs-runway-days (* 30 12))]
           (str years " year" (pluralize years)))))))
+
+(defn remove-trailing
+  ""
+  [value]
+  {:pre (string? value)
+   :post (string? value)}
+  (if-not (or (and (s/ends-with? value "0") (.contains value "."))
+              (s/ends-with? value "."))
+    value
+    (remove-trailing (subs value 0 (- (count value) 1)))))
+
+(defn truncate-decimals
+  "Round and truncate to a float value to at most the specified number of decimal places,
+  leaving no trailing 0's to the right of the decimal."
+  [value decimals]
+  {:pre [(number? value) (pos? decimals) (integer? decimals)]
+   :post (string? %)}
+  (let [exp (Math/pow 10 decimals)]
+    (remove-trailing (format (str "%." decimals "f") (float (/ (Math/round (* exp value)) exp))))))
+
+(defn with-size-label [orig-value]
+  (when orig-value
+    (let [neg (neg? orig-value)
+          value (Math/abs orig-value)
+          short-value (cond
+                        ; 100M
+                        (>= value 100000000)
+                        (str (truncate-decimals(int (/ value 1000000)) 2) "M")
+                        ; 10.0M
+                        (>= value 10000000)
+                        (str (truncate-decimals (/ value 1000000) 1) "M")
+                        ; 1.00M
+                        (>= value 1000000)
+                        (str (truncate-decimals (/ value 1000000) 2) "M")
+                        ; 100K
+                        (>= value 100000)
+                        (str (truncate-decimals (int (/ value 1000)) 2) "K")
+                        ; 10.0K
+                        (>= value 10000)
+                        (str (truncate-decimals (/ value 1000) 1) "K")
+                        ; 1.00K
+                        (>= value 1000)
+                        (str (truncate-decimals (/ value 1000) 2) "K")
+                        ; 100
+                        (>= value 100)
+                        (str (truncate-decimals (int value) 2))
+                        ; 10.0
+                        (>= value 10)
+                        (str (truncate-decimals value 1))
+                        ; 1.00
+                        :else
+                        (str (truncate-decimals value 2)))]
+      (if neg
+        (str "-" short-value)
+        short-value))))

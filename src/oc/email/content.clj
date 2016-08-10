@@ -83,11 +83,7 @@
 (defn- metric
   ([label value] (metric label value false))
   ([label value currency]
-  (let [formatted-value (if (number? value)
-                          (.format (java.text.NumberFormat/getInstance java.util.Locale/US) (int value))
-                          value)
-        final-value (if currency (str currency formatted-value) formatted-value)] ; TODO negative currency
-                                                                                  ; TODO max 3 digits
+  (let [final-value (if currency (str currency value) value)]
     [:table {:class "metric"}
       [:tr
         [:td
@@ -138,10 +134,10 @@
     [:table {:class "finances-metrics"}
       [:tr
         [:td
-          (when cash? (metric (str "CASH - " date) cash "$")) ; TODO other currencies
-          (when revenue? (metric (str "REVENUE - " date) revenue "$")) ; TODO other currencies
-          (when costs? (metric (str "COSTS - " date) costs "$")) ; TODO other currencies
-          (when cash-flow? (metric (str "CASH FLOW - " date) cash-flow "$")) ; TODO other currencies
+          (when cash? (metric (str "CASH - " date) (utils/with-size-label cash) "$")) ; TODO other currencies
+          (when revenue? (metric (str "REVENUE - " date) (utils/with-size-label revenue) "$")) ; TODO other currencies
+          (when costs? (metric (str "COSTS - " date) (utils/with-size-label costs) "$")) ; TODO other currencies
+          (when cash-flow? (metric (str "CASH FLOW - " date) (utils/with-size-label cash-flow) "$")) ; TODO other currencies
           (when runway? (metric (str "RUNWAY - " date) (utils/get-rounded-runway runway)))]]]))
 
 (defn- data-topic [snapshot topic-name topic topic-url]

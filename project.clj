@@ -66,6 +66,7 @@
         [lein-spell "0.1.0"] ; Catch spelling mistakes in docs and docstrings https://github.com/cldwalker/lein-spell
         [lein-deps-tree "0.1.2"] ; Print a tree of project dependencies https://github.com/the-kenny/lein-deps-tree
         [venantius/yagni "0.1.4"] ; Dead code finder https://github.com/venantius/yagni
+        [com.jakemccrary/lein-test-refresh "0.16.0"] ; Autotest https://github.com/jakemcc/lein-test-refresh
       ]  
     }]
 
