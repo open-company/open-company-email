@@ -66,8 +66,8 @@
 (defn remove-trailing
   ""
   [value]
-  {:pre (string? value)
-   :post (string? value)}
+  {:pre [(string? value)]
+   :post [(string? value)]}
   (if-not (or (and (s/ends-with? value "0") (.contains value "."))
               (s/ends-with? value "."))
     value
@@ -78,7 +78,7 @@
   leaving no trailing 0's to the right of the decimal."
   [value decimals]
   {:pre [(number? value) (pos? decimals) (integer? decimals)]
-   :post (string? %)}
+   :post [(string? %)]}
   (let [exp (Math/pow 10 decimals)]
     (remove-trailing (format (str "%." decimals "f") (float (/ (Math/round (* exp value)) exp))))))
 
