@@ -178,7 +178,7 @@
 (defn- topic [snapshot topic-name topic]
   (let [company-slug (:company-slug snapshot)
         snapshot-slug (:slug snapshot)
-        topic-url (s/join "/" [config/web-url company-slug "updates" snapshot-slug topic-name])]
+        topic-url (s/join "/" [config/web-url company-slug "updates" snapshot-slug topic-name "?src=email"])]
     (if (:data topic)
       (data-topic snapshot topic-name topic topic-url)
       (content-topic snapshot topic-name topic topic-url))))
