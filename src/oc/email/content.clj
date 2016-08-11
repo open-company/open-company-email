@@ -153,7 +153,7 @@
 
 (defn- data-topic [snapshot topic-name topic topic-url]
   (let [currency (:currency snapshot)
-        data? (not (empty? (:data topic)))
+        data? (seq (:data topic))
         body? (s/blank? (:body topic))
         view-charts? (> (count (:data topic)) 1)]
     [:table {:class "row topic"}
