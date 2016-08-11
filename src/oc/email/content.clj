@@ -159,7 +159,7 @@
           (when body? (spacer 20))
           (when body? [:p (:body topic)])
           (spacer 20)
-          [:a {:class "topic-read-more", :href topic-url} "SEE MORE"]
+          [:a {:class "topic-read-more", :href topic-url} "VIEW CHARTS"]
           (spacer 30)]
         [:th {:class "expander"}]]]))
 
