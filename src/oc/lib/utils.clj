@@ -6,10 +6,16 @@
   [coll elm]
   (some #(= elm %) coll))
 
+(defn not-zero? [value]
+  (and (number? value) (not= 0 value) (not= 0.0 value)))
+
 (defn fix-runway [runway]
   (if (neg? runway)
     (Math/abs runway)
     0))
+
+(defn calc-runway [cash burn-rate]
+  (int (* (/ cash burn-rate) 30)))
 
 (defn remove-trailing-zero
   "Remove the last zero(s) in a numeric string only after the dot.

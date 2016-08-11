@@ -4,7 +4,8 @@
             [hiccup.core :as h]
             [clojure.walk :refer (keywordize-keys)]
             [oc.email.config :as config]
-            [oc.lib.utils :as utils]))
+            [oc.lib.utils :as utils]
+            [oc.lib.iso4217 :as iso4217]))
 
 (def monthly-period (f/formatter "YYYY-MM"))
 
@@ -80,10 +81,23 @@
           (spacer 20)]
         [:th {:class "expander"}]]]))
 
+(defn- with-currency
+  "Combine the value with the currency indicator, if available."
+  [currency value]
+  (let [currency-key (keyword currency)
+        currency-entry (iso4217/iso4217 currency-key)
+        currency-symbol (if currency-entry (:symbol currency-entry) false)
+        currency-text (if currency-entry (:text currency-entry) false)]
+    (if currency-symbol 
+      (str currency-symbol value)
+      (if currency-text
+        (str value " " currency-text)
+        (str value)))))
+
 (defn- metric
   ([label value] (metric label value false))
   ([label value currency]
-  (let [final-value (if currency (str currency value) value)]
+  (let [final-value (if currency (with-currency currency value) value)]
     [:table {:class "metric"}
       [:tr
         [:td
@@ -114,36 +128,34 @@
         (into [:td]
           (map #(growth-metric % metadata) metrics))]]))
 
-(defn calc-runway [cash burn-rate]
-  (int (* (/ cash burn-rate) 30)))
-
 (defn- finance-metrics [topic currency]
   (let [finances (last (sort-by :period (:data topic)))
         period (f/parse monthly-period (:period finances))
         date (s/upper-case (f/unparse monthly-date period))
-        cash? (:cash finances)
         cash (:cash finances)
-        revenue? (:revenue finances)
+        cash? (utils/not-zero? cash)
         revenue (:revenue finances)
-        costs? (:costs finances)
+        revenue? (utils/not-zero? revenue)
         costs (:costs finances)
+        costs? (utils/not-zero? costs)
         cash-flow? (and revenue? costs?)
         cash-flow (- revenue costs)
         runway? (and cash? costs? (or (not revenue?) (> costs revenue)))
-        runway (when runway? (calc-runway cash cash-flow))]
+        runway (when runway? (utils/calc-runway cash cash-flow))]
     [:table {:class "finances-metrics"}
       [:tr
         [:td
-          (when cash? (metric (str "CASH - " date) (utils/with-size-label cash) "$")) ; TODO other currencies
-          (when revenue? (metric (str "REVENUE - " date) (utils/with-size-label revenue) "$")) ; TODO other currencies
-          (when costs? (metric (str "COSTS - " date) (utils/with-size-label costs) "$")) ; TODO other currencies
-          (when cash-flow? (metric (str "CASH FLOW - " date) (utils/with-size-label cash-flow) "$")) ; TODO other currencies
+          (when cash? (metric (str "CASH - " date) (utils/with-size-label cash) currency))
+          (when revenue? (metric (str "REVENUE - " date) (utils/with-size-label revenue) currency))
+          (when costs? (metric (str "COSTS - " date) (utils/with-size-label costs) currency))
+          (when cash-flow? (metric (str "CASH FLOW - " date) (utils/with-size-label cash-flow) currency))
           (when runway? (metric (str "RUNWAY - " date) (utils/get-rounded-runway runway)))]]]))
 
 (defn- data-topic [snapshot topic-name topic topic-url]
   (let [currency (:currency snapshot)
-        data? (empty? (:data snapshot))
-        body? (s/blank? (:body topic))]
+        data? (not (empty? (:data topic)))
+        body? (s/blank? (:body topic))
+        view-charts? (> (count (:data topic)) 1)]
     [:table {:class "row topic"}
       [:tr
         [:th {:class "small-12 large-12 columns first last"}
@@ -158,8 +170,8 @@
               (growth-metrics topic currency)))
           (when body? (spacer 20))
           (when body? [:p (:body topic)])
-          (spacer 20)
-          [:a {:class "topic-read-more", :href topic-url} "VIEW CHARTS"]
+          (when view-charts? (spacer 20))
+          (when view-charts? [:a {:class "topic-read-more", :href topic-url} "VIEW CHARTS"])
           (spacer 30)]
         [:th {:class "expander"}]]]))
 
@@ -298,5 +310,14 @@
   (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
   (def snapshot (json/decode (slurp "./opt/samples/buff.json")))
   (spit "./hiccup.html" (content/html (-> snapshot (assoc :note note) (assoc :company-slug "buff"))))
+
+  (def snapshot (json/decode (slurp "./opt/samples/new.json")))
+  (spit "./hiccup.html" (content/html (-> snapshot (assoc :note "") (assoc :company-slug "new"))))
+
+  (def snapshot (json/decode (slurp "./opt/samples/bago.json")))
+  (spit "./hiccup.html" (content/html (-> snapshot (assoc :note "") (assoc :company-slug "bago"))))
+
+  (def snapshot (json/decode (slurp "./opt/samples/bago-no-symbol.json")))
+  (spit "./hiccup.html" (content/html (-> snapshot (assoc :note "") (assoc :company-slug "bago"))))
 
   )
