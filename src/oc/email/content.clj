@@ -98,11 +98,17 @@
         (str value " " currency-text)
         (str value)))))
 
+(defn value-output [value]
+  (cond
+    (integer? value) (format "%,d" (biginteger value))
+    (float? value) (str (format "%,d" (biginteger (Math/floor value))) "." (last (s/split (str value) #"\.")))
+    :else "0"))
+
 (defn- with-format [format-symbol value]
   (cond
-    (= format-symbol "%") (str value "%")
-    (not (nil? format-symbol)) (with-currency format-symbol value)
-    :else value))
+    (= format-symbol "%") (str (value-output value) "%")
+    (not (nil? format-symbol)) (with-currency format-symbol (value-output value))
+    :else (value-output value)))
 
 (defn- metric
   ([label value] (metric label value false))
@@ -183,7 +189,7 @@
 (defn- data-topic [snapshot topic-name topic topic-url]
   (let [currency (:currency snapshot)
         data? (seq (:data topic))
-        body? (s/blank? (:body topic))
+        body? (not (s/blank? (:body topic)))
         view-charts? (> (count (:data topic)) 1)]
     [:table {:class "row topic"}
       [:tr
@@ -192,13 +198,13 @@
           [:p {:class "topic-title"} (s/upper-case (:title topic))]
           (spacer 1)
           [:p {:class "topic-headline"} (:headline topic)]
-          (when data? (spacer 15))
+          (when body? (spacer 2))
+          (when body? (:body topic))
+          (when data? (spacer 20))
           (when data?
             (if (= topic-name "finances")
               (finance-metrics topic currency)
               (growth-metrics topic currency)))
-          (when body? (spacer 20))
-          (when body? [:p (:body topic)])
           (when view-charts? (spacer 20))
           (when view-charts? [:a {:class "topic-read-more", :href topic-url} "VIEW CHARTS"])
           (spacer 30)]
