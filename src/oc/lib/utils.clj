@@ -1,5 +1,17 @@
 (ns oc.lib.utils
-  (:require [clojure.string :as s]))
+  (:require [clojure.string :as s]
+            [clj-time.core :as t]
+            [clj-time.format :as f]
+            [oc.lib.iso4217 :as iso4217]))
+
+(def quarterly-period (f/formatter "YYYY-MM"))
+(def monthly-period (f/formatter "YYYY-M"))
+(def weekly-period (f/formatter :date))
+
+(def yearly-date (f/formatter "YYYY"))
+(def quarterly-date (f/formatter "MMM YYYY"))
+(def monthly-date (f/formatter "MMM YYYY"))
+(def weekly-date (f/formatter "d MMM YYYY"))
 
 (defn in?
   "true if seq contains elm"
@@ -123,3 +135,65 @@
       (if neg
         (str "-" short-value)
         short-value))))
+
+(defn with-currency
+  "Combine the value with the currency indicator, if available."
+  [currency value]
+  (let [value-string (str value)
+        negative? (s/starts-with? value "-")
+        neg (when negative? "-")
+        clean-value (if negative? (subs value-string 1) value-string)
+        currency-key (keyword currency)
+        currency-entry (iso4217/iso4217 currency-key)
+        currency-symbol (if currency-entry (:symbol currency-entry) false)
+        currency-text (if currency-entry (:text currency-entry) false)]
+    (if currency-symbol 
+      (str neg currency-symbol clean-value)
+      (if currency-text
+        (str value-string " " currency-text)
+        value-string))))
+
+(defn- value-output [value]
+  (cond
+    (integer? value) (format "%,d" (biginteger value))
+    (float? value) (str (format "%,d" (biginteger (Math/floor value))) "." (last (s/split (str value) #"\.")))
+    :else "0"))
+
+(defn with-format [format-symbol value]
+  (cond
+    (= format-symbol "%") (str (value-output value) "%")
+    (not (nil? format-symbol)) (with-currency format-symbol (value-output value))
+    :else (value-output value)))
+
+(defn- get-quarter-from-month [month & [flags]]
+  (let [short-str (in? flags :short)]
+    (cond
+      (and (>= month 1) (<= month 3))
+      (if short-str
+        "Q1"
+        "January - March")
+      (and (>= month 4) (<= month 6))
+      (if short-str
+        "Q2"
+        "April - June")
+      (and (>= month 7) (<= month 9))
+      (if short-str
+        "Q3"
+        "July - September")
+      (and (>= month 10) (<= month 12))
+      (if short-str
+        "Q4"
+        "October - December"))))
+
+(defn format-period [interval period]
+  (s/upper-case 
+    (case interval
+      "quarterly" (str (get-quarter-from-month (t/month period) [:short]) " " (f/unparse yearly-date period))
+      "weekly" (f/unparse weekly-date period)
+      (f/unparse monthly-date period))))
+
+(defn parse-period [interval value]
+  (case interval
+    "quarterly" (f/parse quarterly-period value)
+    "weekly" (f/parse weekly-period value)
+    (f/parse monthly-period value)))

@@ -4,16 +4,7 @@
             [hiccup.core :as h]
             [clojure.walk :refer (keywordize-keys)]
             [oc.email.config :as config]
-            [oc.lib.utils :as utils]
-            [oc.lib.iso4217 :as iso4217]))
-
-(def quarterly-period (f/formatter "YYYY-MM"))
-(def monthly-period (f/formatter "YYYY-MM"))
-(def weekly-period (f/formatter "YYYY-MM-DD"))
-
-(def quarterly-date (f/formatter "MMM YYYY"))
-(def monthly-date (f/formatter "MMM YYYY"))
-(def weekly-date (f/formatter "D MMM YYYY"))
+            [oc.lib.utils :as utils]))
 
 (defn- logo [snapshot]
   [:table {:class "row header"} 
@@ -85,53 +76,13 @@
           (spacer 20)]
         [:th {:class "expander"}]]]))
 
-(defn- with-currency
-  "Combine the value with the currency indicator, if available."
-  [currency value]
-  (let [currency-key (keyword currency)
-        currency-entry (iso4217/iso4217 currency-key)
-        currency-symbol (if currency-entry (:symbol currency-entry) false)
-        currency-text (if currency-entry (:text currency-entry) false)]
-    (if currency-symbol 
-      (str currency-symbol value)
-      (if currency-text
-        (str value " " currency-text)
-        (str value)))))
-
-(defn value-output [value]
-  (cond
-    (integer? value) (format "%,d" (biginteger value))
-    (float? value) (str (format "%,d" (biginteger (Math/floor value))) "." (last (s/split (str value) #"\.")))
-    :else "0"))
-
-(defn- with-format [format-symbol value]
-  (cond
-    (= format-symbol "%") (str (value-output value) "%")
-    (not (nil? format-symbol)) (with-currency format-symbol (value-output value))
-    :else (value-output value)))
-
 (defn- metric
-  ([label value] (metric label value false))
-  ([label value format-symbol]
-  (let [final-value (with-format format-symbol value)]
-    [:table {:class "metric"}
-      [:tr
-        [:td
-          [:p {:class "metric"} final-value]
-          [:p {:class "label"} label]]]])))
-
-(defn- parse-period [interval value]
-  (case interval
-    "quarterly" (f/parse quarterly-period value)
-    "weekly" (f/parse weekly-period value)
-    (f/parse monthly-period value)))
-
-(defn- format-period [interval period]
-  (s/upper-case 
-    (case interval
-      "quarterly" (f/unparse quarterly-date period)
-      "weekly" (f/unparse weekly-date period)
-      (f/unparse monthly-date period))))
+  [label value]
+  [:table {:class "metric"}
+    [:tr
+      [:td
+        [:p {:class "metric"} value]
+        [:p {:class "label"} label]]]])
 
 (defn- growth-metric [growth-metric metadata currency]
   (let [slug (:slug growth-metric)
@@ -140,13 +91,13 @@
         interval (:interval metadatum)
         unit (:unit metadatum)
         metric-name (:name metadatum)
-        period (when interval (parse-period interval (:period growth-metric)))
-        date (when (and interval period) (format-period interval period))
+        period (when interval (utils/parse-period interval (:period growth-metric)))
+        date (when (and interval period) (utils/format-period interval period))
         label (str metric-name " - " date)
         value (:value growth-metric)
         format-symbol (case unit "%" "%" "currency" currency nil)]
     (when (and interval (number? value))
-      (metric label value format-symbol))))
+      (metric label (utils/with-format format-symbol value)))))
 
 (defn- latest-period-for-metric
   "Given the specified metric, return a sequence of all the periods in the data for that metric."
@@ -165,8 +116,8 @@
 
 (defn- finance-metrics [topic currency]
   (let [finances (last (sort-by :period (:data topic)))
-        period (f/parse monthly-period (:period finances))
-        date (s/upper-case (f/unparse monthly-date period))
+        period (f/parse utils/monthly-period (:period finances))
+        date (s/upper-case (f/unparse utils/monthly-date period))
         cash (:cash finances)
         cash? (utils/not-zero? cash)
         revenue (:revenue finances)
@@ -180,10 +131,10 @@
     [:table {:class "finances-metrics"}
       [:tr
         [:td
-          (when cash? (metric (str "CASH - " date) (utils/with-size-label cash) currency))
-          (when revenue? (metric (str "REVENUE - " date) (utils/with-size-label revenue) currency))
-          (when costs? (metric (str "COSTS - " date) (utils/with-size-label costs) currency))
-          (when cash-flow? (metric (str "CASH FLOW - " date) (utils/with-size-label cash-flow) currency))
+          (when cash? (metric (str "CASH - " date) (utils/with-currency currency (utils/with-size-label cash))))
+          (when revenue? (metric (str "REVENUE - " date) (utils/with-currency currency (utils/with-size-label revenue))))
+          (when costs? (metric (str "COSTS - " date) (utils/with-currency currency (utils/with-size-label costs))))
+          (when cash-flow? (metric (str "CASH FLOW - " date) (utils/with-currency currency (utils/with-size-label cash-flow))))
           (when runway? (metric (str "RUNWAY - " date) (utils/get-rounded-runway runway)))]]]))
 
 (defn- data-topic [snapshot topic-name topic topic-url]

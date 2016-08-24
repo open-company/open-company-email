@@ -1,6 +1,6 @@
 {
-  "slug" : "july-2016-update-89150",
-  "sections" : [ "update", "highlights", "challenges", "team", "custom-89de", "help" ],
+  "slug" : "july-2016-update-748a5",
+  "sections" : [ "update", "highlights", "custom-89de", "growth", "finances", "challenges", "team", "help" ],
   "logo" : "https://open-company-assets.s3.amazonaws.com/green-labs.png",
   "challenges" : {
     "description" : "Challenges facing the company",
@@ -74,6 +74,40 @@
     "body" : "\n          <p>With our latest three hires we're up to 25 across two offices. We're excited to have on board:</p><ul><li>Stacy Mills (dev ops)<br></li><li>Roger Arzberger (dev)</li><li>Eliza Klepsch (dev)</li></ul>\n          <p>Stacy Mills comes to us from Amazon where she spent 3 years in the dev-ops group for AWS. She's a major talent and a great edition to the team.</p><p>Roger is a recent graduate from UT and co-op'd at Google and Cisco in school. He's excited to join the team and already considers himself the office foosball, darts and ping-pong champion.</p><p>Eliza is joining the team out of CodeCamp where she was sponsored by us and was on the winning team for demo day.</p>",
     "created-at" : "2016-07-28T18:02:07.397Z"
   },
+  "finances" : {
+    "description" : "Cash on hand, burn and runway",
+    "updated-at" : "2016-08-24T16:20:11.411Z",
+    "image-url" : null,
+    "headline" : "Revenue rising, expenses steady&nbsp;⚖",
+    "image-width" : 0,
+    "section" : "finances",
+    "body-placeholder" : "What would you like to say about company finances?",
+    "image-height" : 0,
+    "title" : "Finances",
+    "author" : {
+      "image" : "https://avatars.slack-edge.com/2016-01-04/17691305283_beac02319067680e6936_192.jpg",
+      "name" : "Stuart Levinson",
+      "user-id" : "slack:U06SQLDFT"
+    },
+    "body" : "<p>Though monthly expenses have been kept in check, we expect to ramp up marketing expenses in the fall to pursue a higher rate of growth.</p><p>Our cash runway is growing because of the revenue, but we are still planning a capital raise in early 2017 so we can grow the team more quickly.</p>",
+    "created-at" : "2016-08-24T16:19:57.515Z",
+    "data" : [ {
+      "cash" : 967500,
+      "costs" : 89000,
+      "period" : "2016-05",
+      "revenue" : 58500
+    }, {
+      "cash" : 878500,
+      "costs" : 96500,
+      "period" : "2016-06",
+      "revenue" : 74000
+    }, {
+      "cash" : 784000,
+      "costs" : 94000,
+      "period" : "2016-07",
+      "revenue" : 83000
+    } ]
+  },
   "custom-89de" : {
     "description" : null,
     "updated-at" : "2016-07-28T18:05:09.308Z",
@@ -106,11 +140,75 @@
     "body" : "<p>Please introduce us to designers and anyone that might eventually lead us to a new Chief Designer. This is holding us back, and we need everyone's help!</p><p>We've outgrown our SF office. If you know of a sublease or reasonable deal for 5k square ft please let Rebekah know.</p><p><br></p>",
     "created-at" : "2016-07-28T18:07:42.845Z"
   },
-  "created-at" : "2016-08-06T13:05:05.411Z",
+  "growth" : {
+    "description" : "Growth metrics and key performance indicators",
+    "updated-at" : "2016-08-24T16:44:10.331Z",
+    "image-url" : null,
+    "headline" : "Automated Lab Work Tops 20%",
+    "image-width" : 0,
+    "section" : "growth",
+    "body-placeholder" : "Provide context about recent growth. Why are these metrics important? How are they performing against targets? What is impacting them?",
+    "image-height" : 0,
+    "title" : "Growth",
+    "author" : {
+      "image" : "https://avatars.slack-edge.com/2016-01-04/17691305283_beac02319067680e6936_192.jpg",
+      "name" : "Stuart Levinson",
+      "user-id" : "slack:U06SQLDFT"
+    },
+    "body" : "<p>The past two years have seen the greatest increase in lab work assigned to robots, but this is the first time the 20% threshold has been breached.</p><p>Automation is expected to handle up to 80% within five years.</p>",
+    "created-at" : "2016-08-24T16:38:41.576Z",
+    "metrics" : [ {
+      "description" : "Percentage of Lab Work Handled By Robots",
+      "interval" : "monthly",
+      "name" : "% Automated",
+      "slug" : "automated",
+      "unit" : "%"
+    }, {
+      "description" : "Number of Lab Tests We Can Handle Automatically",
+      "interval" : "monthly",
+      "name" : "Lab Tests",
+      "slug" : "reliability",
+      "unit" : "number"
+    } ],
+    "data" : [ {
+      "period" : "2016-05",
+      "slug" : "reliability",
+      "value" : 7
+    }, {
+      "period" : "2016-07",
+      "slug" : "reliability",
+      "value" : 22
+    }, {
+      "period" : "2016-04",
+      "slug" : "reliability",
+      "value" : 7
+    }, {
+      "period" : "2016-05",
+      "slug" : "automated",
+      "value" : 19.3
+    }, {
+      "period" : "2016-04",
+      "slug" : "automated",
+      "value" : 18
+    }, {
+      "period" : "2016-07",
+      "slug" : "automated",
+      "value" : 20.2
+    }, {
+      "period" : "2016-06",
+      "slug" : "reliability",
+      "value" : 11
+    }, {
+      "period" : "2016-06",
+      "slug" : "automated",
+      "value" : 19.7
+    } ]
+  },
+  "created-at" : "2016-08-24T23:14:20.765Z",
   "links" : [ {
     "rel" : "self",
     "method" : "GET",
-    "href" : "/companies/green-labs/updates/july-2016-update-89150",
+    "href" : "/companies/green-labs/updates/july-2016-update-748a5",
     "type" : "application/vnd.open-company.stakeholder-update.v1+json"
   }, {
     "rel" : "company",
@@ -120,6 +218,6 @@
   }, {
     "rel" : "delete",
     "method" : "DELETE",
-    "href" : "/companies/green-labs/updates/july-2016-update-89150"
+    "href" : "/companies/green-labs/updates/july-2016-update-748a5"
   } ]
 }
