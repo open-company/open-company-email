@@ -7,9 +7,13 @@
             [oc.lib.utils :as utils]
             [oc.lib.iso4217 :as iso4217]))
 
+(def quarterly-period (f/formatter "YYYY-MM"))
 (def monthly-period (f/formatter "YYYY-MM"))
+(def weekly-period (f/formatter "YYYY-MM-DD"))
 
+(def quarterly-date (f/formatter "MMM YYYY"))
 (def monthly-date (f/formatter "MMM YYYY"))
+(def weekly-date (f/formatter "D MMM YYYY"))
 
 (defn- logo [snapshot]
   [:table {:class "row header"} 
@@ -94,39 +98,64 @@
         (str value " " currency-text)
         (str value)))))
 
+(defn- with-format [format-symbol value]
+  (cond
+    (= format-symbol "%") (str value "%")
+    (not (nil? format-symbol)) (with-currency format-symbol value)
+    :else value))
+
 (defn- metric
   ([label value] (metric label value false))
-  ([label value currency]
-  (let [final-value (if currency (with-currency currency value) value)]
+  ([label value format-symbol]
+  (let [final-value (with-format format-symbol value)]
     [:table {:class "metric"}
       [:tr
         [:td
           [:p {:class "metric"} final-value]
           [:p {:class "label"} label]]]])))
 
-(defn- growth-metric [growth-metric metadata]
+(defn- parse-period [interval value]
+  (case interval
+    "quarterly" (f/parse quarterly-period value)
+    "weekly" (f/parse weekly-period value)
+    (f/parse monthly-period value)))
+
+(defn- format-period [interval period]
+  (s/upper-case 
+    (case interval
+      "quarterly" (f/unparse quarterly-date period)
+      "weekly" (f/unparse weekly-date period)
+      (f/unparse monthly-date period))))
+
+(defn- growth-metric [growth-metric metadata currency]
   (let [slug (:slug growth-metric)
         metadatum (first (filter #(= (:slug %) slug) metadata))
+        unit (:unit metadatum)
         interval (:interval metadatum)
         unit (:unit metadatum)
         metric-name (:name metadatum)
-        currency (if (= unit "currency") "$" false) ; TODO other currencies
-        period (f/parse monthly-period (:period growth-metric)) ; TODO weekly, quarterly
-        date (s/upper-case (f/unparse monthly-date period)) ; TODO weekly, quarterly
+        period (when interval (parse-period interval (:period growth-metric)))
+        date (when (and interval period) (format-period interval period))
         label (str metric-name " - " date)
-        value (:value growth-metric)] ; TODO %
-    (when (number? value)
-      (metric label value currency))))
+        value (:value growth-metric)
+        format-symbol (case unit "%" "%" "currency" currency nil)]
+    (when (and interval (number? value))
+      (metric label value format-symbol))))
+
+(defn- latest-period-for-metric
+  "Given the specified metric, return a sequence of all the periods in the data for that metric."
+  [metric data]
+  (when-let [periods (vec (filter #(= (:slug %) (:slug metric)) data))]
+    (last (sort-by :period periods))))
 
 (defn growth-metrics [topic currency]
   (let [data (:data topic)
         metadata (:metrics topic)
-        period (last (sort (set (map :period data)))) ; latest period
-        metrics (filter #(= period (:period %)) data)] ; metrics for latest period
+        latest-period (map #(latest-period-for-metric % data) metadata)]
     [:table {:class "growth-metrics"}
       [:tr
         (into [:td]
-          (map #(growth-metric % metadata) metrics))]]))
+          (map #(growth-metric % metadata currency) latest-period))]]))
 
 (defn- finance-metrics [topic currency]
   (let [finances (last (sort-by :period (:data topic)))
@@ -319,5 +348,8 @@
 
   (def snapshot (json/decode (slurp "./opt/samples/bago-no-symbol.json")))
   (spit "./hiccup.html" (content/html (-> snapshot (assoc :note "") (assoc :company-slug "bago"))))
+
+  (def snapshot (json/decode (slurp "./opt/samples/growth-options.json")))
+  (spit "./hiccup.html" (content/html (-> snapshot (assoc :note "") (assoc :company-slug "growth-options"))))
 
   )
