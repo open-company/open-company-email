@@ -117,20 +117,29 @@ table.topic h4 {
 
 /* Data Topic */
 
-table.topic p.metric, table.topic p.label {
+table.topic span.metric, table.topic span.label {
   font-family: OpenSans, Arial, sans-serif !important;
   font-weight: bold;
   line-height: 1.5 !important;
   /* color: #4e5a6b; opacity: 0.75; is the same as: */
 }
 
-table.topic p.metric {
-  font-size: 24px !important;
-  margin-bottom: 0 !important;
+table.topic span.metric {
+  font-size: 16px !important;
+  margin-bottom: 20px;
   color: #0A0A0A;
 }
 
-table.topic p.label {
+table.topic span.metric.pos {
+  color: #26C485;
+}
+
+table.topic span.metric.neg {
+  color: #D72A46;
+}
+
+table.topic span.label {
+  padding-left: 15px;
   font-size: 16px !important;
   letter-spacing: 1px;
   margin-bottom: 20px;

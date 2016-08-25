@@ -77,12 +77,13 @@
         [:th {:class "expander"}]]]))
 
 (defn- metric
-  [label value]
+  ([label value] (metric label value :nuetral))
+  ([label value css-class]
   [:table {:class "metric"}
     [:tr
       [:td
-        [:p {:class "metric"} value]
-        [:p {:class "label"} label]]]])
+        [:p [:span {:class (str "metric " (name css-class))} value]
+            [:span {:class "label"} label]]]]]))
 
 (defn- growth-metric [growth-metric metadata currency]
   (let [slug (:slug growth-metric)
@@ -124,18 +125,26 @@
         revenue? (utils/not-zero? revenue)
         costs (:costs finances)
         costs? (utils/not-zero? costs)
-        cash-flow? (and revenue? costs?)
         cash-flow (- revenue costs)
         runway? (and cash? costs? (or (not revenue?) (> costs revenue)))
         runway (when runway? (utils/calc-runway cash cash-flow))]
     [:table {:class "finances-metrics"}
       [:tr
-        [:td
-          (when cash? (metric (str "CASH - " date) (utils/with-currency currency (utils/with-size-label cash))))
-          (when revenue? (metric (str "REVENUE - " date) (utils/with-currency currency (utils/with-size-label revenue))))
-          (when costs? (metric (str "COSTS - " date) (utils/with-currency currency (utils/with-size-label costs))))
-          (when cash-flow? (metric (str "CASH FLOW - " date) (utils/with-currency currency (utils/with-size-label cash-flow))))
-          (when runway? (metric (str "RUNWAY - " date) (utils/get-rounded-runway runway)))]]]))
+        (let [cost-label (if revenue? "Expenses" "Burn")]
+          [:td
+            (when revenue? (metric (str "Revenue - " date)
+                                   (utils/with-currency currency (utils/with-size-label revenue))
+                                   :pos))
+            (when (and cash? (not revenue?)) (metric (str "Cash - " date)
+                                            (utils/with-currency currency (utils/with-size-label cash))
+                                            :pos))
+            (when costs? (metric (str cost-label " - " date)
+                         (utils/with-currency currency (utils/with-size-label costs))
+                         :neg))
+            (when (and cash? revenue?) (metric (str "Cash - " date)
+                                               (utils/with-currency currency (utils/with-size-label cash))))
+            (when runway? (metric (str "Runway - " date)
+                                  (utils/get-rounded-runway runway)))])]]))
 
 (defn- data-topic [snapshot topic-name topic topic-url]
   (let [currency (:currency snapshot)
@@ -208,7 +217,7 @@
                     [:th {:class "small-11 large-8 columns"} 
                       [:p {:class "text-center"}
                         "Powered by "
-                        [:a {:href "http://opencompany.com/"} "OpenCompany"]]]
+                        [:a {:href "https://opencompany.com/"} "OpenCompany"]]]
                     [:th {:class "small-1 large-2 last columns"}]]]
                 (spacer 28 "footer")]]]]]]])
 
