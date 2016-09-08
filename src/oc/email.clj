@@ -22,12 +22,15 @@
   msg)
 
 (defn -main []
+
+  ;; Log errors to Sentry
   (if c/dsn
     (timbre/merge-config!
       {:level     :info
        :appenders {:sentry (sentry/sentry-appender c/dsn)}})
     (timbre/merge-config! {:level :debug}))
 
+  ;; Uncaught exceptions go to Sentry
   (Thread/setDefaultUncaughtExceptionHandler
    (reify Thread$UncaughtExceptionHandler
      (uncaughtException [_ thread ex]
