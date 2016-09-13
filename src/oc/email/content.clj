@@ -182,10 +182,8 @@
         title? (not (s/blank? (:title snapshot)))]
     [:td
       (spacer 30 "header")
-      (company-name snapshot)
-      (when title? (spacer 10 "header"))
       (when title? (title snapshot))
-      (spacer 22 "header")
+      (when title? (spacer 22 "header"))
       [:table
         [:tr
           (into [:td] 

@@ -52,7 +52,7 @@
         :aws-secret-access-key "CHANGE-ME"
         :aws-endpoint "us-east-1"
         :aws-sqs-email-queue "https://sqs.REGION.amazonaws.com/CHANGE/ME"
-        :email-from-domain "change-me.com"
+        :email-from-domain "staging.opencompany.com"
         :intro "true"
       }
       :dependencies [
