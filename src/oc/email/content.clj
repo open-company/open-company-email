@@ -125,7 +125,7 @@
         revenue? (utils/not-zero? revenue)
         costs (:costs finances)
         costs? (utils/not-zero? costs)
-        cash-flow (- revenue costs)
+        cash-flow (- (or revenue 0) (or costs 0))
         runway? (and cash? costs? (or (not revenue?) (> costs revenue)))
         runway (when runway? (utils/calc-runway cash cash-flow))]
     [:table {:class "finances-metrics"}
