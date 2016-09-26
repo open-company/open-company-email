@@ -73,7 +73,7 @@
       [:table {:class "row topic"}
         (when image-url?
           (topic-image image-url))
-        (when (or title? headline? body?))
+        (when (or title? headline? body?)
           [:tr
             [:th {:class "small-12 large-12 columns first last"}
               (spacer 24)
@@ -85,7 +85,7 @@
               (when body? (spacer 2))
               (when body? body)
               (spacer 20)]
-            [:th {:class "expander"}]]])))
+            [:th {:class "expander"}]])])))
 
 (defn- metric
   ([label value] (metric label value :nuetral))

@@ -85,7 +85,7 @@
   ""
   [value]
   {:pre [(string? value)]
-   :post [(string? value)]}
+   :post [(string? %)]}
   (if-not (or (and (s/ends-with? value "0") (.contains value "."))
               (s/ends-with? value "."))
     value
