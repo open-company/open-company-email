@@ -67,8 +67,10 @@
       (when image-url (topic-image image-url))
        [:tr
         [:th {:class "small-12 large-12 columns first last"}
-          (spacer 24)
-          [:p {:class "topic-title"} (s/upper-case (:title topic))]
+          (when (:title topic)
+            (spacer 24))
+          (when (:title topic)
+            [:p {:class "topic-title"} (s/upper-case (:title topic))])
           (spacer 1)
           [:p {:class "topic-headline"} (:headline topic)]
           (when body? (spacer 2))
@@ -153,8 +155,10 @@
     [:table {:class "row topic"}
       [:tr
         [:th {:class "small-12 large-12 columns first last"}
-          (spacer 24)
-          [:p {:class "topic-title"} (s/upper-case (:title topic))]
+          (when (:title topic)
+            (spacer 24))
+          (when (:title topic)
+            [:p {:class "topic-title"} (s/upper-case (:title topic))])
           (spacer 1)
           [:p {:class "topic-headline"} (:headline topic)]
           (when body? (spacer 2))
