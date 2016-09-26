@@ -61,22 +61,31 @@
       [:img {:src image-url}]]])
 
 (defn- content-topic [snapshot topic-name topic topic-url]
-  (let [body? (not (s/blank? (:body topic)))
-        image-url (:image-url topic)]
-    [:table {:class "row topic"}
-      (when image-url (topic-image image-url))
-       [:tr
-        [:th {:class "small-12 large-12 columns first last"}
-          (when-not (s/blank? (:title topic))
-            (spacer 24))
-          (when-not (s/blank? (:title topic))
-            [:p {:class "topic-title"} (s/upper-case (:title topic))])
-          (spacer 1)
-          [:p {:class "topic-headline"} (:headline topic)]
-          (when body? (spacer 2))
-          (when body? (:body topic))
-          (spacer 20)]
-        [:th {:class "expander"}]]]))
+  (let [title (:title topic)
+        title? (not (s/blank? title))
+        headline (:headline topic)
+        headline? (not (s/blank? headline))
+        body (:body topic)
+        body? (not (s/blank? body))
+        image-url (:image-url topic)
+        image-url? (not (s/blank? image-url))]
+    (when (or image-url? title? headline? body?)
+      [:table {:class "row topic"}
+        (when image-url?
+          (topic-image image-url))
+        (when (or title? headline? body?))
+          [:tr
+            [:th {:class "small-12 large-12 columns first last"}
+              (spacer 24)
+              (when title?
+                [:p {:class "topic-title"} (s/upper-case title)])
+              (when title? (spacer 1))
+              (when headline?
+                [:p {:class "topic-headline"} headline])
+              (when body? (spacer 2))
+              (when body? body)
+              (spacer 20)]
+            [:th {:class "expander"}]]])))
 
 (defn- metric
   ([label value] (metric label value :nuetral))
@@ -318,5 +327,8 @@
 
   (def snapshot (json/decode (slurp "./opt/samples/growth-options.json")))
   (spit "./hiccup.html" (content/html (-> snapshot (assoc :note "") (assoc :company-slug "growth-options"))))
+
+  (def snapshot (json/decode (slurp "./opt/samples/blanks-test.json")))
+  (spit "./hiccup.html" (content/html (-> snapshot (assoc :note "") (assoc :company-slug "blanks-test"))))
 
   )
