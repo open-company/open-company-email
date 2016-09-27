@@ -58,7 +58,8 @@
 (defn- topic-image [image-url]
   [:tr
     [:th
-      [:img {:src image-url}]]])
+      [:center
+        [:img {:src image-url}]]]])
 
 (defn- content-topic [snapshot topic-name topic topic-url]
   (let [title (:title topic)
