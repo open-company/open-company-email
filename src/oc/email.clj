@@ -18,7 +18,9 @@
         error (if (:test-error msg-body) (/ 1 0) false)] ; test Sentry error reporting
     (timbre/info "Received message from SQS.")
     (timbre/tracef "\nMessage from SQS: %s\n" msg-body)
-    (mailer/send-snapshot msg-body))
+    (if (= (:type msg-body) "invite")
+      (mailer/send-invite msg-body)
+      (mailer/send-snapshot msg-body)))
   msg)
 
 (defn -main []
@@ -52,7 +54,7 @@
 (comment
 
   ;; SQS message payload
-  (def snapshot (json/decode (slurp "./opt/samples/green-labs.json")))
+  (def snapshot (json/decode (slurp "./opt/samples/updates/green-labs.json")))
   (def message 
     {:subject "GreenLabs Update"
      :to "change@changeme.com,change2@changeme.com"

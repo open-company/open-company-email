@@ -1,0 +1,9 @@
+{
+  "type": "invite",
+  "from": "Bill Gates",
+  "reply-to": "billg@microsoft.com",
+  "email": "change@me.com",
+  "company-name": "Microsoft",
+  "logo": "https://c.s-microsoft.com/en-us/CMSImages/lrn-share-site-ms-logo.png",
+  "token-link": "http://localhost:3000/invite?token=dd7c0bfe-2068-4de0-aa3c-4913eeeaa360"
+}
