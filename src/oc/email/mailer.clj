@@ -17,47 +17,50 @@
 (def default-reply-to (str "hello@" c/email-from-domain))
 (def default-inviter "OpenCompany")
 
-(defn- email-snapshot
+(defn- email
+  "Send an email."
+  [{:keys [to source reply-to subject]} body]
+  (timbre/info "Sending email: " to)
+  (let [text (:text body)
+        text-body (if text {:text text} {})
+        html (:html body)
+        html-body (if html (assoc text-body :html html) text-body)]
+    (ses/send-email creds
+      :destination {:to-addresses [to]}
+      :source source
+      :reply-to-addresses [reply-to]
+      :message {:subject subject
+                :body html-body})))
+
+(defn- email-snapshots
   "Send emails to all to recipients in parallel."
-  [{to :to reply-to :reply-to subject :subject snap :snapshot} body]
-  (let [snapshot (keywordize-keys snap)
+  [{:keys [to reply-to subject snapshot]} body]
+  (let [snapshot (keywordize-keys snapshot)
         company-slug (:company-slug snapshot)
         company-name (:name snapshot)]
-    (doall (pmap 
-      #(do 
-        (timbre/info "Sending email: " %)
-        (ses/send-email creds
-          :destination {:to-addresses [%]}
-          :source (str company-name "<" company-slug "@" c/email-from-domain ">")
-          :reply-to-addresses [(if (s/blank? reply-to) default-reply-to reply-to)]
-          :message {:subject subject
-                    :body {:html body}}))
-        to))))
+    (doall (pmap #(do 
+      (email {
+        :to %
+        :source (str company-name "<" company-slug "@" c/email-from-domain ">")
+        :reply-to (if (s/blank? reply-to) default-reply-to reply-to)
+        :subject subject} {:html body})) to))))
 
 (defn send-snapshot [{note :note snapshot :snapshot :as msg}]
+  "Create an HTML snapshot and email it to the specified recipients."
   (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
         html-file (str uuid-fragment ".html")
         inline-file (str uuid-fragment ".inline.html")]
     (try
       (spit html-file (content/html (assoc snapshot :note note))) ; create the email in a tmp file
       (shell/sh "juice" html-file inline-file) ; inline the CSS
-      (email-snapshot msg (slurp inline-file)) ; email it to the recipients
+      (email-snapshots msg (slurp inline-file)) ; email it to the recipients
       (finally
         ; remove the tmp files
         (io/delete-file html-file true)
         (io/delete-file inline-file true)))))
 
-(defn- email-invite
-  [{:keys [to reply-to subject company-name]} body]
-  (timbre/info "Sending email: " to)
-  (ses/send-email creds
-    :destination {:to-addresses [to]}
-    :source (str default-inviter " <" default-reply-to ">")
-    :reply-to-addresses [(if (s/blank? reply-to) default-reply-to reply-to)]
-    :message {:subject subject
-              :body {:text (:text body)}}))
-
 (defn send-invite [message]
+  "Create an HTML and text invite and email it to the specified recipients."
   (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
         html-file (str uuid-fragment ".html")
         inline-file (str uuid-fragment ".inline.html")
@@ -67,12 +70,14 @@
         prefix (if (s/blank? from) "You've been invited" (str from " invites you"))
         company (if (s/blank? company-name) "" (str company-name " on "))
         subject (str prefix " to join " company "OpenCompany")
-        invitation (assoc msg :subject subject)]
+        invitation (-> msg
+                      (assoc :subject subject)
+                      (assoc :source (str default-inviter " <" default-reply-to ">")))]
     (try
       (spit html-file (invite/html invitation)) ; create the email in a tmp file
       (shell/sh "juice" html-file inline-file) ; inline the CSS
-      (email-invite invitation {:text (invite/text invitation)
-                                :html (slurp inline-file)}) ; email it to the recipients
+      (email invitation {:text (invite/text invitation)})
+                         ;:html (slurp inline-file)}) ; email it to the recipients
       (finally
         ; remove the tmp files
         (io/delete-file html-file true)
