@@ -38,12 +38,12 @@
   (let [snapshot (keywordize-keys snapshot)
         company-slug (:company-slug snapshot)
         company-name (:name snapshot)]
-    (doall (pmap #(do 
-      (email {
-        :to %
-        :source (str company-name "<" company-slug "@" c/email-from-domain ">")
-        :reply-to (if (s/blank? reply-to) default-reply-to reply-to)
-        :subject subject} {:html body})) to))))
+    (doall (pmap #(email {:to %
+                          :source (str company-name "<" company-slug "@" c/email-from-domain ">")
+                          :reply-to (if (s/blank? reply-to) default-reply-to reply-to)
+                          :subject subject} 
+                    {:html body}))
+              to)))
 
 (defn send-snapshot [{note :note snapshot :snapshot :as msg}]
   "Create an HTML snapshot and email it to the specified recipients."
@@ -76,8 +76,8 @@
     (try
       (spit html-file (invite/html invitation)) ; create the email in a tmp file
       (shell/sh "juice" html-file inline-file) ; inline the CSS
-      (email invitation {:text (invite/text invitation)})
-                         ;:html (slurp inline-file)}) ; email it to the recipients
+      (email invitation {:text (invite/text invitation)
+                         :html (slurp inline-file)}) ; email it to the recipients
       (finally
         ; remove the tmp files
         (io/delete-file html-file true)

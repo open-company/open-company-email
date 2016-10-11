@@ -1,7 +1,6 @@
 (ns oc.email.invite
   (:require [clojure.string :as s]
-            [hiccup.core :as h]
-            [clojure.walk :refer (keywordize-keys)]))
+            [hiccup.core :as h]))
 
 (defn text [msg]
   (str (:subject msg) ".\n\n"
