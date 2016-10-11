@@ -42,11 +42,12 @@
                           :source (str company-name "<" company-slug "@" c/email-from-domain ">")
                           :reply-to (if (s/blank? reply-to) default-reply-to reply-to)
                           :subject subject} 
-                    {:html body}))
-              to)))
+                    {:html body})
+              to))))
 
-(defn send-snapshot [{note :note snapshot :snapshot :as msg}]
+(defn send-snapshot
   "Create an HTML snapshot and email it to the specified recipients."
+  [{note :note snapshot :snapshot :as msg}]
   (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
         html-file (str uuid-fragment ".html")
         inline-file (str uuid-fragment ".inline.html")]
@@ -59,8 +60,9 @@
         (io/delete-file html-file true)
         (io/delete-file inline-file true)))))
 
-(defn send-invite [message]
+(defn send-invite
   "Create an HTML and text invite and email it to the specified recipients."
+  [message]
   (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
         html-file (str uuid-fragment ".html")
         inline-file (str uuid-fragment ".inline.html")
