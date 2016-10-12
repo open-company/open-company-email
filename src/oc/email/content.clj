@@ -310,26 +310,26 @@
   ;; Generate test email HTML content from various snapshots
 
   (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
-  (def snapshot (json/decode (slurp "./opt/samples/green-labs.json")))
+  (def snapshot (json/decode (slurp "./opt/samples/updates/green-labs.json")))
   (spit "./hiccup.html" (content/html (-> snapshot (assoc :note note) (assoc :company-slug "green-labs"))))
 
   (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
-  (def snapshot (json/decode (slurp "./opt/samples/buff.json")))
+  (def snapshot (json/decode (slurp "./opt/samples/updates/buff.json")))
   (spit "./hiccup.html" (content/html (-> snapshot (assoc :note note) (assoc :company-slug "buff"))))
 
-  (def snapshot (json/decode (slurp "./opt/samples/new.json")))
+  (def snapshot (json/decode (slurp "./opt/samples/updates/new.json")))
   (spit "./hiccup.html" (content/html (-> snapshot (assoc :note "") (assoc :company-slug "new"))))
 
-  (def snapshot (json/decode (slurp "./opt/samples/bago.json")))
+  (def snapshot (json/decode (slurp "./opt/samples/updates/bago.json")))
   (spit "./hiccup.html" (content/html (-> snapshot (assoc :note "") (assoc :company-slug "bago"))))
 
-  (def snapshot (json/decode (slurp "./opt/samples/bago-no-symbol.json")))
+  (def snapshot (json/decode (slurp "./opt/samples/updates/bago-no-symbol.json")))
   (spit "./hiccup.html" (content/html (-> snapshot (assoc :note "") (assoc :company-slug "bago"))))
 
-  (def snapshot (json/decode (slurp "./opt/samples/growth-options.json")))
+  (def snapshot (json/decode (slurp "./opt/samples/updates/growth-options.json")))
   (spit "./hiccup.html" (content/html (-> snapshot (assoc :note "") (assoc :company-slug "growth-options"))))
 
-  (def snapshot (json/decode (slurp "./opt/samples/blanks-test.json")))
+  (def snapshot (json/decode (slurp "./opt/samples/updates/blanks-test.json")))
   (spit "./hiccup.html" (content/html (-> snapshot (assoc :note "") (assoc :company-slug "blanks-test"))))
 
   )

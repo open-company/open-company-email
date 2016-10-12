@@ -1,0 +1,9 @@
+{
+  "type": "invite",
+  "from": "Simone de Beauvoir",
+  "reply-to": "simone@lyceela.org",
+  "email": "e.cioran@fu-berlin.de",
+  "company-name": "Combat",
+  "logo": "https://open-company-assets.s3.amazonaws.com/combat.png",
+  "token-link": "http://localhost:3000/invite?token=dd7c0bfe-2068-4de0-aa3c-4913eeeaa360"
+}
