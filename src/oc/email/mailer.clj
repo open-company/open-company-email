@@ -69,7 +69,7 @@
         msg (keywordize-keys message)
         company-name (:company-name msg)
         from (:from msg)
-        prefix (if (s/blank? from) "You've been invited" (str from " invites you"))
+        prefix (if (s/blank? from) "You've been invited" (str from " invited you"))
         company (if (s/blank? company-name) "" (str company-name " on "))
         subject (str prefix " to join " company "OpenCompany")
         invitation (-> msg
