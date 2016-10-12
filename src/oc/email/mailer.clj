@@ -76,10 +76,10 @@
                       (assoc :subject subject)
                       (assoc :source (str default-inviter " <" default-reply-to ">")))]
     (try
-      (spit html-file (invite/html invitation)) ; create the email in a tmp file
-      (shell/sh "juice" html-file inline-file) ; inline the CSS
-      (email invitation {:text (invite/text invitation)
-                         :html (slurp inline-file)}) ; email it to the recipients
+      ;(spit html-file (invite/html invitation)) ; create the email in a tmp file
+      ;(shell/sh "juice" html-file inline-file) ; inline the CSS
+      (email invitation {:text (invite/text invitation)})
+                         ;:html (slurp inline-file)}) ; email it to the recipients
       (finally
         ; remove the tmp files
         (io/delete-file html-file true)
