@@ -256,10 +256,19 @@
       [:link {:href "http://fonts.googleapis.com/css?family=Open+Sans", :rel "stylesheet", :type "text/css"}]]
     (body snapshot)])
 
-(defn html [snapshot]
+(defn update-html [snapshot]
   (str
     "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
     (h/html (head (keywordize-keys snapshot)))))
+
+(defn invite-text [msg]
+  (str (:subject msg) ".\n\n"
+       "OpenCompany is the simplest way to keep everyone on the same page.\n\n"
+       "Open the link below to check it out.\n\n"
+       (:token-link msg) "\n\n"))
+
+(defn invite-html [msg]
+  )
 
 (comment
   
@@ -311,25 +320,25 @@
 
   (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
   (def snapshot (json/decode (slurp "./opt/samples/updates/green-labs.json")))
-  (spit "./hiccup.html" (content/html (-> snapshot (assoc :note note) (assoc :company-slug "green-labs"))))
+  (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note note) (assoc :company-slug "green-labs"))))
 
   (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
   (def snapshot (json/decode (slurp "./opt/samples/updates/buff.json")))
-  (spit "./hiccup.html" (content/html (-> snapshot (assoc :note note) (assoc :company-slug "buff"))))
+  (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note note) (assoc :company-slug "buff"))))
 
   (def snapshot (json/decode (slurp "./opt/samples/updates/new.json")))
-  (spit "./hiccup.html" (content/html (-> snapshot (assoc :note "") (assoc :company-slug "new"))))
+  (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note "") (assoc :company-slug "new"))))
 
   (def snapshot (json/decode (slurp "./opt/samples/updates/bago.json")))
-  (spit "./hiccup.html" (content/html (-> snapshot (assoc :note "") (assoc :company-slug "bago"))))
+  (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note "") (assoc :company-slug "bago"))))
 
   (def snapshot (json/decode (slurp "./opt/samples/updates/bago-no-symbol.json")))
-  (spit "./hiccup.html" (content/html (-> snapshot (assoc :note "") (assoc :company-slug "bago"))))
+  (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note "") (assoc :company-slug "bago"))))
 
   (def snapshot (json/decode (slurp "./opt/samples/updates/growth-options.json")))
-  (spit "./hiccup.html" (content/html (-> snapshot (assoc :note "") (assoc :company-slug "growth-options"))))
+  (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note "") (assoc :company-slug "growth-options"))))
 
   (def snapshot (json/decode (slurp "./opt/samples/updates/blanks-test.json")))
-  (spit "./hiccup.html" (content/html (-> snapshot (assoc :note "") (assoc :company-slug "blanks-test"))))
+  (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note "") (assoc :company-slug "blanks-test"))))
 
   )
