@@ -45,8 +45,9 @@
                     {:html body}))
               to)))
 
-(defn send-snapshot [{note :note snapshot :snapshot :as msg}]
+(defn send-snapshot
   "Create an HTML snapshot and email it to the specified recipients."
+  [{note :note snapshot :snapshot :as msg}]
   (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
         html-file (str uuid-fragment ".html")
         inline-file (str uuid-fragment ".inline.html")]
@@ -59,15 +60,16 @@
         (io/delete-file html-file true)
         (io/delete-file inline-file true)))))
 
-(defn send-invite [message]
+(defn send-invite
   "Create an HTML and text invite and email it to the specified recipients."
+  [message]
   (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
         html-file (str uuid-fragment ".html")
         inline-file (str uuid-fragment ".inline.html")
         msg (keywordize-keys message)
         company-name (:company-name msg)
         from (:from msg)
-        prefix (if (s/blank? from) "You've been invited" (str from " invites you"))
+        prefix (if (s/blank? from) "You've been invited" (str from " invited you"))
         company (if (s/blank? company-name) "" (str company-name " on "))
         subject (str prefix " to join " company "OpenCompany")
         invitation (-> msg
