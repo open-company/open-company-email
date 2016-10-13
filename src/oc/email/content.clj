@@ -263,7 +263,7 @@
 
 (comment
   
-  ;; For REPL testing
+  ;; For REPL testing and content development
 
   (require '[oc.email.content :as content] :reload)
 
@@ -275,34 +275,34 @@
       (s/replace "\n" "")
       (s/replace "\t" "")))
 
-  (def data (clean-html (slurp "./resources/head.html")))
+  (def data (clean-html (slurp "./resources/update/head.html")))
   (-> (hickory/parse data) hickory/as-hiccup first)
 
-  (def data (clean-html (slurp "./resources/body.html")))
+  (def data (clean-html (slurp "./resources/update/body.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3))
 
-  (def data (clean-html (slurp "./resources/spacer.html")))
+  (def data (clean-html (slurp "./resources/update/spacer.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-html (slurp "./resources/note.html")))
+  (def data (clean-html (slurp "./resources/update/note.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-htnml (slurp "./resources/logo.html")))
+  (def data (clean-htnml (slurp "./resources/update/logo.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-html (slurp "./resources/name.html")))
+  (def data (clean-html (slurp "./resources/update/name.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-html (slurp "./resources/title.html")))
+  (def data (clean-html (slurp "./resources/update/title.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-html (slurp "./resources/topic.html")))
+  (def data (clean-html (slurp "./resources/update/topic.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-html (slurp "./resources/data-topic.html")))
+  (def data (clean-html (slurp "./resources/update/data-topic.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-html (slurp "./resources/footer.html")))
+  (def data (clean-html (slurp "./resources/update/footer.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
   (spit "./hiccup.html" (email/html {}))
