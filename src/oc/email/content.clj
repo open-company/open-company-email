@@ -6,6 +6,8 @@
             [oc.email.config :as config]
             [oc.lib.utils :as utils]))
 
+(def doc-type "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
+
 (defn- logo [snapshot]
   [:table {:class "row header"} 
     [:tr
@@ -191,7 +193,7 @@
       (data-topic snapshot topic-name topic topic-url)
       (content-topic snapshot topic-name topic topic-url))))
 
-(defn- content [snapshot]
+(defn- snapshot-content [snapshot]
   (let [logo? (not (s/blank? (:logo snapshot)))
         title? (not (s/blank? (:title snapshot)))]
     [:td
@@ -204,6 +206,21 @@
             (interleave
               (map #(topic snapshot % (snapshot (keyword %))) (:sections snapshot))
               (repeat (spacer 15 "header"))))]]]))
+
+(defn- invite-content [invite]
+  )
+  ; (let [logo? (not (s/blank? (:logo snapshot)))
+  ;       title? (not (s/blank? (:title snapshot)))]
+  ;   [:td
+  ;     (spacer 30 "header")
+  ;     (when title? (title snapshot))
+  ;     (when title? (spacer 22 "header"))
+  ;     [:table
+  ;       [:tr
+  ;         (into [:td] 
+  ;           (interleave
+  ;             (map #(topic snapshot % (snapshot (keyword %))) (:sections snapshot))
+  ;             (repeat (spacer 15 "header"))))]]]))
 
 (defn- note [snapshot]
   [:table {:class "note"}
@@ -232,43 +249,50 @@
                     [:th {:class "small-1 large-2 last columns"}]]]
                 (spacer 28 "footer")]]]]]]])
 
-(defn- body [snapshot]
-  [:body
-    [:table {:class "body"}
-      [:tr
-        [:td {:class "float-center", :align "center", :valign "top"}
-          (when-not (s/blank? (:note snapshot)) (note snapshot))
-          [:center
-            [:table {:class "container"}
-              [:tr
-                (content snapshot)]]]
-          (footer)]]]])
+(defn- body [data]
+  (let [type (:type data)]
+    [:body
+      [:table {:class "body"}
+        [:tr
+          [:td {:class "float-center", :align "center", :valign "top"}
+            (when-not (s/blank? (:note data)) (note data))
+            [:center
+              [:table {:class "container"}
+                [:tr
+                  (case type
+                    :snapshot (snapshot-content data)
+                    :invite (invite-content data))]]]
+            (when (= type :snapshot) (footer))]]]]))
 
-(defn- head [snapshot]
-  [:html {:xmlns "http://www.w3.org/1999/xhtml"} 
-    [:head 
-      [:meta {:http-equiv "Content-Type", :content "text/html; charset=utf-8"}]
-      [:meta {:name "viewport", :content "width=device-width"}]
-      [:title (str (:name snapshot) " Update")]
-      [:link {:rel "stylesheet", :href "resources/css/foundation.css"}]
-      [:link {:rel "stylesheet", :href "resources/css/opencompany.css"}]
-      [:link {:href "http://fonts.googleapis.com/css?family=Domine", :rel "stylesheet", :type "text/css"}]
-      [:link {:href "http://fonts.googleapis.com/css?family=Open+Sans", :rel "stylesheet", :type "text/css"}]]
-    (body snapshot)])
+(defn- head [data]
+  (let [type (:type data)]
+    [:html {:xmlns "http://www.w3.org/1999/xhtml"} 
+      [:head 
+        [:meta {:http-equiv "Content-Type", :content "text/html; charset=utf-8"}]
+        [:meta {:name "viewport", :content "width=device-width"}]
+        (if (= type :snapshot) 
+          [:title (str (:name data) " Update")]
+          [:title (str (:company-name data) " Invite")])
+        [:link {:rel "stylesheet", :href "resources/css/foundation.css"}]
+        [:link {:rel "stylesheet", :href "resources/css/opencompany.css"}]
+        [:link {:href "http://fonts.googleapis.com/css?family=Domine", :rel "stylesheet", :type "text/css"}]
+        [:link {:href "http://fonts.googleapis.com/css?family=Open+Sans", :rel "stylesheet", :type "text/css"}]]
+      (body data)]))
 
-(defn update-html [snapshot]
-  (str
-    "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
-    (h/html (head (keywordize-keys snapshot)))))
+(defn- html [data type]
+  (str doc-type (h/html (head (assoc (keywordize-keys data) :type type)))))
+
+(defn snapshot-html [snapshot]
+  (html snapshot :snapshot))
+
+(defn invite-html [invite]
+  (html invite :invite))
 
 (defn invite-text [msg]
   (str (:subject msg) ".\n\n"
        "OpenCompany is the simplest way to keep everyone on the same page.\n\n"
        "Open the link below to check it out.\n\n"
        (:token-link msg) "\n\n"))
-
-(defn invite-html [msg]
-  )
 
 (comment
   
@@ -320,25 +344,25 @@
 
   (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
   (def snapshot (json/decode (slurp "./opt/samples/updates/green-labs.json")))
-  (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note note) (assoc :company-slug "green-labs"))))
+  (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note note) (assoc :company-slug "green-labs"))))
 
   (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
   (def snapshot (json/decode (slurp "./opt/samples/updates/buff.json")))
-  (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note note) (assoc :company-slug "buff"))))
+  (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note note) (assoc :company-slug "buff"))))
 
   (def snapshot (json/decode (slurp "./opt/samples/updates/new.json")))
-  (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note "") (assoc :company-slug "new"))))
+  (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note "") (assoc :company-slug "new"))))
 
   (def snapshot (json/decode (slurp "./opt/samples/updates/bago.json")))
-  (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note "") (assoc :company-slug "bago"))))
+  (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note "") (assoc :company-slug "bago"))))
 
   (def snapshot (json/decode (slurp "./opt/samples/updates/bago-no-symbol.json")))
-  (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note "") (assoc :company-slug "bago"))))
+  (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note "") (assoc :company-slug "bago"))))
 
   (def snapshot (json/decode (slurp "./opt/samples/updates/growth-options.json")))
-  (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note "") (assoc :company-slug "growth-options"))))
+  (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note "") (assoc :company-slug "growth-options"))))
 
   (def snapshot (json/decode (slurp "./opt/samples/updates/blanks-test.json")))
-  (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note "") (assoc :company-slug "blanks-test"))))
+  (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note "") (assoc :company-slug "blanks-test"))))
 
   )

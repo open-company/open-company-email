@@ -6,8 +6,7 @@
             [oc.email.config :as c]
             [taoensso.timbre :as timbre]
             [amazonica.aws.simpleemail :as ses]
-            [oc.email.content :as content]
-            [oc.email.invite :as invite]))
+            [oc.email.content :as content]))
 
 (def creds
   {:access-key c/aws-access-key-id
@@ -52,7 +51,7 @@
         html-file (str uuid-fragment ".html")
         inline-file (str uuid-fragment ".inline.html")]
     (try
-      (spit html-file (content/html (assoc snapshot :note note))) ; create the email in a tmp file
+      (spit html-file (content/snapshot-html (assoc snapshot :note note))) ; create the email in a tmp file
       (shell/sh "juice" html-file inline-file) ; inline the CSS
       (email-snapshots msg (slurp inline-file)) ; email it to the recipients
       (finally
@@ -76,9 +75,9 @@
                       (assoc :subject subject)
                       (assoc :source (str default-inviter " <" default-reply-to ">")))]
     (try
-      (spit html-file (invite/html invitation)) ; create the email in a tmp file
+      (spit html-file (content/invite-html invitation)) ; create the email in a tmp file
       (shell/sh "juice" html-file inline-file) ; inline the CSS
-      (email invitation {:text (invite/text invitation)
+      (email invitation {:text (content/invite-text invitation)
                          :html (slurp inline-file)}) ; email it to the recipients
       (finally
         ; remove the tmp files
