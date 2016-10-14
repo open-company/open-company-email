@@ -8,7 +8,9 @@
 
 (def doc-type "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
 
-(defn- logo [snapshot]
+(def tagline "OpenCompany is the simplest way to keep everyone on the same page.")
+
+(defn- logo [logo company-name]
   [:table {:class "row header"} 
     [:tr
       [:th {:class "small-12 large-12 first last columns"} 
@@ -21,8 +23,8 @@
                        :style "background-color: #ffffff;border: solid 1px rgba(78, 90, 107, 0.2);"
                        :height "50px"
                        :width "50px"
-                       :src (:logo snapshot)
-                       :alt (str (:name snapshot) " logo")}]]]]]]]])
+                       :src logo
+                       :alt (str company-name " logo")}]]]]]]]])
 
 (defn- company-name [snapshot]
   [:table {:class "row header"}
@@ -193,9 +195,18 @@
       (data-topic snapshot topic-name topic topic-url)
       (content-topic snapshot topic-name topic topic-url))))
 
+(defn- paragraph [content]
+  [:table {:class "row"}
+    [:tbody
+      [:tr
+        [:th {:class "small-2 large-2 first columns"}]
+        [:th {:class "small-8 large-8 columns"}
+          [:p {:class "text-center"} content]]
+        [:th {:class "small-2 large-2 last columns"}]
+        [:th {:class "expander"}]]]])
+
 (defn- snapshot-content [snapshot]
-  (let [logo? (not (s/blank? (:logo snapshot)))
-        title? (not (s/blank? (:title snapshot)))]
+  (let [title? (not (s/blank? (:title snapshot)))]
     [:td
       (spacer 30 "header")
       (when title? (title snapshot))
@@ -207,20 +218,40 @@
               (map #(topic snapshot % (snapshot (keyword %))) (:sections snapshot))
               (repeat (spacer 15 "header"))))]]]))
 
+(defn- cta-button [cta url]
+  [:table {:class "row"}
+    [:tbody
+      [:tr
+        [:th {:class "small-12 large-12 columns first last"}
+          [:table
+            [:tbody
+              [:tr
+                [:th
+                  [:center
+                    [:table {:class "button oc radius large float-center"}
+                      [:tbody
+                        [:tr
+                          [:td
+                            [:table
+                              [:tbody
+                                [:tr
+                                  [:td
+                                    [:a {:href url} cta]]]]]]]]]]]
+                [:th {:class "expander"}]]]]]]]])
+
 (defn- invite-content [invite]
-  )
-  ; (let [logo? (not (s/blank? (:logo snapshot)))
-  ;       title? (not (s/blank? (:title snapshot)))]
-  ;   [:td
-  ;     (spacer 30 "header")
-  ;     (when title? (title snapshot))
-  ;     (when title? (spacer 22 "header"))
-  ;     [:table
-  ;       [:tr
-  ;         (into [:td] 
-  ;           (interleave
-  ;             (map #(topic snapshot % (snapshot (keyword %))) (:sections snapshot))
-  ;             (repeat (spacer 15 "header"))))]]]))
+  (let [logo-url (:logo invite)
+        logo? (not (s/blank? logo-url))
+        company-name (:company-name invite)]
+    [:td
+      (when logo? (spacer 25))
+      (when logo? (logo logo-url company-name))
+      (spacer 35)
+      (paragraph (str "Hi there! " (:subject invite)))
+      (spacer 25)
+      (cta-button "OK! LET'S GET STARTED ➞" (:token-link invite))
+      (spacer 55)
+      (paragraph tagline)]))
 
 (defn- note [snapshot]
   [:table {:class "note"}
@@ -282,17 +313,26 @@
 (defn- html [data type]
   (str doc-type (h/html (head (assoc (keywordize-keys data) :type type)))))
 
+(defn invite-subject [invite]
+  (let [msg (keywordize-keys invite)
+        company-name (:company-name msg)
+        from (:from msg)
+        prefix (if (s/blank? from) "You've been invited" (str from " invited you"))
+        company (if (s/blank? company-name) "" (str company-name " on "))]
+    (str prefix " to join " company "OpenCompany")))
+
 (defn snapshot-html [snapshot]
   (html snapshot :snapshot))
 
 (defn invite-html [invite]
-  (html invite :invite))
+  (html (assoc invite :subject (invite-subject invite)) :invite))
 
-(defn invite-text [msg]
-  (str (:subject msg) ".\n\n"
-       "OpenCompany is the simplest way to keep everyone on the same page.\n\n"
-       "Open the link below to check it out.\n\n"
-       (:token-link msg) "\n\n"))
+(defn invite-text [invite]
+  (let [link (:token-link (keywordize-keys invite))]
+    (str (invite-subject invite) ".\n\n"
+         tagline "\n\n"
+         "Open the link below to check it out.\n\n"
+         link "\n\n")))
 
 (comment
   
@@ -338,6 +378,12 @@
   (def data (clean-html (slurp "./resources/snapshot/footer.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
+  (def data (clean-html (slurp "./resources/invite/paragraph.html")))
+  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
+
+  (def data (clean-html (slurp "./resources/invite/cta-button.html")))
+  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
+
   (spit "./hiccup.html" (email/html {}))
 
   ;; Generate test email HTML content from various snapshots
@@ -364,5 +410,20 @@
 
   (def snapshot (json/decode (slurp "./opt/samples/snapshots/blanks-test.json")))
   (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note "") (assoc :company-slug "blanks-test"))))
+
+  (def invite (json/decode (slurp "./opt/samples/invites/apple.json")))
+  (spit "./hiccup.html" (content/invite-html invite))
+
+  (def invite (json/decode (slurp "./opt/samples/invites/microsoft.json")))
+  (spit "./hiccup.html" (content/invite-html invite))
+  (content/invite-text invite)
+
+  (def invite (json/decode (slurp "./opt/samples/invites/combat.json")))
+  (spit "./hiccup.html" (content/invite-html invite))
+  (content/invite-text invite)
+
+  (def invite (json/decode (slurp "./opt/samples/invites/sparse-data.json")))
+  (spit "./hiccup.html" (content/invite-html invite))
+  (content/invite-text invite)
 
   )
