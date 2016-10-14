@@ -41,8 +41,8 @@
                           :source (str company-name "<" company-slug "@" c/email-from-domain ">")
                           :reply-to (if (s/blank? reply-to) default-reply-to reply-to)
                           :subject subject} 
-                    {:html body}))
-              to)))
+                    {:html body})
+              to))))
 
 (defn send-snapshot
   "Create an HTML snapshot and email it to the specified recipients."
