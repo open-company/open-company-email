@@ -20,9 +20,7 @@
               [:center {:data-parsed ""}
                 [:img {:class "float-center logo"
                        :align "center"
-                       :style "background-color: #ffffff;border: solid 1px rgba(78, 90, 107, 0.2);"
-                       :height "50px"
-                       :width "50px"
+                       :style "background-color: #ffffff;border: solid 1px rgba(78, 90, 107, 0.2);max-height: 50px;max-width: 50px;"
                        :src logo
                        :alt (str company-name " logo")}]]]]]]]])
 
@@ -199,10 +197,10 @@
   [:table {:class "row"}
     [:tbody
       [:tr
-        [:th {:class "small-2 large-2 first columns"}]
-        [:th {:class "small-8 large-8 columns"}
+        [:th {:class "small-1 large-2 first columns"}]
+        [:th {:class "small-10 large-8 columns"}
           [:p {:class "text-center"} content]]
-        [:th {:class "small-2 large-2 last columns"}]
+        [:th {:class "small-1 large-2 last columns"}]
         [:th {:class "expander"}]]]])
 
 (defn- snapshot-content [snapshot]
@@ -244,13 +242,13 @@
         logo? (not (s/blank? logo-url))
         company-name (:company-name invite)]
     [:td
-      (when logo? (spacer 25))
+      (when logo? (spacer 20))
       (when logo? (logo logo-url company-name))
-      (spacer 35)
+      (spacer 15)
       (paragraph (str "Hi there! " (:subject invite)))
-      (spacer 25)
+      (spacer 15)
       (cta-button "OK! LET'S GET STARTED ➞" (:token-link invite))
-      (spacer 55)
+      (spacer 30)
       (paragraph tagline)]))
 
 (defn- note [snapshot]
@@ -319,7 +317,7 @@
         from (:from msg)
         prefix (if (s/blank? from) "You've been invited" (str from " invited you"))
         company (if (s/blank? company-name) "" (str company-name " on "))]
-    (str prefix " to join " company "OpenCompany")))
+    (str prefix " to join " company "OpenCompany.")))
 
 (defn snapshot-html [snapshot]
   (html snapshot :snapshot))
