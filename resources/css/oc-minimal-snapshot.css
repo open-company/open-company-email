@@ -1,0 +1,14 @@
+body,
+html,
+.body {
+  background: white !important;
+  font-family: Domine-Regular, Georgia, serif;
+}
+
+table.body {
+  margin-left: 10px;
+}
+
+img.headline-img {
+  margin-bottom: 10px;
+}
