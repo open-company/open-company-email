@@ -265,16 +265,16 @@
             (when (= type :snapshot) (footer))]]]]))
 
 (defn- head [data]
-  (let [type (:type data)]
+  (let [type (:type data)
+        title (if (= type :snapshot) (str (:name data) " Update") (str (:company-name data) " Invite"))
+        css (if (= type :snapshot) "oc-snapshot.css" "oc-invite.css")]
     [:html {:xmlns "http://www.w3.org/1999/xhtml"} 
       [:head 
         [:meta {:http-equiv "Content-Type", :content "text/html; charset=utf-8"}]
         [:meta {:name "viewport", :content "width=device-width"}]
-        (if (= type :snapshot) 
-          [:title (str (:name data) " Update")]
-          [:title (str (:company-name data) " Invite")])
+        [:title title]
         [:link {:rel "stylesheet", :href "resources/css/foundation.css"}]
-        [:link {:rel "stylesheet", :href "resources/css/opencompany.css"}]
+        [:link {:rel "stylesheet", :href (str "resources/css/" css)}]
         [:link {:href "http://fonts.googleapis.com/css?family=Domine", :rel "stylesheet", :type "text/css"}]
         [:link {:href "http://fonts.googleapis.com/css?family=Open+Sans", :rel "stylesheet", :type "text/css"}]]
       (body data)]))
@@ -308,34 +308,34 @@
       (s/replace "\n" "")
       (s/replace "\t" "")))
 
-  (def data (clean-html (slurp "./resources/update/head.html")))
+  (def data (clean-html (slurp "./resources/snapshot/head.html")))
   (-> (hickory/parse data) hickory/as-hiccup first)
 
-  (def data (clean-html (slurp "./resources/update/body.html")))
+  (def data (clean-html (slurp "./resources/snapshot/body.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3))
 
-  (def data (clean-html (slurp "./resources/update/spacer.html")))
+  (def data (clean-html (slurp "./resources/snapshot/spacer.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-html (slurp "./resources/update/note.html")))
+  (def data (clean-html (slurp "./resources/snapshot/note.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-htnml (slurp "./resources/update/logo.html")))
+  (def data (clean-htnml (slurp "./resources/snapshot/logo.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-html (slurp "./resources/update/name.html")))
+  (def data (clean-html (slurp "./resources/snapshot/name.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-html (slurp "./resources/update/title.html")))
+  (def data (clean-html (slurp "./resources/snapshot/title.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-html (slurp "./resources/update/topic.html")))
+  (def data (clean-html (slurp "./resources/snapshot/topic.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-html (slurp "./resources/update/data-topic.html")))
+  (def data (clean-html (slurp "./resources/snapshot/data-topic.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-html (slurp "./resources/update/footer.html")))
+  (def data (clean-html (slurp "./resources/snapshot/footer.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
   (spit "./hiccup.html" (email/html {}))
@@ -343,26 +343,26 @@
   ;; Generate test email HTML content from various snapshots
 
   (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
-  (def snapshot (json/decode (slurp "./opt/samples/updates/green-labs.json")))
+  (def snapshot (json/decode (slurp "./opt/samples/snapshots/green-labs.json")))
   (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note note) (assoc :company-slug "green-labs"))))
 
   (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
-  (def snapshot (json/decode (slurp "./opt/samples/updates/buff.json")))
+  (def snapshot (json/decode (slurp "./opt/samples/snapshots/buff.json")))
   (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note note) (assoc :company-slug "buff"))))
 
-  (def snapshot (json/decode (slurp "./opt/samples/updates/new.json")))
+  (def snapshot (json/decode (slurp "./opt/samples/snapshots/new.json")))
   (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note "") (assoc :company-slug "new"))))
 
-  (def snapshot (json/decode (slurp "./opt/samples/updates/bago.json")))
+  (def snapshot (json/decode (slurp "./opt/samples/snapshots/bago.json")))
   (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note "") (assoc :company-slug "bago"))))
 
-  (def snapshot (json/decode (slurp "./opt/samples/updates/bago-no-symbol.json")))
+  (def snapshot (json/decode (slurp "./opt/samples/snapshots/bago-no-symbol.json")))
   (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note "") (assoc :company-slug "bago"))))
 
-  (def snapshot (json/decode (slurp "./opt/samples/updates/growth-options.json")))
+  (def snapshot (json/decode (slurp "./opt/samples/snapshots/growth-options.json")))
   (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note "") (assoc :company-slug "growth-options"))))
 
-  (def snapshot (json/decode (slurp "./opt/samples/updates/blanks-test.json")))
+  (def snapshot (json/decode (slurp "./opt/samples/snapshots/blanks-test.json")))
   (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note "") (assoc :company-slug "blanks-test"))))
 
   )
