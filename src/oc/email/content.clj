@@ -6,6 +6,8 @@
             [oc.email.config :as config]
             [oc.lib.data.utils :as utils]))
 
+(def month-formatter (f/formatter "MMM"))
+
 (def doc-type "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
 
 (def tagline "OpenCompany is the simplest way to keep everyone on the same page.")
@@ -129,16 +131,30 @@
         (into [:td]
           (map #(growth-metric % metadata currency) latest-period))]]))
 
+(defn- format-delta
+  "Create a display fragment for a delta value."
+  [currency delta prior-date]
+  (str "(" (utils/with-currency currency (utils/with-size-label delta) true) " since " prior-date ") "))
+
 (defn- finance-metrics [topic currency]
   (let [sorted-finances (reverse (sort-by :period (:data topic)))
         finances (first sorted-finances)
         contiguous-periods (utils/contiguous (map :period sorted-finances))
         prior-contiguous? (>= (count contiguous-periods) 2)
+        prior-finances (when prior-contiguous?
+                        (first (filter #(= (:period %) (second contiguous-periods)) sorted-finances)))
         sparkline? (>= (count contiguous-periods) 3)
         period (f/parse utils/monthly-period (:period finances))
+        prior-period (when prior-finances (f/parse utils/monthly-period (:period prior-finances)))
         date (s/upper-case (f/unparse utils/monthly-date period))
+        prior-date (when prior-period (s/upper-case (f/unparse month-formatter prior-period)))
+        ;prior-date (when prior-finances (s/upper-case (f/unparse utils/monthly-date (:period prior-finances))))
         cash (:cash finances)
         cash? (utils/not-zero? cash)
+        formatted-cash (when cash? (utils/with-currency currency (utils/with-size-label cash)))
+        prior-cash (when prior-finances (:cash prior-finances))
+        cash-delta (when prior-cash (- cash prior-cash))
+        formatted-cash-delta (when cash-delta (format-delta currency cash-delta prior-date))
         revenue (:revenue finances)
         revenue? (utils/not-zero? revenue)
         costs (:costs finances)
@@ -153,13 +169,15 @@
             (when revenue? (metric (str "Revenue - " date)
                                    (utils/with-currency currency (utils/with-size-label revenue))
                                    :pos))
-            (when (and cash? (not revenue?)) (metric (str "Cash - " date)
-                                            (utils/with-currency currency (utils/with-size-label cash))))
+            (when (and cash? (not revenue?)) (metric (str "Cash " formatted-cash-delta "- " date)
+                                            formatted-cash
+                                            :neutral))
             (when costs? (metric (str cost-label " - " date)
                          (utils/with-currency currency (utils/with-size-label costs))
                          :neg))
-            (when (and cash? revenue?) (metric (str "Cash - " date)
-                                               (utils/with-currency currency (utils/with-size-label cash))))
+            (when (and cash? revenue?) (metric (str "Cash " formatted-cash-delta "- " date)
+                                               formatted-cash
+                                               :nuetral))
             (when runway? (metric (str "Runway - " date)
                                   (utils/get-rounded-runway runway)))])]]))
 
