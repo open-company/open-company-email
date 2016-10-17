@@ -4,7 +4,7 @@
             [hiccup.core :as h]
             [clojure.walk :refer (keywordize-keys)]
             [oc.email.config :as config]
-            [oc.lib.utils :as utils]))
+            [oc.lib.data.utils :as utils]))
 
 (def doc-type "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
 
@@ -130,7 +130,11 @@
           (map #(growth-metric % metadata currency) latest-period))]]))
 
 (defn- finance-metrics [topic currency]
-  (let [finances (last (sort-by :period (:data topic)))
+  (let [sorted-finances (reverse (sort-by :period (:data topic)))
+        finances (first sorted-finances)
+        contiguous-periods (utils/contiguous (map :period sorted-finances))
+        prior-contiguous? (>= (count contiguous-periods) 2)
+        sparkline? (>= (count contiguous-periods) 3)
         period (f/parse utils/monthly-period (:period finances))
         date (s/upper-case (f/unparse utils/monthly-date period))
         cash (:cash finances)
