@@ -6,8 +6,7 @@
             [oc.email.config :as c]
             [taoensso.timbre :as timbre]
             [amazonica.aws.simpleemail :as ses]
-            [oc.email.content :as content]
-            [oc.email.invite :as invite]))
+            [oc.email.content :as content]))
 
 (def creds
   {:access-key c/aws-access-key-id
@@ -52,7 +51,7 @@
         html-file (str uuid-fragment ".html")
         inline-file (str uuid-fragment ".inline.html")]
     (try
-      (spit html-file (content/html (assoc snapshot :note note))) ; create the email in a tmp file
+      (spit html-file (content/snapshot-html (assoc snapshot :note note))) ; create the email in a tmp file
       (shell/sh "juice" html-file inline-file) ; inline the CSS
       (email-snapshots msg (slurp inline-file)) ; email it to the recipients
       (finally
@@ -66,20 +65,15 @@
   (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
         html-file (str uuid-fragment ".html")
         inline-file (str uuid-fragment ".inline.html")
-        msg (keywordize-keys message)
-        company-name (:company-name msg)
-        from (:from msg)
-        prefix (if (s/blank? from) "You've been invited" (str from " invited you"))
-        company (if (s/blank? company-name) "" (str company-name " on "))
-        subject (str prefix " to join " company "OpenCompany")
-        invitation (-> msg
-                      (assoc :subject subject)
-                      (assoc :source (str default-inviter " <" default-reply-to ">")))]
+        invitation (-> message 
+                    (keywordize-keys)
+                    (assoc :source (str default-inviter " <" default-reply-to ">"))
+                    (assoc :subject (content/invite-subject message)))]
     (try
-      ;(spit html-file (invite/html invitation)) ; create the email in a tmp file
-      ;(shell/sh "juice" html-file inline-file) ; inline the CSS
-      (email invitation {:text (invite/text invitation)})
-                         ;:html (slurp inline-file)}) ; email it to the recipients
+      (spit html-file (content/invite-html invitation)) ; create the email in a tmp file
+      (shell/sh "juice" html-file inline-file) ; inline the CSS
+      (email invitation {:text (content/invite-text invitation)
+                         :html (slurp inline-file)}) ; email it to the recipients
       (finally
         ; remove the tmp files
         (io/delete-file html-file true)
@@ -98,7 +92,7 @@
                          :note "Enjoy this groovy update!"
                          :snapshot (assoc snapshot :company-slug "green-labs")})
 
-  (def invite (json/decode (slurp "./opt/samples/invites/apple.json")))
-  (mailer/send-invite (assoc invite :to "change@me.com"))
+  (def invite (json/decode (slurp "./opt/samples/invites/microsoft.json")))
+  (mailer/send-invite (assoc invite :to "sean@opencompany.com"))
 
 )

@@ -6,7 +6,11 @@
             [oc.email.config :as config]
             [oc.lib.utils :as utils]))
 
-(defn- logo [snapshot]
+(def doc-type "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
+
+(def tagline "OpenCompany is the simplest way to keep everyone on the same page.")
+
+(defn- logo [logo company-name]
   [:table {:class "row header"} 
     [:tr
       [:th {:class "small-12 large-12 first last columns"} 
@@ -16,11 +20,9 @@
               [:center {:data-parsed ""}
                 [:img {:class "float-center logo"
                        :align "center"
-                       :style "background-color: #ffffff;border: solid 1px rgba(78, 90, 107, 0.2);"
-                       :height "50px"
-                       :width "50px"
-                       :src (:logo snapshot)
-                       :alt (str (:name snapshot) " logo")}]]]]]]]])
+                       :style "background-color: #ffffff;border: solid 1px rgba(78, 90, 107, 0.2);max-height: 50px;max-width: 50px;"
+                       :src logo
+                       :alt (str company-name " logo")}]]]]]]]])
 
 (defn- company-name [snapshot]
   [:table {:class "row header"}
@@ -191,9 +193,18 @@
       (data-topic snapshot topic-name topic topic-url)
       (content-topic snapshot topic-name topic topic-url))))
 
-(defn- content [snapshot]
-  (let [logo? (not (s/blank? (:logo snapshot)))
-        title? (not (s/blank? (:title snapshot)))]
+(defn- paragraph [content]
+  [:table {:class "row"}
+    [:tbody
+      [:tr
+        [:th {:class "small-1 large-2 first columns"}]
+        [:th {:class "small-10 large-8 columns"}
+          [:p {:class "text-center"} content]]
+        [:th {:class "small-1 large-2 last columns"}]
+        [:th {:class "expander"}]]]])
+
+(defn- snapshot-content [snapshot]
+  (let [title? (not (s/blank? (:title snapshot)))]
     [:td
       (spacer 30 "header")
       (when title? (title snapshot))
@@ -204,6 +215,41 @@
             (interleave
               (map #(topic snapshot % (snapshot (keyword %))) (:sections snapshot))
               (repeat (spacer 15 "header"))))]]]))
+
+(defn- cta-button [cta url]
+  [:table {:class "row"}
+    [:tbody
+      [:tr
+        [:th {:class "small-12 large-12 columns first last"}
+          [:table
+            [:tbody
+              [:tr
+                [:th
+                  [:center
+                    [:table {:class "button oc radius large float-center"}
+                      [:tbody
+                        [:tr
+                          [:td
+                            [:table
+                              [:tbody
+                                [:tr
+                                  [:td
+                                    [:a {:href url} cta]]]]]]]]]]]
+                [:th {:class "expander"}]]]]]]]])
+
+(defn- invite-content [invite]
+  (let [logo-url (:logo invite)
+        logo? (not (s/blank? logo-url))
+        company-name (:company-name invite)]
+    [:td
+      (when logo? (spacer 20))
+      (when logo? (logo logo-url company-name))
+      (spacer 15)
+      (paragraph (str "Hi there! " (:subject invite)))
+      (spacer 15)
+      (cta-button "OK! LET'S GET STARTED ➞" (:token-link invite))
+      (spacer 30)
+      (paragraph tagline)]))
 
 (defn- note [snapshot]
   [:table {:class "note"}
@@ -232,38 +278,63 @@
                     [:th {:class "small-1 large-2 last columns"}]]]
                 (spacer 28 "footer")]]]]]]])
 
-(defn- body [snapshot]
-  [:body
-    [:table {:class "body"}
-      [:tr
-        [:td {:class "float-center", :align "center", :valign "top"}
-          (when-not (s/blank? (:note snapshot)) (note snapshot))
-          [:center
-            [:table {:class "container"}
-              [:tr
-                (content snapshot)]]]
-          (footer)]]]])
+(defn- body [data]
+  (let [type (:type data)]
+    [:body
+      [:table {:class "body"}
+        [:tr
+          [:td {:class "float-center", :align "center", :valign "top"}
+            (when-not (s/blank? (:note data)) (note data))
+            [:center
+              [:table {:class "container"}
+                [:tr
+                  (case type
+                    :snapshot (snapshot-content data)
+                    :invite (invite-content data))]]]
+            (when (= type :snapshot) (footer))]]]]))
 
-(defn- head [snapshot]
-  [:html {:xmlns "http://www.w3.org/1999/xhtml"} 
-    [:head 
-      [:meta {:http-equiv "Content-Type", :content "text/html; charset=utf-8"}]
-      [:meta {:name "viewport", :content "width=device-width"}]
-      [:title (str (:name snapshot) " Update")]
-      [:link {:rel "stylesheet", :href "resources/css/foundation.css"}]
-      [:link {:rel "stylesheet", :href "resources/css/opencompany.css"}]
-      [:link {:href "http://fonts.googleapis.com/css?family=Domine", :rel "stylesheet", :type "text/css"}]
-      [:link {:href "http://fonts.googleapis.com/css?family=Open+Sans", :rel "stylesheet", :type "text/css"}]]
-    (body snapshot)])
+(defn- head [data]
+  (let [type (:type data)
+        title (if (= type :snapshot) (str (:name data) " Update") (str (:company-name data) " Invite"))
+        css (if (= type :snapshot) "oc-snapshot.css" "oc-invite.css")]
+    [:html {:xmlns "http://www.w3.org/1999/xhtml"} 
+      [:head 
+        [:meta {:http-equiv "Content-Type", :content "text/html; charset=utf-8"}]
+        [:meta {:name "viewport", :content "width=device-width"}]
+        [:title title]
+        [:link {:rel "stylesheet", :href "resources/css/foundation.css"}]
+        [:link {:rel "stylesheet", :href (str "resources/css/" css)}]
+        [:link {:href "http://fonts.googleapis.com/css?family=Domine", :rel "stylesheet", :type "text/css"}]
+        [:link {:href "http://fonts.googleapis.com/css?family=Open+Sans", :rel "stylesheet", :type "text/css"}]]
+      (body data)]))
 
-(defn html [snapshot]
-  (str
-    "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
-    (h/html (head (keywordize-keys snapshot)))))
+(defn- html [data type]
+  (str doc-type (h/html (head (assoc (keywordize-keys data) :type type)))))
+
+(defn invite-subject [invite]
+  (let [msg (keywordize-keys invite)
+        company-name (:company-name msg)
+        from (:from msg)
+        prefix (if (s/blank? from) "You've been invited" (str from " invited you"))
+        company (if (s/blank? company-name) "" (str company-name " on "))]
+    (str prefix " to join " company "OpenCompany.")))
+
+(defn snapshot-html [snapshot]
+  (html snapshot :snapshot))
+
+(defn invite-html [invite]
+  (html (assoc invite :subject (invite-subject invite)) :invite))
+
+(defn invite-text [invite]
+  (let [link (:token-link (keywordize-keys invite))]
+    (str (invite-subject invite) ".\n\n"
+         tagline "\n\n"
+         "Open the link below to check it out.\n\n"
+         link "\n\n")))
 
 (comment
   
-  ;; For REPL testing
+  ;; For REPL testing and content development
 
   (require '[oc.email.content :as content] :reload)
 
@@ -275,34 +346,40 @@
       (s/replace "\n" "")
       (s/replace "\t" "")))
 
-  (def data (clean-html (slurp "./resources/head.html")))
+  (def data (clean-html (slurp "./resources/snapshot/head.html")))
   (-> (hickory/parse data) hickory/as-hiccup first)
 
-  (def data (clean-html (slurp "./resources/body.html")))
+  (def data (clean-html (slurp "./resources/snapshot/body.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3))
 
-  (def data (clean-html (slurp "./resources/spacer.html")))
+  (def data (clean-html (slurp "./resources/snapshot/spacer.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-html (slurp "./resources/note.html")))
+  (def data (clean-html (slurp "./resources/snapshot/note.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-htnml (slurp "./resources/logo.html")))
+  (def data (clean-htnml (slurp "./resources/snapshot/logo.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-html (slurp "./resources/name.html")))
+  (def data (clean-html (slurp "./resources/snapshot/name.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-html (slurp "./resources/title.html")))
+  (def data (clean-html (slurp "./resources/snapshot/title.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-html (slurp "./resources/topic.html")))
+  (def data (clean-html (slurp "./resources/snapshot/topic.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-html (slurp "./resources/data-topic.html")))
+  (def data (clean-html (slurp "./resources/snapshot/data-topic.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-html (slurp "./resources/footer.html")))
+  (def data (clean-html (slurp "./resources/snapshot/footer.html")))
+  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
+
+  (def data (clean-html (slurp "./resources/invite/paragraph.html")))
+  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
+
+  (def data (clean-html (slurp "./resources/invite/cta-button.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
   (spit "./hiccup.html" (email/html {}))
@@ -310,26 +387,41 @@
   ;; Generate test email HTML content from various snapshots
 
   (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
-  (def snapshot (json/decode (slurp "./opt/samples/updates/green-labs.json")))
-  (spit "./hiccup.html" (content/html (-> snapshot (assoc :note note) (assoc :company-slug "green-labs"))))
+  (def snapshot (json/decode (slurp "./opt/samples/snapshots/green-labs.json")))
+  (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note note) (assoc :company-slug "green-labs"))))
 
   (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
-  (def snapshot (json/decode (slurp "./opt/samples/updates/buff.json")))
-  (spit "./hiccup.html" (content/html (-> snapshot (assoc :note note) (assoc :company-slug "buff"))))
+  (def snapshot (json/decode (slurp "./opt/samples/snapshots/buff.json")))
+  (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note note) (assoc :company-slug "buff"))))
 
-  (def snapshot (json/decode (slurp "./opt/samples/updates/new.json")))
-  (spit "./hiccup.html" (content/html (-> snapshot (assoc :note "") (assoc :company-slug "new"))))
+  (def snapshot (json/decode (slurp "./opt/samples/snapshots/new.json")))
+  (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note "") (assoc :company-slug "new"))))
 
-  (def snapshot (json/decode (slurp "./opt/samples/updates/bago.json")))
-  (spit "./hiccup.html" (content/html (-> snapshot (assoc :note "") (assoc :company-slug "bago"))))
+  (def snapshot (json/decode (slurp "./opt/samples/snapshots/bago.json")))
+  (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note "") (assoc :company-slug "bago"))))
 
-  (def snapshot (json/decode (slurp "./opt/samples/updates/bago-no-symbol.json")))
-  (spit "./hiccup.html" (content/html (-> snapshot (assoc :note "") (assoc :company-slug "bago"))))
+  (def snapshot (json/decode (slurp "./opt/samples/snapshots/bago-no-symbol.json")))
+  (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note "") (assoc :company-slug "bago"))))
 
-  (def snapshot (json/decode (slurp "./opt/samples/updates/growth-options.json")))
-  (spit "./hiccup.html" (content/html (-> snapshot (assoc :note "") (assoc :company-slug "growth-options"))))
+  (def snapshot (json/decode (slurp "./opt/samples/snapshots/growth-options.json")))
+  (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note "") (assoc :company-slug "growth-options"))))
 
-  (def snapshot (json/decode (slurp "./opt/samples/updates/blanks-test.json")))
-  (spit "./hiccup.html" (content/html (-> snapshot (assoc :note "") (assoc :company-slug "blanks-test"))))
+  (def snapshot (json/decode (slurp "./opt/samples/snapshots/blanks-test.json")))
+  (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note "") (assoc :company-slug "blanks-test"))))
+
+  (def invite (json/decode (slurp "./opt/samples/invites/apple.json")))
+  (spit "./hiccup.html" (content/invite-html invite))
+
+  (def invite (json/decode (slurp "./opt/samples/invites/microsoft.json")))
+  (spit "./hiccup.html" (content/invite-html invite))
+  (content/invite-text invite)
+
+  (def invite (json/decode (slurp "./opt/samples/invites/combat.json")))
+  (spit "./hiccup.html" (content/invite-html invite))
+  (content/invite-text invite)
+
+  (def invite (json/decode (slurp "./opt/samples/invites/sparse-data.json")))
+  (spit "./hiccup.html" (content/invite-html invite))
+  (content/invite-text invite)
 
   )

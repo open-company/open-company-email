@@ -1,0 +1,33 @@
+body,
+html,
+.body {
+  background: white !important;
+}
+
+p {
+    font-family: Domine-Regular, Georgia, serif;
+    font-size: 18px;
+    color: #4e5a6b;
+    line-height: 1.6;
+}
+
+table.button.oc table td {
+  background: #f9d748;
+  border: 1px solid #f9d748; }
+
+table.button.oc table a {
+  font-family: OpenSans, Arial, sans-serif !important;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1.5;
+  letter-spacing: 1px;
+  color: #4e5a6b;
+}
+
+table.button.oc:hover table td {
+  border: 1px solid #d8b935;
+}
+
+table.button.oc:hover table a {
+  color: #4e5a6b !important;
+}
