@@ -133,47 +133,70 @@
 
 (defn- format-delta
   "Create a display fragment for a delta value."
-  [currency delta prior-date]
-  (str "(" (utils/with-currency currency (utils/with-size-label delta) true) " since " prior-date ") "))
+  
+  ([delta prior-date]
+  (let [pos (when (pos? delta) "+")]
+    (str "(" pos (if (zero? delta) "no change" (utils/with-size-label delta)) "% since " prior-date ") ")))
+  
+  ([currency delta prior-date]
+  (str "(" (if (zero? delta) "no change" (utils/with-currency currency (utils/with-size-label delta) true))
+    " since " prior-date ") ")))
 
 (defn- finance-metrics [topic currency]
   (let [sorted-finances (reverse (sort-by :period (:data topic)))
+        ;; Most recent finances
         finances (first sorted-finances)
+        period (f/parse utils/monthly-period (:period finances))
+        date (s/upper-case (f/unparse utils/monthly-date period))
+        ;; Check for older periods contiguous to most recent
         contiguous-periods (utils/contiguous (map :period sorted-finances))
         prior-contiguous? (>= (count contiguous-periods) 2)
+        sparkline? (>= (count contiguous-periods) 3)
+        ;; Info on prior period
         prior-finances (when prior-contiguous?
                         (first (filter #(= (:period %) (second contiguous-periods)) sorted-finances)))
-        sparkline? (>= (count contiguous-periods) 3)
-        period (f/parse utils/monthly-period (:period finances))
         prior-period (when prior-finances (f/parse utils/monthly-period (:period prior-finances)))
-        date (s/upper-case (f/unparse utils/monthly-date period))
         prior-date (when prior-period (s/upper-case (f/unparse month-formatter prior-period)))
-        ;prior-date (when prior-finances (s/upper-case (f/unparse utils/monthly-date (:period prior-finances))))
+        ;; Info on cash
         cash (:cash finances)
         cash? (utils/not-zero? cash)
         formatted-cash (when cash? (utils/with-currency currency (utils/with-size-label cash)))
         prior-cash (when prior-finances (:cash prior-finances))
-        cash-delta (when prior-cash (- cash prior-cash))
+        cash-delta (when (and cash? prior-cash) (- cash prior-cash))
         formatted-cash-delta (when cash-delta (format-delta currency cash-delta prior-date))
+        ;; Info on revenue
         revenue (:revenue finances)
         revenue? (utils/not-zero? revenue)
+        formatted-revenue (when revenue? (utils/with-currency currency (utils/with-size-label revenue)))
+        prior-revenue (when prior-finances (:revenue prior-finances))
+        revenue-delta (when (and revenue? prior-revenue) (- revenue prior-revenue))
+        revenue-delta-percent (when revenue-delta (* 100 (float (/ revenue-delta prior-revenue))))
+        formatted-revenue-delta (when revenue-delta-percent (format-delta revenue-delta-percent prior-date))
+        ;; Info on costs/expenses
         costs (:costs finances)
         costs? (utils/not-zero? costs)
+        formatted-costs (when costs? (utils/with-currency currency (utils/with-size-label costs)))
+        prior-costs (when prior-finances (:costs prior-finances))
+        costs-delta (when (and costs? prior-costs) (- costs prior-costs))
+        costs-delta-percent (when costs-delta (* 100 (float (/ costs-delta prior-costs))))
+        formatted-costs-delta (when costs-delta-percent (format-delta costs-delta-percent prior-date))        
+        ;; Info on runway (calculated) 
         cash-flow (- (or revenue 0) (or costs 0))
         runway? (and cash? costs? (or (not revenue?) (> costs revenue)))
         runway (when runway? (utils/calc-runway cash cash-flow))]
+    
     [:table {:class "finances-metrics"}
       [:tr
         (let [cost-label (if revenue? "Expenses" "Burn")]
           [:td
-            (when revenue? (metric (str "Revenue - " date)
-                                   (utils/with-currency currency (utils/with-size-label revenue))
+            (when revenue? (metric (str "Revenue " formatted-revenue-delta "- " date)
+                                   formatted-revenue
                                    :pos))
             (when (and cash? (not revenue?)) (metric (str "Cash " formatted-cash-delta "- " date)
                                             formatted-cash
                                             :neutral))
-            (when costs? (metric (str cost-label " - " date)
-                         (utils/with-currency currency (utils/with-size-label costs))
+            (when costs? (metric (str cost-label " " formatted-costs-delta "- " date)
+                         formatted-costs
                          :neg))
             (when (and cash? revenue?) (metric (str "Cash " formatted-cash-delta "- " date)
                                                formatted-cash
@@ -430,6 +453,9 @@
 
   (def snapshot (json/decode (slurp "./opt/samples/snapshots/blanks-test.json")))
   (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note "") (assoc :company-slug "blanks-test"))))
+
+  (def snapshot (json/decode (slurp "./opt/samples/snapshots/sparse.json")))
+  (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note "") (assoc :company-slug "sparse"))))
 
   (def invite (json/decode (slurp "./opt/samples/invites/apple.json")))
   (spit "./hiccup.html" (content/invite-html invite))
