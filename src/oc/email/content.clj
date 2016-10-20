@@ -115,7 +115,6 @@
         ;; Check for older periods contiguous to most recent
         contiguous-periods (when (not (empty? periods)) (utils/contiguous (map :period periods) (keyword interval)))
         prior-contiguous? (>= (count contiguous-periods) 2)
-        sparkline? (>= (count contiguous-periods) 3)
         ;; Info on prior period
         prior-metric (when prior-contiguous?
                         (first (filter #(= (:period %) (second contiguous-periods)) periods)))
@@ -167,7 +166,6 @@
         ;; Check for older periods contiguous to most recent
         contiguous-periods (utils/contiguous (map :period sorted-finances))
         prior-contiguous? (>= (count contiguous-periods) 2)
-        sparkline? (>= (count contiguous-periods) 3)
         ;; Info on prior period
         prior-finances (when prior-contiguous?
                         (first (filter #(= (:period %) (second contiguous-periods)) sorted-finances)))
