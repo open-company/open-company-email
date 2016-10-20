@@ -101,6 +101,17 @@
         [:p [:span {:class (str "metric " (name css-class))} value]
             [:span {:class "label"} label]]]]]))
 
+(defn- format-delta
+  "Create a display fragment for a delta value."
+  
+  ([delta prior-date]
+  (let [pos (when (pos? delta) "+")]
+    (str "(" pos (if (zero? delta) "no change" (utils/with-size-label delta)) "% since " prior-date ") ")))
+  
+  ([currency delta prior-date]
+  (str "(" (if (zero? delta) "no change" (utils/with-currency currency (utils/with-size-label delta) true))
+    " since " prior-date ") ")))
+
 (defn- growth-metric [periods metadata currency]
   (let [growth-metric (first periods)
         slug (:slug growth-metric)
@@ -113,7 +124,7 @@
         date (when (and interval period) (utils/format-period interval period))
         value (:value growth-metric)
         ;; Check for older periods contiguous to most recent
-        contiguous-periods (when (not (empty? periods)) (utils/contiguous (map :period periods) (keyword interval)))
+        contiguous-periods (when (seq periods) (utils/contiguous (map :period periods) (keyword interval)))
         prior-contiguous? (>= (count contiguous-periods) 2)
         ;; Info on prior period
         prior-metric (when prior-contiguous?
@@ -145,17 +156,6 @@
       [:tr
         (into [:td]
           (map #(growth-metric % metadata currency) periods))]]))
-
-(defn- format-delta
-  "Create a display fragment for a delta value."
-  
-  ([delta prior-date]
-  (let [pos (when (pos? delta) "+")]
-    (str "(" pos (if (zero? delta) "no change" (utils/with-size-label delta)) "% since " prior-date ") ")))
-  
-  ([currency delta prior-date]
-  (str "(" (if (zero? delta) "no change" (utils/with-currency currency (utils/with-size-label delta) true))
-    " since " prior-date ") ")))
 
 (defn- finance-metrics [topic currency]
   (let [sorted-finances (reverse (sort-by :period (:data topic)))
