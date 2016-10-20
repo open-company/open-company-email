@@ -101,8 +101,9 @@
         [:p [:span {:class (str "metric " (name css-class))} value]
             [:span {:class "label"} label]]]]]))
 
-(defn- growth-metric [growth-metric metadata currency]
-  (let [slug (:slug growth-metric)
+(defn- growth-metric [periods metadata currency]
+  (let [growth-metric (first periods)
+        slug (:slug growth-metric)
         metadatum (first (filter #(= (:slug %) slug) metadata))
         unit (:unit metadatum)
         interval (:interval metadatum)
@@ -110,26 +111,41 @@
         metric-name (:name metadatum)
         period (when interval (utils/parse-period interval (:period growth-metric)))
         date (when (and interval period) (utils/format-period interval period))
-        label (str metric-name " - " date)
         value (:value growth-metric)
+        ;; Check for older periods contiguous to most recent
+        contiguous-periods (when (not (empty? periods)) (utils/contiguous (map :period periods) (keyword interval)))
+        prior-contiguous? (>= (count contiguous-periods) 2)
+        sparkline? (>= (count contiguous-periods) 3)
+        ;; Info on prior period
+        prior-metric (when prior-contiguous?
+                        (first (filter #(= (:period %) (second contiguous-periods)) periods)))
+        prior-period (when (and interval prior-metric) (utils/parse-period interval (:period prior-metric)))
+        prior-date (when (and interval prior-period) (utils/format-period interval prior-period))
+        formatted-prior-date (when prior-date (s/join " " (butlast (s/split prior-date #" ")))) ; drop the year
+        prior-value (when prior-metric (:value prior-metric))
+        metric-delta (when (and value prior-value) (- value prior-value))
+        metric-delta-percent (when metric-delta (* 100 (float (/ metric-delta prior-value))))
+        formatted-metric-delta (when metric-delta-percent (format-delta metric-delta-percent formatted-prior-date))
+        ;; Format output
+        label (str metric-name " " formatted-metric-delta "- " date)
         format-symbol (case unit "%" "%" "currency" currency nil)]
     (when (and interval (number? value))
       (metric label (utils/with-format format-symbol value)))))
 
-(defn- latest-period-for-metric
-  "Given the specified metric, return a sequence of all the periods in the data for that metric."
+(defn- periods-for-metric
+  "Given the specified metric, return a sequence of all the periods in the data for that metric, sorted by most recent."
   [metric data]
   (when-let [periods (vec (filter #(= (:slug %) (:slug metric)) data))]
-    (last (sort-by :period periods))))
+    (reverse (sort-by :period periods))))
 
 (defn growth-metrics [topic currency]
   (let [data (:data topic)
         metadata (:metrics topic)
-        latest-period (map #(latest-period-for-metric % data) metadata)]
+        periods (map #(periods-for-metric % data) metadata)]
     [:table {:class "growth-metrics"}
       [:tr
         (into [:td]
-          (map #(growth-metric % metadata currency) latest-period))]]))
+          (map #(growth-metric % metadata currency) periods))]]))
 
 (defn- format-delta
   "Create a display fragment for a delta value."
