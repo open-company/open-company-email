@@ -13,16 +13,17 @@
 
   ;; All profile dependencies
   :dependencies [
-    [org.clojure/clojure "1.9.0-alpha12"] ; Lisp on the JVM http://clojure.org/documentation
+    [org.clojure/clojure "1.9.0-alpha13"] ; Lisp on the JVM http://clojure.org/documentation
     [environ "1.1.0"] ; Environment settings from different sources https://github.com/weavejester/environ
-    [com.taoensso/timbre "4.7.4"] ; Logging https://github.com/ptaoussanis/timbre
+    [com.taoensso/timbre "4.8.0-alpha1"] ; Logging https://github.com/ptaoussanis/timbre
     [raven-clj "1.4.3"] ; Interface to Sentry error reporting https://github.com/sethtrain/raven-clj
     [com.stuartsierra/component "0.3.1"] ; Component Lifecycle
     [amazonica "0.3.76"] ; A comprehensive Clojure client for the entire Amazon AWS api https://github.com/mcohen01/amazonica
     [hiccup "1.0.5"] ; HTML rendering https://github.com/weavejester/hiccup
     [cheshire "5.6.3"] ; JSON encoding / decoding https://github.com/dakrone/cheshire
-    [manifold "0.1.6-alpha1"] ; Async programming tools https://github.com/ztellman/manifold
+    [manifold "0.1.6-alpha3"] ; Async programming tools https://github.com/ztellman/manifold
     [clj-time "0.12.0"] ; Date and time lib https://github.com/clj-time/clj-time
+    [open-company/lib "0.0.4.2-6cdf3dd"] ; Library for OC projects https://github.com/open-company/open-company-lib
   ]
 
   ;; All profile plugins

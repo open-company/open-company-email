@@ -4,7 +4,9 @@
             [hiccup.core :as h]
             [clojure.walk :refer (keywordize-keys)]
             [oc.email.config :as config]
-            [oc.lib.utils :as utils]))
+            [oc.lib.data.utils :as utils]))
+
+(def month-formatter (f/formatter "MMM"))
 
 (def doc-type "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
 
@@ -99,8 +101,20 @@
         [:p [:span {:class (str "metric " (name css-class))} value]
             [:span {:class "label"} label]]]]]))
 
-(defn- growth-metric [growth-metric metadata currency]
-  (let [slug (:slug growth-metric)
+(defn- format-delta
+  "Create a display fragment for a delta value."
+  
+  ([delta prior-date]
+  (let [pos (when (pos? delta) "+")]
+    (str "(" pos (if (zero? delta) "no change" (utils/with-size-label delta)) "% since " prior-date ") ")))
+  
+  ([currency delta prior-date]
+  (str "(" (if (zero? delta) "no change" (utils/with-currency currency (utils/with-size-label delta) true))
+    " since " prior-date ") ")))
+
+(defn- growth-metric [periods metadata currency]
+  (let [growth-metric (first periods)
+        slug (:slug growth-metric)
         metadatum (first (filter #(= (:slug %) slug) metadata))
         unit (:unit metadatum)
         interval (:interval metadatum)
@@ -108,54 +122,99 @@
         metric-name (:name metadatum)
         period (when interval (utils/parse-period interval (:period growth-metric)))
         date (when (and interval period) (utils/format-period interval period))
-        label (str metric-name " - " date)
         value (:value growth-metric)
+        ;; Check for older periods contiguous to most recent
+        contiguous-periods (when (seq periods) (utils/contiguous (map :period periods) (keyword interval)))
+        prior-contiguous? (>= (count contiguous-periods) 2)
+        ;; Info on prior period
+        prior-metric (when prior-contiguous?
+                        (first (filter #(= (:period %) (second contiguous-periods)) periods)))
+        prior-period (when (and interval prior-metric) (utils/parse-period interval (:period prior-metric)))
+        prior-date (when (and interval prior-period) (utils/format-period interval prior-period))
+        formatted-prior-date (when prior-date (s/join " " (butlast (s/split prior-date #" ")))) ; drop the year
+        prior-value (when prior-metric (:value prior-metric))
+        metric-delta (when (and value prior-value) (- value prior-value))
+        metric-delta-percent (when metric-delta (* 100 (float (/ metric-delta prior-value))))
+        formatted-metric-delta (when metric-delta-percent (format-delta metric-delta-percent formatted-prior-date))
+        ;; Format output
+        label (str metric-name " " formatted-metric-delta "- " date)
         format-symbol (case unit "%" "%" "currency" currency nil)]
     (when (and interval (number? value))
       (metric label (utils/with-format format-symbol value)))))
 
-(defn- latest-period-for-metric
-  "Given the specified metric, return a sequence of all the periods in the data for that metric."
+(defn- periods-for-metric
+  "Given the specified metric, return a sequence of all the periods in the data for that metric, sorted by most recent."
   [metric data]
   (when-let [periods (vec (filter #(= (:slug %) (:slug metric)) data))]
-    (last (sort-by :period periods))))
+    (reverse (sort-by :period periods))))
 
 (defn growth-metrics [topic currency]
   (let [data (:data topic)
         metadata (:metrics topic)
-        latest-period (map #(latest-period-for-metric % data) metadata)]
+        periods (map #(periods-for-metric % data) metadata)]
     [:table {:class "growth-metrics"}
       [:tr
         (into [:td]
-          (map #(growth-metric % metadata currency) latest-period))]]))
+          (map #(growth-metric % metadata currency) periods))]]))
 
 (defn- finance-metrics [topic currency]
-  (let [finances (last (sort-by :period (:data topic)))
+  (let [sorted-finances (reverse (sort-by :period (:data topic)))
+        ;; Most recent finances
+        finances (first sorted-finances)
         period (f/parse utils/monthly-period (:period finances))
         date (s/upper-case (f/unparse utils/monthly-date period))
+        ;; Check for older periods contiguous to most recent
+        contiguous-periods (utils/contiguous (map :period sorted-finances))
+        prior-contiguous? (>= (count contiguous-periods) 2)
+        ;; Info on prior period
+        prior-finances (when prior-contiguous?
+                        (first (filter #(= (:period %) (second contiguous-periods)) sorted-finances)))
+        prior-period (when prior-finances (f/parse utils/monthly-period (:period prior-finances)))
+        prior-date (when prior-period (s/upper-case (f/unparse month-formatter prior-period)))
+        ;; Info on cash
         cash (:cash finances)
         cash? (utils/not-zero? cash)
+        formatted-cash (when cash? (utils/with-currency currency (utils/with-size-label cash)))
+        prior-cash (when prior-finances (:cash prior-finances))
+        cash-delta (when (and cash? prior-cash) (- cash prior-cash))
+        formatted-cash-delta (when cash-delta (format-delta currency cash-delta prior-date))
+        ;; Info on revenue
         revenue (:revenue finances)
         revenue? (utils/not-zero? revenue)
+        formatted-revenue (when revenue? (utils/with-currency currency (utils/with-size-label revenue)))
+        prior-revenue (when prior-finances (:revenue prior-finances))
+        revenue-delta (when (and revenue? prior-revenue) (- revenue prior-revenue))
+        revenue-delta-percent (when revenue-delta (* 100 (float (/ revenue-delta prior-revenue))))
+        formatted-revenue-delta (when revenue-delta-percent (format-delta revenue-delta-percent prior-date))
+        ;; Info on costs/expenses
         costs (:costs finances)
         costs? (utils/not-zero? costs)
+        formatted-costs (when costs? (utils/with-currency currency (utils/with-size-label costs)))
+        prior-costs (when prior-finances (:costs prior-finances))
+        costs-delta (when (and costs? prior-costs) (- costs prior-costs))
+        costs-delta-percent (when costs-delta (* 100 (float (/ costs-delta prior-costs))))
+        formatted-costs-delta (when costs-delta-percent (format-delta costs-delta-percent prior-date))        
+        ;; Info on runway (calculated) 
         cash-flow (- (or revenue 0) (or costs 0))
         runway? (and cash? costs? (or (not revenue?) (> costs revenue)))
         runway (when runway? (utils/calc-runway cash cash-flow))]
+    
     [:table {:class "finances-metrics"}
       [:tr
         (let [cost-label (if revenue? "Expenses" "Burn")]
           [:td
-            (when revenue? (metric (str "Revenue - " date)
-                                   (utils/with-currency currency (utils/with-size-label revenue))
+            (when revenue? (metric (str "Revenue " formatted-revenue-delta "- " date)
+                                   formatted-revenue
                                    :pos))
-            (when (and cash? (not revenue?)) (metric (str "Cash - " date)
-                                            (utils/with-currency currency (utils/with-size-label cash))))
-            (when costs? (metric (str cost-label " - " date)
-                         (utils/with-currency currency (utils/with-size-label costs))
+            (when (and cash? (not revenue?)) (metric (str "Cash " formatted-cash-delta "- " date)
+                                            formatted-cash
+                                            :neutral))
+            (when costs? (metric (str cost-label " " formatted-costs-delta "- " date)
+                         formatted-costs
                          :neg))
-            (when (and cash? revenue?) (metric (str "Cash - " date)
-                                               (utils/with-currency currency (utils/with-size-label cash))))
+            (when (and cash? revenue?) (metric (str "Cash " formatted-cash-delta "- " date)
+                                               formatted-cash
+                                               :nuetral))
             (when runway? (metric (str "Runway - " date)
                                   (utils/get-rounded-runway runway)))])]]))
 
@@ -408,6 +467,9 @@
 
   (def snapshot (json/decode (slurp "./opt/samples/snapshots/blanks-test.json")))
   (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note "") (assoc :company-slug "blanks-test"))))
+
+  (def snapshot (json/decode (slurp "./opt/samples/snapshots/sparse.json")))
+  (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note "") (assoc :company-slug "sparse"))))
 
   (def invite (json/decode (slurp "./opt/samples/invites/apple.json")))
   (spit "./hiccup.html" (content/invite-html invite))

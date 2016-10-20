@@ -139,7 +139,7 @@ table.topic span.metric.neg {
 }
 
 table.topic span.label {
-  padding-left: 15px;
+  padding-left: 7px;
   font-size: 16px !important;
   letter-spacing: 1px;
   margin-bottom: 20px;
