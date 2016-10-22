@@ -23,8 +23,11 @@
     [cheshire "5.6.3"] ; JSON encoding / decoding https://github.com/dakrone/cheshire
     [manifold "0.1.6-alpha3"] ; Async programming tools https://github.com/ztellman/manifold
     [clj-time "0.12.0"] ; Date and time lib https://github.com/clj-time/clj-time
+    [jfree/jfreechart "1.0.13"] ; Java chart library http://www.jfree.org/jfreechart/
     [open-company/lib "0.0.4.2-6cdf3dd"] ; Library for OC projects https://github.com/open-company/open-company-lib
   ]
+
+  :repositories [["jfreechart" "http://central.maven.org/maven2/"]]
 
   ;; All profile plugins
   :plugins [
