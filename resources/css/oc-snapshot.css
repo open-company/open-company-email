@@ -117,12 +117,17 @@ table.topic h4 {
 
 /* Data Topic */
 
-table.topic span.metric, table.topic span.label {
+table.topic span.metric {
   font-family: OpenSans, Arial, sans-serif !important;
   font-weight: bold;
   line-height: 1.5 !important;
-  /* color: #4e5a6b; opacity: 0.75; is the same as: */
 }
+
+table.topic span.metric-diff {
+  font-family: OpenSans, Arial, sans-serif !important;
+  line-height: 1.5 !important;
+}
+
 
 table.topic span.metric {
   font-size: 16px !important;
@@ -143,7 +148,13 @@ table.topic span.label {
   font-size: 16px !important;
   letter-spacing: 1px;
   margin-bottom: 20px;
-  color: #7A838F !important;
+}
+
+img.sparkline, img.sparkbar {
+  display: inline-block;
+  vertical-align: bottom;
+  /* TODO remove bottom padding from sparklines
+  vertical-align: text-bottom; */
 }
 
 /* === Footer === */

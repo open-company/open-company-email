@@ -1,5 +1,7 @@
 (ns oc.email.lib.sparkline
-  (:require [clojure.java.io :as io])
+  (:require [clojure.java.io :as io]
+            [amazonica.aws.s3]
+            [oc.email.config :as config])
   (:import [java.awt.geom Ellipse2D$Double]
            [org.jfree.data.category DefaultCategoryDataset]
            [org.jfree.chart ChartFactory JFreeChart ChartColor ChartUtilities]
@@ -7,14 +9,18 @@
            [org.jfree.chart.renderer.category LineAndShapeRenderer BarRenderer StandardBarPainter]
            [org.jfree.ui RectangleInsets]))
 
-(def width-per-datum 20)
+(def line-width-per-datum 20)
+(def bar-width-per-datum 10)
 (def height 30)
 (def buffer-percenct 0.3)
+
+(def s3-url-fragment "s3.amazonaws.com")
 
 (def colors {:black ChartColor/BLACK
              :blue ChartColor/BLUE
              :red ChartColor/DARK_RED
              :green ChartColor/DARK_GREEN})
+(def default-color :black)
 
 (defn- chart-data [data]
   (let [series (DefaultCategoryDataset.)]
@@ -68,16 +74,30 @@
     chart))
 
 (defn sparkline
-  ([data file-name] (sparkline data file-name :black))
+  ([data file-name] (sparkline data file-name default-color))
   ([data file-name color]
   (let [chart (sparkchart :line data color)]
-    (ChartUtilities/saveChartAsPNG (io/as-file file-name) chart (* width-per-datum (count data)) height))))
+    (ChartUtilities/saveChartAsPNG (io/as-file file-name) chart (* line-width-per-datum (count data)) height)
+    file-name)))
 
 (defn sparkbar
-  ([data file-name] (sparkline data file-name :black))
+  ([data file-name] (sparkline data file-name default-color))
   ([data file-name color]
   (let [chart (sparkchart :bar data color)]
-    (ChartUtilities/saveChartAsPNG (io/as-file file-name) chart (* width-per-datum (count data)) height))))
+    (ChartUtilities/saveChartAsPNG (io/as-file file-name) chart (* bar-width-per-datum (count data)) height))))
+
+(defn sparkbar-html
+  ([data] (sparkbar-html data default-color))
+  ([data color]
+  (let [chart (sparkchart :bar data color)
+        file-name (str (java.util.UUID/randomUUID) ".png")
+        bucket-name config/aws-s3-chart-bucket
+        file-url (str "https://" bucket-name "." s3-url-fragment "/" file-name)
+        bytes (java.io.ByteArrayOutputStream.)]
+    ;(ChartUtilities/writeChartAsPNG bytes chart (* width-per-datum (count data)) height))))
+    (ChartUtilities/saveChartAsPNG (io/as-file file-name) chart (* bar-width-per-datum (count data)) height)
+    ; async S3 goodness
+    [:img {:src file-url :alt "Bar chart" :class "sparkbar"}])))
 
 (comment
   
