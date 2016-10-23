@@ -130,11 +130,13 @@
         date (when (and interval period) (utils/format-period interval period))
         value (:value growth-metric)
         ;; Check for older periods contiguous to most recent
-        contiguous-periods (when (seq periods) (utils/contiguous (map :period periods) (keyword interval)))
+        contiguous-periods (when (seq periods)
+                            (take (count (utils/contiguous (map :period periods) (keyword interval))) periods))
         prior-contiguous? (>= (count contiguous-periods) 2)
+        sparkline? (>= (count contiguous-periods) 3) ; sparklines are possible at 3 or more
+        spark-periods (when sparkline? (reverse (take 4 contiguous-periods))) ; 3-4 periods for potential sparklines
         ;; Info on prior period
-        prior-metric (when prior-contiguous?
-                        (first (filter #(= (:period %) (second contiguous-periods)) periods)))
+        prior-metric (when prior-contiguous? (second contiguous-periods))
         prior-period (when (and interval prior-metric) (utils/parse-period interval (:period prior-metric)))
         prior-date (when (and interval prior-period) (utils/format-period interval prior-period))
         formatted-prior-date (when prior-date (s/join " " (butlast (s/split prior-date #" ")))) ; drop the year
@@ -142,8 +144,13 @@
         metric-delta (when (and value prior-value) (- value prior-value))
         metric-delta-percent (when metric-delta (* 100 (float (/ metric-delta prior-value))))
         formatted-metric-delta (when metric-delta-percent (format-delta metric-delta-percent formatted-prior-date))
+        sparkline-metric (when (>= (count spark-periods) 3) (sl/sparkline-html (map :value spark-periods)))
+        first-period (when (and interval sparkline-metric) (utils/parse-period interval (:period (first spark-periods))))
+        first-date (when first-period
+                    (s/upper-case (s/join " " (butlast (s/split (utils/format-period interval first-period) #" ")))))
+        formatted-spark (when (and sparkline-metric first-date) [:span first-date sparkline-metric])
         ;; Format output
-        label (str metric-name " " formatted-metric-delta "- " date)
+        label [:span metric-name " " formatted-metric-delta "- " formatted-spark date]
         format-symbol (case unit "%" "%" "currency" currency nil)]
     (when (and interval (number? value))
       (metric label (utils/with-format format-symbol value)))))
@@ -170,7 +177,8 @@
         period (f/parse utils/monthly-period (:period finances))
         date (s/upper-case (f/unparse utils/monthly-date period))
         ;; Check for older periods contiguous to most recent
-        contiguous-periods (take (count (utils/contiguous (map :period sorted-finances))) sorted-finances)
+        contiguous-periods (when (seq sorted-finances)
+                            (take (count (utils/contiguous (map :period sorted-finances))) sorted-finances))
         prior-contiguous? (>= (count contiguous-periods) 2)
         sparkline? (>= (count contiguous-periods) 3) ; sparkbars are possible (finance data might be sparse though)
         spark-periods (when sparkline? (take 4 contiguous-periods)) ; 3-4 periods for potential sparkbars

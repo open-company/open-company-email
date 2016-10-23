@@ -9,7 +9,7 @@
            [org.jfree.chart.renderer.category LineAndShapeRenderer BarRenderer StandardBarPainter]
            [org.jfree.ui RectangleInsets]))
 
-(def line-width-per-datum 20)
+(def line-width-per-datum 15)
 (def bar-width-per-datum 10)
 (def height 30)
 (def buffer-percenct 0.3)
