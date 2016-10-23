@@ -21,6 +21,8 @@
 
 (defonce aws-access-key-id (env :aws-access-key-id))
 (defonce aws-secret-access-key (env :aws-secret-access-key))
+(defonce aws-creds {:access-key aws-access-key-id
+                    :secret-key aws-secret-access-key})
 (defonce aws-endpoint (env :aws-endpoint))
 
 ;; ----- AWS SQS -----
