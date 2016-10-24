@@ -150,7 +150,7 @@
                     (s/upper-case (s/join " " (butlast (s/split (utils/format-period interval first-period) #" ")))))
         formatted-spark (when (and sparkline-metric first-date) [:span first-date sparkline-metric])
         ;; Format output
-        label [:span metric-name " " formatted-metric-delta "- " formatted-spark date]
+        label [:span [:b metric-name] " " formatted-metric-delta "- " formatted-spark date]
         format-symbol (case unit "%" "%" "currency" currency nil)]
     (when (and interval (number? value))
       (metric label (utils/with-format format-symbol value)))))
@@ -233,19 +233,19 @@
       [:tr
         (let [cost-label (if revenue? "Expenses" "Burn")]
           [:td
-            (when revenue? (metric [:span "Revenue " formatted-revenue-delta "- " formatted-revenue-spark date]
+            (when revenue? (metric [:span [:b "Revenue"] " " formatted-revenue-delta "- " formatted-revenue-spark date]
                                    formatted-revenue
                                    :nuetral))
-            (when (and cash? (not revenue?)) (metric [:span "Cash " formatted-cash-delta "- " formatted-cash-spark date]
+            (when (and cash? (not revenue?)) (metric [:span [:b "Cash"] " " formatted-cash-delta "- " formatted-cash-spark date]
                                             formatted-cash
                                             :neutral))
-            (when costs? (metric [:span cost-label " " formatted-costs-delta "- " formatted-costs-spark date]
+            (when costs? (metric [:span [:b cost-label] " " formatted-costs-delta "- " formatted-costs-spark date]
                          formatted-costs
                          :neutral))
-            (when (and cash? revenue?) (metric [:span "Cash " formatted-cash-delta "- " formatted-cash-spark date]
+            (when (and cash? revenue?) (metric [:span [:b "Cash"] " " formatted-cash-delta "- " formatted-cash-spark date]
                                                formatted-cash
                                                :nuetral))
-            (when runway? (metric (str "Runway - " date)
+            (when runway? (metric [:span [:b "Runway"] " - " date]
                                   (utils/get-rounded-runway runway)))])]]))
 
 (defn- data-topic [snapshot topic-name topic topic-url]
