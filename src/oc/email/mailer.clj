@@ -85,7 +85,7 @@
 
   (require '[oc.email.mailer :as mailer] :reload)
 
-  (def snapshot (json/decode (slurp "./opt/samples/updates/green-labs.json")))
+  (def snapshot (json/decode (slurp "./opt/samples/snapshots/green-labs.json")))
   (mailer/send-snapshot {:to ["change@me.com"]
                          :reply-to "change@me.com"
                          :subject "Latest GreenLabs Update"

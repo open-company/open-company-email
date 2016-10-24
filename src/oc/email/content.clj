@@ -33,12 +33,6 @@
       [:th {:class "small-12 large-12 first last columns"}
         [:p {:class "text-center company-name"} (:name snapshot)]]]])
 
-(defn- title [snapshot]
-  [:table {:class "row header"}
-    [:tr
-      [:th {:class "small-12 large-12 first last columns"}
-        [:p {:class "text-center title"} (:title snapshot)]]]])
-
 (defn- message [snapshot]
   [:table {:class "row note"}
     [:tr
@@ -94,13 +88,16 @@
             [:th {:class "expander"}]])])))
 
 (defn- metric
-  ([label value] (metric label value :nuetral))
-  ([label value css-class]
+  ([value label sub-label] (metric value label sub-label :nuetral))
+  ([value label sub-label css-class]
   [:table {:class "metric"}
     [:tr
       [:td
-        [:p [:span {:class (str "metric " (name css-class))} value]
-            [:span {:class "label"} label]]]]]))
+        [:span {:class (str "metric " (name css-class))} value]
+        [:span {:class "label"} label]]]
+    [:tr
+      [:td
+         [:p [:span {:class "sublabel"} sub-label]]]]]))
 
 (defn- format-delta
   "Create a display fragment for a delta value."
@@ -144,16 +141,16 @@
         metric-delta (when (and value prior-value) (- value prior-value))
         metric-delta-percent (when metric-delta (* 100 (float (/ metric-delta prior-value))))
         formatted-metric-delta (when metric-delta-percent (format-delta metric-delta-percent formatted-prior-date))
-        sparkline-metric (when (>= (count spark-periods) 3) (sl/sparkline-html (map :value spark-periods)))
-        first-period (when (and interval sparkline-metric) (utils/parse-period interval (:period (first spark-periods))))
-        first-date (when first-period
-                    (s/upper-case (s/join " " (butlast (s/split (utils/format-period interval first-period) #" ")))))
-        formatted-spark (when (and sparkline-metric first-date) [:span first-date sparkline-metric])
+        sparkline-metric (when (>= (count spark-periods) 3) (sl/sparkline-html (map :value spark-periods) :blue))
         ;; Format output
-        label [:span [:b metric-name] " " formatted-metric-delta "- " formatted-spark date]
-        format-symbol (case unit "%" "%" "currency" currency nil)]
+        label [:span [:b metric-name] " " date]
+        sub-label [:span formatted-metric-delta " " sparkline-metric]
+        formatted-value (case unit
+                          "%" (str (utils/with-size-label value) "%")
+                          "currency" (utils/with-currency currency (utils/with-size-label value))
+                          (utils/with-size-label value))]
     (when (and interval (number? value))
-      (metric label (utils/with-format format-symbol value)))))
+      (metric formatted-value label sub-label))))
 
 (defn- periods-for-metric
   "Given the specified metric, return a sequence of all the periods in the data for that metric, sorted by most recent."
@@ -193,11 +190,6 @@
         prior-cash (when prior-finances (:cash prior-finances))
         cash-delta (when (and cash? prior-cash) (- cash prior-cash))
         formatted-cash-delta (when cash-delta (format-delta currency cash-delta prior-date))
-        spark-cash-periods (when spark-periods (reverse (take-while #(not (nil? (:cash %))) spark-periods)))
-        sparkbar-cash (when (>= (count spark-cash-periods) 3) (sl/sparkbar-html (map :cash spark-cash-periods)))
-        first-cash-period (when sparkbar-cash (f/parse utils/monthly-period (:period (first spark-cash-periods))))
-        first-cash-date (when first-cash-period (s/upper-case (f/unparse month-formatter first-cash-period)))
-        formatted-cash-spark (when (and sparkbar-cash first-cash-date) [:span first-cash-date sparkbar-cash])
         ;; Info on revenue
         revenue (:revenue finances)
         revenue? (utils/not-zero? revenue)
@@ -208,10 +200,7 @@
         formatted-revenue-delta (when revenue-delta-percent (format-delta revenue-delta-percent prior-date))
         spark-revenue-periods (when spark-periods (reverse (take-while #(not (nil? (:revenue %))) spark-periods)))
         sparkbar-revenue (when (>= (count spark-revenue-periods) 3)
-                          (sl/sparkbar-html (map :revenue spark-cash-periods) :green))
-        first-revenue-period (when sparkbar-revenue (f/parse utils/monthly-period (:period (first spark-revenue-periods))))
-        first-revenue-date (when first-revenue-period (s/upper-case (f/unparse month-formatter first-revenue-period)))
-        formatted-revenue-spark (when (and sparkbar-revenue first-revenue-date) [:span first-revenue-date sparkbar-revenue])
+                          (sl/sparkbar-html (map :revenue spark-revenue-periods) :green))
         ;; Info on costs/expenses
         costs (:costs finances)
         costs? (utils/not-zero? costs)
@@ -225,28 +214,34 @@
         first-costs-period (when sparkbar-costs (f/parse utils/monthly-period (:period (first spark-costs-periods))))
         first-costs-date (when first-costs-period (s/upper-case (f/unparse month-formatter first-costs-period)))
         formatted-costs-spark (when (and sparkbar-costs first-costs-date) [:span first-costs-date sparkbar-costs])
+        cost-label (if revenue? "Expenses" "Burn")
         ;; Info on runway (calculated) 
         cash-flow (- (or revenue 0) (or costs 0))
         runway? (and cash? costs? (or (not revenue?) (> costs revenue)))
-        runway (when runway? (utils/calc-runway cash cash-flow))]
+        runway (when runway? (utils/calc-runway cash cash-flow))
+        formatted-runway (when runway? (str (utils/get-rounded-runway runway) " runway"))]
     [:table {:class "finances-metrics"}
-      [:tr
-        (let [cost-label (if revenue? "Expenses" "Burn")]
+      (when revenue?
+        [:tr
+          [:td 
+            (metric formatted-revenue [:span [:b "Revenue"] " " date]
+              [:span formatted-revenue-delta " " sparkbar-revenue])]])
+      (when (and cash? (not revenue?)) 
+        [:tr
           [:td
-            (when revenue? (metric [:span [:b "Revenue"] " " formatted-revenue-delta "- " formatted-revenue-spark date]
-                                   formatted-revenue
-                                   :nuetral))
-            (when (and cash? (not revenue?)) (metric [:span [:b "Cash"] " " formatted-cash-delta "- " formatted-cash-spark date]
-                                            formatted-cash
-                                            :neutral))
-            (when costs? (metric [:span [:b cost-label] " " formatted-costs-delta "- " formatted-costs-spark date]
-                         formatted-costs
-                         :neutral))
-            (when (and cash? revenue?) (metric [:span [:b "Cash"] " " formatted-cash-delta "- " formatted-cash-spark date]
-                                               formatted-cash
-                                               :nuetral))
-            (when runway? (metric [:span [:b "Runway"] " - " date]
-                                  (utils/get-rounded-runway runway)))])]]))
+            (metric formatted-cash [:span [:b "Cash"] " " date]
+              [:span formatted-cash-delta " " formatted-runway])]])
+      (when costs? 
+        [:tr
+          [:td
+            (metric formatted-costs [:span [:b cost-label] " " date]
+              [:span formatted-costs-delta " " sparkbar-costs])]])
+      (when (and cash? revenue?)
+        [:tr
+          [:td
+            (metric formatted-cash [:span [:b "Cash"] " " date]
+              [:span formatted-cash-delta " " formatted-runway])]])]))
+
 
 (defn- data-topic [snapshot topic-name topic topic-url]
   (let [currency (:currency snapshot)
@@ -262,13 +257,14 @@
             [:p {:class "topic-title"} (s/upper-case (:title topic))])
           (spacer 1)
           [:p {:class "topic-headline"} (:headline topic)]
-          (when body? (spacer 2))
-          (when body? (:body topic))
           (when data? (spacer 20))
           (when data?
             (if (= topic-name "finances")
               (finance-metrics topic currency)
               (growth-metrics topic currency)))
+          (when (and data? body?) (spacer 20))
+          (when (and (not data?) body?) (spacer 2))
+          (when body? (:body topic))
           (spacer 30)]
         [:th {:class "expander"}]]]))
 
@@ -294,8 +290,6 @@
   (let [title? (not (s/blank? (:title snapshot)))]
     [:td
       (spacer 30 "header")
-      (when title? (title snapshot))
-      (when title? (spacer 22 "header"))
       [:table
         [:tr
           (into [:td] 
@@ -360,7 +354,7 @@
                     [:th {:class "small-1 large-2 first columns"}]
                     [:th {:class "small-11 large-8 columns"} 
                       [:p {:class "text-center"}
-                        "Powered by "
+                        "Updates by "
                         [:a {:href "https://opencompany.com/"} "OpenCompany"]]]
                     [:th {:class "small-1 large-2 last columns"}]]]
                 (spacer 28 "footer")]]]]]]])

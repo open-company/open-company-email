@@ -17,9 +17,9 @@
 (def s3-url-fragment "s3.amazonaws.com")
 
 (def colors {:black ChartColor/BLACK
-             :blue ChartColor/BLUE
-             :red ChartColor/DARK_RED
-             :green ChartColor/DARK_GREEN})
+             :blue (ChartColor. 30 129 196) ; OC Dark Blue
+             :red (ChartColor. 224 75 83) ; OC Red
+             :green (ChartColor. 53 188 46)}) ; OC Dark Green
 (def default-color :black)
 
 (defn- chart-data [data]
