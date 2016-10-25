@@ -3,15 +3,21 @@
             [amazonica.aws.s3 :as s3]
             [oc.email.config :as config])
   (:import [java.awt.geom Ellipse2D$Double]
+           [javax.imageio ImageIO]
            [org.jfree.data.category DefaultCategoryDataset]
            [org.jfree.chart ChartFactory JFreeChart ChartColor ChartUtilities]
            [org.jfree.chart.plot PlotOrientation]
            [org.jfree.chart.renderer.category LineAndShapeRenderer BarRenderer StandardBarPainter]
            [org.jfree.ui RectangleInsets]))
 
+;; Sparkline generation constants
 (def line-width-per-datum 15)
 (def bar-width-per-datum 10)
-(def height 30)
+(def height 26)
+(def left-x-offset 6)
+(def top-y-offset 6)
+(def right-x-offset 5)
+(def bottom-y-offset 5)
 (def buffer-percenct 0.3)
 
 (def s3-url-fragment "s3.amazonaws.com")
@@ -28,7 +34,7 @@
       (.addValue series (second datum) "data" (inc (first datum))))
     series))
 
-(defn- sparkchart [chart-type data color]
+(defn sparkchart [chart-type data color]
   (let [series (chart-data data)
         line? (= chart-type :line)
         bar? (= chart-type :bar)
@@ -79,6 +85,16 @@
                  :content-type "image/png"}
       :access-control-list {:grant-permission ["AllUsers" "Read"]})))
 
+(defn- crop
+  [baos x-offset y-offset width height]
+  (let [ba (.toByteArray baos)
+        bis (java.io.ByteArrayInputStream. ba)
+        bi (ImageIO/read bis)
+        cropped-bi (.getSubimage bi x-offset y-offset width height)
+        cropped-baos (java.io.ByteArrayOutputStream.)]
+    (ImageIO/write cropped-bi "png" cropped-baos)
+    cropped-baos))
+
 (defn- sparkchart-file
   [chart-type data file-name color]
   {:pre [(#{:line :bar} chart-type)
@@ -107,11 +123,15 @@
         file-name (str (java.util.UUID/randomUUID) ".png")
         bucket-name config/aws-s3-chart-bucket
         file-url (str "https://" bucket-name "." s3-url-fragment "/" file-name)
-        bytes (java.io.ByteArrayOutputStream.)]
+        baos (java.io.ByteArrayOutputStream.)]
     ;; Chart as bytes
-    (ChartUtilities/writeChartAsPNG bytes chart width height)
-    ;; Async S3 U/L
-    (future (s3-upload bytes file-name))
+    (ChartUtilities/writeChartAsPNG baos chart width height)
+    ;; Crop the bytes
+    (let [crop-width (+ left-x-offset right-x-offset)
+          crop-height (+ top-y-offset bottom-y-offset)
+          cropped-baos (crop baos left-x-offset top-y-offset (- width crop-width) (- height crop-height))]
+      ;; Async S3 U/L
+      (future (s3-upload cropped-baos file-name)))
     ;; hiccup style HTML response
     [:img {:src file-url :alt label :class klass}]))
 
@@ -144,4 +164,15 @@
   (sl/sparkline-html [1.1 2.1 3.2 3.3 5.8 4.7])
   (sl/sparkbar-html [1100 2100 3200 3300 5800] :red)
 
+  ; Export
+  (def c (sl/sparkchart :line [1.1 2.1 3.2 3.3] :black))
+  (def b (java.io.ByteArrayOutputStream.))
+  (ChartUtilities/writeChartAsPNG b c 80 26)
+  ; Crop
+  (import '[javax.imageio ImageIO])
+  (def ba (.toByteArray b))
+  (def bis (java.io.ByteArrayInputStream. ba))
+  (def bi (ImageIO/read bis)) ; 80x26 buffered image
+  (def cropped (.getSubimage bi 6 6 69 15))
+  (ImageIO/write cropped "png" (java.io.File. "./crop.png"))
 )

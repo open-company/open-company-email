@@ -104,16 +104,16 @@
   
   ([delta prior-date]
   (let [pos (when (pos? delta) "+")]
-    [:span "(" 
-           (if (zero? delta) "no change" [:span {:class "metric-diff"} pos (utils/with-size-label delta) "%"])
-           (str " since " prior-date ") ")]))
+    [:span
+      (if (zero? delta) "no change" [:span {:class "metric-diff"} pos (utils/with-size-label delta) "%"])
+      (str " since " prior-date " ")]))
   
   ([currency delta prior-date]
-  [:span "("
-         (if (zero? delta)
-          "no change"
-          [:span {:class "metric-diff"} (utils/with-currency currency (utils/with-size-label delta) true)])
-         (str " since " prior-date ") ")]))
+  [:span
+   (if (zero? delta)
+      "no change"
+      [:span {:class "metric-diff"} (utils/with-currency currency (utils/with-size-label delta) true)])
+      (str " since " prior-date " ")]))
 
 (defn- growth-metric [periods metadata currency]
   (let [growth-metric (first periods)
@@ -144,7 +144,7 @@
         sparkline-metric (when (>= (count spark-periods) 3) (sl/sparkline-html (map :value spark-periods) :blue))
         ;; Format output
         label [:span [:b metric-name] " " date]
-        sub-label [:span formatted-metric-delta " " sparkline-metric]
+        sub-label [:span formatted-metric-delta  " " sparkline-metric]
         formatted-value (case unit
                           "%" (str (utils/with-size-label value) "%")
                           "currency" (utils/with-currency currency (utils/with-size-label value))
@@ -177,8 +177,8 @@
         contiguous-periods (when (seq sorted-finances)
                             (take (count (utils/contiguous (map :period sorted-finances))) sorted-finances))
         prior-contiguous? (>= (count contiguous-periods) 2)
-        sparkline? (>= (count contiguous-periods) 3) ; sparkbars are possible (finance data might be sparse though)
-        spark-periods (when sparkline? (take 4 contiguous-periods)) ; 3-4 periods for potential sparkbars
+        sparkline? (>= (count contiguous-periods) 3) ; sparklines are possible (finance data might be sparse though)
+        spark-periods (when sparkline? (take 4 contiguous-periods)) ; 3-4 periods for potential sparklines
         ;; Info on prior period
         prior-finances (when prior-contiguous? (second contiguous-periods))
         prior-period (when prior-finances (f/parse utils/monthly-period (:period prior-finances)))
@@ -199,8 +199,8 @@
         revenue-delta-percent (when revenue-delta (* 100 (float (/ revenue-delta prior-revenue))))
         formatted-revenue-delta (when revenue-delta-percent (format-delta revenue-delta-percent prior-date))
         spark-revenue-periods (when spark-periods (reverse (take-while #(not (nil? (:revenue %))) spark-periods)))
-        sparkbar-revenue (when (>= (count spark-revenue-periods) 3)
-                          (sl/sparkbar-html (map :revenue spark-revenue-periods) :green))
+        spark-revenue (when (>= (count spark-revenue-periods) 3)
+                        (sl/sparkline-html (map :revenue spark-revenue-periods) :green))
         ;; Info on costs/expenses
         costs (:costs finances)
         costs? (utils/not-zero? costs)
@@ -210,10 +210,7 @@
         costs-delta-percent (when costs-delta (* 100 (float (/ costs-delta prior-costs))))
         formatted-costs-delta (when costs-delta-percent (format-delta costs-delta-percent prior-date))        
         spark-costs-periods (when spark-periods (reverse (take-while #(not (nil? (:costs %))) spark-periods)))
-        sparkbar-costs (when (>= (count spark-costs-periods) 3) (sl/sparkbar-html (map :costs spark-costs-periods) :red))
-        first-costs-period (when sparkbar-costs (f/parse utils/monthly-period (:period (first spark-costs-periods))))
-        first-costs-date (when first-costs-period (s/upper-case (f/unparse month-formatter first-costs-period)))
-        formatted-costs-spark (when (and sparkbar-costs first-costs-date) [:span first-costs-date sparkbar-costs])
+        spark-costs (when (>= (count spark-costs-periods) 3) (sl/sparkline-html (map :costs spark-costs-periods) :red))
         cost-label (if revenue? "Expenses" "Burn")
         ;; Info on runway (calculated) 
         cash-flow (- (or revenue 0) (or costs 0))
@@ -225,7 +222,7 @@
         [:tr
           [:td 
             (metric formatted-revenue [:span [:b "Revenue"] " " date]
-              [:span formatted-revenue-delta " " sparkbar-revenue])]])
+              [:span formatted-revenue-delta " " spark-revenue])]])
       (when (and cash? (not revenue?)) 
         [:tr
           [:td
@@ -235,7 +232,7 @@
         [:tr
           [:td
             (metric formatted-costs [:span [:b cost-label] " " date]
-              [:span formatted-costs-delta " " sparkbar-costs])]])
+              [:span formatted-costs-delta " " spark-costs])]])
       (when (and cash? revenue?)
         [:tr
           [:td
@@ -257,13 +254,13 @@
             [:p {:class "topic-title"} (s/upper-case (:title topic))])
           (spacer 1)
           [:p {:class "topic-headline"} (:headline topic)]
-          (when data? (spacer 20))
+          (when data? (spacer 4))
           (when data?
             (if (= topic-name "finances")
               (finance-metrics topic currency)
               (growth-metrics topic currency)))
-          (when (and data? body?) (spacer 20))
-          (when (and (not data?) body?) (spacer 2))
+          (when data? (spacer 10))
+          (when body? (spacer 2))
           (when body? (:body topic))
           (spacer 30)]
         [:th {:class "expander"}]]]))

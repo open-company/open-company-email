@@ -152,9 +152,7 @@ table.topic span.label {
 
 img.sparkline, img.sparkbar {
   display: inline-block;
-  vertical-align: bottom;
-  /* TODO remove bottom padding from sparklines
-  vertical-align: text-bottom; */
+  vertical-align: baseline;
 }
 
 /* === Footer === */
