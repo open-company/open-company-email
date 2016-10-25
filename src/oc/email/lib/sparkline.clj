@@ -15,7 +15,7 @@
 (def bar-width-per-datum 10)
 (def height 26)
 (def left-x-offset 6)
-(def top-y-offset 6)
+(def top-y-offset 5)
 (def right-x-offset 5)
 (def bottom-y-offset 5)
 (def buffer-percenct 0.3)

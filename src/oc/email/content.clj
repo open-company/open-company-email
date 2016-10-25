@@ -143,8 +143,8 @@
         formatted-metric-delta (when metric-delta-percent (format-delta metric-delta-percent formatted-prior-date))
         sparkline-metric (when (>= (count spark-periods) 3) (sl/sparkline-html (map :value spark-periods) :blue))
         ;; Format output
-        label [:span [:b metric-name] " " date]
-        sub-label [:span formatted-metric-delta  " " sparkline-metric]
+        label [:span [:b metric-name] " " date " " sparkline-metric]
+        sub-label [:span formatted-metric-delta]
         formatted-value (case unit
                           "%" (str (utils/with-size-label value) "%")
                           "currency" (utils/with-currency currency (utils/with-size-label value))
@@ -221,8 +221,8 @@
       (when revenue?
         [:tr
           [:td 
-            (metric formatted-revenue [:span [:b "Revenue"] " " date]
-              [:span formatted-revenue-delta " " spark-revenue])]])
+            (metric formatted-revenue [:span [:b "Revenue"] " " date " " spark-revenue]
+              [:span formatted-revenue-delta])]])
       (when (and cash? (not revenue?)) 
         [:tr
           [:td
@@ -231,8 +231,8 @@
       (when costs? 
         [:tr
           [:td
-            (metric formatted-costs [:span [:b cost-label] " " date]
-              [:span formatted-costs-delta " " spark-costs])]])
+            (metric formatted-costs [:span [:b cost-label] " " date " " spark-costs]
+              [:span formatted-costs-delta])]])
       (when (and cash? revenue?)
         [:tr
           [:td
