@@ -106,14 +106,14 @@
   (let [pos (when (pos? delta) "+")]
     [:span
       (if (zero? delta) "no change" [:span {:class "metric-diff"} pos (utils/with-size-label delta) "%"])
-      (str " since " prior-date " ")]))
+      (str " since " prior-date)]))
   
   ([currency delta prior-date]
   [:span
    (if (zero? delta)
       "no change"
       [:span {:class "metric-diff"} (utils/with-currency currency (utils/with-size-label delta) true)])
-      (str " since " prior-date " ")]))
+      (str " since " prior-date)]))
 
 (defn- growth-metric [periods metadata currency]
   (let [growth-metric (first periods)
@@ -216,7 +216,7 @@
         cash-flow (- (or revenue 0) (or costs 0))
         runway? (and cash? costs? (or (not revenue?) (> costs revenue)))
         runway (when runway? (utils/calc-runway cash cash-flow))
-        formatted-runway (when runway? (str (utils/get-rounded-runway runway) " runway"))]
+        formatted-runway (when runway? (str ", " (utils/get-rounded-runway runway) " runway"))]
     [:table {:class "finances-metrics"}
       (when revenue?
         [:tr
@@ -237,7 +237,7 @@
         [:tr
           [:td
             (metric formatted-cash [:span [:b "Cash"] " " date]
-              [:span formatted-cash-delta " " formatted-runway])]])]))
+              [:span formatted-cash-delta formatted-runway])]])]))
 
 
 (defn- data-topic [snapshot topic-name topic topic-url]
