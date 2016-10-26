@@ -91,8 +91,8 @@
         bis (java.io.ByteArrayInputStream. ba)
         bi (ImageIO/read bis)
         cropped-bi (.getSubimage bi x-offset y-offset width height)
-        cropped-baos (java.io.ByteArrayOutputStream.)]
-    (ImageIO/write cropped-bi "png" cropped-baos)
+        cropped-baos (java.io.ByteArrayOutputStream.)
+        _for-eastwood (ImageIO/write cropped-bi "png" cropped-baos)]
     cropped-baos))
 
 (defn- sparkchart-file
