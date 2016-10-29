@@ -52,7 +52,7 @@
         inline-file (str uuid-fragment ".inline.html")]
     (try
       (spit html-file (content/snapshot-html (assoc snapshot :note note))) ; create the email in a tmp file
-      (shell/sh "juice" html-file inline-file) ; inline the CSS
+      (shell/sh "juice" "--web-resources-images" "false" html-file inline-file) ; inline the CSS
       (email-snapshots msg (slurp inline-file)) ; email it to the recipients
       (finally
         ; remove the tmp files
@@ -71,7 +71,7 @@
                     (assoc :subject (content/invite-subject message)))]
     (try
       (spit html-file (content/invite-html invitation)) ; create the email in a tmp file
-      (shell/sh "juice" html-file inline-file) ; inline the CSS
+      (shell/sh "juice" "--web-resources-images" "false" html-file inline-file) ; inline the CSS
       (email invitation {:text (content/invite-text invitation)
                          :html (slurp inline-file)}) ; email it to the recipients
       (finally
@@ -85,7 +85,7 @@
 
   (require '[oc.email.mailer :as mailer] :reload)
 
-  (def snapshot (json/decode (slurp "./opt/samples/updates/green-labs.json")))
+  (def snapshot (json/decode (slurp "./opt/samples/snapshots/green-labs.json")))
   (mailer/send-snapshot {:to ["change@me.com"]
                          :reply-to "change@me.com"
                          :subject "Latest GreenLabs Update"

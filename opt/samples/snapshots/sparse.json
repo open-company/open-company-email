@@ -1,0 +1,133 @@
+{
+  "slug" : "update-89df5",
+  "sections" : [ "finances", "growth" ],
+  "logo" : "https://open-company-assets.s3.amazonaws.com/orange-clothes.png",
+  "name" : "Sparse.ly",
+  "title" : "Sparse Update",
+  "author" : {
+    "image" : "https://secure.gravatar.com/avatar/866a6350e399e67e749c6f2aef0b96c0.jpg?s=192&d=https%3A%2F%2Fa.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0020-192.png",
+    "name" : "Sean Johnson",
+    "user-id" : "slack:U06SBTXJR"
+  },
+  "currency" : "FKP",
+  "finances" : {
+    "author" : {
+      "image" : "http://2.gravatar.com/avatar/22bd03ace6f176bfe0c593650bcf45d8?s=48&d=&r=G",
+      "name" : "Nick Newsome",
+      "user-id" : "234567"
+    },
+    "body" : "<p>S p a r s e   F i n a n c e</p>",
+    "created-at" : "2016-08-08T12:59:28.000Z",
+    "data" : [ 
+      {
+      "costs" : 12188,
+      "period" : "2016-10"
+      },
+      {
+      "cash" : 208899,
+      "period" : "2016-09"
+      },
+      {
+      "period" : "2016-08",
+      "revenue" : 145661
+      },
+      {
+      "period" : "2016-07",
+      "revenue" : 132712
+      },
+      {
+      "cash" : 209111,
+      "period" : "2016-06"
+      },
+      {
+      "costs" : 7319,
+      "period" : "2016-05"
+      }
+    ],
+    "description" : "Cash on hand, burn and runway",
+    "headline" : "Sparse is as sparse does...",
+    "title" : "Finances",
+    "updated-at" : "2016-08-08T12:59:28.000Z"
+  },
+    "growth" : {
+    "description" : "Growth metrics and key performance indicators",
+    "updated-at" : "2016-08-24T12:28:41.650Z",
+    "image-url" : null,
+    "headline" : "Sparse is as sparse does...",
+    "image-width" : 0,
+    "section" : "growth",
+    "body-placeholder" : "Provide context about recent growth. Why are these metrics important? How are they performing against targets? What is impacting them?",
+    "image-height" : 0,
+    "title" : "Growth",
+    "author" : {
+      "image" : "https://secure.gravatar.com/avatar/866a6350e399e67e749c6f2aef0b96c0.jpg?s=192&d=https%3A%2F%2Fa.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0020-192.png",
+      "name" : "Sean Johnson",
+      "user-id" : "slack:U06SBTXJR"
+    },
+    "body" : "<p>S p a r s e   G r o w t h</p>",
+    "created-at" : "2016-08-24T12:23:21.032Z",
+    "metrics" : [ {
+      "description" : null,
+      "interval" : "quarterly",
+      "name" : "QAU",
+      "slug" : "qau",
+      "unit" : "number"
+    }, {
+      "description" : null,
+      "interval" : "weekly",
+      "name" : "WAU",
+      "slug" : "wau",
+      "unit" : "number"
+    }, {
+      "description" : null,
+      "interval" : "monthly",
+      "name" : "MAU",
+      "slug" : "mau",
+      "unit" : "number"
+    }],
+    "data" : [ 
+    {
+      "period" : "2016-10-10",
+      "slug" : "wau",
+      "value" : 700
+    }, {
+      "period" : "2016-09-26",
+      "slug" : "wau",
+      "value" : 650
+    }, {
+      "period" : "2016-07",
+      "slug" : "qau",
+      "value" : 3
+    }, {
+      "period" : "2016-01",
+      "slug" : "qau",
+      "value" : 6
+    }, {
+      "period" : "2016-09",
+      "slug" : "mau",
+      "value" : 11111
+    }, {
+      "period" : "2016-08",
+      "slug" : "mau",
+      "value" : 22222
+    }]
+  },
+  "logo-width" : 136,
+  "created-at" : "2016-08-11T12:57:13.633Z",
+  "logo-height" : 136,
+  "links" : [ {
+    "rel" : "self",
+    "method" : "GET",
+    "href" : "/companies/sparse/updates/update-89df5",
+    "type" : "application/vnd.open-company.stakeholder-update.v1+json"
+  }, {
+    "rel" : "company",
+    "method" : "GET",
+    "href" : "/companies/sparse",
+    "type" : "application/vnd.open-company.company.v1+json"
+  }, {
+    "rel" : "delete",
+    "method" : "DELETE",
+    "href" : "/companies/sparse/updates/update-89df5"
+  } ]
+}

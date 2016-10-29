@@ -13,5 +13,9 @@ pom.xml.asc
 /hiccup.html
 /hiccup.inline.html
 
+/*.png
+
 .ruby-gemset
 .ruby-version
+
+.DS_Store
