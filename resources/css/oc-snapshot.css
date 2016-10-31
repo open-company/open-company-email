@@ -72,8 +72,8 @@ table.topic p.topic-title {
   margin-bottom: 5px;
 }
 
-table.topic a.topic-read-more {
-  text-decoration: underline !important;
+table.topic img {
+  max-height: 209px;
 }
 
 table.topic,

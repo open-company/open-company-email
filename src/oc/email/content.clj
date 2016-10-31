@@ -54,11 +54,11 @@
                         :style (str "font-size:" pixels "px;line-height:" pixels "px;")} " "]]]]
             [:th {:class "expander"}]]]]]]))
 
-(defn- topic-image [image-url]
-  [:tr
-    [:th {:class "small-12 large-12 columns first last"}
-      [:center
-        [:img {:src image-url}]]]])
+; (defn- topic-image [image-url]
+;   [:tr
+;     [:th {:class "small-12 large-12 columns first last"}
+;       [:center
+;         [:img {:src image-url}]]]])
 
 (defn- content-topic [snapshot topic-name topic topic-url last-topic?]
   (let [title (:title topic)
@@ -72,21 +72,21 @@
         topic-class (str "row topic" (when last-topic? " last"))]
     (when (or image-url? title? headline? body?)
       [:table {:class topic-class}
-        (when image-url?
-          (topic-image image-url))
-        (when (or title? headline? body?)
-          [:tr
-            [:th {:class "small-12 large-12 columns first last"}
-              (spacer 18)
-              (when title?
-                [:p {:class "topic-title"} (s/upper-case title)])
-              (when title? (spacer 1))
-              (when headline?
-                [:p {:class "topic-headline"} headline])
-              (when body? (spacer 2))
-              (when body? body)
-              (spacer 10)]
-            [:th {:class "expander"}]])])))
+        [:tr
+          [:th {:class "small-12 large-12 columns first last"}
+            (spacer 18)
+            (when title?
+              [:p {:class "topic-title"} (s/upper-case title)])
+            (when title? (spacer 1))
+            (when headline?
+              [:p {:class "topic-headline"} headline])
+            (when image-url? (spacer 2))
+            (when image-url?
+              [:img {:src image-url}])
+            (when body? (spacer 2))
+            (when body? body)
+            (spacer 10)]
+          [:th {:class "expander"}]]])))
 
 (defn- metric
   ([value label sub-label] (metric value label sub-label :nuetral))
