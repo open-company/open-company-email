@@ -60,7 +60,7 @@
       [:center
         [:img {:src image-url}]]]])
 
-(defn- content-topic [snapshot topic-name topic topic-url]
+(defn- content-topic [snapshot topic-name topic topic-url last-topic?]
   (let [title (:title topic)
         title? (not (s/blank? title))
         headline (:headline topic)
@@ -68,9 +68,10 @@
         body (:body topic)
         body? (not (s/blank? body))
         image-url (:image-url topic)
-        image-url? false] ;(not (s/blank? image-url))]
+        image-url? (not (s/blank? image-url))
+        topic-class (str "row topic" (when last-topic? " last"))]
     (when (or image-url? title? headline? body?)
-      [:table {:class "row topic"}
+      [:table {:class topic-class}
         (when image-url?
           (topic-image image-url))
         (when (or title? headline? body?)
@@ -240,7 +241,7 @@
               [:span formatted-cash-delta formatted-runway])]])]))
 
 
-(defn- data-topic [snapshot topic-name topic topic-url]
+(defn- data-topic [snapshot topic-name topic topic-url last-topic?]
   (let [currency (:currency snapshot)
         data? (seq (:data topic))
         body? (not (s/blank? (:body topic)))
@@ -248,8 +249,9 @@
         title (:title topic)
         title? (not (s/blank? title))
         headline (:headline topic)
-        headline? (not (s/blank? headline))]
-    [:table {:class "row topic"}
+        headline? (not (s/blank? headline))
+        topic-class (str "row topic" (when last-topic? " last"))]
+    [:table {:class topic-class}
       [:tr
         [:th {:class "small-12 large-12 columns first last"}
           (when title?
@@ -271,13 +273,13 @@
           (spacer 10)]
         [:th {:class "expander"}]]]))
 
-(defn- topic [snapshot topic-name topic]
+(defn- topic [snapshot topic-name topic last-topic?]
   (let [company-slug (:company-slug snapshot)
         snapshot-slug (:slug snapshot)
         topic-url (s/join "/" [config/web-url company-slug "updates" snapshot-slug (str topic-name "?src=email")])]
     (if (:data topic)
-      (data-topic snapshot topic-name topic topic-url)
-      (content-topic snapshot topic-name topic topic-url))))
+      (data-topic snapshot topic-name topic topic-url last-topic?)
+      (content-topic snapshot topic-name topic topic-url last-topic?))))
 
 (defn- paragraph [content]
   [:table {:class "row"}
@@ -292,11 +294,12 @@
 (defn- snapshot-content [snapshot]
   (let [title? (not (s/blank? (:title snapshot)))]
     [:td
-      (spacer 10 "header")
+      (spacer 10)
       [:table
         [:tr
-          (into [:td] 
-            (map #(topic snapshot % (snapshot (keyword %))) (:sections snapshot)))]]]))
+          (let [topics (:sections snapshot)]
+            (into [:td]
+              (map #(topic snapshot % (snapshot (keyword %)) (= (keyword %) (keyword (last topics)))) topics)))]]]))
 
 (defn- cta-button [cta url]
   [:table {:class "row"}
