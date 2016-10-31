@@ -56,7 +56,7 @@
 
 (defn- topic-image [image-url]
   [:tr
-    [:th
+    [:th {:class "small-12 large-12 columns first last"}
       [:center
         [:img {:src image-url}]]]])
 
@@ -68,7 +68,7 @@
         body (:body topic)
         body? (not (s/blank? body))
         image-url (:image-url topic)
-        image-url? (not (s/blank? image-url))]
+        image-url? false] ;(not (s/blank? image-url))]
     (when (or image-url? title? headline? body?)
       [:table {:class "row topic"}
         (when image-url?
@@ -76,7 +76,7 @@
         (when (or title? headline? body?)
           [:tr
             [:th {:class "small-12 large-12 columns first last"}
-              (spacer 24)
+              (spacer 18)
               (when title?
                 [:p {:class "topic-title"} (s/upper-case title)])
               (when title? (spacer 1))
@@ -84,7 +84,7 @@
                 [:p {:class "topic-headline"} headline])
               (when body? (spacer 2))
               (when body? body)
-              (spacer 20)]
+              (spacer 10)]
             [:th {:class "expander"}]])])))
 
 (defn- metric
@@ -244,17 +244,23 @@
   (let [currency (:currency snapshot)
         data? (seq (:data topic))
         body? (not (s/blank? (:body topic)))
-        view-charts? (> (count (:data topic)) 1)]
+        view-charts? (> (count (:data topic)) 1)
+        title (:title topic)
+        title? (not (s/blank? title))
+        headline (:headline topic)
+        headline? (not (s/blank? headline))]
     [:table {:class "row topic"}
       [:tr
         [:th {:class "small-12 large-12 columns first last"}
-          (when-not (s/blank? (:title topic))
-            (spacer 24))
-          (when-not (s/blank? (:title topic))
-            [:p {:class "topic-title"} (s/upper-case (:title topic))])
-          (spacer 1)
-          [:p {:class "topic-headline"} (:headline topic)]
-          (when data? (spacer 4))
+          (when title?
+            (spacer 18))
+          (when title?
+            [:p {:class "topic-title"} (s/upper-case title)])
+          (when headline?
+            (spacer 1))
+          (when headline?
+            [:p {:class "topic-headline"} headline])
+          (when data? (spacer 8))
           (when data?
             (if (= topic-name "finances")
               (finance-metrics topic currency)
@@ -262,7 +268,7 @@
           (when data? (spacer 10))
           (when body? (spacer 2))
           (when body? (:body topic))
-          (spacer 30)]
+          (spacer 10)]
         [:th {:class "expander"}]]]))
 
 (defn- topic [snapshot topic-name topic]
@@ -286,13 +292,11 @@
 (defn- snapshot-content [snapshot]
   (let [title? (not (s/blank? (:title snapshot)))]
     [:td
-      (spacer 30 "header")
+      (spacer 10 "header")
       [:table
         [:tr
           (into [:td] 
-            (interleave
-              (map #(topic snapshot % (snapshot (keyword %))) (:sections snapshot))
-              (repeat (spacer 15 "header"))))]]]))
+            (map #(topic snapshot % (snapshot (keyword %))) (:sections snapshot)))]]]))
 
 (defn- cta-button [cta url]
   [:table {:class "row"}
@@ -348,12 +352,10 @@
                 (spacer 31 "footer")
                 [:table {:class "row footer"}
                   [:tr
-                    [:th {:class "small-1 large-2 first columns"}]
-                    [:th {:class "small-11 large-8 columns"} 
+                    [:th {:class "small-12 large-12 first columns"} 
                       [:p {:class "text-center"}
                         "Updates by "
-                        [:a {:href "https://opencompany.com/"} "OpenCompany"]]]
-                    [:th {:class "small-1 large-2 last columns"}]]]
+                        [:a {:href "https://opencompany.com/"} "OpenCompany"]]]]]
                 (spacer 28 "footer")]]]]]]])
 
 (defn- body [data]

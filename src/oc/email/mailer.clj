@@ -92,7 +92,14 @@
                          :note "Enjoy this groovy update!"
                          :snapshot (assoc snapshot :company-slug "green-labs")})
 
+  (def snapshot (json/decode (slurp "./opt/samples/snapshots/buff.json")))
+  (mailer/send-snapshot {:to ["change@me.com"]
+                         :reply-to "change@me.com"
+                         :subject "Latest Buffer Update"
+                         :note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week."
+                         :snapshot (assoc snapshot :company-slug "buff")})
+
   (def invite (json/decode (slurp "./opt/samples/invites/microsoft.json")))
-  (mailer/send-invite (assoc invite :to "sean@opencompany.com"))
+  (mailer/send-invite (assoc invite :to "change@me.com"))
 
 )
