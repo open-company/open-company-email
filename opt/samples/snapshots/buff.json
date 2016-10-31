@@ -164,7 +164,7 @@
       "name" : "Joel Gascoigne",
       "user-id" : "123456"
     },
-    "body" : "\n        <p>It can clearly be seen :see_no_evil: in the numbers here that our move from 7-day to 30-day trials for Buffer\n        for Business has significantly impacted metrics (most noticeably MRR).</p>\n        <p>The reason this has stalled our revenue growth is that it created a 30-day gap with no expiring trials\n        and therefore no new converting Buffer for Business customers.</p>\n        <p>This is an expected outcome that we decided was the right move for us to grow Buffer for Business.</p>\n        <p>I'm happy to share that from the trend we've seen for the first week of November, we are seeing an\n        increase in both the number of trials and the conversion rate of trials as a result of moving from 7-day\n        to 30-day trials.</p>",
+    "body" : "\n        <p>It can clearly be seen in the numbers here that our move from 7-day to 30-day trials for Buffer\n        for Business has significantly impacted metrics (most noticeably MRR).</p>\n        <p>The reason this has stalled our revenue growth is that it created a 30-day gap with no expiring trials\n        and therefore no new converting Buffer for Business customers.</p>\n        <p>This is an expected outcome that we decided was the right move for us to grow Buffer for Business.</p>\n        <p>I'm happy to share that from the trend we've seen for the first week of November, we are seeing an\n        increase in both the number of trials and the conversion rate of trials as a result of moving from 7-day\n        to 30-day trials.</p>",
     "created-at" : "2015-11-20T08:00:46.000Z",
     "metrics" : [ {
       "description" : "Total number of registered users",

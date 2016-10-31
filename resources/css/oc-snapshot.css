@@ -127,6 +127,7 @@ table.topic span.metric.neg {
 table.topic span.label {
   padding-left: 7px;
   font-size: 15px !important;
+  line-height: 1.5 !important;
   letter-spacing: 1px;
   margin-bottom: 20px;
 }
