@@ -80,9 +80,10 @@
             (when title? (spacer 1))
             (when headline?
               [:p {:class "topic-headline"} headline])
-            (when image-url? (spacer 2))
+            (when image-url? (spacer 6))
             (when image-url?
               [:img {:src image-url}])
+            (when image-url? (spacer 4))
             (when body? (spacer 2))
             (when body? body)
             (spacer 10)]
