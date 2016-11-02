@@ -460,8 +460,6 @@
   (def data (clean-html (slurp "./resources/invite/cta-button.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (spit "./hiccup.html" (email/html {}))
-
   ;; Generate test email HTML content from various snapshots
 
   (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
