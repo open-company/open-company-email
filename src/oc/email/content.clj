@@ -54,12 +54,6 @@
                         :style (str "font-size:" pixels "px;line-height:" pixels "px;")} " "]]]]
             [:th {:class "expander"}]]]]]]))
 
-; (defn- topic-image [image-url]
-;   [:tr
-;     [:th {:class "small-12 large-12 columns first last"}
-;       [:center
-;         [:img {:src image-url}]]]])
-
 (defn- content-topic [snapshot topic-name topic topic-url last-topic?]
   (let [title (:title topic)
         title? (not (s/blank? title))
