@@ -41,7 +41,7 @@
     }, {
       "description" : null,
       "interval" : "monthly",
-      "name" : "MAU",
+      "name" : "Monthly Average Users",
       "slug" : "mau",
       "unit" : "number"
     }, {

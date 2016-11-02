@@ -18,13 +18,16 @@
     [com.taoensso/timbre "4.8.0-alpha1"] ; Logging https://github.com/ptaoussanis/timbre
     [raven-clj "1.4.3"] ; Interface to Sentry error reporting https://github.com/sethtrain/raven-clj
     [com.stuartsierra/component "0.3.1"] ; Component Lifecycle
-    [amazonica "0.3.76"] ; A comprehensive Clojure client for the entire Amazon AWS api https://github.com/mcohen01/amazonica
+    [amazonica "0.3.77"] ; A comprehensive Clojure client for the entire Amazon AWS api https://github.com/mcohen01/amazonica
     [hiccup "1.0.5"] ; HTML rendering https://github.com/weavejester/hiccup
     [cheshire "5.6.3"] ; JSON encoding / decoding https://github.com/dakrone/cheshire
     [manifold "0.1.6-alpha3"] ; Async programming tools https://github.com/ztellman/manifold
     [clj-time "0.12.0"] ; Date and time lib https://github.com/clj-time/clj-time
-    [open-company/lib "0.0.4.2-6cdf3dd"] ; Library for OC projects https://github.com/open-company/open-company-lib
+    [jfree/jfreechart "1.0.13"] ; Java chart library http://www.jfree.org/jfreechart/
+    [open-company/lib "0.0.5-5899489"] ; Library for OC projects https://github.com/open-company/open-company-lib
   ]
+
+  :repositories [["jfreechart" "http://central.maven.org/maven2/"]]
 
   ;; All profile plugins
   :plugins [
@@ -53,6 +56,7 @@
         :aws-secret-access-key "CHANGE-ME"
         :aws-endpoint "us-east-1"
         :aws-sqs-email-queue "https://sqs.REGION.amazonaws.com/CHANGE/ME"
+        :aws-s3-chart-bucket "open-company-chart-dev"
         :email-from-domain "staging.opencompany.com"
         :intro "true"
       }

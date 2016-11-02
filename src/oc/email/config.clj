@@ -17,13 +17,21 @@
 
 (defonce web-url (or (env :oc-web-url) "http://localhost:3559"))
 
-;; ----- AWS SQS / SES -----
+;; ----- AWS -----
 
 (defonce aws-access-key-id (env :aws-access-key-id))
 (defonce aws-secret-access-key (env :aws-secret-access-key))
+(defonce aws-creds {:access-key aws-access-key-id
+                    :secret-key aws-secret-access-key})
 (defonce aws-endpoint (env :aws-endpoint))
 
+;; ----- AWS SQS -----
+
 (defonce aws-sqs-email-queue (env :aws-sqs-email-queue))
+
+;; ----- AWS S3 -----
+
+(defonce aws-s3-chart-bucket (env :aws-s3-chart-bucket))
 
 ;; ----- Email -----
 
