@@ -72,10 +72,6 @@ table.topic p.topic-title {
   margin-bottom: 5px;
 }
 
-table.topic img {
-  max-height: 209px;
-}
-
 table.topic,
 table.topic p,
 table.topic ul {
