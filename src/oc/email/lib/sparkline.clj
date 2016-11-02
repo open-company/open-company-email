@@ -164,15 +164,4 @@
   (sl/sparkline-html [1.1 2.1 3.2 3.3 5.8 4.7])
   (sl/sparkbar-html [1100 2100 3200 3300 5800] :red)
 
-  ; Export
-  (def c (sl/sparkchart :line [1.1 2.1 3.2 3.3] :black))
-  (def b (java.io.ByteArrayOutputStream.))
-  (ChartUtilities/writeChartAsPNG b c 80 26)
-  ; Crop
-  (import '[javax.imageio ImageIO])
-  (def ba (.toByteArray b))
-  (def bis (java.io.ByteArrayInputStream. ba))
-  (def bi (ImageIO/read bis)) ; 80x26 buffered image
-  (def cropped (.getSubimage bi 6 6 69 15))
-  (ImageIO/write cropped "png" (java.io.File. "./crop.png"))
 )
