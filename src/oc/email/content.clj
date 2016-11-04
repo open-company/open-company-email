@@ -251,14 +251,12 @@
             [:p {:class "topic-title"} (s/upper-case title)])
           (when headline?
             [:p {:class "topic-headline"} headline])
-          (when data? (spacer 8))
           (when data?
             (if (= topic-name "finances")
               (finance-metrics topic currency)
               (growth-metrics topic currency)))
-          (when (and data? body?) (spacer 12))
           (when body? (:body topic))
-          (spacer 10)]
+          (when body? (spacer 10))]
         [:th {:class "expander"}]]]))
 
 (defn- topic [snapshot topic-name topic last-topic?]
