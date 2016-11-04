@@ -13,16 +13,16 @@
 
   ;; All profile dependencies
   :dependencies [
-    [org.clojure/clojure "1.9.0-alpha13"] ; Lisp on the JVM http://clojure.org/documentation
+    [org.clojure/clojure "1.9.0-alpha14"] ; Lisp on the JVM http://clojure.org/documentation
     [environ "1.1.0"] ; Environment settings from different sources https://github.com/weavejester/environ
     [com.taoensso/timbre "4.8.0-alpha1"] ; Logging https://github.com/ptaoussanis/timbre
-    [raven-clj "1.4.3"] ; Interface to Sentry error reporting https://github.com/sethtrain/raven-clj
+    [raven-clj "1.5.0"] ; Interface to Sentry error reporting https://github.com/sethtrain/raven-clj
     [com.stuartsierra/component "0.3.1"] ; Component Lifecycle
     [amazonica "0.3.77"] ; A comprehensive Clojure client for the entire Amazon AWS api https://github.com/mcohen01/amazonica
     [hiccup "1.0.5"] ; HTML rendering https://github.com/weavejester/hiccup
     [cheshire "5.6.3"] ; JSON encoding / decoding https://github.com/dakrone/cheshire
     [manifold "0.1.6-alpha3"] ; Async programming tools https://github.com/ztellman/manifold
-    [clj-time "0.12.0"] ; Date and time lib https://github.com/clj-time/clj-time
+    [clj-time "0.12.2"] ; Date and time lib https://github.com/clj-time/clj-time
     [jfree/jfreechart "1.0.13"] ; Java chart library http://www.jfree.org/jfreechart/
     [open-company/lib "0.0.5-5899489"] ; Library for OC projects https://github.com/open-company/open-company-lib
   ]
@@ -61,7 +61,7 @@
         :intro "true"
       }
       :dependencies [
-        [hickory "0.6.0"] ; HTML as data https://github.com/davidsantiago/hickory
+        [hickory "0.7.0"] ; HTML as data https://github.com/davidsantiago/hickory
       ]
       :plugins [
         [lein-bikeshed "0.3.0"] ; Check for code smells https://github.com/dakrone/lein-bikeshed
