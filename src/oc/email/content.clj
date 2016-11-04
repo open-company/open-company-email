@@ -462,6 +462,8 @@
 
   ;; Generate test email HTML content from various snapshots
 
+  (require '[oc.email.content :as content] :reload)
+
   (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
   (def snapshot (json/decode (slurp "./opt/samples/snapshots/green-labs.json")))
   (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note note) (assoc :company-slug "green-labs"))))

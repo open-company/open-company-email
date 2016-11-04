@@ -2,7 +2,8 @@
   (:require [clojure.java.io :as io]
             [amazonica.aws.s3 :as s3]
             [oc.email.config :as config])
-  (:import [java.awt.geom Ellipse2D$Double]
+  (:import [java.awt BasicStroke]
+           [java.awt.geom Ellipse2D$Double]
            [javax.imageio ImageIO]
            [org.jfree.data.category DefaultCategoryDataset]
            [org.jfree.chart ChartFactory JFreeChart ChartColor ChartUtilities]
@@ -11,14 +12,18 @@
            [org.jfree.ui RectangleInsets]))
 
 ;; Sparkline generation constants
-(def line-width-per-datum 15)
-(def bar-width-per-datum 10)
-(def height 26)
-(def left-x-offset 6)
-(def top-y-offset 5)
-(def right-x-offset 5)
-(def bottom-y-offset 5)
-(def buffer-percenct 0.3)
+(def retina-factor 4)
+(def line-width-per-datum (* 15 retina-factor))
+(def bar-width-per-datum (* 10  retina-factor))
+(def height (* 26 retina-factor))
+(def left-x-offset (* 6 retina-factor))
+(def top-y-offset (* 5 retina-factor))
+(def right-x-offset (* 5 retina-factor))
+(def bottom-y-offset (* 5 retina-factor))
+(def line-stroke (* 1.0 retina-factor))
+(def point-offset (* -2.0 retina-factor))
+(def point-diameter (* 4.0 retina-factor))
+(def buffer-percenct 0.35)
 
 (def s3-url-fragment "s3.amazonaws.com")
 
@@ -45,7 +50,7 @@
         range-axis (.getRangeAxis plot)
         domain-axis (.getDomainAxis plot)
         renderer (if line? (LineAndShapeRenderer.) (BarRenderer.))
-        circle (java.awt.geom.Ellipse2D$Double. -2.0, -2.0, 4.0, 4.0)
+        circle (java.awt.geom.Ellipse2D$Double. point-offset, point-offset, point-diameter, point-diameter)
         nothing (RectangleInsets. 0.0 0.0 0.0 0.0)
         color (or (colors color) (:black colors))
         min-point (apply min data)
@@ -67,6 +72,7 @@
     (.setRenderer plot renderer)
     (.setSeriesPaint renderer 0 color)
     (when line?
+      (.setSeriesStroke renderer 0 (BasicStroke. line-stroke))
       (.setSeriesShape renderer 0 circle)
       (.setLowerBound range-axis min-range)
       (.setUpperBound range-axis max-range))
@@ -129,11 +135,17 @@
     ;; Crop the bytes
     (let [crop-width (+ left-x-offset right-x-offset)
           crop-height (+ top-y-offset bottom-y-offset)
-          cropped-baos (crop baos left-x-offset top-y-offset (- width crop-width) (- height crop-height))]
+          cropped-width (- width crop-width)
+          cropped-height (- height crop-height)
+          cropped-baos (crop baos left-x-offset top-y-offset cropped-width cropped-height)
+          html-width (int (/ cropped-width retina-factor))
+          html-height (int (/ cropped-height retina-factor))]
       ;; Async S3 U/L
-      (future (s3-upload cropped-baos file-name)))
-    ;; hiccup style HTML response
-    [:img {:src file-url :alt label :class klass}]))
+      (future (s3-upload cropped-baos file-name))
+      ;; hiccup style HTML response
+      [:img {:src file-url :alt label :class klass
+             :width html-width :height html-height
+             :style (str "max-width:" html-width "px;" " max-height:" html-height "px;")}])))
 
 (defn sparkline-file
   ([data file-name] (sparkline-file data file-name default-color))
