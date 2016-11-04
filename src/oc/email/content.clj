@@ -71,16 +71,12 @@
             (spacer 18)
             (when title?
               [:p {:class "topic-title"} (s/upper-case title)])
-            (when title? (spacer 1))
             (when headline?
               [:p {:class "topic-headline"} headline])
-            (when image-url? (spacer 10))
             (when image-url?
-              [:img {:src image-url}])
-            (when image-url? (spacer 8))
-            (when body? (spacer 2))
+              [:img {:class "topic-image" :src image-url}])
             (when body? body)
-            (spacer 10)]
+            (when body? (spacer 10))]
           [:th {:class "expander"}]]])))
 
 (defn- metric
@@ -254,16 +250,13 @@
           (when title?
             [:p {:class "topic-title"} (s/upper-case title)])
           (when headline?
-            (spacer 1))
-          (when headline?
             [:p {:class "topic-headline"} headline])
           (when data? (spacer 8))
           (when data?
             (if (= topic-name "finances")
               (finance-metrics topic currency)
               (growth-metrics topic currency)))
-          (when data? (spacer 10))
-          (when body? (spacer 2))
+          (when (and data? body?) (spacer 12))
           (when body? (:body topic))
           (spacer 10)]
         [:th {:class "expander"}]]]))
@@ -289,7 +282,6 @@
 (defn- snapshot-content [snapshot]
   (let [title? (not (s/blank? (:title snapshot)))]
     [:td
-      (spacer 10)
       [:table
         [:tr
           (let [topics (:sections snapshot)]
@@ -414,6 +406,7 @@
   
   ;; For REPL testing and content development
 
+  (require '[hickory.core :as hickory])
   (require '[oc.email.content :as content] :reload)
 
   ;; Recreate hiccup from various HTML fragments

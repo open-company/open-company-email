@@ -92,6 +92,10 @@ table.topic h4 {
   color: #0A0A0A;
 }
 
+table.topic img.topic-image {
+  padding: 10px 0 10px 0;
+}
+
 /* Data Topic */
 
 table.topic span.metric {
