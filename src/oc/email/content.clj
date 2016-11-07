@@ -123,7 +123,7 @@
                             (take (count (utils/contiguous (map :period periods) (keyword interval))) periods))
         prior-contiguous? (>= (count contiguous-periods) 2)
         sparkline? (>= (count contiguous-periods) 3) ; sparklines are possible at 3 or more
-        spark-periods (when sparkline? (reverse (take 4 contiguous-periods))) ; 3-4 periods for potential sparklines
+        spark-periods (when sparkline? (reverse (take-while #(number? (:value %)) (take 4 contiguous-periods)))) ; 3-4 periods for potential sparklines
         ;; Info on prior period
         prior-metric (when prior-contiguous? (second contiguous-periods))
         prior-period (when (and interval prior-metric) (utils/parse-period interval (:period prior-metric)))
@@ -190,7 +190,7 @@
         revenue-delta (when (and revenue? prior-revenue) (- revenue prior-revenue))
         revenue-delta-percent (when revenue-delta (* 100 (float (/ revenue-delta prior-revenue))))
         formatted-revenue-delta (when revenue-delta-percent (format-delta revenue-delta-percent prior-date))
-        spark-revenue-periods (when spark-periods (reverse (take-while #(not (nil? (:revenue %))) spark-periods)))
+        spark-revenue-periods (when spark-periods (reverse (take-while #(number? (:revenue %)) spark-periods)))
         spark-revenue (when (>= (count spark-revenue-periods) 3)
                         (sl/sparkline-html (map :revenue spark-revenue-periods) :green))
         ;; Info on costs/expenses
@@ -201,7 +201,7 @@
         costs-delta (when (and costs? prior-costs) (- costs prior-costs))
         costs-delta-percent (when costs-delta (* 100 (float (/ costs-delta prior-costs))))
         formatted-costs-delta (when costs-delta-percent (format-delta costs-delta-percent prior-date))        
-        spark-costs-periods (when spark-periods (reverse (take-while #(not (nil? (:costs %))) spark-periods)))
+        spark-costs-periods (when spark-periods (reverse (take-while #(number? (:costs %)) spark-periods)))
         spark-costs (when (>= (count spark-costs-periods) 3) (sl/sparkline-html (map :costs spark-costs-periods) :red))
         cost-label (if revenue? "Expenses" "Burn")
         ;; Info on runway (calculated) 
