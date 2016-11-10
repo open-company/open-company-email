@@ -24,7 +24,7 @@
     [manifold "0.1.6-alpha3"] ; Async programming tools https://github.com/ztellman/manifold
     [clj-time "0.12.2"] ; Date and time lib https://github.com/clj-time/clj-time
     [jfree/jfreechart "1.0.13"] ; Java chart library http://www.jfree.org/jfreechart/
-    [open-company/lib "0.0.5-5899489"] ; Library for OC projects https://github.com/open-company/open-company-lib
+    [open-company/lib "0.0.6-04c024d"] ; Library for OC projects https://github.com/open-company/open-company-lib
   ]
 
   :repositories [["jfreechart" "http://central.maven.org/maven2/"]]
@@ -59,12 +59,13 @@
         :aws-s3-chart-bucket "open-company-chart-dev"
         :email-from-domain "staging.opencompany.com"
         :intro "true"
+        :log-level "debug"
       }
       :dependencies [
         [hickory "0.7.0"] ; HTML as data https://github.com/davidsantiago/hickory
       ]
       :plugins [
-        [lein-bikeshed "0.3.0"] ; Check for code smells https://github.com/dakrone/lein-bikeshed
+        [lein-bikeshed "0.4.0"] ; Check for code smells https://github.com/dakrone/lein-bikeshed
         [lein-checkall "0.1.1"] ; Runs bikeshed, kibit and eastwood https://github.com/itang/lein-checkall
         [lein-pprint "1.1.2"] ; pretty-print the lein project map https://github.com/technomancy/leiningen/tree/master/lein-pprint
         [lein-ancient "0.6.10"] ; Check for outdated dependencies https://github.com/xsc/lein-ancient

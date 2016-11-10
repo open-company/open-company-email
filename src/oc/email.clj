@@ -9,9 +9,9 @@
             [oc.email.mailer :as mailer]))
 
 (defn system [config-options]
-  (let [{:keys [sqs-queue sqs-msg-handler]} config-options]
+  (let [{:keys [sqs-creds sqs-queue-url sqs-msg-handler]} config-options]
     (component/system-map
-      :sqs (sqs/sqs-listener sqs-queue sqs-msg-handler))))
+      :sqs (sqs/sqs-listener sqs-creds sqs-queue-url sqs-msg-handler))))
 
 (defn sqs-handler [sys msg]
   (let [msg-body (read-string (:body msg))
@@ -28,9 +28,9 @@
   ;; Log errors to Sentry
   (if c/dsn
     (timbre/merge-config!
-      {:level     :info
+      {:level (keyword c/log-level)
        :appenders {:sentry (sentry/sentry-appender c/dsn)}})
-    (timbre/merge-config! {:level :debug}))
+    (timbre/merge-config! {:level (keyword c/log-level)}))
 
   ;; Uncaught exceptions go to Sentry
   (Thread/setDefaultUncaughtExceptionHandler
@@ -38,6 +38,7 @@
      (uncaughtException [_ thread ex]
        (timbre/error ex "Uncaught exception on" (.getName thread) (.getMessage ex)))))
 
+  ;; Echo config information
   (println (str "\n"
     (when c/intro? (str (slurp (clojure.java.io/resource "oc/assets/ascii_art.txt")) "\n"))
     "OpenCompany Email Service\n\n"
@@ -45,8 +46,11 @@
     "Sentry: " c/dsn "\n\n"
     (when c/intro? "Ready to serve...\n")))
 
-  (component/start (system {:sqs-queue c/aws-sqs-email-queue
-                            :sqs-msg-handler sqs-handler}))
+  ;; Start the system, which will start long polling SQS
+  (component/start (system {:sqs-queue-url c/aws-sqs-email-queue
+                            :sqs-msg-handler sqs-handler
+                            :sqs-creds {:access-key c/aws-access-key-id
+                                        :secret-key c/aws-secret-access-key}}))
 
   (deref (stream/take! (stream/stream)))) ; block forever
 
