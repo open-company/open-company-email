@@ -59,7 +59,6 @@ table.topic p.topic-headline {
   color: #0A0A0A;
   font-family: Domine-Regular, Georgia, serif !important;
   line-height: 1.5;
-  margin-bottom: 0px;
 }
 
 table.topic p.topic-title {
@@ -92,7 +91,15 @@ table.topic h4 {
   color: #0A0A0A;
 }
 
+table.topic img.topic-image {
+  padding: 10px 0 10px 0;
+}
+
 /* Data Topic */
+
+table.finances-metrics, table.growth-metrics {
+  margin: 10px 0 10px 0;
+}
 
 table.topic span.metric {
   font-family: OpenSans, Arial, sans-serif !important;

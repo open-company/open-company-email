@@ -71,16 +71,12 @@
             (spacer 18)
             (when title?
               [:p {:class "topic-title"} (s/upper-case title)])
-            (when title? (spacer 1))
             (when headline?
               [:p {:class "topic-headline"} headline])
-            (when image-url? (spacer 10))
             (when image-url?
-              [:img {:src image-url}])
-            (when image-url? (spacer 8))
-            (when body? (spacer 2))
+              [:img {:class "topic-image" :src image-url}])
             (when body? body)
-            (spacer 10)]
+            (when body? (spacer 10))]
           [:th {:class "expander"}]]])))
 
 (defn- metric
@@ -127,7 +123,7 @@
                             (take (count (utils/contiguous (map :period periods) (keyword interval))) periods))
         prior-contiguous? (>= (count contiguous-periods) 2)
         sparkline? (>= (count contiguous-periods) 3) ; sparklines are possible at 3 or more
-        spark-periods (when sparkline? (reverse (take 4 contiguous-periods))) ; 3-4 periods for potential sparklines
+        spark-periods (when sparkline? (reverse (take-while #(number? (:value %)) (take 4 contiguous-periods)))) ; 3-4 periods for potential sparklines
         ;; Info on prior period
         prior-metric (when prior-contiguous? (second contiguous-periods))
         prior-period (when (and interval prior-metric) (utils/parse-period interval (:period prior-metric)))
@@ -194,7 +190,7 @@
         revenue-delta (when (and revenue? prior-revenue) (- revenue prior-revenue))
         revenue-delta-percent (when revenue-delta (* 100 (float (/ revenue-delta prior-revenue))))
         formatted-revenue-delta (when revenue-delta-percent (format-delta revenue-delta-percent prior-date))
-        spark-revenue-periods (when spark-periods (reverse (take-while #(not (nil? (:revenue %))) spark-periods)))
+        spark-revenue-periods (when spark-periods (reverse (take-while #(number? (:revenue %)) spark-periods)))
         spark-revenue (when (>= (count spark-revenue-periods) 3)
                         (sl/sparkline-html (map :revenue spark-revenue-periods) :green))
         ;; Info on costs/expenses
@@ -205,7 +201,7 @@
         costs-delta (when (and costs? prior-costs) (- costs prior-costs))
         costs-delta-percent (when costs-delta (* 100 (float (/ costs-delta prior-costs))))
         formatted-costs-delta (when costs-delta-percent (format-delta costs-delta-percent prior-date))        
-        spark-costs-periods (when spark-periods (reverse (take-while #(not (nil? (:costs %))) spark-periods)))
+        spark-costs-periods (when spark-periods (reverse (take-while #(number? (:costs %)) spark-periods)))
         spark-costs (when (>= (count spark-costs-periods) 3) (sl/sparkline-html (map :costs spark-costs-periods) :red))
         cost-label (if revenue? "Expenses" "Burn")
         ;; Info on runway (calculated) 
@@ -254,18 +250,13 @@
           (when title?
             [:p {:class "topic-title"} (s/upper-case title)])
           (when headline?
-            (spacer 1))
-          (when headline?
             [:p {:class "topic-headline"} headline])
-          (when data? (spacer 8))
           (when data?
             (if (= topic-name "finances")
               (finance-metrics topic currency)
               (growth-metrics topic currency)))
-          (when data? (spacer 10))
-          (when body? (spacer 2))
           (when body? (:body topic))
-          (spacer 10)]
+          (when body? (spacer 10))]
         [:th {:class "expander"}]]]))
 
 (defn- topic [snapshot topic-name topic last-topic?]
@@ -289,7 +280,6 @@
 (defn- snapshot-content [snapshot]
   (let [title? (not (s/blank? (:title snapshot)))]
     [:td
-      (spacer 10)
       [:table
         [:tr
           (let [topics (:sections snapshot)]
@@ -414,6 +404,7 @@
   
   ;; For REPL testing and content development
 
+  (require '[hickory.core :as hickory])
   (require '[oc.email.content :as content] :reload)
 
   ;; Recreate hiccup from various HTML fragments
@@ -461,6 +452,8 @@
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
   ;; Generate test email HTML content from various snapshots
+
+  (require '[oc.email.content :as content] :reload)
 
   (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
   (def snapshot (json/decode (slurp "./opt/samples/snapshots/green-labs.json")))
