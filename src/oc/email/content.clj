@@ -1,13 +1,16 @@
 (ns oc.email.content
   (:require [clojure.string :as s]
-            [clj-time.format :as f]
+            [clj-time.format :as format]
             [hiccup.core :as h]
             [clojure.walk :refer (keywordize-keys)]
             [oc.email.config :as config]
             [oc.email.lib.sparkline :as sl]
             [oc.lib.data.utils :as utils]))
 
-(def month-formatter (f/formatter "MMM"))
+(def month-formatter (format/formatter "MMM"))
+
+(def iso-format (format/formatters :date-time)) ; ISO 8601
+(def link-format (format/formatter "YYYY-MM-dd")) ; Format for date in URL of stakeholder-update links
 
 (def doc-type "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
 
@@ -163,8 +166,8 @@
   (let [sorted-finances (reverse (sort-by :period (:data topic)))
         ;; Most recent finances
         finances (first sorted-finances)
-        period (f/parse utils/monthly-period (:period finances))
-        date (s/upper-case (f/unparse utils/monthly-date period))
+        period (format/parse utils/monthly-period (:period finances))
+        date (s/upper-case (format/unparse utils/monthly-date period))
         ;; Check for older periods contiguous to most recent
         contiguous-periods (when (seq sorted-finances)
                             (take (count (utils/contiguous (map :period sorted-finances))) sorted-finances))
@@ -173,8 +176,8 @@
         spark-periods (when sparkline? (take 4 contiguous-periods)) ; 3-4 periods for potential sparklines
         ;; Info on prior period
         prior-finances (when prior-contiguous? (second contiguous-periods))
-        prior-period (when prior-finances (f/parse utils/monthly-period (:period prior-finances)))
-        prior-date (when prior-period (s/upper-case (f/unparse month-formatter prior-period)))
+        prior-period (when prior-finances (format/parse utils/monthly-period (:period prior-finances)))
+        prior-date (when prior-period (s/upper-case (format/unparse month-formatter prior-period)))
         ;; Info on cash
         cash (:cash finances)
         cash? (utils/not-zero? cash)
@@ -321,6 +324,31 @@
       (spacer 30)
       (paragraph tagline)]))
 
+(defn- snapshot-link-content [snapshot]
+  (let [logo-url (:logo snapshot)
+        logo? (not (s/blank? logo-url))
+        company-name (:name snapshot)
+        company-name? (not (s/blank? company-name))
+        title (:title snapshot)
+        title? (not (s/blank? title))
+        company-slug (:company-slug snapshot)
+        update-slug (:slug snapshot)
+        origin-url (:origin-url snapshot)
+        created-at (format/parse iso-format (:created-at snapshot))
+        update-time (format/unparse link-format created-at)
+        update-url (s/join "/" [origin-url company-slug "updates" update-time update-slug])]
+    [:td
+      (when logo? (spacer 20))
+      (when logo? (logo logo-url company-name))
+      (spacer 15)
+      (paragraph [:span "Check out the latest"
+                        (when company-name? (str " from " company-name))
+                        (if title? ":" "!")])
+      (when title?
+        (paragraph [:a {:href update-url} title]))
+      (spacer 15)
+      (cta-button "READ THE UPDATE ➞" update-url)]))
+
 (defn- note [snapshot]
   [:table {:class "note"}
     [:tr
@@ -358,6 +386,7 @@
                 [:tr
                   (case type
                     :snapshot (snapshot-content data)
+                    :snapshot-link (snapshot-link-content data)
                     :invite (invite-content data))]]]
             (when (= type :snapshot) (footer))]]]]))
 
@@ -386,6 +415,9 @@
         prefix (if (s/blank? from) "You've been invited" (str from " invited you"))
         company (if (s/blank? company-name) "" (str company-name " on "))]
     (str prefix " to join " company "OpenCompany.")))
+
+(defn snapshot-link-html [snapshot]
+  (html snapshot :snapshot-link))
 
 (defn snapshot-html [snapshot]
   (html snapshot :snapshot))

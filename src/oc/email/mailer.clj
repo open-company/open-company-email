@@ -3,10 +3,13 @@
             [clojure.java.shell :as shell]
             [clojure.java.io :as io]
             [clojure.walk :refer (keywordize-keys)]
-            [oc.email.config :as c]
             [taoensso.timbre :as timbre]
             [amazonica.aws.simpleemail :as ses]
+            [raven-clj.core :as sentry]
+            [oc.email.config :as c]
             [oc.email.content :as content]))
+
+(def size-limit 100000) ; 100KB size limit of HTML content in GMail
 
 (def creds
   {:access-key c/aws-access-key-id
@@ -44,16 +47,37 @@
                     {:html body})
               to))))
 
+(defn- inline-css [html-file inline-file]
+  (shell/sh "juice" "--web-resources-images" "false" html-file inline-file))
+
 (defn send-snapshot
   "Create an HTML snapshot and email it to the specified recipients."
-  [{note :note snapshot :snapshot :as msg}]
-  (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
+  [{note :note snapshot :snapshot origin-url :origin-url :as msg}]
+  (let [full-snapshot (-> snapshot 
+                        (assoc :note note)
+                        (assoc :origin-url origin-url))
+        uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
         html-file (str uuid-fragment ".html")
         inline-file (str uuid-fragment ".inline.html")]
     (try
-      (spit html-file (content/snapshot-html (assoc snapshot :note note))) ; create the email in a tmp file
-      (shell/sh "juice" "--web-resources-images" "false" html-file inline-file) ; inline the CSS
-      (email-snapshots msg (slurp inline-file)) ; email it to the recipients
+      (spit html-file (content/snapshot-html full-snapshot)) ; create the email in a tmp file
+      (inline-css html-file inline-file) ; inline the CSS
+      (let [file-size (.length (io/file inline-file))]
+        (when (>= file-size size-limit)
+          ;; Send a Sentry notification
+          (when c/dsn ; Sentry is configured
+            (sentry/capture c/dsn {:message (str "Rendered update email is over size limit at "
+                                                 (int (Math/ceil (/ file-size 1000)))
+                                                 "KB")
+                                   :extra {
+                                      :company-slug (:company-slug snapshot)
+                                      :update-slug (:slug snapshot)
+                                      :topic-count (count (:sections snapshot))}}))
+          ;; Render an alternative, smaller email
+          (spit html-file (content/snapshot-link-html full-snapshot)) ; create the email in a tmp file
+          (inline-css html-file inline-file))) ; inline the CSS
+      ;; Email the recipients
+      (email-snapshots msg (slurp inline-file))
       (finally
         ; remove the tmp files
         (io/delete-file html-file true)
@@ -71,7 +95,7 @@
                     (assoc :subject (content/invite-subject message)))]
     (try
       (spit html-file (content/invite-html invitation)) ; create the email in a tmp file
-      (shell/sh "juice" "--web-resources-images" "false" html-file inline-file) ; inline the CSS
+      (inline-css html-file inline-file) ; inline the CSS
       (email invitation {:text (content/invite-text invitation)
                          :html (slurp inline-file)}) ; email it to the recipients
       (finally
@@ -90,6 +114,7 @@
                          :reply-to "change@me.com"
                          :subject "Latest GreenLabs Update"
                          :note "Enjoy this groovy update!"
+                         :origin "http://localhost:3559"
                          :snapshot (assoc snapshot :company-slug "green-labs")})
 
   (def snapshot (json/decode (slurp "./opt/samples/snapshots/buff.json")))
@@ -97,6 +122,7 @@
                          :reply-to "change@me.com"
                          :subject "Latest Buffer Update"
                          :note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week."
+                         :origin "http://localhost:3559"
                          :snapshot (assoc snapshot :company-slug "buff")})
 
   (def invite (json/decode (slurp "./opt/samples/invites/microsoft.json")))

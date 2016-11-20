@@ -7,6 +7,8 @@
   [val]
   (boolean (Boolean/valueOf val)))
 
+;; ----- System -----
+
 (defonce intro? (bool (or (env :intro ) false)))
 
 ;; ----- Logging -----
