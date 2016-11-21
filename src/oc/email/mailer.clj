@@ -48,7 +48,12 @@
               to))))
 
 (defn- inline-css [html-file inline-file]
-  (shell/sh "juice" "--web-resources-images" "false" html-file inline-file))
+  (shell/sh "juice" 
+            "--web-resources-images" "false"
+            "--remove-style-tags" "true"
+            "--preserve-media-queries" "false"
+            "--preserve-font-faces" "false"
+            html-file inline-file))
 
 (defn send-snapshot
   "Create an HTML snapshot and email it to the specified recipients."
@@ -76,7 +81,7 @@
           ;; Render an alternative, smaller email
           (spit html-file (content/snapshot-link-html full-snapshot)) ; create the email in a tmp file
           (inline-css html-file inline-file))) ; inline the CSS
-      ;; Email the recipients
+      ; Email the recipients
       (email-snapshots msg (slurp inline-file))
       (finally
         ; remove the tmp files
