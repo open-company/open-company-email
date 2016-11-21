@@ -325,37 +325,35 @@
       (paragraph tagline)]))
 
 (defn- snapshot-link-content [snapshot]
-  (let [logo-url (:logo snapshot)
-        logo? (not (s/blank? logo-url))
-        company-name (:name snapshot)
+  (let [company-name (:name snapshot)
         company-name? (not (s/blank? company-name))
         title (:title snapshot)
         title? (not (s/blank? title))
+        link-title (if title? title (str company-name " Update"))
         company-slug (:company-slug snapshot)
         update-slug (:slug snapshot)
         origin-url (:origin-url snapshot)
         created-at (format/parse iso-format (:created-at snapshot))
         update-time (format/unparse link-format created-at)
         update-url (s/join "/" [origin-url company-slug "updates" update-time update-slug])]
-    [:td
-      (when logo? (spacer 20))
-      (when logo? (logo logo-url company-name))
-      (spacer 15)
-      (paragraph [:span "Check out the latest"
-                        (when company-name? (str " from " company-name))
-                        (if title? ":" "!")])
-      (when title?
-        (paragraph [:a {:href update-url} title]))
-      (spacer 15)
-      (cta-button "READ THE UPDATE ➞" update-url)]))
+    [:table {:class "note"}
+      [:tr
+        [:td 
+          [:table {:class "row note"}
+            [:tr
+              [:th {:class "small-12 large-12 first last columns note"}
+                "Check out the latest"
+                (when company-name? (str " from " company-name))
+                ": " [:a {:href update-url} link-title]]]]]]]))
 
-(defn- note [snapshot]
+(defn- note 
+  [snapshot trail-space?]
   [:table {:class "note"}
     [:tr
       [:td
-        (spacer 20 "note")
+        (spacer 15 "note")
         (message snapshot)
-        (spacer 22 "note")]]])
+        (when trail-space? (spacer 22 "note"))]]])
 
 (defn- footer []
   [:table {:class "footer"}
@@ -375,19 +373,22 @@
                 (spacer 28 "footer")]]]]]]])
 
 (defn- body [data]
-  (let [type (:type data)]
+  (let [type (:type data)
+        trail-space? (not= type :snapshot-link)]
     [:body
       [:table {:class "body"}
         [:tr
           [:td {:class "float-center", :align "center", :valign "top"}
-            (when-not (s/blank? (:note data)) (note data))
-            [:center
-              [:table {:class "container"}
-                [:tr
-                  (case type
-                    :snapshot (snapshot-content data)
-                    :snapshot-link (snapshot-link-content data)
-                    :invite (invite-content data))]]]
+            (when-not (s/blank? (:note data)) (note data trail-space?))
+            (when (and (s/blank? (:note data)) (= type :snapshot-link)) (spacer 15 "note"))
+            (if (= type :snapshot-link)
+              (snapshot-link-content data)     
+              [:center
+                [:table {:class "container"}
+                  [:tr
+                    (case type
+                      :snapshot (snapshot-content data)
+                      :invite (invite-content data))]]])
             (when (= type :snapshot) (footer))]]]]))
 
 (defn- head [data]
@@ -489,7 +490,9 @@
 
   (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
   (def snapshot (json/decode (slurp "./opt/samples/snapshots/green-labs.json")))
-  (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note note) (assoc :company-slug "green-labs"))))
+  (spit "./hiccup.html" (content/snapshot-link-html (-> snapshot (assoc :note note) (assoc :company-slug "green-labs"))))
+
+  (spit "./hiccup.html" (content/snapshot-link-html (-> snapshot (assoc :note note) (assoc :company-slug "green-labs"))))
 
   (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
   (def snapshot (json/decode (slurp "./opt/samples/snapshots/buff.json")))
