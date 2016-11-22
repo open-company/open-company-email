@@ -21,7 +21,7 @@
     [amazonica "0.3.77"] ; A comprehensive Clojure client for the entire Amazon AWS api https://github.com/mcohen01/amazonica
     [hiccup "1.0.5"] ; HTML rendering https://github.com/weavejester/hiccup
     [cheshire "5.6.3"] ; JSON encoding / decoding https://github.com/dakrone/cheshire
-    [manifold "0.1.6-alpha3"] ; Async programming tools https://github.com/ztellman/manifold
+    [manifold "0.1.6-alpha4"] ; Async programming tools https://github.com/ztellman/manifold
     [clj-time "0.12.2"] ; Date and time lib https://github.com/clj-time/clj-time
     [jfree/jfreechart "1.0.13"] ; Java chart library http://www.jfree.org/jfreechart/
     [open-company/lib "0.0.6-04c024d"] ; Library for OC projects https://github.com/open-company/open-company-lib
@@ -45,7 +45,7 @@
       ]
       :plugins [
         [jonase/eastwood "0.2.3"] ; Linter https://github.com/jonase/eastwood
-        [lein-kibit "0.1.2"] ; Static code search for non-idiomatic code https://github.com/jonase/kibit
+        [lein-kibit "0.1.3"] ; Static code search for non-idiomatic code https://github.com/jonase/kibit
       ]
     }
 
