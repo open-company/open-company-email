@@ -71,12 +71,12 @@
         (when (>= file-size size-limit)
           ;; Send a Sentry notification
           (when c/dsn ; Sentry is configured
-            (sentry/capture c/dsn {:message (str "Rendered update email is over size limit at "
-                                                 (int (Math/ceil (/ file-size 1000)))
-                                                 "KB")
+            (sentry/capture c/dsn {:message "Rendered update email is over size limit"
                                    :extra {
                                       :company-slug (:company-slug snapshot)
                                       :update-slug (:slug snapshot)
+                                      :human-size (str (int (Math/ceil (/ file-size 1000))) "KB")
+                                      :size file-size
                                       :topic-count (count (:sections snapshot))}}))
           ;; Render an alternative, smaller email
           (spit html-file (content/snapshot-link-html full-snapshot)) ; create the email in a tmp file
