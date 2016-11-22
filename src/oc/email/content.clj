@@ -150,7 +150,7 @@
 (defn- periods-for-metric
   "Given the specified metric, return a sequence of all the periods in the data for that metric, sorted by most recent."
   [metric data]
-  (when-let [periods (vec (filter #(= (:slug %) (:slug metric)) data))]
+  (when-let [periods (filterv #(= (:slug %) (:slug metric)) data)]
     (reverse (sort-by :period periods))))
 
 (defn growth-metrics [topic currency]
