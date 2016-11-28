@@ -15,12 +15,15 @@
 
 (defn sqs-handler [sys msg]
   (let [msg-body (read-string (:body msg))
+        msg-type (:type msg-body)
         error (if (:test-error msg-body) (/ 1 0) false)] ; test Sentry error reporting
     (timbre/info "Received message from SQS.")
     (timbre/tracef "\nMessage from SQS: %s\n" msg-body)
-    (if (= (:type msg-body) "invite")
-      (mailer/send-invite msg-body)
-      (mailer/send-snapshot msg-body)))
+    (case msg-type
+      "invite" (mailer/send-invite msg-body)
+      "reset" (mailer/send-reset msg-body)
+      "snapshot" (mailer/send-snapshot msg-body)
+      (timbre/error "Unrecognized message type" msg-type)))
   msg)
 
 (defn -main []

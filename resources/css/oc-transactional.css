@@ -9,6 +9,9 @@ p {
     font-size: 18px;
     color: #4e5a6b;
     line-height: 1.6;
+    -webkit-hyphens: manual;
+    -moz-hyphens: manual;
+    hyphens: manual;
 }
 
 table.button.oc table td {

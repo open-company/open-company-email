@@ -17,7 +17,7 @@
    :endpoint   c/aws-endpoint})
 
 (def default-reply-to (str "hello@" c/email-from-domain))
-(def default-inviter "OpenCompany")
+(def default-from "OpenCompany")
 
 (defn- email
   "Send an email."
@@ -89,20 +89,46 @@
         (io/delete-file inline-file true)))))
 
 (defn send-invite
-  "Create an HTML and text invite and email it to the specified recipients."
+  "Create an HTML and text invite and email it to the specified recipient."
   [message]
   (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
         html-file (str uuid-fragment ".html")
         inline-file (str uuid-fragment ".inline.html")
         invitation (-> message 
                     (keywordize-keys)
-                    (assoc :source (str default-inviter " <" default-reply-to ">"))
+                    (assoc :source (str default-from " <" default-reply-to ">"))
                     (assoc :subject (content/invite-subject message)))]
     (try
       (spit html-file (content/invite-html invitation)) ; create the email in a tmp file
       (inline-css html-file inline-file) ; inline the CSS
+      ;; Email it to the recipient
+      (println invitation)
       (email invitation {:text (content/invite-text invitation)
-                         :html (slurp inline-file)}) ; email it to the recipients
+                         :html (slurp inline-file)})
+      (finally
+        ; remove the tmp files
+        (io/delete-file html-file true)
+        (io/delete-file inline-file true)))))
+
+(defn send-reset
+  "Create an HTML and text reset password email and email it to the specified recipient."
+  [message]
+  (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
+        html-file (str uuid-fragment ".html")
+        inline-file (str uuid-fragment ".inline.html")
+        reset (-> message 
+                (keywordize-keys)
+                (assoc :source (str default-from " <" default-reply-to ">"))
+                (assoc :from default-from)
+                (assoc :reply-to default-reply-to)
+                (assoc :subject "OpenCompany Password Reset"))]
+    (try
+      (spit html-file (content/reset-html reset)) ; create the email in a tmp file
+      (inline-css html-file inline-file) ; inline the CSS
+      ;; Email it to the recipient
+      (println reset)
+      (email reset {:text (content/reset-text reset)
+                    :html (slurp inline-file)})
       (finally
         ; remove the tmp files
         (io/delete-file html-file true)
@@ -132,5 +158,8 @@
 
   (def invite (json/decode (slurp "./opt/samples/invites/microsoft.json")))
   (mailer/send-invite (assoc invite :to "change@me.com"))
+
+  (mailer/send-reset {:to "change@me.com"
+                      :token-link "http://localhost:3000/invite?token=dd7c0bfe-2068-4de0-aa3c-4913eeeaa360"})
 
 )

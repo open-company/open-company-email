@@ -15,6 +15,8 @@
 (def doc-type "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
 
 (def tagline "OpenCompany is the simplest way to keep everyone on the same page.")
+(def reset-greeting "Hi there! Someone (hopefully you) requested a new password for your OpenCompany account.")
+(def reset-instructions "This reset link is good for the next 3 hours. If you didn't request a password reset, you can ignore this email.")
 
 (defn- logo [logo company-name]
   [:table {:class "row header"} 
@@ -29,6 +31,20 @@
                        :style "background-color: #ffffff;border: solid 1px rgba(78, 90, 107, 0.2);max-height: 50px;max-width: 50px;"
                        :src logo
                        :alt (str company-name " logo")}]]]]]]]])
+
+(defn- oc-logo []
+  [:table {:class "row header"} 
+    [:tr
+      [:th {:class "small-12 large-12 first last columns"} 
+        [:table
+          [:tr
+            [:th
+              [:center {:data-parsed ""}
+                [:img {:class "float-center logo"
+                       :align "center"
+                       :style "background-color: #ffffff;max-height: 71px;max-width: 71px;"
+                       :src "https://open-company-assets.s3.amazonaws.com/open-company.png"
+                       :alt "OpenCompany logo"}]]]]]]]])
 
 (defn- company-name [snapshot]
   [:table {:class "row header"}
@@ -324,6 +340,18 @@
       (spacer 30)
       (paragraph tagline)]))
 
+(defn- reset-content [reset]
+  [:td
+    (spacer 15)
+    (paragraph reset-greeting)
+    (spacer 15)
+    (cta-button "RESET PASSWORD ➞" (:token-link reset))
+    (spacer 15)
+    (paragraph reset-instructions)
+    (spacer 15)
+    (oc-logo)
+    (paragraph tagline)])
+
 (defn- snapshot-link-content [snapshot]
   (let [company-name (:name snapshot)
         company-name? (not (s/blank? company-name))
@@ -388,18 +416,17 @@
                   [:tr
                     (case type
                       :snapshot (snapshot-content data)
+                      :reset (reset-content data)
                       :invite (invite-content data))]]])
             (when (= type :snapshot) (footer))]]]]))
 
 (defn- head [data]
   (let [type (:type data)
-        title (if (= type :snapshot) (str (:name data) " Update") (str (:company-name data) " Invite"))
-        css (if (= type :snapshot) "oc-snapshot.css" "oc-invite.css")]
+        css (if (= type :snapshot) "oc-snapshot.css" "oc-transactional.css")]
     [:html {:xmlns "http://www.w3.org/1999/xhtml"} 
       [:head 
         [:meta {:http-equiv "Content-Type", :content "text/html; charset=utf-8"}]
         [:meta {:name "viewport", :content "width=device-width"}]
-        [:title title]
         [:link {:rel "stylesheet", :href "resources/css/foundation.css"}]
         [:link {:rel "stylesheet", :href (str "resources/css/" css)}]
         [:link {:href "http://fonts.googleapis.com/css?family=Domine", :rel "stylesheet", :type "text/css"}]
@@ -432,6 +459,16 @@
          tagline "\n\n"
          "Open the link below to check it out.\n\n"
          link "\n\n")))
+
+(defn reset-html [reset]
+  (html reset :reset))
+
+(defn reset-text [reset]
+  (let [link (:token-link (keywordize-keys reset))]
+    (str reset-greeting "\n\n"
+         "Click the link below to reset your password.\n\n"
+         link "\n\n"
+         reset-instructions "\n\n")))
 
 (comment
   
@@ -530,5 +567,8 @@
   (def invite (json/decode (slurp "./opt/samples/invites/sparse-data.json")))
   (spit "./hiccup.html" (content/invite-html invite))
   (content/invite-text invite)
+
+  (spit "./hiccup.html" (content/reset-html {}))
+  (content/reset-text {})
 
   )
