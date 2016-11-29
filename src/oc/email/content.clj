@@ -16,7 +16,7 @@
 
 (def tagline "OpenCompany is the simplest way to keep everyone on the same page.")
 (def reset-greeting "Hi there! Someone (hopefully you) requested a new password for your OpenCompany account.")
-(def reset-instructions "This reset link is good for the next 3 hours. If you didn't request a password reset, you can ignore this email.")
+(def reset-instructions "If you didn't request a password reset, you can ignore this email.")
 
 (defn- logo [logo company-name]
   [:table {:class "row header"} 
