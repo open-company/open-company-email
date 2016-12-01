@@ -1,7 +1,7 @@
 body,
 html,
 .body {
-  background: #fff !important;
+  background: #F8F8F8 !important;
   font-family: Domine-Regular, Georgia, serif;
 }
 
@@ -15,7 +15,13 @@ a:visited {
 }
 
 table.container {
-  width: 450px;
+  max-width: 500px;
+}
+
+table.container  td {
+  padding-left: 25px;
+  padding-right: 25px;
+  background: white !important;
 }
 
 /* === Sender message === */

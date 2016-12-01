@@ -381,6 +381,7 @@
           [:td {:class "float-center", :align "center", :valign "top"}
             (when-not (s/blank? (:note data)) (note data trail-space?))
             (when (and (s/blank? (:note data)) (= type :snapshot-link)) (spacer 15 "note"))
+            (when (= type :snapshot) (spacer 55 "blank"))
             (if (= type :snapshot-link)
               (snapshot-link-content data)     
               [:center
@@ -389,7 +390,8 @@
                     (case type
                       :snapshot (snapshot-content data)
                       :invite (invite-content data))]]])
-            (when (= type :snapshot) (footer))]]]]))
+            (when (= type :snapshot) (footer))
+            (when (= type :snapshot) (spacer 55 "blank"))]]]]))
 
 (defn- head [data]
   (let [type (:type data)
@@ -490,7 +492,7 @@
 
   (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
   (def snapshot (json/decode (slurp "./opt/samples/snapshots/green-labs.json")))
-  (spit "./hiccup.html" (content/snapshot-link-html (-> snapshot (assoc :note note) (assoc :company-slug "green-labs"))))
+  (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note note) (assoc :company-slug "green-labs"))))
 
   (spit "./hiccup.html" (content/snapshot-link-html (-> snapshot (assoc :note note) (assoc :company-slug "green-labs"))))
 
