@@ -221,17 +221,12 @@
           [:td 
             (metric formatted-revenue [:span [:b "Revenue"] " " date " " spark-revenue]
               [:span formatted-revenue-delta])]])
-      (when (and cash? (not revenue?)) 
-        [:tr
-          [:td
-            (metric formatted-cash [:span [:b "Cash"] " " date]
-              [:span formatted-cash-delta " " formatted-runway])]])
       (when costs? 
         [:tr
           [:td
             (metric formatted-costs [:span [:b cost-label] " " date " " spark-costs]
               [:span formatted-costs-delta])]])
-      (when (and cash? revenue?)
+      (when cash?
         [:tr
           [:td
             (metric formatted-cash [:span [:b "Cash"] " " date]
