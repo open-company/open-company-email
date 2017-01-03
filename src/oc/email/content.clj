@@ -133,7 +133,7 @@
         prior-date (when (and interval prior-period) (utils/format-period interval prior-period))
         formatted-prior-date (when prior-date (s/join " " (butlast (s/split prior-date #" ")))) ; drop the year
         prior-value (when prior-metric (:value prior-metric))
-        metric-delta (when (and value prior-value) (- value prior-value))
+        metric-delta (when (and value prior-value (not= prior-value 0)) (- value prior-value))
         metric-delta-percent (when metric-delta (* 100 (float (/ metric-delta prior-value))))
         formatted-metric-delta (when metric-delta-percent (format-delta metric-delta-percent formatted-prior-date))
         sparkline-metric (when (>= (count spark-periods) 3) (sl/sparkline-html (map :value spark-periods) :blue))
