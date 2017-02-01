@@ -149,7 +149,7 @@
         prior-date (when (and interval prior-period) (utils/format-period interval prior-period))
         formatted-prior-date (when prior-date (s/join " " (butlast (s/split prior-date #" ")))) ; drop the year
         prior-value (when prior-metric (:value prior-metric))
-        metric-delta (when (and value prior-value) (- value prior-value))
+        metric-delta (when (and value prior-value (not= prior-value 0)) (- value prior-value))
         metric-delta-percent (when metric-delta (* 100 (float (/ metric-delta prior-value))))
         formatted-metric-delta (when metric-delta-percent (format-delta metric-delta-percent formatted-prior-date))
         sparkline-metric (when (>= (count spark-periods) 3) (sl/sparkline-html (map :value spark-periods) :blue))
@@ -199,14 +199,16 @@
         cash? (utils/not-zero? cash)
         formatted-cash (when cash? (utils/with-currency currency (utils/with-size-label cash)))
         prior-cash (when prior-finances (:cash prior-finances))
-        cash-delta (when (and cash? prior-cash) (- cash prior-cash))
+        prior-cash? (utils/not-zero? prior-cash)
+        cash-delta (when (and cash? prior-cash?) (- cash prior-cash))
         formatted-cash-delta (when cash-delta (format-delta currency cash-delta prior-date))
         ;; Info on revenue
         revenue (:revenue finances)
         revenue? (utils/not-zero? revenue)
         formatted-revenue (when revenue? (utils/with-currency currency (utils/with-size-label revenue)))
         prior-revenue (when prior-finances (:revenue prior-finances))
-        revenue-delta (when (and revenue? prior-revenue) (- revenue prior-revenue))
+        prior-revenue? (utils/not-zero? prior-revenue)
+        revenue-delta (when (and revenue? prior-revenue?) (- revenue prior-revenue))
         revenue-delta-percent (when revenue-delta (* 100 (float (/ revenue-delta prior-revenue))))
         formatted-revenue-delta (when revenue-delta-percent (format-delta revenue-delta-percent prior-date))
         spark-revenue-periods (when spark-periods (reverse (take-while #(number? (:revenue %)) spark-periods)))
@@ -217,7 +219,8 @@
         costs? (utils/not-zero? costs)
         formatted-costs (when costs? (utils/with-currency currency (utils/with-size-label costs)))
         prior-costs (when prior-finances (:costs prior-finances))
-        costs-delta (when (and costs? prior-costs) (- costs prior-costs))
+        prior-costs? (utils/not-zero? prior-costs)
+        costs-delta (when (and costs? prior-costs?) (- costs prior-costs))
         costs-delta-percent (when costs-delta (* 100 (float (/ costs-delta prior-costs))))
         formatted-costs-delta (when costs-delta-percent (format-delta costs-delta-percent prior-date))        
         spark-costs-periods (when spark-periods (reverse (take-while #(number? (:costs %)) spark-periods)))
@@ -234,17 +237,12 @@
           [:td 
             (metric formatted-revenue [:span [:b "Revenue"] " " date " " spark-revenue]
               [:span formatted-revenue-delta])]])
-      (when (and cash? (not revenue?)) 
-        [:tr
-          [:td
-            (metric formatted-cash [:span [:b "Cash"] " " date]
-              [:span formatted-cash-delta " " formatted-runway])]])
       (when costs? 
         [:tr
           [:td
             (metric formatted-costs [:span [:b cost-label] " " date " " spark-costs]
               [:span formatted-costs-delta])]])
-      (when (and cash? revenue?)
+      (when cash?
         [:tr
           [:td
             (metric formatted-cash [:span [:b "Cash"] " " date]
@@ -409,6 +407,7 @@
           [:td {:class "float-center", :align "center", :valign "top"}
             (when-not (s/blank? (:note data)) (note data trail-space?))
             (when (and (s/blank? (:note data)) (= type :snapshot-link)) (spacer 15 "note"))
+            (when (= type :snapshot) (spacer 55 "blank"))
             (if (= type :snapshot-link)
               (snapshot-link-content data)     
               [:center
@@ -418,7 +417,8 @@
                       :snapshot (snapshot-content data)
                       :reset (reset-content data)
                       :invite (invite-content data))]]])
-            (when (= type :snapshot) (footer))]]]]))
+            (when (= type :snapshot) (footer))
+            (when (= type :snapshot) (spacer 55 "blank"))]]]]))
 
 (defn- head [data]
   (let [type (:type data)
@@ -527,7 +527,7 @@
 
   (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
   (def snapshot (json/decode (slurp "./opt/samples/snapshots/green-labs.json")))
-  (spit "./hiccup.html" (content/snapshot-link-html (-> snapshot (assoc :note note) (assoc :company-slug "green-labs"))))
+  (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note note) (assoc :company-slug "green-labs"))))
 
   (spit "./hiccup.html" (content/snapshot-link-html (-> snapshot (assoc :note note) (assoc :company-slug "green-labs"))))
 

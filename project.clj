@@ -15,16 +15,16 @@
   :dependencies [
     [org.clojure/clojure "1.9.0-alpha14"] ; Lisp on the JVM http://clojure.org/documentation
     [environ "1.1.0"] ; Environment settings from different sources https://github.com/weavejester/environ
-    [com.taoensso/timbre "4.8.0-alpha1"] ; Logging https://github.com/ptaoussanis/timbre
+    [com.taoensso/timbre "4.8.0"] ; Logging https://github.com/ptaoussanis/timbre
     [raven-clj "1.5.0"] ; Interface to Sentry error reporting https://github.com/sethtrain/raven-clj
-    [com.stuartsierra/component "0.3.1"] ; Component Lifecycle
-    [amazonica "0.3.77"] ; A comprehensive Clojure client for the entire Amazon AWS api https://github.com/mcohen01/amazonica
+    [com.stuartsierra/component "0.3.2"] ; Component Lifecycle
+    [amazonica "0.3.83"] ; A comprehensive Clojure client for the entire Amazon AWS api https://github.com/mcohen01/amazonica
     [hiccup "1.0.5"] ; HTML rendering https://github.com/weavejester/hiccup
     [cheshire "5.6.3"] ; JSON encoding / decoding https://github.com/dakrone/cheshire
     [manifold "0.1.6-alpha4"] ; Async programming tools https://github.com/ztellman/manifold
-    [clj-time "0.12.2"] ; Date and time lib https://github.com/clj-time/clj-time
+    [clj-time "0.13.0"] ; Date and time lib https://github.com/clj-time/clj-time
     [jfree/jfreechart "1.0.13"] ; Java chart library http://www.jfree.org/jfreechart/
-    [open-company/lib "0.0.6-04c024d"] ; Library for OC projects https://github.com/open-company/open-company-lib
+    [open-company/lib "0.0.11-deee910"] ; Library for OC projects https://github.com/open-company/open-company-lib
   ]
 
   :repositories [["jfreechart" "http://central.maven.org/maven2/"]]
@@ -72,7 +72,7 @@
         [lein-spell "0.1.0"] ; Catch spelling mistakes in docs and docstrings https://github.com/cldwalker/lein-spell
         [lein-deps-tree "0.1.2"] ; Print a tree of project dependencies https://github.com/the-kenny/lein-deps-tree
         [venantius/yagni "0.1.4"] ; Dead code finder https://github.com/venantius/yagni
-        [com.jakemccrary/lein-test-refresh "0.18.0"] ; Autotest https://github.com/jakemcc/lein-test-refresh
+        [com.jakemccrary/lein-test-refresh "0.18.1"] ; Autotest https://github.com/jakemcc/lein-test-refresh
       ]  
     }]
 
