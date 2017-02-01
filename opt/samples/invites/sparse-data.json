@@ -3,7 +3,7 @@
   "from": "",
   "reply-to": "",
   "email": "change@me.com",
-  "company-name": "S",
-  "logo": "",
+  "org-name": "S",
+  "logo-url": "",
   "token-link": "http://localhost:3000/invite?token=dd7c0bfe-2068-4de0-aa3c-4913eeeaa360"
 }

@@ -15,10 +15,11 @@
 (def doc-type "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
 
 (def tagline "OpenCompany is the simplest way to keep everyone on the same page.")
-(def reset-greeting "Hi there! Someone (hopefully you) requested a new password for your OpenCompany account.")
+
+(def reset-message "Someone (hopefully you) requested a new password for your OpenCompany account.")
 (def reset-instructions "If you didn't request a password reset, you can ignore this email.")
 
-(defn- logo [logo company-name]
+(defn- logo [logo-url org-name]
   [:table {:class "row header"} 
     [:tr
       [:th {:class "small-12 large-12 first last columns"} 
@@ -29,8 +30,8 @@
                 [:img {:class "float-center logo"
                        :align "center"
                        :style "background-color: #ffffff;border: solid 1px rgba(78, 90, 107, 0.2);max-height: 50px;max-width: 50px;"
-                       :src logo
-                       :alt (str company-name " logo")}]]]]]]]])
+                       :src logo-url
+                       :alt (str org-name " logo")}]]]]]]]])
 
 (defn- oc-logo []
   [:table {:class "row header"} 
@@ -46,7 +47,7 @@
                        :src "https://open-company-assets.s3.amazonaws.com/open-company.png"
                        :alt "OpenCompany logo"}]]]]]]]])
 
-(defn- company-name [snapshot]
+(defn- org-name [snapshot]
   [:table {:class "row header"}
     [:tr
       [:th {:class "small-12 large-12 first last columns"}
@@ -325,30 +326,34 @@
                 [:th {:class "expander"}]]]]]]]])
 
 (defn- invite-content [invite]
-  (let [logo-url (:logo invite)
+  (let [logo-url (:logo-url invite)
         logo? (not (s/blank? logo-url))
-        company-name (:company-name invite)]
+        org-name (:org-name invite)
+        first-name (if (s/blank? (:first-name invite)) "there" (:first-name invite))]
+    (println logo-url)
+    (println logo?)
     [:td
       (when logo? (spacer 20))
-      (when logo? (logo logo-url company-name))
+      (when logo? (logo logo-url org-name))
       (spacer 15)
-      (paragraph (str "Hi there! " (:subject invite)))
+      (paragraph (str "Hi " first-name "! " (:subject invite)))
       (spacer 15)
       (cta-button "OK! LET'S GET STARTED ➞" (:token-link invite))
       (spacer 30)
       (paragraph tagline)]))
 
 (defn- reset-content [reset]
-  [:td
-    (spacer 15)
-    (paragraph reset-greeting)
-    (spacer 15)
-    (cta-button "RESET PASSWORD ➞" (:token-link reset))
-    (spacer 15)
-    (paragraph reset-instructions)
-    (spacer 15)
-    (oc-logo)
-    (paragraph tagline)])
+  (let [first-name (if (s/blank? (:first-name reset)) "there" (:first-name reset))]
+    [:td
+      (spacer 15)
+      (paragraph (str "Hi " first-name "! " reset-message))
+      (spacer 15)
+      (cta-button "RESET PASSWORD ➞" (:token-link reset))
+      (spacer 15)
+      (paragraph reset-instructions)
+      (spacer 15)
+      (oc-logo)
+      (paragraph tagline)]))
 
 (defn- snapshot-link-content [snapshot]
   (let [company-name (:name snapshot)
@@ -438,11 +443,11 @@
 
 (defn invite-subject [invite]
   (let [msg (keywordize-keys invite)
-        company-name (:company-name msg)
+        org-name (:org-name msg)
         from (:from msg)
         prefix (if (s/blank? from) "You've been invited" (str from " invited you"))
-        company (if (s/blank? company-name) "" (str company-name " on "))]
-    (str prefix " to join " company "OpenCompany.")))
+        org (if (s/blank? org-name) "" (str org-name " on "))]
+    (str prefix " to join " org "OpenCompany.")))
 
 (defn snapshot-link-html [snapshot]
   (html snapshot :snapshot-link))
@@ -464,8 +469,9 @@
   (html reset :reset))
 
 (defn reset-text [reset]
-  (let [link (:token-link (keywordize-keys reset))]
-    (str reset-greeting "\n\n"
+  (let [link (:token-link (keywordize-keys reset))
+        first-name (if (s/blank? (:first-name reset)) "there" (:first-name reset))]
+    (str "Hi " first-name "! " reset-message "\n\n"
          "Click the link below to reset your password.\n\n"
          link "\n\n"
          reset-instructions "\n\n")))

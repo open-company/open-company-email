@@ -3,7 +3,7 @@
   "from": "Tim Cook",
   "reply-to": "tcook@apple.com",
   "email": "change@me.com",
-  "company-name": "Apple",
-  "logo": "https://www.apple.com/ac/structured-data/images/knowledge_graph_logo.png",
+  "org-name": "Apple",
+  "logo-url": "https://www.apple.com/ac/structured-data/images/knowledge_graph_logo.png",
   "token-link": "http://localhost:3000/invite?token=dd7c0bfe-2068-4de0-aa3c-4913eeeaa360"
 }
