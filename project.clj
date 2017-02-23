@@ -15,16 +15,16 @@
   :dependencies [
     [org.clojure/clojure "1.9.0-alpha14"] ; Lisp on the JVM http://clojure.org/documentation
     [environ "1.1.0"] ; Environment settings from different sources https://github.com/weavejester/environ
-    [com.taoensso/timbre "4.8.0"] ; Logging https://github.com/ptaoussanis/timbre
-    [raven-clj "1.5.0"] ; Interface to Sentry error reporting https://github.com/sethtrain/raven-clj
-    [com.stuartsierra/component "0.3.2"] ; Component Lifecycle
-    [amazonica "0.3.85"] ; A comprehensive Clojure client for the entire Amazon AWS api https://github.com/mcohen01/amazonica
     [hiccup "1.0.5"] ; HTML rendering https://github.com/weavejester/hiccup
-    [cheshire "5.7.0"] ; JSON encoding / decoding https://github.com/dakrone/cheshire
     [manifold "0.1.6-alpha4"] ; Async programming tools https://github.com/ztellman/manifold
-    [clj-time "0.13.0"] ; Date and time lib https://github.com/clj-time/clj-time
     [jfree/jfreechart "1.0.13"] ; Java chart library http://www.jfree.org/jfreechart/
-    [open-company/lib "0.5.1-e6633f1"] ; Library for OC projects https://github.com/open-company/open-company-lib
+    [open-company/lib "0.6.7-0497483"] ; Library for OC projects https://github.com/open-company/open-company-lib
+    ; In addition to common functions, brings in the following common dependencies used by this project:
+    ; Component - Component Lifecycle https://github.com/stuartsierra/component
+    ; Schema - Data validation https://github.com/Prismatic/schema
+    ; Timbre - Pure Clojure/Script logging library https://github.com/ptaoussanis/timbre
+    ; Amazonica - A comprehensive Clojure client for the AWS API https://github.com/mcohen01/amazonica
+    ; Raven - Interface to Sentry error reporting https://github.com/sethtrain/raven-clj
   ]
 
   :repositories [["jfreechart" "http://central.maven.org/maven2/"]]
