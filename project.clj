@@ -18,6 +18,7 @@
     [hiccup "1.0.5"] ; HTML rendering https://github.com/weavejester/hiccup
     [manifold "0.1.6-alpha4"] ; Async programming tools https://github.com/ztellman/manifold
     [jfree/jfreechart "1.0.13"] ; Java chart library http://www.jfree.org/jfreechart/
+
     [open-company/lib "0.6.7-0497483"] ; Library for OC projects https://github.com/open-company/open-company-lib
     ; In addition to common functions, brings in the following common dependencies used by this project:
     ; Component - Component Lifecycle https://github.com/stuartsierra/component
@@ -25,6 +26,8 @@
     ; Timbre - Pure Clojure/Script logging library https://github.com/ptaoussanis/timbre
     ; Amazonica - A comprehensive Clojure client for the AWS API https://github.com/mcohen01/amazonica
     ; Raven - Interface to Sentry error reporting https://github.com/sethtrain/raven-clj
+    ; Cheshire - JSON encoding / decoding https://github.com/dakrone/cheshire
+    ; clj-time - Date and time lib https://github.com/clj-time/clj-time
   ]
 
   :repositories [["jfreechart" "http://central.maven.org/maven2/"]]

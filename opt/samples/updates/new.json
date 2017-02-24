@@ -1,15 +1,15 @@
 {
   "slug": "july-2016-update-89df5",
-  "logo-url": "https://open-company-assets.s3.amazonaws.com/new.png",
+  "title": "July 2016 Update",
   "org-slug": "new",
   "org-name": "New.ly",
-  "title": "July 2016 Update",
+  "logo-url": "https://open-company-assets.s3.amazonaws.com/new.png",
   "currency": "USD",
   "created-at": "2016-08-11T12:57:13.633Z",
   "entries": [
     {
       "topic-slug": "finances",
-      "body": "",
+      "body": "A lot of new information here.",
       "created-at": "2016-08-08T12:59:28.000Z",
       "data": [
         {
@@ -19,7 +19,6 @@
           "revenue": 0
         }
       ],
-      "description": "Cash on hand, burn and runway",
       "headline": "",
       "title": "Finances",
       "updated-at": "2016-08-08T12:59:28.000Z"

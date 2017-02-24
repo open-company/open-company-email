@@ -278,6 +278,7 @@
         [:th {:class "expander"}]]]))
 
 (defn- entry [update topic-slug entry last-topic?]
+  (println entry)
   (let [org-slug (:org-slug update)
         slug (:slug update)]
     (if (:data entry)
@@ -295,13 +296,14 @@
         [:th {:class "expander"}]]]])
 
 (defn- update-content [update]
+  (println "update")
   (let [title? (not (s/blank? (:title update)))]
     [:td
       [:table
         [:tr
           (let [entries (:entries update)]
             (into [:td]
-              (map #(entry update % (:topic-slug %) (= (:topic-slug %) (:topic-slug (last entries)))) entries)))]]]))
+              (map #(entry update (:topic-slug %) % (= (:topic-slug %) (:topic-slug (last entries)))) entries)))]]]))
 
 (defn- cta-button [cta url]
   [:table {:class "row"}
@@ -401,6 +403,7 @@
                 (spacer 28 "footer")]]]]]]])
 
 (defn- body [data]
+  (println "body")
   (let [type (:type data)
         trail-space? (not= type :update-link)]
     [:body
@@ -541,33 +544,33 @@
   (def update (json/decode (slurp "./opt/samples/updates/new.json")))
   (spit "./hiccup.html" (content/update-html (assoc update :note "")))
 
-  (def snapshot (json/decode (slurp "./opt/updates/snapshots/bago.json")))
+  (def update (json/decode (slurp "./opt/samples/updates/bago.json")))
   (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note "") (assoc :company-slug "bago"))))
 
-  (def snapshot (json/decode (slurp "./opt/updates/snapshots/bago-no-symbol.json")))
+  (def update (json/decode (slurp "./opt/samples/updates/bago-no-symbol.json")))
   (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note "") (assoc :company-slug "bago"))))
 
-  (def snapshot (json/decode (slurp "./opt/samples/updates/growth-options.json")))
+  (def update (json/decode (slurp "./opt/samples/updates/growth-options.json")))
   (spit "./hiccup.html" (content/update-html (assoc update :note "")))
 
-  (def snapshot (json/decode (slurp "./opt/updates/snapshots/blanks-test.json")))
+  (def update (json/decode (slurp "./opt/samples/updates/blanks-test.json")))
   (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note "") (assoc :company-slug "blanks-test"))))
 
-  (def snapshot (json/decode (slurp "./opt/updates/snapshots/sparse.json")))
+  (def update (json/decode (slurp "./opt/samples/updates/sparse.json")))
   (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note "") (assoc :company-slug "sparse"))))
 
-  (def invite (json/decode (slurp "./opt/updates/invites/apple.json")))
+  (def invite (json/decode (slurp "./opt/samples/invites/apple.json")))
   (spit "./hiccup.html" (content/invite-html invite))
 
-  (def invite (json/decode (slurp "./opt/updates/invites/microsoft.json")))
-  (spit "./hiccup.html" (content/invite-html invite))
-  (content/invite-text invite)
-
-  (def invite (json/decode (slurp "./opt/updates/invites/combat.json")))
+  (def invite (json/decode (slurp "./opt/samples/invites/microsoft.json")))
   (spit "./hiccup.html" (content/invite-html invite))
   (content/invite-text invite)
 
-  (def invite (json/decode (slurp "./opt/updates/invites/sparse-data.json")))
+  (def invite (json/decode (slurp "./opt/samples/invites/combat.json")))
+  (spit "./hiccup.html" (content/invite-html invite))
+  (content/invite-text invite)
+
+  (def invite (json/decode (slurp "./opt/samples/invites/sparse-data.json")))
   (spit "./hiccup.html" (content/invite-html invite))
   (content/invite-text invite)
 
