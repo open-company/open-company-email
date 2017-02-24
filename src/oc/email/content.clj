@@ -278,7 +278,6 @@
         [:th {:class "expander"}]]]))
 
 (defn- entry [update topic-slug entry last-topic?]
-  (println entry)
   (let [org-slug (:org-slug update)
         slug (:slug update)]
     (if (:data entry)
@@ -296,7 +295,6 @@
         [:th {:class "expander"}]]]])
 
 (defn- update-content [update]
-  (println "update")
   (let [title? (not (s/blank? (:title update)))]
     [:td
       [:table
@@ -403,7 +401,6 @@
                 (spacer 28 "footer")]]]]]]])
 
 (defn- body [data]
-  (println "body")
   (let [type (:type data)
         trail-space? (not= type :update-link)]
     [:body

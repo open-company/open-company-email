@@ -36,9 +36,9 @@
 
 (defn- email-update
   "Send emails to all to recipients in parallel."
-  [{:keys [to reply-to subject org-slug org-name entries]} body]
+  [{:keys [to reply-to subject org-slug org-name entries] :as update} body]
   (doall (pmap #(email {:to %
-                        :source (str org-name "<" org-slug "@" c/email-from-domain ">")
+                        :source (str org-name " <" org-slug "@" c/email-from-domain ">")
                         :reply-to (if (s/blank? reply-to) default-reply-to reply-to)
                         :subject subject}
                   {:html body})
@@ -96,7 +96,6 @@
       (spit html-file (content/invite-html invitation)) ; create the email in a tmp file
       (inline-css html-file inline-file) ; inline the CSS
       ;; Email it to the recipient
-      (println invitation)
       (email invitation {:text (content/invite-text invitation)
                          :html (slurp inline-file)})
       (finally
@@ -120,7 +119,6 @@
       (spit html-file (content/reset-html reset)) ; create the email in a tmp file
       (inline-css html-file inline-file) ; inline the CSS
       ;; Email it to the recipient
-      (println reset)
       (email reset {:text (content/reset-text reset)
                     :html (slurp inline-file)})
       (finally
@@ -134,31 +132,23 @@
 
   (require '[oc.email.mailer :as mailer] :reload)
 
-  (def update (json/decode (slurp "./opt/samples/updates/green-labs.json")))
-  (mailer/send-update {:to ["change@me.com"]
+  (def update (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/updates/green-labs.json"))))
+  (mailer/send-update (merge update {
+                       :to ["sean@opencompany.com"]
                        :reply-to "change@me.com"
                        :subject "Latest GreenLabs Update"
                        :note "Enjoy this groovy update!"
-                       :origin "http://localhost:3559"
-                       :org-slug (:org-slug update)
-                       :org-name (:org-name update)
-                       :logo-url (:logo-url update)
-                       :currency (:currency update)
-                       :entries (:entries update)})
+                       :origin "http://localhost:3559"}))
 
-  (def update (json/decode (slurp "./opt/samples/updates/buff.json")))
-  (mailer/send-update {:to ["change@me.com"]
+  (def update (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/updates/buff.json"))))
+  (mailer/send-update (merge update {
+                       :to ["change@me.com"]
                        :reply-to "change@me.com"
                        :subject "Latest GreenLabs Update"
                        :note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week."
-                       :origin "http://localhost:3559"
-                       :org-slug (:org-slug update)
-                       :org-name (:org-name update)
-                       :logo-url (:logo-url update)
-                       :currency (:currency update)
-                       :entries (:entries update)})
+                       :origin "http://localhost:3559"}))
 
-  (def invite (json/decode (slurp "./opt/samples/invites/microsoft.json")))
+  (def invite (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/invites/microsoft.json"))))
   (mailer/send-invite (assoc invite :to "change@me.com"))
 
   (mailer/send-reset {:to "change@me.com"
