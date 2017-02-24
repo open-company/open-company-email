@@ -22,7 +22,7 @@
     (case msg-type
       "invite" (mailer/send-invite msg-body)
       "reset" (mailer/send-reset msg-body)
-      "snapshot" (mailer/send-snapshot msg-body)
+      "update" (mailer/send-update msg-body)
       (timbre/error "Unrecognized message type" msg-type)))
   msg)
 
@@ -61,14 +61,14 @@
 (comment
 
   ;; SQS message payload
-  (def snapshot (json/decode (slurp "./opt/samples/updates/green-labs.json")))
+  (def entries (json/decode (slurp "./opt/samples/updates/green-labs.json")))
   (def message 
     {:subject "GreenLabs Update"
-     :to "change@changeme.com,change2@changeme.com"
+     :to ["change@changeme.com" "change2@changeme.com"]
      :note "Howdy folks!"
      :reply-to "hange@changeme.com"
-     :company-slug "green-labs"
-     :snapshot snapshot})
+     :org-slug "green-labs"
+     :entries entries})
 
   (require '[amazonica.aws.sqs :as sqs2])
   

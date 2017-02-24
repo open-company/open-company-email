@@ -47,17 +47,17 @@
                        :src "https://open-company-assets.s3.amazonaws.com/open-company.png"
                        :alt "OpenCompany logo"}]]]]]]]])
 
-(defn- org-name [snapshot]
+(defn- org-name [update]
   [:table {:class "row header"}
     [:tr
       [:th {:class "small-12 large-12 first last columns"}
-        [:p {:class "text-center company-name"} (:name snapshot)]]]])
+        [:p {:class "text-center org-name"} (:org-name update)]]]])
 
-(defn- message [snapshot]
+(defn- message [update]
   [:table {:class "row note"}
     [:tr
       [:th {:class "small-12 large-12 first last columns note"}
-        (:note snapshot)]]])
+        (:note update)]]])
 
 (defn- spacer
   ([pixels] (spacer pixels ""))
@@ -74,27 +74,27 @@
                         :style (str "font-size:" pixels "px;line-height:" pixels "px;")} " "]]]]
             [:th {:class "expander"}]]]]]]))
 
-(defn- content-topic [snapshot topic-name topic topic-url last-topic?]
-  (let [title (:title topic)
+(defn- content-entry [update topic-slug entry last-entry?]
+  (let [title (:title entry)
         title? (not (s/blank? title))
-        headline (:headline topic)
+        headline (:headline entry)
         headline? (not (s/blank? headline))
-        body (:body topic)
+        body (:body entry)
         body? (not (s/blank? body))
-        image-url (:image-url topic)
+        image-url (:image-url entry)
         image-url? (not (s/blank? image-url))
-        topic-class (str "row topic" (when last-topic? " last"))]
+        entry-class (str "row entry" (when last-entry? " last"))]
     (when (or image-url? title? headline? body?)
-      [:table {:class topic-class}
+      [:table {:class entry-class}
         [:tr
           [:th {:class "small-12 large-12 columns first last"}
             (spacer 18)
             (when title?
-              [:p {:class "topic-title"} (s/upper-case title)])
+              [:p {:class "entry-title"} (s/upper-case title)])
             (when headline?
-              [:p {:class "topic-headline"} headline])
+              [:p {:class "entry-headline"} headline])
             (when image-url?
-              [:img {:class "topic-image" :src image-url}])
+              [:img {:class "entry-image" :src image-url}])
             (when body? body)
             (when body? (spacer 10))]
           [:th {:class "expander"}]]])))
@@ -170,17 +170,17 @@
   (when-let [periods (filterv #(= (:slug %) (:slug metric)) data)]
     (reverse (sort-by :period periods))))
 
-(defn growth-metrics [topic currency]
-  (let [data (:data topic)
-        metadata (:metrics topic)
+(defn growth-metrics [entry currency]
+  (let [data (:data entry)
+        metadata (:metrics entry)
         periods (map #(periods-for-metric % data) metadata)]
     [:table {:class "growth-metrics"}
       [:tr
         (into [:td]
           (map #(growth-metric % metadata currency) periods))]]))
 
-(defn- finance-metrics [topic currency]
-  (let [sorted-finances (reverse (sort-by :period (:data topic)))
+(defn- finance-metrics [entry currency]
+  (let [sorted-finances (reverse (sort-by :period (:data entry)))
         ;; Most recent finances
         finances (first sorted-finances)
         period (format/parse utils/monthly-period (:period finances))
@@ -250,40 +250,39 @@
               [:span formatted-cash-delta formatted-runway])]])]))
 
 
-(defn- data-topic [snapshot topic-name topic topic-url last-topic?]
-  (let [currency (:currency snapshot)
-        data? (seq (:data topic))
-        body? (not (s/blank? (:body topic)))
-        view-charts? (> (count (:data topic)) 1)
-        title (:title topic)
+(defn- data-entry [update topic-slug entry last-entry?]
+  (let [currency (:currency update)
+        data? (seq (:data entry))
+        body? (not (s/blank? (:body entry)))
+        view-charts? (> (count (:data entry)) 1)
+        title (:title entry)
         title? (not (s/blank? title))
-        headline (:headline topic)
+        headline (:headline entry)
         headline? (not (s/blank? headline))
-        topic-class (str "row topic" (when last-topic? " last"))]
-    [:table {:class topic-class}
+        entry-class (str "row entry" (when last-entry? " last"))]
+    [:table {:class entry-class}
       [:tr
         [:th {:class "small-12 large-12 columns first last"}
           (when title?
             (spacer 18))
           (when title?
-            [:p {:class "topic-title"} (s/upper-case title)])
+            [:p {:class "entry-title"} (s/upper-case title)])
           (when headline?
-            [:p {:class "topic-headline"} headline])
+            [:p {:class "entry-headline"} headline])
           (when data?
-            (if (= topic-name "finances")
-              (finance-metrics topic currency)
-              (growth-metrics topic currency)))
-          (when body? (:body topic))
+            (if (= topic-slug "finances")
+              (finance-metrics entry currency)
+              (growth-metrics entry currency)))
+          (when body? (:body entry))
           (when body? (spacer 10))]
         [:th {:class "expander"}]]]))
 
-(defn- topic [snapshot topic-name topic last-topic?]
-  (let [company-slug (:company-slug snapshot)
-        snapshot-slug (:slug snapshot)
-        topic-url (s/join "/" [config/web-url company-slug "updates" snapshot-slug (str topic-name "?src=email")])]
-    (if (:data topic)
-      (data-topic snapshot topic-name topic topic-url last-topic?)
-      (content-topic snapshot topic-name topic topic-url last-topic?))))
+(defn- entry [update topic-slug entry last-topic?]
+  (let [org-slug (:org-slug update)
+        slug (:slug update)]
+    (if (:data entry)
+      (data-entry update topic-slug entry last-topic?)
+      (content-entry update topic-slug entry last-topic?))))
 
 (defn- paragraph [content]
   [:table {:class "row"}
@@ -295,14 +294,14 @@
         [:th {:class "small-1 large-2 last columns"}]
         [:th {:class "expander"}]]]])
 
-(defn- snapshot-content [snapshot]
-  (let [title? (not (s/blank? (:title snapshot)))]
+(defn- update-content [update]
+  (let [title? (not (s/blank? (:title update)))]
     [:td
       [:table
         [:tr
-          (let [topics (:sections snapshot)]
+          (let [entries (:entries update)]
             (into [:td]
-              (map #(topic snapshot % (snapshot (keyword %)) (= (keyword %) (keyword (last topics)))) topics)))]]]))
+              (map #(entry update % (:topic-slug %) (= (:topic-slug %) (:topic-slug (last entries)))) entries)))]]]))
 
 (defn- cta-button [cta url]
   [:table {:class "row"}
@@ -330,8 +329,6 @@
         logo? (not (s/blank? logo-url))
         org-name (:org-name invite)
         first-name (if (s/blank? (:first-name invite)) "there" (:first-name invite))]
-    (println logo-url)
-    (println logo?)
     [:td
       (when logo? (spacer 20))
       (when logo? (logo logo-url org-name))
@@ -355,18 +352,18 @@
       (oc-logo)
       (paragraph tagline)]))
 
-(defn- snapshot-link-content [snapshot]
-  (let [company-name (:name snapshot)
-        company-name? (not (s/blank? company-name))
-        title (:title snapshot)
+(defn- update-link-content [update]
+  (let [org-name (:name update)
+        org-name? (not (s/blank? org-name))
+        title (:title update)
         title? (not (s/blank? title))
-        link-title (if title? title (str company-name " Update"))
-        company-slug (:company-slug snapshot)
-        update-slug (:slug snapshot)
-        origin-url (:origin-url snapshot)
-        created-at (format/parse iso-format (:created-at snapshot))
+        link-title (if title? title (str org-name " Update"))
+        org-slug (:org-slug update)
+        slug (:slug update)
+        origin-url (:origin-url update)
+        created-at (format/parse iso-format (:created-at update))
         update-time (format/unparse link-format created-at)
-        update-url (s/join "/" [origin-url company-slug "updates" update-time update-slug])]
+        update-url (s/join "/" [origin-url org-slug "updates" update-time slug])]
     [:table {:class "note"}
       [:tr
         [:td 
@@ -374,16 +371,16 @@
             [:tr
               [:th {:class "small-12 large-12 first last columns note"}
                 "Check out the latest"
-                (when company-name? (str " from " company-name))
+                (when org-name? (str " from " org-name))
                 ": " [:a {:href update-url} link-title]]]]]]]))
 
 (defn- note 
-  [snapshot trail-space?]
+  [update trail-space?]
   [:table {:class "note"}
     [:tr
       [:td
         (spacer 15 "note")
-        (message snapshot)
+        (message update)
         (when trail-space? (spacer 22 "note"))]]])
 
 (defn- footer []
@@ -405,29 +402,29 @@
 
 (defn- body [data]
   (let [type (:type data)
-        trail-space? (not= type :snapshot-link)]
+        trail-space? (not= type :update-link)]
     [:body
       [:table {:class "body"}
         [:tr
           [:td {:class "float-center", :align "center", :valign "top"}
             (when-not (s/blank? (:note data)) (note data trail-space?))
-            (when (and (s/blank? (:note data)) (= type :snapshot-link)) (spacer 15 "note"))
-            (when (= type :snapshot) (spacer 55 "blank"))
-            (if (= type :snapshot-link)
-              (snapshot-link-content data)     
+            (when (and (s/blank? (:note data)) (= type :update-link)) (spacer 15 "note"))
+            (when (= type :update) (spacer 55 "blank"))
+            (if (= type :update-link)
+              (update-link-content data)     
               [:center
                 [:table {:class "container"}
                   [:tr
                     (case type
-                      :snapshot (snapshot-content data)
+                      :update (update-content data)
                       :reset (reset-content data)
                       :invite (invite-content data))]]])
-            (when (= type :snapshot) (footer))
-            (when (= type :snapshot) (spacer 55 "blank"))]]]]))
+            (when (= type :update) (footer))
+            (when (= type :update) (spacer 55 "blank"))]]]]))
 
 (defn- head [data]
   (let [type (:type data)
-        css (if (= type :snapshot) "oc-snapshot.css" "oc-transactional.css")]
+        css (if (= type :update) "oc-update.css" "oc-transactional.css")]
     [:html {:xmlns "http://www.w3.org/1999/xhtml"} 
       [:head 
         [:meta {:http-equiv "Content-Type", :content "text/html; charset=utf-8"}]
@@ -449,11 +446,11 @@
         org (if (s/blank? org-name) "" (str org-name " on "))]
     (str prefix " to join " org "OpenCompany.")))
 
-(defn snapshot-link-html [snapshot]
-  (html snapshot :snapshot-link))
+(defn update-link-html [update]
+  (html update :update-link))
 
-(defn snapshot-html [snapshot]
-  (html snapshot :snapshot))
+(defn update-html [update]
+  (html update :update))
 
 (defn invite-html [invite]
   (html (assoc invite :subject (invite-subject invite)) :invite))
@@ -491,34 +488,34 @@
       (s/replace "\n" "")
       (s/replace "\t" "")))
 
-  (def data (clean-html (slurp "./resources/snapshot/head.html")))
+  (def data (clean-html (slurp "./resources/update/head.html")))
   (-> (hickory/parse data) hickory/as-hiccup first)
 
-  (def data (clean-html (slurp "./resources/snapshot/body.html")))
+  (def data (clean-html (slurp "./resources/update/body.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3))
 
-  (def data (clean-html (slurp "./resources/snapshot/spacer.html")))
+  (def data (clean-html (slurp "./resources/update/spacer.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-html (slurp "./resources/snapshot/note.html")))
+  (def data (clean-html (slurp "./resources/update/note.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-htnml (slurp "./resources/snapshot/logo.html")))
+  (def data (clean-htnml (slurp "./resources/update/logo.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-html (slurp "./resources/snapshot/name.html")))
+  (def data (clean-html (slurp "./resources/update/name.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-html (slurp "./resources/snapshot/title.html")))
+  (def data (clean-html (slurp "./resources/update/title.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-html (slurp "./resources/snapshot/topic.html")))
+  (def data (clean-html (slurp "./resources/update/topic.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-html (slurp "./resources/snapshot/data-topic.html")))
+  (def data (clean-html (slurp "./resources/update/data-topic.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-html (slurp "./resources/snapshot/footer.html")))
+  (def data (clean-html (slurp "./resources/update/footer.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
   (def data (clean-html (slurp "./resources/invite/paragraph.html")))
@@ -532,45 +529,45 @@
   (require '[oc.email.content :as content] :reload)
 
   (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
-  (def snapshot (json/decode (slurp "./opt/samples/snapshots/green-labs.json")))
-  (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note note) (assoc :company-slug "green-labs"))))
+  (def update (json/decode (slurp "./opt/samples/updates/green-labs.json")))
+  (spit "./hiccup.html" (content/update-html (assoc update :note note)))
 
-  (spit "./hiccup.html" (content/snapshot-link-html (-> snapshot (assoc :note note) (assoc :company-slug "green-labs"))))
+  (spit "./hiccup.html" (content/snapshot-link-html (assoc update :note note)))
 
   (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
-  (def snapshot (json/decode (slurp "./opt/samples/snapshots/buff.json")))
-  (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note note) (assoc :company-slug "buff"))))
+  (def update (json/decode (slurp "./opt/samples/updates/buff.json")))
+  (spit "./hiccup.html" (content/update-html (assoc update :note note)))
 
-  (def snapshot (json/decode (slurp "./opt/samples/snapshots/new.json")))
-  (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note "") (assoc :company-slug "new"))))
+  (def update (json/decode (slurp "./opt/samples/updates/new.json")))
+  (spit "./hiccup.html" (content/update-html (assoc update :note "")))
 
-  (def snapshot (json/decode (slurp "./opt/samples/snapshots/bago.json")))
-  (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note "") (assoc :company-slug "bago"))))
+  (def snapshot (json/decode (slurp "./opt/updates/snapshots/bago.json")))
+  (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note "") (assoc :company-slug "bago"))))
 
-  (def snapshot (json/decode (slurp "./opt/samples/snapshots/bago-no-symbol.json")))
-  (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note "") (assoc :company-slug "bago"))))
+  (def snapshot (json/decode (slurp "./opt/updates/snapshots/bago-no-symbol.json")))
+  (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note "") (assoc :company-slug "bago"))))
 
-  (def snapshot (json/decode (slurp "./opt/samples/snapshots/growth-options.json")))
-  (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note "") (assoc :company-slug "growth-options"))))
+  (def snapshot (json/decode (slurp "./opt/samples/updates/growth-options.json")))
+  (spit "./hiccup.html" (content/update-html (assoc update :note "")))
 
-  (def snapshot (json/decode (slurp "./opt/samples/snapshots/blanks-test.json")))
-  (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note "") (assoc :company-slug "blanks-test"))))
+  (def snapshot (json/decode (slurp "./opt/updates/snapshots/blanks-test.json")))
+  (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note "") (assoc :company-slug "blanks-test"))))
 
-  (def snapshot (json/decode (slurp "./opt/samples/snapshots/sparse.json")))
-  (spit "./hiccup.html" (content/snapshot-html (-> snapshot (assoc :note "") (assoc :company-slug "sparse"))))
+  (def snapshot (json/decode (slurp "./opt/updates/snapshots/sparse.json")))
+  (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note "") (assoc :company-slug "sparse"))))
 
-  (def invite (json/decode (slurp "./opt/samples/invites/apple.json")))
+  (def invite (json/decode (slurp "./opt/updates/invites/apple.json")))
   (spit "./hiccup.html" (content/invite-html invite))
 
-  (def invite (json/decode (slurp "./opt/samples/invites/microsoft.json")))
-  (spit "./hiccup.html" (content/invite-html invite))
-  (content/invite-text invite)
-
-  (def invite (json/decode (slurp "./opt/samples/invites/combat.json")))
+  (def invite (json/decode (slurp "./opt/updates/invites/microsoft.json")))
   (spit "./hiccup.html" (content/invite-html invite))
   (content/invite-text invite)
 
-  (def invite (json/decode (slurp "./opt/samples/invites/sparse-data.json")))
+  (def invite (json/decode (slurp "./opt/updates/invites/combat.json")))
+  (spit "./hiccup.html" (content/invite-html invite))
+  (content/invite-text invite)
+
+  (def invite (json/decode (slurp "./opt/updates/invites/sparse-data.json")))
   (spit "./hiccup.html" (content/invite-html invite))
   (content/invite-text invite)
 

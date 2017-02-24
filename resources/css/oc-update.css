@@ -44,30 +44,30 @@ th.columns {
   padding-bottom: 0px !important;
 }
 
-/* Topic */
+/* Entry */
 
-table.topic {
+table.entry {
   border-bottom: 1px solid #EDEDED;
 }
 
-table.topic.last {
+table.entry.last {
   border-bottom: 0;
   margin-bottom: 30px;
 }
 
-table.topic th.large-10 th.small-10 {
+table.entry th.large-10 th.small-10 {
   padding-left: 0;
   padding-right: 0;  
 }
 
-table.topic p.topic-headline {
+table.entry p.entry-headline {
   font-size: 18px;
   color: #0A0A0A;
   font-family: Domine-Regular, Georgia, serif;
   line-height: 1.5;
 }
 
-table.topic p.topic-title {
+table.entry p.entry-title {
   font-family: OpenSans, Arial, sans-serif;
   font-size: 13px;
   font-weight: bold;
@@ -78,19 +78,19 @@ table.topic p.topic-title {
   margin-bottom: 5px;
 }
 
-table.topic,
-table.topic p,
-table.topic ul {
+table.entry,
+table.entry p,
+table.entry ul {
   font-size: 15px;
   color: #0A0A0A;
   font-family: Domine-Regular;
   line-height: 1.5;
 }
 
-table.topic h1,
-table.topic h2,
-table.topic h3,
-table.topic h4 {
+table.entry h1,
+table.entry h2,
+table.entry h3,
+table.entry h4 {
   font-family: Domine-Regular, Georgia, serif;
   font-weight: 800;
   font-size: 18px;
@@ -98,11 +98,11 @@ table.topic h4 {
   color: #0A0A0A;
 }
 
-table.topic img.topic-image {
+table.entry img.entry-image {
   padding: 10px 0 10px 0;
 }
 
-/* Data Topic */
+/* Data Entry */
 
 table.finances-metrics, table.growth-metrics {
   margin: 10px 0 10px 0;
@@ -113,33 +113,33 @@ table.finances-metrics td, table.growth-metrics td {
   padding-right: 0;
 }
 
-table.topic span.metric {
+table.entry span.metric {
   font-family: OpenSans, Arial, sans-serif;
   font-weight: bold;
   line-height: 1.5;
 }
 
-table.topic span.metric-diff {
+table.entry span.metric-diff {
   font-family: OpenSans, Arial, sans-serif;
   line-height: 1.5;
 }
 
 
-table.topic span.metric {
+table.entry span.metric {
   font-size: 15px !important;
   margin-bottom: 20px;
   color: #0A0A0A;
 }
 
-table.topic span.metric.pos {
+table.entry span.metric.pos {
   color: #26C485;
 }
 
-table.topic span.metric.neg {
+table.entry span.metric.neg {
   color: #D72A46;
 }
 
-table.topic span.label {
+table.entry span.label {
   padding-left: 7px;
   font-size: 15px !important;
   line-height: 1.5 !important;

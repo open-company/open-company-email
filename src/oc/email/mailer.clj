@@ -34,18 +34,15 @@
       :message {:subject subject
                 :body html-body})))
 
-(defn- email-snapshots
+(defn- email-update
   "Send emails to all to recipients in parallel."
-  [{:keys [to reply-to subject snapshot]} body]
-  (let [snapshot (keywordize-keys snapshot)
-        company-slug (:company-slug snapshot)
-        company-name (:name snapshot)]
-    (doall (pmap #(email {:to %
-                          :source (str company-name "<" company-slug "@" c/email-from-domain ">")
-                          :reply-to (if (s/blank? reply-to) default-reply-to reply-to)
-                          :subject subject} 
-                    {:html body})
-              to))))
+  [{:keys [to reply-to subject org-slug org-name entries]} body]
+  (doall (pmap #(email {:to %
+                        :source (str org-name "<" org-slug "@" c/email-from-domain ">")
+                        :reply-to (if (s/blank? reply-to) default-reply-to reply-to)
+                        :subject subject}
+                  {:html body})
+            to)))
 
 (defn- inline-css [html-file inline-file]
   (shell/sh "juice" 
@@ -55,17 +52,14 @@
             "--preserve-font-faces" "false"
             html-file inline-file))
 
-(defn send-snapshot
-  "Create an HTML snapshot and email it to the specified recipients."
-  [{note :note snapshot :snapshot origin-url :origin-url :as msg}]
-  (let [full-snapshot (-> snapshot 
-                        (assoc :note note)
-                        (assoc :origin-url origin-url))
-        uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
+(defn send-update
+  "Create an HTML update and email it to the specified recipients."
+  [update]
+  (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
         html-file (str uuid-fragment ".html")
         inline-file (str uuid-fragment ".inline.html")]
     (try
-      (spit html-file (content/snapshot-html full-snapshot)) ; create the email in a tmp file
+      (spit html-file (content/update-html update)) ; create the email in a tmp file
       (inline-css html-file inline-file) ; inline the CSS
       (let [file-size (.length (io/file inline-file))]
         (when (>= file-size size-limit)
@@ -73,16 +67,16 @@
           (when c/dsn ; Sentry is configured
             (sentry/capture c/dsn {:message "Rendered update email is over size limit"
                                    :extra {
-                                      :company-slug (:company-slug snapshot)
-                                      :update-slug (:slug snapshot)
+                                      :org-slug (:org-slug update)
+                                      :slug (:slug update)
                                       :human-size (str (int (Math/ceil (/ file-size 1000))) "KB")
                                       :size file-size
-                                      :topic-count (count (:sections snapshot))}}))
+                                      :entry-count (count (:entries update))}}))
           ;; Render an alternative, smaller email
-          (spit html-file (content/snapshot-link-html full-snapshot)) ; create the email in a tmp file
+          (spit html-file (content/update-link-html update)) ; create the email in a tmp file
           (inline-css html-file inline-file))) ; inline the CSS
       ; Email the recipients
-      (email-snapshots msg (slurp inline-file))
+      (email-update update (slurp inline-file))
       (finally
         ; remove the tmp files
         (io/delete-file html-file true)
@@ -140,21 +134,29 @@
 
   (require '[oc.email.mailer :as mailer] :reload)
 
-  (def snapshot (json/decode (slurp "./opt/samples/snapshots/green-labs.json")))
-  (mailer/send-snapshot {:to ["change@me.com"]
-                         :reply-to "change@me.com"
-                         :subject "Latest GreenLabs Update"
-                         :note "Enjoy this groovy update!"
-                         :origin "http://localhost:3559"
-                         :snapshot (assoc snapshot :company-slug "green-labs")})
+  (def update (json/decode (slurp "./opt/samples/updates/green-labs.json")))
+  (mailer/send-update {:to ["change@me.com"]
+                       :reply-to "change@me.com"
+                       :subject "Latest GreenLabs Update"
+                       :note "Enjoy this groovy update!"
+                       :origin "http://localhost:3559"
+                       :org-slug (:org-slug update)
+                       :org-name (:org-name update)
+                       :logo-url (:logo-url update)
+                       :currency (:currency update)
+                       :entries (:entries update)})
 
-  (def snapshot (json/decode (slurp "./opt/samples/snapshots/buff.json")))
-  (mailer/send-snapshot {:to ["change@me.com"]
-                         :reply-to "change@me.com"
-                         :subject "Latest Buffer Update"
-                         :note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week."
-                         :origin "http://localhost:3559"
-                         :snapshot (assoc snapshot :company-slug "buff")})
+  (def update (json/decode (slurp "./opt/samples/updates/buff.json")))
+  (mailer/send-update {:to ["change@me.com"]
+                       :reply-to "change@me.com"
+                       :subject "Latest GreenLabs Update"
+                       :note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week."
+                       :origin "http://localhost:3559"
+                       :org-slug (:org-slug update)
+                       :org-name (:org-name update)
+                       :logo-url (:logo-url update)
+                       :currency (:currency update)
+                       :entries (:entries update)})
 
   (def invite (json/decode (slurp "./opt/samples/invites/microsoft.json")))
   (mailer/send-invite (assoc invite :to "change@me.com"))
