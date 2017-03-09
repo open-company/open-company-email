@@ -17,7 +17,14 @@
 (def tagline "OpenCompany is the simplest way to keep everyone on the same page.")
 
 (def reset-message "Someone (hopefully you) requested a new password for your OpenCompany account.")
-(def reset-instructions "If you didn't request a password reset, you can ignore this email.")
+(def reset-instructions "Click the link below to reset your password.")
+(def reset-button-text "RESET PASSWORD ➞")
+(def reset-ignore "If you didn't request a password reset, you can ignore this email.")
+
+(def verify-message "Someone (hopefully you) created an OpenCompany account.")
+(def verify-instructions "Click the link below to verify your email address.")
+(def verify-button-text "VERIFY EMAIL ➞")
+(def verify-ignore "If you didn't create an OpenCompany account, you can ignore this email.")
 
 (defn- logo [logo-url org-name]
   [:table {:class "row header"} 
@@ -339,15 +346,31 @@
       (spacer 30)
       (paragraph tagline)]))
 
-(defn- reset-content [reset]
-  (let [first-name (if (s/blank? (:first-name reset)) "there" (:first-name reset))]
+(defn- token-prep [token-type msg]
+  {:first-name (if (s/blank? (:first-name msg)) "there" (:first-name msg))
+   :message (case token-type
+              :reset reset-message
+              :verify verify-message)
+    :instructions (case token-type
+                     :reset reset-instructions
+                     :verify verify-instructions)
+    :button-text (case token-type
+                    :reset reset-button-text
+                    :verify verify-button-text)
+    :link (:token-link (keywordize-keys msg))
+    :ignore (case token-type
+                :reset reset-ignore
+                :verify verify-ignore)})
+
+(defn- token-content [token-type msg]
+  (let [message (token-prep token-type msg)]
     [:td
       (spacer 15)
-      (paragraph (str "Hi " first-name "! " reset-message))
+      (paragraph (str "Hi " (:first-name message) "! " (:message message)))
       (spacer 15)
-      (cta-button "RESET PASSWORD ➞" (:token-link reset))
+      (cta-button (:button-text message) (:link message))
       (spacer 15)
-      (paragraph reset-instructions)
+      (paragraph (:ignore message))
       (spacer 15)
       (oc-logo)
       (paragraph tagline)]))
@@ -417,7 +440,8 @@
                   [:tr
                     (case type
                       :update (update-content data)
-                      :reset (reset-content data)
+                      :reset (token-content type data)
+                      :verify (token-content type data)
                       :invite (invite-content data))]]])
             (when (= type :update) (footer))
             (when (= type :update) (spacer 55 "blank"))]]]]))
@@ -462,16 +486,15 @@
          "Open the link below to check it out.\n\n"
          link "\n\n")))
 
-(defn reset-html [reset]
-  (html reset :reset))
+(defn token-html [token-type msg]
+  (html msg token-type))
 
-(defn reset-text [reset]
-  (let [link (:token-link (keywordize-keys reset))
-        first-name (if (s/blank? (:first-name reset)) "there" (:first-name reset))]
-    (str "Hi " first-name "! " reset-message "\n\n"
-         "Click the link below to reset your password.\n\n"
-         link "\n\n"
-         reset-instructions "\n\n")))
+(defn token-text [token-type msg]
+  (let [message (token-prep token-type msg)]
+    (str "Hi " (:first-name message) "! " (:message message) "\n\n"
+         (:instructions message) "\n\n"
+         (:link message) "\n\n"
+         (:ignore message))))
 
 (comment
   
@@ -571,7 +594,7 @@
   (spit "./hiccup.html" (content/invite-html invite))
   (content/invite-text invite)
 
-  (spit "./hiccup.html" (content/reset-html {}))
-  (content/reset-text {})
+  (spit "./hiccup.html" (content/token-html :reset {:token-link "http://test.it/123"}))
+  (content/token-text :verify {:token-link "http://test.it/123"})
 
   )

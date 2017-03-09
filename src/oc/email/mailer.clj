@@ -103,24 +103,26 @@
         (io/delete-file html-file true)
         (io/delete-file inline-file true)))))
 
-(defn send-reset
-  "Create an HTML and text reset password email and email it to the specified recipient."
-  [message]
+(defn send-token
+  "Create an HTML and text one-time-token email and email it to the specified recipient."
+  [token-type message]
   (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
         html-file (str uuid-fragment ".html")
         inline-file (str uuid-fragment ".inline.html")
-        reset (-> message 
-                (keywordize-keys)
-                (assoc :source (str default-from " <" default-reply-to ">"))
-                (assoc :from default-from)
-                (assoc :reply-to default-reply-to)
-                (assoc :subject "OpenCompany Password Reset"))]
+        msg (-> message 
+              (keywordize-keys)
+              (assoc :source (str default-from " <" default-reply-to ">"))
+              (assoc :from default-from)
+              (assoc :reply-to default-reply-to)
+              (assoc :subject (case token-type
+                                  :reset "OpenCompany Password Reset"
+                                  :verify "OpenCompany Email Verification")))]
     (try
-      (spit html-file (content/reset-html reset)) ; create the email in a tmp file
+      (spit html-file (content/token-html token-type msg)) ; create the email in a tmp file
       (inline-css html-file inline-file) ; inline the CSS
       ;; Email it to the recipient
-      (email reset {:text (content/reset-text reset)
-                    :html (slurp inline-file)})
+      (email msg {:text (content/token-text token-type msg)
+                  :html (slurp inline-file)})
       (finally
         ; remove the tmp files
         (io/delete-file html-file true)
@@ -151,7 +153,7 @@
   (def invite (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/invites/microsoft.json"))))
   (mailer/send-invite (assoc invite :to "change@me.com"))
 
-  (mailer/send-reset {:to "change@me.com"
-                      :token-link "http://localhost:3000/invite?token=dd7c0bfe-2068-4de0-aa3c-4913eeeaa360"})
+  (mailer/send-token :reset {:to "change@me.com"
+                             :token-link "http://localhost:3000/invite?token=dd7c0bfe-2068-4de0-aa3c-4913eeeaa360"})
 
 )

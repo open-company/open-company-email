@@ -20,8 +20,9 @@
     (timbre/info "Received message from SQS.")
     (timbre/tracef "\nMessage from SQS: %s\n" msg-body)
     (case msg-type
+      "reset" (mailer/send-token :reset msg-body)
+      "verify" (mailer/send-token :verify msg-body)
       "invite" (mailer/send-invite msg-body)
-      "reset" (mailer/send-reset msg-body)
       "update" (mailer/send-update msg-body)
       (timbre/error "Unrecognized message type" msg-type)))
   msg)
