@@ -15,7 +15,7 @@
   :dependencies [
     [org.clojure/clojure "1.9.0-alpha15"] ; Lisp on the JVM http://clojure.org/documentation
     [environ "1.1.0"] ; Environment settings from different sources https://github.com/weavejester/environ
-    [hiccup "1.0.5"] ; HTML rendering https://github.com/weavejester/hiccup
+    [hiccup "2.0.0-alpha1"] ; HTML rendering https://github.com/weavejester/hiccup
     [jfree/jfreechart "1.0.13"] ; Java chart library http://www.jfree.org/jfreechart/
 
     [open-company/lib "0.7.0-ff55bd6"] ; Library for OC projects https://github.com/open-company/open-company-lib

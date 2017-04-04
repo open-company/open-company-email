@@ -2,6 +2,9 @@
 https://github.com/zurb/foundation-emails/releases/tag/v2.2.1
 2.2.1 
 July 1, 2016
+
+NB: Modified by OC to comment all 580px width/min/max to prevent font scaling in mobile emails.
+
 */
 .wrapper {
   width: 100%; }
@@ -49,7 +52,8 @@ img {
 
 center {
   width: 100%;
-  min-width: 580px; }
+  /*min-width: 580px;*/
+}
 
 a img {
   border: none; }
@@ -86,7 +90,7 @@ table.body {
 
 table.container {
   background: #fefefe;
-  width: 580px;
+  /*width: 580px;*/
   margin: 0 auto;
   Margin: 0 auto;
   text-align: inherit; }
@@ -558,7 +562,8 @@ th.large-12.last {
 .collapse > tbody > tr > th.large-12 {
   padding-right: 0;
   padding-left: 0;
-  width: 580px; }
+  /*width: 580px; */
+}
 
 .collapse td.large-12.first,
 .collapse th.large-12.first,
@@ -676,7 +681,8 @@ table.container.radius {
 
 .block-grid {
   width: 100%;
-  max-width: 580px; }
+  /*max-width: 580px;*/
+  }
   .block-grid td {
     display: inline-block;
     padding: 8px; }
@@ -939,7 +945,9 @@ table.hr {
   width: 100%; }
   table.hr th {
     height: 0;
+    /*
     max-width: 580px;
+    */
     border-top: 0;
     border-right: 0;
     border-bottom: 1px solid #0a0a0a;
@@ -1158,7 +1166,7 @@ th.callout-inner {
     box-shadow: 0 0 6px 1px rgba(33, 153, 232, 0.5); }
 
 table.menu {
-  width: 580px; }
+  /*width: 580px;*/ }
   table.menu td.menu-item,
   table.menu th.menu-item {
     padding: 10px;

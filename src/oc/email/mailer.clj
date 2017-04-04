@@ -136,7 +136,7 @@
 
   (def update (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/updates/green-labs.json"))))
   (mailer/send-update (merge update {
-                       :to ["sean@opencompany.com"]
+                       :to ["change@me.com"]
                        :reply-to "change@me.com"
                        :subject "Latest GreenLabs Update"
                        :note "Enjoy this groovy update!"
