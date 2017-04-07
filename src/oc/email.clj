@@ -9,11 +9,11 @@
             [oc.email.mailer :as mailer]))
 
 (defn system [config-options]
-  (let [{:keys [sqs-creds sqs-queue-url sqs-msg-handler]} config-options]
+  (let [{:keys [sqs-creds sqs-queue sqs-msg-handler]} config-options]
     (component/system-map
-      :sqs (sqs/sqs-listener sqs-creds sqs-queue-url sqs-msg-handler))))
+      :sqs (sqs/sqs-listener sqs-creds sqs-queue sqs-msg-handler))))
 
-(defn sqs-handler [sys msg]
+(defn sqs-handler [msg done-channel]
   (let [msg-body (read-string (:body msg))
         msg-type (:type msg-body)
         error (if (:test-error msg-body) (/ 1 0) false)] ; test Sentry error reporting
@@ -25,7 +25,7 @@
       "invite" (mailer/send-invite msg-body)
       "update" (mailer/send-update msg-body)
       (timbre/error "Unrecognized message type" msg-type)))
-  msg)
+  (sqs/ack done-channel msg))
 
 (defn -main []
 
@@ -51,7 +51,7 @@
     (when c/intro? "Ready to serve...\n")))
 
   ;; Start the system, which will start long polling SQS
-  (component/start (system {:sqs-queue-url c/aws-sqs-email-queue
+  (component/start (system {:sqs-queue c/aws-sqs-email-queue
                             :sqs-msg-handler sqs-handler
                             :sqs-creds {:access-key c/aws-access-key-id
                                         :secret-key c/aws-secret-access-key}}))
