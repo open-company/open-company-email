@@ -15,10 +15,10 @@
   :dependencies [
     [org.clojure/clojure "1.9.0-alpha15"] ; Lisp on the JVM http://clojure.org/documentation
     [environ "1.1.0"] ; Environment settings from different sources https://github.com/weavejester/environ
-    [hiccup "1.0.5"] ; HTML rendering https://github.com/weavejester/hiccup
+    [hiccup "2.0.0-alpha1"] ; HTML rendering https://github.com/weavejester/hiccup
     [jfree/jfreechart "1.0.13"] ; Java chart library http://www.jfree.org/jfreechart/
-
-    [open-company/lib "0.7.0-ff55bd6"] ; Library for OC projects https://github.com/open-company/open-company-lib
+    [manifold "0.1.6"] ; Async programming tools https://github.com/ztellman/manifold
+    [open-company/lib "0.8.1-e4fe975"] ; Library for OC projects https://github.com/open-company/open-company-lib
     ; In addition to common functions, brings in the following common dependencies used by this project:
     ; Component - Component Lifecycle https://github.com/stuartsierra/component
     ; Schema - Data validation https://github.com/Prismatic/schema
@@ -27,7 +27,6 @@
     ; Raven - Interface to Sentry error reporting https://github.com/sethtrain/raven-clj
     ; Cheshire - JSON encoding / decoding https://github.com/dakrone/cheshire
     ; clj-time - Date and time lib https://github.com/clj-time/clj-time
-    ; Manifold - Async programming tools
   ]
 
   :repositories [["jfreechart" "http://central.maven.org/maven2/"]]

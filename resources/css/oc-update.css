@@ -5,6 +5,18 @@ html,
   font-family: Domine-Regular, Georgia, serif;
 }
 
+@media only screen and (max-device-width: 480px) {
+    body { width: 320px !important; margin: 0; padding: 0; }
+    img.entry-image { height:auto !important; max-width:100% !important; }
+    table.container td { padding-left: 0px; padding-right: 0px; }
+    table.container { max-width: 320px; }
+}
+
+@media only screen and (min-device-width: 481px) {
+  table.container td { padding-left: 25px; padding-right: 25px; }
+  table.container { max-width: 480px; }
+}
+
 a,
 a:hover,
 a:active,
@@ -14,13 +26,7 @@ a:visited {
   text-decoration: underline;
 }
 
-table.container {
-  max-width: 500px;
-}
-
 table.container td {
-  padding-left: 25px;
-  padding-right: 25px;
   background: white;
 }
 

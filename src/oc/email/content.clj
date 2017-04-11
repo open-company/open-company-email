@@ -551,7 +551,7 @@
 
   (require '[oc.email.content :as content] :reload)
 
-  (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
+  (def note "Enjoy the groovy update.")
   (def update (json/decode (slurp "./opt/samples/updates/green-labs.json")))
   (spit "./hiccup.html" (content/update-html (assoc update :note note)))
 
