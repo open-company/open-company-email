@@ -54,7 +54,7 @@ used above as the `MAIL FROM` header (such as bounce.company.com).
 
 Follow the directions provided during signup to add the DMARC entry TXT record to your DNS in Route 53.
 
-Details on this step can be found here: [https://www.chrisanthropic.com/sending-mail-ses-route53-dkim-spf-dmarc/](Sending mail with AWS SES and Route 53)
+Details on this step can be found here: [Sending mail with AWS SES and Route 53](https://www.chrisanthropic.com/sending-mail-ses-route53-dkim-spf-dmarc/)
 
 After you setup the DNS record, click the verify button on Postmark's service and you'll get an email when it's able
 to verify your DNS entry.
@@ -72,4 +72,4 @@ DMARC is reported as `none` as the server looked in the TLD for it.
 
 ## Reference
 
-[https://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from.html](Using a Custom MAIL FROM Domain with Amazon SES)
+[Using a Custom MAIL FROM Domain with Amazon SES](https://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from.html)
