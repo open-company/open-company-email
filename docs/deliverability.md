@@ -38,7 +38,7 @@ By default, SES uses a subdomain of amazonses.com as the `MAIL FROM` domain.
 
 Follow the steps here to verify your domain, generate DKIM keys, and add them to DNS entries in Route 53:
 
-[https://www.chrisanthropic.com/sending-mail-ses-route53-dkim-spf-dmarc/](Sending mail with AWS SES and Route 53)
+[Sending mail with AWS SES and Route 53](https://www.chrisanthropic.com/sending-mail-ses-route53-dkim-spf-dmarc/)
 
 Follow the steps in the same post to setup the `MAIL FROM` to a subdomain (`bounce` is a good one to use) rather
 than have it be use SES as the `MAIL FROM`.
