@@ -13,12 +13,12 @@
 
   ;; All profile dependencies
   :dependencies [
-    [org.clojure/clojure "1.9.0-alpha15"] ; Lisp on the JVM http://clojure.org/documentation
+    [org.clojure/clojure "1.9.0-alpha16"] ; Lisp on the JVM http://clojure.org/documentation
     [environ "1.1.0"] ; Environment settings from different sources https://github.com/weavejester/environ
     [hiccup "2.0.0-alpha1"] ; HTML rendering https://github.com/weavejester/hiccup
     [jfree/jfreechart "1.0.13"] ; Java chart library http://www.jfree.org/jfreechart/
-    [manifold "0.1.6"] ; Async programming tools https://github.com/ztellman/manifold
-    [open-company/lib "0.8.2-df1018e"] ; Library for OC projects https://github.com/open-company/open-company-lib
+    [manifold "0.1.7-alpha2"] ; Async programming tools https://github.com/ztellman/manifold
+    [open-company/lib "0.9.4-8954046"] ; Library for OC projects https://github.com/open-company/open-company-lib
     ; In addition to common functions, brings in the following common dependencies used by this project:
     ; Component - Component Lifecycle https://github.com/stuartsierra/component
     ; Schema - Data validation https://github.com/Prismatic/schema
@@ -47,7 +47,7 @@
       ]
       :plugins [
         [jonase/eastwood "0.2.3"] ; Linter https://github.com/jonase/eastwood
-        [lein-kibit "0.1.3"] ; Static code search for non-idiomatic code https://github.com/jonase/kibit
+        [lein-kibit "0.1.5"] ; Static code search for non-idiomatic code https://github.com/jonase/kibit
       ]
     }
 
@@ -74,7 +74,7 @@
         [lein-spell "0.1.0"] ; Catch spelling mistakes in docs and docstrings https://github.com/cldwalker/lein-spell
         [lein-deps-tree "0.1.2"] ; Print a tree of project dependencies https://github.com/the-kenny/lein-deps-tree
         [venantius/yagni "0.1.4"] ; Dead code finder https://github.com/venantius/yagni
-        [com.jakemccrary/lein-test-refresh "0.19.0"] ; Autotest https://github.com/jakemcc/lein-test-refresh
+        [com.jakemccrary/lein-test-refresh "0.20.0"] ; Autotest https://github.com/jakemcc/lein-test-refresh
       ]  
     }]
 
