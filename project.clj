@@ -6,19 +6,19 @@
     :url "http://www.mozilla.org/MPL/2.0/"
   }
 
-  :min-lein-version "2.5.1" ; highest version supported by Travis-CI as of 1/28/2016
+  :min-lein-version "2.7.1"
 
   ;; JVM memory
   :jvm-opts ^:replace ["-Xms512m" "-Xmx3072m" "-server"]
 
   ;; All profile dependencies
   :dependencies [
-    [org.clojure/clojure "1.9.0-alpha16"] ; Lisp on the JVM http://clojure.org/documentation
+    [org.clojure/clojure "1.9.0-alpha17"] ; Lisp on the JVM http://clojure.org/documentation
     [environ "1.1.0"] ; Environment settings from different sources https://github.com/weavejester/environ
     [hiccup "2.0.0-alpha1"] ; HTML rendering https://github.com/weavejester/hiccup
     [jfree/jfreechart "1.0.13"] ; Java chart library http://www.jfree.org/jfreechart/
-    [manifold "0.1.7-alpha2"] ; Async programming tools https://github.com/ztellman/manifold
-    [open-company/lib "0.9.4-8954046"] ; Library for OC projects https://github.com/open-company/open-company-lib
+    [manifold "0.1.7-alpha5"] ; Async programming tools https://github.com/ztellman/manifold
+    [open-company/lib "0.10.9-2151229"] ; Library for OC projects https://github.com/open-company/open-company-lib
     ; In addition to common functions, brings in the following common dependencies used by this project:
     ; Component - Component Lifecycle https://github.com/stuartsierra/component
     ; Schema - Data validation https://github.com/Prismatic/schema
@@ -46,7 +46,7 @@
         [philoskim/debux "0.2.1"] ; `dbg` macro around -> or let https://github.com/philoskim/debux
       ]
       :plugins [
-        [jonase/eastwood "0.2.3"] ; Linter https://github.com/jonase/eastwood
+        [jonase/eastwood "0.2.4"] ; Linter https://github.com/jonase/eastwood
         [lein-kibit "0.1.5"] ; Static code search for non-idiomatic code https://github.com/jonase/kibit
       ]
     }
