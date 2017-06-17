@@ -18,7 +18,7 @@
     [hiccup "2.0.0-alpha1"] ; HTML rendering https://github.com/weavejester/hiccup
     [jfree/jfreechart "1.0.13"] ; Java chart library http://www.jfree.org/jfreechart/
     [manifold "0.1.7-alpha5"] ; Async programming tools https://github.com/ztellman/manifold
-    [open-company/lib "0.11.7"] ; Library for OC projects https://github.com/open-company/open-company-lib
+    [open-company/lib "0.11.10"] ; Library for OC projects https://github.com/open-company/open-company-lib
     ; In addition to common functions, brings in the following common dependencies used by this project:
     ; Component - Component Lifecycle https://github.com/stuartsierra/component
     ; Schema - Data validation https://github.com/Prismatic/schema
