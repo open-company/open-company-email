@@ -22,7 +22,7 @@ To maintain transparency, OpenCompany information is always accessible and easy 
 
 Transparency expectations are changing. Startups need to change as well if they are going to attract and retain savvy employees and investors. Just as open source changed the way we build software, transparency changes how we build successful startups with information that is open, interactive, and always accessible. The OpenCompany platform turns transparency into a competitive advantage.
 
-Like the open companies we promote and support, the [OpenCompany](https://opencompany.com/) platform is completely transparent. The company supporting this effort, OpenCompany, LLC, is an open company. The [platform](https://github.com/open-company/open-company-web) is open source software, and open company data is [open data](https://en.wikipedia.org/wiki/Open_data) accessible through the [platform API](https://github.com/open-company/open-company-api).
+Like the open companies we promote and support, the [OpenCompany](https://opencompany.com/) platform is completely transparent. The company supporting this effort, OpenCompany, LLC, is an open company. The [platform](https://github.com/open-company/open-company-web) is open source software, and open company data is [open data](https://en.wikipedia.org/wiki/Open_data) accessible through the [Storage service](https://github.com/open-company/open-company-storage).
 
 To get started, head to: [OpenCompany](https://opencompany.com/)
 
@@ -65,8 +65,8 @@ Leiningen is easy to install:
 Then let Leiningen install the rest of the dependencies:
 
 ```console
-git clone https://github.com/open-company/open-company-api.git
-cd open-company-api
+git clone https://github.com/open-company/open-company-email.git
+cd open-company-email
 lein deps
 ```
 
@@ -150,7 +150,7 @@ lein build
 
 ## Testing
 
-Tests are run in continuous integration of the `master` and `mainline` branches on [Travis CI](https://travis-ci.org/open-company/open-company-api):
+Tests are run in continuous integration of the `master` and `mainline` branches on [Travis CI](https://travis-ci.org/open-company/open-company-email):
 
 [![Build Status](http://img.shields.io/travis/open-company/open-company-email.svg?style=flat)](https://travis-ci.org/open-company/open-company-email)
 
