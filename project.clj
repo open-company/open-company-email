@@ -1,6 +1,6 @@
 (defproject open-company-email "0.2.0-SNAPSHOT"
   :description "OpenCompany Email Service"
-  :url "https://opencompany.com/"
+  :url "https://github.com/open-company/open-company-email"
   :license {
     :name "Mozilla Public License v2.0"
     :url "http://www.mozilla.org/MPL/2.0/"
@@ -43,7 +43,7 @@
       :env {
       }
       :dependencies [
-        [philoskim/debux "0.3.4"] ; `dbg` macro around -> or let https://github.com/philoskim/debux
+        [philoskim/debux "0.3.6"] ; `dbg` macro around -> or let https://github.com/philoskim/debux
       ]
       :plugins [
         [jonase/eastwood "0.2.4"] ; Linter https://github.com/jonase/eastwood
@@ -58,8 +58,7 @@
         :aws-secret-access-key "CHANGE-ME"
         :aws-endpoint "us-east-1"
         :aws-sqs-email-queue "https://sqs.REGION.amazonaws.com/CHANGE/ME"
-        :aws-s3-chart-bucket "open-company-chart-dev"
-        :email-from-domain "staging.opencompany.com"
+        :email-from-domain "change.me"
         :intro "true"
         :log-level "debug"
       }

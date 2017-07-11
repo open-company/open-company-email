@@ -108,56 +108,6 @@ table.entry img.entry-image {
   padding: 10px 0 10px 0;
 }
 
-/* Data Entry */
-
-table.finances-metrics, table.growth-metrics {
-  margin: 10px 0 10px 0;
-}
-
-table.finances-metrics td, table.growth-metrics td {
-  padding-left: 0;
-  padding-right: 0;
-}
-
-table.entry span.metric {
-  font-family: OpenSans, Arial, sans-serif;
-  font-weight: bold;
-  line-height: 1.5;
-}
-
-table.entry span.metric-diff {
-  font-family: OpenSans, Arial, sans-serif;
-  line-height: 1.5;
-}
-
-
-table.entry span.metric {
-  font-size: 15px !important;
-  margin-bottom: 20px;
-  color: #0A0A0A;
-}
-
-table.entry span.metric.pos {
-  color: #26C485;
-}
-
-table.entry span.metric.neg {
-  color: #D72A46;
-}
-
-table.entry span.label {
-  padding-left: 7px;
-  font-size: 15px !important;
-  line-height: 1.5 !important;
-  letter-spacing: 1px;
-  margin-bottom: 20px;
-}
-
-img.sparkline, img.sparkbar {
-  display: inline-block;
-  vertical-align: baseline;
-}
-
 /* === Footer === */
 
 table.footer {

@@ -3,11 +3,7 @@
             [clj-time.format :as format]
             [hiccup.core :as h]
             [clojure.walk :refer (keywordize-keys)]
-            [oc.email.config :as config]
-            [oc.email.lib.sparkline :as sl]
-            [oc.lib.data.utils :as utils]))
-
-(def month-formatter (format/formatter "MMM"))
+            [oc.email.config :as config]))
 
 (def iso-format (format/formatters :date-time)) ; ISO 8601
 (def link-format (format/formatter "YYYY-MM-dd")) ; Format for date in URL of stakeholder-update links
@@ -81,7 +77,7 @@
                         :style (str "font-size:" pixels "px;line-height:" pixels "px;")} " "]]]]
             [:th {:class "expander"}]]]]]]))
 
-(defn- content-entry [update topic-slug entry last-entry?]
+(defn- entry [update topic-slug entry last-entry?]
   (let [title (:title entry)
         title? (not (s/blank? title))
         headline (:headline entry)
@@ -105,191 +101,6 @@
             (when body? body)
             (when body? (spacer 10))]
           [:th {:class "expander"}]]])))
-
-(defn- metric
-  ([value label sub-label] (metric value label sub-label :nuetral))
-  ([value label sub-label css-class]
-  [:table {:class "metric"}
-    [:tr
-      [:td
-        [:span {:class (str "metric " (name css-class))} value]
-        [:span {:class "label"} label]]]
-    [:tr
-      [:td
-         [:p [:span {:class "sublabel"} sub-label]]]]]))
-
-(defn- format-delta
-  "Create a display fragment for a delta value."
-  
-  ([delta prior-date]
-  (let [pos (when (pos? delta) "+")]
-    [:span
-      (if (zero? delta) "no change" [:span {:class "metric-diff"} pos (utils/with-size-label delta) "%"])
-      (str " since " prior-date)]))
-  
-  ([currency delta prior-date]
-  [:span
-   (if (zero? delta)
-      "no change"
-      [:span {:class "metric-diff"} (utils/with-currency currency (utils/with-size-label delta) true)])
-      (str " since " prior-date)]))
-
-(defn- growth-metric [periods metadata currency]
-  (let [growth-metric (first periods)
-        slug (:slug growth-metric)
-        metadatum (first (filter #(= (:slug %) slug) metadata))
-        unit (:unit metadatum)
-        interval (:interval metadatum)
-        unit (:unit metadatum)
-        metric-name (:name metadatum)
-        period (when interval (utils/parse-period interval (:period growth-metric)))
-        date (when (and interval period) (utils/format-period interval period))
-        value (:value growth-metric)
-        ;; Check for older periods contiguous to most recent
-        contiguous-periods (when (seq periods)
-                            (take (count (utils/contiguous (map :period periods) (keyword interval))) periods))
-        prior-contiguous? (>= (count contiguous-periods) 2)
-        sparkline? (>= (count contiguous-periods) 3) ; sparklines are possible at 3 or more
-        spark-periods (when sparkline? (reverse (take-while #(number? (:value %)) (take 4 contiguous-periods)))) ; 3-4 periods for potential sparklines
-        ;; Info on prior period
-        prior-metric (when prior-contiguous? (second contiguous-periods))
-        prior-period (when (and interval prior-metric) (utils/parse-period interval (:period prior-metric)))
-        prior-date (when (and interval prior-period) (utils/format-period interval prior-period))
-        formatted-prior-date (when prior-date (s/join " " (butlast (s/split prior-date #" ")))) ; drop the year
-        prior-value (when prior-metric (:value prior-metric))
-        metric-delta (when (and value prior-value (not= prior-value 0)) (- value prior-value))
-        metric-delta-percent (when metric-delta (* 100 (float (/ metric-delta prior-value))))
-        formatted-metric-delta (when metric-delta-percent (format-delta metric-delta-percent formatted-prior-date))
-        sparkline-metric (when (>= (count spark-periods) 3) (sl/sparkline-html (map :value spark-periods) :blue))
-        ;; Format output
-        label [:span [:b metric-name] " " date " " sparkline-metric]
-        sub-label [:span formatted-metric-delta]
-        formatted-value (case unit
-                          "%" (str (utils/with-size-label value) "%")
-                          "currency" (utils/with-currency currency (utils/with-size-label value))
-                          (utils/with-size-label value))]
-    (when (and interval (number? value))
-      (metric formatted-value label sub-label))))
-
-(defn- periods-for-metric
-  "Given the specified metric, return a sequence of all the periods in the data for that metric, sorted by most recent."
-  [metric data]
-  (when-let [periods (filterv #(= (:slug %) (:slug metric)) data)]
-    (reverse (sort-by :period periods))))
-
-(defn growth-metrics [entry currency]
-  (let [data (:data entry)
-        metadata (:metrics entry)
-        periods (map #(periods-for-metric % data) metadata)]
-    [:table {:class "growth-metrics"}
-      [:tr
-        (into [:td]
-          (map #(growth-metric % metadata currency) periods))]]))
-
-(defn- finance-metrics [entry currency]
-  (let [sorted-finances (reverse (sort-by :period (:data entry)))
-        ;; Most recent finances
-        finances (first sorted-finances)
-        period (format/parse utils/monthly-period (:period finances))
-        date (s/upper-case (format/unparse utils/monthly-date period))
-        ;; Check for older periods contiguous to most recent
-        contiguous-periods (when (seq sorted-finances)
-                            (take (count (utils/contiguous (map :period sorted-finances))) sorted-finances))
-        prior-contiguous? (>= (count contiguous-periods) 2)
-        sparkline? (>= (count contiguous-periods) 3) ; sparklines are possible (finance data might be sparse though)
-        spark-periods (when sparkline? (take 4 contiguous-periods)) ; 3-4 periods for potential sparklines
-        ;; Info on prior period
-        prior-finances (when prior-contiguous? (second contiguous-periods))
-        prior-period (when prior-finances (format/parse utils/monthly-period (:period prior-finances)))
-        prior-date (when prior-period (s/upper-case (format/unparse month-formatter prior-period)))
-        ;; Info on cash
-        cash (:cash finances)
-        cash? (utils/not-zero? cash)
-        formatted-cash (when cash? (utils/with-currency currency (utils/with-size-label cash)))
-        prior-cash (when prior-finances (:cash prior-finances))
-        prior-cash? (utils/not-zero? prior-cash)
-        cash-delta (when (and cash? prior-cash?) (- cash prior-cash))
-        formatted-cash-delta (when cash-delta (format-delta currency cash-delta prior-date))
-        ;; Info on revenue
-        revenue (:revenue finances)
-        revenue? (utils/not-zero? revenue)
-        formatted-revenue (when revenue? (utils/with-currency currency (utils/with-size-label revenue)))
-        prior-revenue (when prior-finances (:revenue prior-finances))
-        prior-revenue? (utils/not-zero? prior-revenue)
-        revenue-delta (when (and revenue? prior-revenue?) (- revenue prior-revenue))
-        revenue-delta-percent (when revenue-delta (* 100 (float (/ revenue-delta prior-revenue))))
-        formatted-revenue-delta (when revenue-delta-percent (format-delta revenue-delta-percent prior-date))
-        spark-revenue-periods (when spark-periods (reverse (take-while #(number? (:revenue %)) spark-periods)))
-        spark-revenue (when (>= (count spark-revenue-periods) 3)
-                        (sl/sparkline-html (map :revenue spark-revenue-periods) :green))
-        ;; Info on costs/expenses
-        costs (:costs finances)
-        costs? (utils/not-zero? costs)
-        formatted-costs (when costs? (utils/with-currency currency (utils/with-size-label costs)))
-        prior-costs (when prior-finances (:costs prior-finances))
-        prior-costs? (utils/not-zero? prior-costs)
-        costs-delta (when (and costs? prior-costs?) (- costs prior-costs))
-        costs-delta-percent (when costs-delta (* 100 (float (/ costs-delta prior-costs))))
-        formatted-costs-delta (when costs-delta-percent (format-delta costs-delta-percent prior-date))        
-        spark-costs-periods (when spark-periods (reverse (take-while #(number? (:costs %)) spark-periods)))
-        spark-costs (when (>= (count spark-costs-periods) 3) (sl/sparkline-html (map :costs spark-costs-periods) :red))
-        cost-label (if revenue? "Expenses" "Burn")
-        ;; Info on runway (calculated) 
-        cash-flow (- (or revenue 0) (or costs 0))
-        runway? (and cash? costs? (or (not revenue?) (> costs revenue)))
-        runway (when runway? (utils/calc-runway cash cash-flow))
-        formatted-runway (when runway? (str ", " (utils/get-rounded-runway runway) " runway"))]
-    [:table {:class "finances-metrics"}
-      (when revenue?
-        [:tr
-          [:td 
-            (metric formatted-revenue [:span [:b "Revenue"] " " date " " spark-revenue]
-              [:span formatted-revenue-delta])]])
-      (when costs? 
-        [:tr
-          [:td
-            (metric formatted-costs [:span [:b cost-label] " " date " " spark-costs]
-              [:span formatted-costs-delta])]])
-      (when cash?
-        [:tr
-          [:td
-            (metric formatted-cash [:span [:b "Cash"] " " date]
-              [:span formatted-cash-delta formatted-runway])]])]))
-
-
-(defn- data-entry [update topic-slug entry last-entry?]
-  (let [currency (:currency update)
-        data? (seq (:data entry))
-        body? (not (s/blank? (:body entry)))
-        view-charts? (> (count (:data entry)) 1)
-        title (:title entry)
-        title? (not (s/blank? title))
-        headline (:headline entry)
-        headline? (not (s/blank? headline))
-        entry-class (str "row entry" (when last-entry? " last"))]
-    [:table {:class entry-class}
-      [:tr
-        [:th {:class "small-12 large-12 columns first last"}
-          (when title?
-            (spacer 18))
-          (when title?
-            [:p {:class "entry-title"} (s/upper-case title)])
-          (when headline?
-            [:p {:class "entry-headline"} headline])
-          (when data?
-            (if (= topic-slug "finances")
-              (finance-metrics entry currency)
-              (growth-metrics entry currency)))
-          (when body? (:body entry))
-          (when body? (spacer 10))]
-        [:th {:class "expander"}]]]))
-
-(defn- entry [update topic-slug entry last-topic?]
-  (let [org-slug (:org-slug update)
-        slug (:slug update)]
-    (if (:data entry)
-      (data-entry update topic-slug entry last-topic?)
-      (content-entry update topic-slug entry last-topic?))))
 
 (defn- paragraph [content]
   [:table {:class "row"}
@@ -420,7 +231,7 @@
                     [:th {:class "small-12 large-12 first columns"} 
                       [:p {:class "text-center"}
                         "Updates by "
-                        [:a {:href "https://opencompany.com/"} "OpenCompany"]]]]]
+                        [:a {:href "https://carrot.io/"} "Carrot"]]]]]
                 (spacer 28 "footer")]]]]]]])
 
 (defn- body [data]

@@ -35,10 +35,6 @@
 
 (defonce aws-sqs-email-queue (env :aws-sqs-email-queue))
 
-;; ----- AWS S3 -----
-
-(defonce aws-s3-chart-bucket (env :aws-s3-chart-bucket))
-
 ;; ----- Email -----
 
 (defonce email-from-domain (env :email-from-domain))
