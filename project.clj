@@ -119,5 +119,18 @@
     "ancient" ["ancient" ":all" ":allow-qualified"] ; check for out of date dependencies
   }
 
+  ;; ----- Code check configuration -----
+
+  :eastwood {
+    ;; Disable some linters that are enabled by default
+    :exclude-linters [:constant-test :wrong-arity]
+    ;; Enable some linters that are disabled by default
+    :add-linters [:unused-namespaces :unused-private-vars] ; :unused-locals]
+
+    ;; Exclude testing namespaces
+    :tests-paths ["test"]
+    :exclude-namespaces [:test-paths]
+  }
+
   :main oc.email
 )

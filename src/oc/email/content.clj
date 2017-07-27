@@ -2,8 +2,7 @@
   (:require [clojure.string :as s]
             [clj-time.format :as format]
             [hiccup.core :as h]
-            [clojure.walk :refer (keywordize-keys)]
-            [oc.email.config :as config]))
+            [clojure.walk :refer (keywordize-keys)]))
 
 (def iso-format (format/formatters :date-time)) ; ISO 8601
 (def link-format (format/formatter "YYYY-MM-dd")) ; Format for date in URL of stakeholder-update links
@@ -49,12 +48,6 @@
                        :style "background-color: #ffffff;max-height: 71px;max-width: 71px;"
                        :src "https://open-company-assets.s3.amazonaws.com/open-company.png"
                        :alt "OpenCompany logo"}]]]]]]]])
-
-(defn- org-name [update]
-  [:table {:class "row header"}
-    [:tr
-      [:th {:class "small-12 large-12 first last columns"}
-        [:p {:class "text-center org-name"} (:org-name update)]]]])
 
 (defn- message [update]
   [:table {:class "row note"}
@@ -113,13 +106,12 @@
         [:th {:class "expander"}]]]])
 
 (defn- update-content [update]
-  (let [title? (not (s/blank? (:title update)))]
-    [:td
-      [:table
-        [:tr
-          (let [entries (:entries update)]
-            (into [:td]
-              (map #(entry update (:topic-slug %) % (= (:topic-slug %) (:topic-slug (last entries)))) entries)))]]]))
+  [:td
+    [:table
+      [:tr
+        (let [entries (:entries update)]
+          (into [:td]
+            (map #(entry update (:topic-slug %) % (= (:topic-slug %) (:topic-slug (last entries)))) entries)))]]])
 
 (defn- cta-button [cta url]
   [:table {:class "row"}

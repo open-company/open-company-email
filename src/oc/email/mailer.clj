@@ -36,7 +36,7 @@
 
 (defn- email-update
   "Send emails to all to recipients in parallel."
-  [{:keys [to reply-to subject org-slug org-name entries] :as update} body]
+  [{:keys [to reply-to subject org-slug org-name]} body]
   (doall (pmap #(email {:to %
                         :source (str org-name " <" org-slug "@" c/email-from-domain ">")
                         :reply-to (if (s/blank? reply-to) default-reply-to reply-to)
