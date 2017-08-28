@@ -23,7 +23,7 @@
       "reset" (mailer/send-token :reset msg-body)
       "verify" (mailer/send-token :verify msg-body)
       "invite" (mailer/send-invite msg-body)
-      "update" (mailer/send-update msg-body)
+      "story" (mailer/send-story msg-body)
       (timbre/error "Unrecognized message type" msg-type)))
   (sqs/ack done-channel msg))
 

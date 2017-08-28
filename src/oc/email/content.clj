@@ -1,8 +1,9 @@
 (ns oc.email.content
   (:require [clojure.string :as s]
+            [clojure.walk :refer (keywordize-keys)]
             [clj-time.format :as format]
             [hiccup.core :as h]
-            [clojure.walk :refer (keywordize-keys)]))
+            [oc.email.config :as config]))
 
 (def iso-format (format/formatters :date-time)) ; ISO 8601
 (def link-format (format/formatter "YYYY-MM-dd")) ; Format for date in URL of stakeholder-update links
@@ -178,18 +179,16 @@
       (oc-logo)
       (paragraph tagline)]))
 
-(defn- update-link-content [update]
-  (let [org-name (:name update)
+(defn- story-link-content [story]
+  (let [org-name (:org-name story)
         org-name? (not (s/blank? org-name))
-        title (:title update)
+        title (:title story)
         title? (not (s/blank? title))
         link-title (if title? title (str org-name " Update"))
-        org-slug (:org-slug update)
-        slug (:slug update)
-        origin-url (:origin-url update)
-        created-at (format/parse iso-format (:created-at update))
-        update-time (format/unparse link-format created-at)
-        update-url (s/join "/" [origin-url org-slug "updates" update-time slug])]
+        org-slug (:org-slug story)
+        secure-uuid (:secure-uuid story)
+        origin-url config/web-url
+        update-url (s/join "/" [origin-url org-slug "story" secure-uuid])]
     [:table {:class "note"}
       [:tr
         [:td 
@@ -237,7 +236,7 @@
             (when (and (s/blank? (:note data)) (= type :update-link)) (spacer 15 "note"))
             (when (= type :update) (spacer 55 "blank"))
             (if (= type :update-link)
-              (update-link-content data)     
+              (story-link-content data)     
               [:center
                 [:table {:class "container"}
                   [:tr
@@ -273,7 +272,7 @@
         org (if (s/blank? org-name) "" (str org-name " on "))]
     (str prefix " to join " org "OpenCompany.")))
 
-(defn update-link-html [update]
+(defn story-link-html [update]
   (html update :update-link))
 
 (defn update-html [update]
@@ -355,8 +354,8 @@
   (require '[oc.email.content :as content] :reload)
 
   (def note "Enjoy the groovy update.")
-  (def update (json/decode (slurp "./opt/samples/updates/green-labs.json")))
-  (spit "./hiccup.html" (content/update-html (assoc update :note note)))
+  (def share-request (json/decode (slurp "./opt/samples/updates/green-labs.json")))
+  (spit "./hiccup.html" (content/story-link-html (assoc share-request :note note)))
 
   (spit "./hiccup.html" (content/snapshot-link-html (assoc update :note note)))
 

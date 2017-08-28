@@ -17,7 +17,7 @@
    :endpoint   c/aws-endpoint})
 
 (def default-reply-to (str "hello@" c/email-from-domain))
-(def default-from "OpenCompany")
+(def default-from "Carrot")
 
 (defn- email
   "Send an email."
@@ -34,7 +34,7 @@
       :message {:subject subject
                 :body html-body})))
 
-(defn- email-update
+(defn- email-story
   "Send emails to all to recipients in parallel."
   [{:keys [to reply-to subject org-slug org-name]} body]
   (doall (pmap #(email {:to %
@@ -52,33 +52,19 @@
             "--preserve-font-faces" "false"
             html-file inline-file))
 
-(defn send-update
-  "Create an HTML update and email it to the specified recipients."
-  [update]
+(defn send-story
+  "Create an HTML story share and email it to the specified recipients."
+  [story]
   (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
         html-file (str uuid-fragment ".html")
         inline-file (str uuid-fragment ".inline.html")]
     (try
-      (spit html-file (content/update-html update)) ; create the email in a tmp file
+      (spit html-file (content/story-link-html story)) ; create the email in a tmp file
       (inline-css html-file inline-file) ; inline the CSS
-      (let [file-size (.length (io/file inline-file))]
-        (when (>= file-size size-limit)
-          ;; Send a Sentry notification
-          (when c/dsn ; Sentry is configured
-            (sentry/capture c/dsn {:message "Rendered update email is over size limit"
-                                   :extra {
-                                      :org-slug (:org-slug update)
-                                      :slug (:slug update)
-                                      :human-size (str (int (Math/ceil (/ file-size 1000))) "KB")
-                                      :size file-size
-                                      :entry-count (count (:entries update))}}))
-          ;; Render an alternative, smaller email
-          (spit html-file (content/update-link-html update)) ; create the email in a tmp file
-          (inline-css html-file inline-file))) ; inline the CSS
-      ; Email the recipients
-      (email-update update (slurp inline-file))
+      ;; Email the recipients
+      (email-story story (slurp inline-file))
       (finally
-        ; remove the tmp files
+        ;; remove the tmp files
         (io/delete-file html-file true)
         (io/delete-file inline-file true)))))
 
@@ -99,7 +85,7 @@
       (email invitation {:text (content/invite-text invitation)
                          :html (slurp inline-file)})
       (finally
-        ; remove the tmp files
+        ;; remove the tmp files
         (io/delete-file html-file true)
         (io/delete-file inline-file true)))))
 
@@ -134,13 +120,12 @@
 
   (require '[oc.email.mailer :as mailer] :reload)
 
-  (def update (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/updates/green-labs.json"))))
-  (mailer/send-update (merge update {
+  (def share-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/updates/green-labs.json"))))
+  (mailer/send-story (merge share-request {
                        :to ["change@me.com"]
                        :reply-to "change@me.com"
                        :subject "Latest GreenLabs Update"
-                       :note "Enjoy this groovy update!"
-                       :origin "http://localhost:3559"}))
+                       :note "Enjoy this groovy update!"}))
 
   (def update (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/updates/buff.json"))))
   (mailer/send-update (merge update {

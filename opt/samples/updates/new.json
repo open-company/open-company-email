@@ -1,27 +1,9 @@
 {
-  "slug": "july-2016-update-89df5",
-  "title": "July 2016 Update",
   "org-slug": "new",
   "org-name": "New.ly",
-  "logo-url": "https://open-company-assets.s3.amazonaws.com/new.png",
-  "currency": "USD",
-  "created-at": "2016-08-11T12:57:13.633Z",
-  "entries": [
-    {
-      "topic-slug": "finances",
-      "body": "A lot of new information here.",
-      "created-at": "2016-08-08T12:59:28.000Z",
-      "data": [
-        {
-          "cash": 208899,
-          "costs": 12188,
-          "period": "2016-07",
-          "revenue": 0
-        }
-      ],
-      "headline": "",
-      "title": "Finances",
-      "updated-at": "2016-08-08T12:59:28.000Z"
-    }
-  ]
+  "org-logo-url": "https://open-company-assets.s3.amazonaws.com/new.png",
+  "title": "August 2017 Update",
+  "secure-uuid": "1234-abcd-1234",
+  "published-at": "2017-08-24T23:14:20.765Z",
+  "shared-at": "2017-08-25T23:14:20.765Z"
 }
