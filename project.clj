@@ -13,12 +13,12 @@
 
   ;; All profile dependencies
   :dependencies [
-    [org.clojure/clojure "1.9.0-alpha17"] ; Lisp on the JVM http://clojure.org/documentation
+    [org.clojure/clojure "1.9.0-alpha19"] ; Lisp on the JVM http://clojure.org/documentation
     [environ "1.1.0"] ; Environment settings from different sources https://github.com/weavejester/environ
     [hiccup "2.0.0-alpha1"] ; HTML rendering https://github.com/weavejester/hiccup
     [jfree/jfreechart "1.0.13"] ; Java chart library http://www.jfree.org/jfreechart/
     [manifold "0.1.7-alpha5"] ; Async programming tools https://github.com/ztellman/manifold
-    [open-company/lib "0.11.15"] ; Library for OC projects https://github.com/open-company/open-company-lib
+    [open-company/lib "0.12.5"] ; Library for OC projects https://github.com/open-company/open-company-lib
     ; In addition to common functions, brings in the following common dependencies used by this project:
     ; Component - Component Lifecycle https://github.com/stuartsierra/component
     ; Schema - Data validation https://github.com/Prismatic/schema
@@ -43,11 +43,11 @@
       :env {
       }
       :dependencies [
-        [philoskim/debux "0.3.9"] ; `dbg` macro around -> or let https://github.com/philoskim/debux
+        [philoskim/debux "0.3.12"] ; `dbg` macro around -> or let https://github.com/philoskim/debux
       ]
       :plugins [
         [jonase/eastwood "0.2.4"] ; Linter https://github.com/jonase/eastwood
-        [lein-kibit "0.1.6-beta1"] ; Static code search for non-idiomatic code https://github.com/jonase/kibit
+        [lein-kibit "0.1.6-beta2"] ; Static code search for non-idiomatic code https://github.com/jonase/kibit
       ]
     }
 
@@ -73,7 +73,7 @@
         [lein-spell "0.1.0"] ; Catch spelling mistakes in docs and docstrings https://github.com/cldwalker/lein-spell
         [lein-deps-tree "0.1.2"] ; Print a tree of project dependencies https://github.com/the-kenny/lein-deps-tree
         [venantius/yagni "0.1.4"] ; Dead code finder https://github.com/venantius/yagni
-        [com.jakemccrary/lein-test-refresh "0.20.0"] ; Autotest https://github.com/jakemcc/lein-test-refresh
+        [com.jakemccrary/lein-test-refresh "0.21.1"] ; Autotest https://github.com/jakemcc/lein-test-refresh
       ]  
     }]
 
