@@ -16,8 +16,8 @@
     [org.clojure/clojure "1.9.0-alpha19"] ; Lisp on the JVM http://clojure.org/documentation
     [environ "1.1.0"] ; Environment settings from different sources https://github.com/weavejester/environ
     [hiccup "2.0.0-alpha1"] ; HTML rendering https://github.com/weavejester/hiccup
-    [jfree/jfreechart "1.0.13"] ; Java chart library http://www.jfree.org/jfreechart/
     [manifold "0.1.7-alpha5"] ; Async programming tools https://github.com/ztellman/manifold
+    [org.clojure/tools.namespace "0.3.0-alpha4"] ; Namespace management https://github.com/clojure/tools.namespace
     [open-company/lib "0.12.5"] ; Library for OC projects https://github.com/open-company/open-company-lib
     ; In addition to common functions, brings in the following common dependencies used by this project:
     ; Component - Component Lifecycle https://github.com/stuartsierra/component
@@ -107,12 +107,13 @@
   :repl-options {
     :welcome (println (str "\n" (slurp (clojure.java.io/resource "oc/assets/ascii_art.txt")) "\n"
                       "OpenCompany Email Service REPL\n"))
+    :init-ns dev
   }
 
   :aliases {
     "build" ["with-profile" "prod" "do" "clean," "uberjar"] ; clean and build code
     "repl" ["with-profile" "+repl-config" "repl"]
-    "start" ["run" "-m" "oc.email"] ; start a development server
+    "start" ["run" "-m" "oc.email.app"] ; start a development server
     "start!" ["with-profile" "prod" "do" "start"] ; start a server in production
     "spell!" ["spell" "-n"] ; check spelling in docs and docstrings
     "bikeshed!" ["bikeshed" "-v" "-m" "120"] ; code check with max line length warning of 120 characters
@@ -132,5 +133,5 @@
     :exclude-namespaces [:test-paths]
   }
 
-  :main oc.email
+  :main oc.email.app
 )
