@@ -77,7 +77,7 @@
         invitation (-> message 
                     (keywordize-keys)
                     (assoc :source (str default-from " <" default-reply-to ">"))
-                    (assoc :subject (content/invite-subject message)))]
+                    (assoc :subject (content/invite-subject message false)))]
     (try
       (spit html-file (content/invite-html invitation)) ; create the email in a tmp file
       (inline-css html-file inline-file) ; inline the CSS
@@ -101,8 +101,8 @@
               (assoc :from default-from)
               (assoc :reply-to default-reply-to)
               (assoc :subject (case token-type
-                                  :reset "OpenCompany Password Reset"
-                                  :verify "OpenCompany Email Verification")))]
+                                  :reset "Carrot Password Reset"
+                                  :verify "Carrot Email Verification")))]
     (try
       (spit html-file (content/token-html token-type msg)) ; create the email in a tmp file
       (inline-css html-file inline-file) ; inline the CSS
@@ -127,16 +127,16 @@
                        :subject "Latest GreenLabs Update"
                        :note "Enjoy this groovy update!"}))
 
-  (def update (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/updates/buff.json"))))
+  (def update (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/updates/new.json"))))
   (mailer/send-update (merge update {
                        :to ["change@me.com"]
                        :reply-to "change@me.com"
-                       :subject "Latest GreenLabs Update"
+                       :subject "Latest New.ly Update"
                        :note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week."
                        :origin "http://localhost:3559"}))
 
   (def invite (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/invites/microsoft.json"))))
-  (mailer/send-invite (assoc invite :to "change@me.com"))
+  (mailer/send-invite (assoc invite :to "belucid@acm.org"))
 
   (mailer/send-token :reset {:to "change@me.com"
                              :token-link "http://localhost:3000/invite?token=dd7c0bfe-2068-4de0-aa3c-4913eeeaa360"})

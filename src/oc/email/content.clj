@@ -10,17 +10,17 @@
 
 (def doc-type "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
 
-(def tagline "OpenCompany is the simplest way to keep everyone on the same page.")
+(def tagline "News and company updates that create greater transparency and alignment.")
 
-(def reset-message "Someone (hopefully you) requested a new password for your OpenCompany account.")
+(def reset-message "Someone (hopefully you) requested a new password for your Carrot account.")
 (def reset-instructions "Click the link below to reset your password.")
 (def reset-button-text "RESET PASSWORD ➞")
 (def reset-ignore "If you didn't request a password reset, you can ignore this email.")
 
-(def verify-message "Someone (hopefully you) created an OpenCompany account.")
+(def verify-message "Someone (hopefully you) created an Carrot account.")
 (def verify-instructions "Click the link below to verify your email address.")
 (def verify-button-text "VERIFY EMAIL ➞")
-(def verify-ignore "If you didn't create an OpenCompany account, you can ignore this email.")
+(def verify-ignore "If you didn't create an Carrot account, you can ignore this email.")
 
 (defn- logo [logo-url org-name]
   [:table {:class "row header"} 
@@ -36,7 +36,7 @@
                        :src logo-url
                        :alt (str org-name " logo")}]]]]]]]])
 
-(defn- oc-logo []
+(defn- carrot-logo []
   [:table {:class "row header"} 
     [:tr
       [:th {:class "small-12 large-12 first last columns"} 
@@ -47,8 +47,8 @@
                 [:img {:class "float-center logo"
                        :align "center"
                        :style "background-color: #ffffff;max-height: 71px;max-width: 71px;"
-                       :src "https://open-company-assets.s3.amazonaws.com/open-company.png"
-                       :alt "OpenCompany logo"}]]]]]]]])
+                       :src "https://open-company-assets.s3.amazonaws.com/carrot-logo.png"
+                       :alt "Carrot logo"}]]]]]]]])
 
 (defn- message [update]
   [:table {:class "row note"}
@@ -144,7 +144,7 @@
       (when logo? (spacer 20))
       (when logo? (logo logo-url org-name))
       (spacer 15)
-      (paragraph (str "Hi " first-name "! " (:subject invite)))
+      (paragraph (str "Hi " first-name "! " (:text invite)))
       (spacer 15)
       (cta-button "OK! LET'S GET STARTED ➞" (:token-link invite))
       (spacer 30)
@@ -176,7 +176,7 @@
       (spacer 15)
       (paragraph (:ignore message))
       (spacer 15)
-      (oc-logo)
+      (carrot-logo)
       (paragraph tagline)]))
 
 (defn- story-link-content [story]
@@ -264,13 +264,13 @@
 (defn- html [data type]
   (str doc-type (h/html (head (assoc (keywordize-keys data) :type type)))))
 
-(defn invite-subject [invite]
+(defn invite-subject [invite bold?]
   (let [msg (keywordize-keys invite)
-        org-name (:org-name msg)
+        org-name (if bold? (str "<b>" (:org-name msg) "</b>") (:org-name msg))
         from (:from msg)
         prefix (if (s/blank? from) "You've been invited" (str from " invited you"))
         org (if (s/blank? org-name) "" (str org-name " on "))]
-    (str prefix " to join " org "OpenCompany.")))
+    (str prefix " to join " org "Carrot.")))
 
 (defn story-link-html [update]
   (html update :update-link))
@@ -279,11 +279,13 @@
   (html update :update))
 
 (defn invite-html [invite]
-  (html (assoc invite :subject (invite-subject invite)) :invite))
+  (html (-> invite
+          (assoc :subject (invite-subject invite false))
+          (assoc :text (invite-subject invite true))) :invite))
 
 (defn invite-text [invite]
   (let [link (:token-link (keywordize-keys invite))]
-    (str (invite-subject invite) ".\n\n"
+    (str (invite-subject invite false) ".\n\n"
          tagline "\n\n"
          "Open the link below to check it out.\n\n"
          link "\n\n")))
@@ -397,6 +399,7 @@
   (content/invite-text invite)
 
   (spit "./hiccup.html" (content/token-html :reset {:token-link "http://test.it/123"}))
+  
   (content/token-text :verify {:token-link "http://test.it/123"})
 
   )
