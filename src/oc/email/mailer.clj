@@ -5,7 +5,6 @@
             [clojure.walk :refer (keywordize-keys)]
             [taoensso.timbre :as timbre]
             [amazonica.aws.simpleemail :as ses]
-            [raven-clj.core :as sentry]
             [oc.email.config :as c]
             [oc.email.content :as content]))
 
