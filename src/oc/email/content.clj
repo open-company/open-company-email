@@ -17,10 +17,10 @@
 (def reset-button-text "RESET PASSWORD ➞")
 (def reset-ignore "If you didn't request a password reset, you can ignore this email.")
 
-(def verify-message "Someone (hopefully you) created an Carrot account.")
+(def verify-message "Someone (hopefully you) created a Carrot account.")
 (def verify-instructions "Click the link below to verify your email address.")
 (def verify-button-text "VERIFY EMAIL ➞")
-(def verify-ignore "If you didn't create an Carrot account, you can ignore this email.")
+(def verify-ignore "If you didn't create a Carrot account, you can ignore this email.")
 
 (defn- logo [logo-url org-name]
   [:table {:class "row header"} 
