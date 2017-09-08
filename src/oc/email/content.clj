@@ -25,16 +25,17 @@
 (defn- logo [logo-url org-name]
   [:table {:class "row header"} 
     [:tr
-      [:th {:class "small-12 large-12 first last columns"} 
+      [:th {:class "small-1 large-2 first columns"}]
+      [:th {:class "small-10 large-8 columns"}
         [:table
           [:tr
             [:th
-              [:center {:data-parsed ""}
+              [:center
                 [:img {:class "float-center logo"
-                       :align "center"
                        :style "background-color: #ffffff;border: solid 1px rgba(78, 90, 107, 0.2);max-height: 50px;max-width: 50px;"
                        :src logo-url
-                       :alt (str org-name " logo")}]]]]]]]])
+                       :alt (str org-name " logo")}]]]]]]
+      [:th {:class "small-1 large-2 last columns"}]]])
 
 (defn- carrot-logo []
   [:table {:class "row header"} 
@@ -43,9 +44,8 @@
         [:table
           [:tr
             [:th
-              [:center {:data-parsed ""}
+              [:center
                 [:img {:class "float-center logo"
-                       :align "center"
                        :style "background-color: #ffffff;max-height: 71px;max-width: 71px;"
                        :src "https://open-company-assets.s3.amazonaws.com/carrot-logo.png"
                        :alt "Carrot logo"}]]]]]]]])
@@ -98,13 +98,11 @@
 
 (defn- paragraph [content]
   [:table {:class "row"}
-    [:tbody
-      [:tr
-        [:th {:class "small-1 large-2 first columns"}]
-        [:th {:class "small-10 large-8 columns"}
-          [:p {:class "text-center"} content]]
-        [:th {:class "small-1 large-2 last columns"}]
-        [:th {:class "expander"}]]]])
+    [:tr
+      [:th {:class "small-1 large-2 first columns"}]
+      [:th {:class "small-10 large-8 columns"}
+        [:p {:class "text-center"} content]]
+      [:th {:class "small-1 large-2 last columns"}]]])
 
 (defn- update-content [update]
   [:td
@@ -146,7 +144,7 @@
       (spacer 15)
       (paragraph (str "Hi " first-name "! " (:text invite)))
       (spacer 15)
-      (cta-button "OK! LET'S GET STARTED ➞" (:token-link invite))
+      (cta-button "OK, Let's get started ➞" (:token-link invite))
       (spacer 30)
       (paragraph tagline)]))
 
@@ -257,8 +255,8 @@
         [:meta {:name "viewport", :content "width=device-width"}]
         [:link {:rel "stylesheet", :href "resources/css/foundation.css"}]
         [:link {:rel "stylesheet", :href (str "resources/css/" css)}]
-        [:link {:href "http://fonts.googleapis.com/css?family=Domine", :rel "stylesheet", :type "text/css"}]
-        [:link {:href "http://fonts.googleapis.com/css?family=Open+Sans", :rel "stylesheet", :type "text/css"}]]
+        [:link {:href "http://fonts.googleapis.com/css?family=Muli", :rel "stylesheet", :type "text/css"}]
+        [:title]]
       (body data)]))
 
 (defn- html [data type]

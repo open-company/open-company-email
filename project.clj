@@ -13,12 +13,12 @@
 
   ;; All profile dependencies
   :dependencies [
-    [org.clojure/clojure "1.9.0-alpha19"] ; Lisp on the JVM http://clojure.org/documentation
+    [org.clojure/clojure "1.9.0-alpha20"] ; Lisp on the JVM http://clojure.org/documentation
     [environ "1.1.0"] ; Environment settings from different sources https://github.com/weavejester/environ
     [hiccup "2.0.0-alpha1"] ; HTML rendering https://github.com/weavejester/hiccup
     [manifold "0.1.7-alpha5"] ; Async programming tools https://github.com/ztellman/manifold
     [org.clojure/tools.namespace "0.3.0-alpha4"] ; Namespace management https://github.com/clojure/tools.namespace
-    [open-company/lib "0.12.15"] ; Library for OC projects https://github.com/open-company/open-company-lib
+    [open-company/lib "0.12.16"] ; Library for OC projects https://github.com/open-company/open-company-lib
     ; In addition to common functions, brings in the following common dependencies used by this project:
     ; Component - Component Lifecycle https://github.com/stuartsierra/component
     ; Schema - Data validation https://github.com/Prismatic/schema
