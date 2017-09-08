@@ -135,7 +135,7 @@
                        :origin "http://localhost:3559"}))
 
   (def invite (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/invites/microsoft.json"))))
-  (mailer/send-invite (assoc invite :to "belucid@acm.org"))
+  (mailer/send-invite (assoc invite :to "change@me.com"))
 
   (mailer/send-token :reset {:to "change@me.com"
                              :token-link "http://localhost:3000/invite?token=dd7c0bfe-2068-4de0-aa3c-4913eeeaa360"})
