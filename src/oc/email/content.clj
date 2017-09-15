@@ -32,7 +32,7 @@
             [:th
               [:center
                 [:img {:class "float-center logo"
-                       :style "background-color: #ffffff;max-height: 100px;max-width: 100px;"
+                       :style "background-color: #ffffff;max-height: 71px;max-width: 213px;"
                        :src logo-url
                        :alt (str org-name " logo")}]]]]]]
       [:th {:class "small-1 large-2 last columns"}]]])
