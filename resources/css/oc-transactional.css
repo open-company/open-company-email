@@ -5,7 +5,7 @@ html,
 }
 
 p {
-    font-family: Domine-Regular, Georgia, serif;
+    font-family: Muli, Helvetica, Arial, sans-serif !important;
     font-size: 18px;
     color: #4e5a6b;
     line-height: 1.6;
@@ -15,22 +15,14 @@ p {
 }
 
 table.button.oc table td {
-  background: #f9d748;
-  border: 1px solid #f9d748; }
+  background: #4C67FC;
+}
 
 table.button.oc table a {
-  font-family: OpenSans, Arial, sans-serif !important;
-  font-size: 12px;
+  font-family: Muli, Helvetica, Arial, sans-serif !important;
+  font-size: 16px;
   font-weight: bold;
-  line-height: 1.5;
+  line-height: 1.6;
   letter-spacing: 1px;
-  color: #4e5a6b;
-}
-
-table.button.oc:hover table td {
-  border: 1px solid #d8b935;
-}
-
-table.button.oc:hover table a {
-  color: #4e5a6b !important;
+  color: #FFF;
 }

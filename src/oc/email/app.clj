@@ -1,4 +1,4 @@
-(ns oc.email
+(ns oc.email.app
   (:gen-class)
   (:require [com.stuartsierra.component :as component]
             [manifold.stream :as stream]
@@ -7,11 +7,6 @@
             [oc.lib.sentry-appender :as sentry]
             [oc.lib.sqs :as sqs]
             [oc.email.mailer :as mailer]))
-
-(defn system [config-options]
-  (let [{:keys [sqs-creds sqs-queue sqs-msg-handler]} config-options]
-    (component/system-map
-      :sqs (sqs/sqs-listener sqs-creds sqs-queue sqs-msg-handler))))
 
 (defn sqs-handler [msg done-channel]
   (let [msg-body (read-string (:body msg))
@@ -23,11 +18,23 @@
       "reset" (mailer/send-token :reset msg-body)
       "verify" (mailer/send-token :verify msg-body)
       "invite" (mailer/send-invite msg-body)
-      "update" (mailer/send-update msg-body)
+      "story" (mailer/send-story msg-body)
       (timbre/error "Unrecognized message type" msg-type)))
   (sqs/ack done-channel msg))
 
-(defn -main []
+(defn system [config-options]
+  (let [{:keys [sqs-creds sqs-queue sqs-msg-handler]} config-options]
+    (component/system-map
+      :sqs (sqs/sqs-listener sqs-creds sqs-queue sqs-msg-handler))))
+
+(defn echo-config []
+  (println (str "\n"
+    "AWS SQS queue: " c/aws-sqs-email-queue "\n"
+    "Web URL: " c/web-url "\n"    
+    "Sentry: " c/dsn "\n\n"
+    (when c/intro? "Ready to serve...\n"))))
+
+(defn start []
 
   ;; Log errors to Sentry
   (if c/dsn
@@ -45,10 +52,8 @@
   ;; Echo config information
   (println (str "\n"
     (when c/intro? (str (slurp (clojure.java.io/resource "oc/assets/ascii_art.txt")) "\n"))
-    "OpenCompany Email Service\n\n"
-    "AWS SQS queue: " c/aws-sqs-email-queue "\n"
-    "Sentry: " c/dsn "\n\n"
-    (when c/intro? "Ready to serve...\n")))
+    "OpenCompany Email Service\n"))
+  (echo-config)
 
   ;; Start the system, which will start long polling SQS
   (component/start (system {:sqs-queue c/aws-sqs-email-queue
@@ -58,6 +63,8 @@
 
   (deref (stream/take! (stream/stream)))) ; block forever
 
+(defn -main []
+  (start))
 
 (comment
 

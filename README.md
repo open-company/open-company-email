@@ -42,8 +42,8 @@ Most of the dependencies are internal, meaning [Leiningen](https://github.com/te
 
 * [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/index.html) - a Java 8+ JRE is needed to run Clojure
 * [Leiningen](https://github.com/technomancy/leiningen) 2.5.1+ - Clojure's build and dependency management tool
-* [Node.js](https://nodejs.org/en/) v0.10.25+ - JavaScript runtime
-* [Juice](https://github.com/Automattic/juice) 2.0.0+ - Inlines CSS into HTML
+* [Node.js](https://nodejs.org/en/) v6.11.2+ - JavaScript runtime
+* [Juice](https://github.com/Automattic/juice) 4.1.0+ - Inlines CSS into HTML
 
 #### Java
 

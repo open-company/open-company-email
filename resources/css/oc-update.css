@@ -2,7 +2,7 @@ body,
 html,
 .body {
   background: #F8F8F8 !important;
-  font-family: Domine-Regular, Georgia, serif;
+  font-family: Muli, Helvetica, Arial, sans-serif !important;
 }
 
 @media only screen and (max-device-width: 480px) {
@@ -22,7 +22,7 @@ a:hover,
 a:active,
 a:visited {
   color: #0A0A0A;
-  font-family: Domine-Regular, Georgia, serif;
+  font-family: Muli, Helvetica, Arial, sans-serif !important;
   text-decoration: underline;
 }
 
@@ -40,7 +40,7 @@ table.note {
 
 table.note th,
 table.note th p {
-  font-family: Arial, sans-serif;
+  font-family: Muli, Helvetica, Arial, sans-serif !important;
   font-size: 15px;
 }
 
@@ -69,12 +69,12 @@ table.entry th.large-10 th.small-10 {
 table.entry p.entry-headline {
   font-size: 18px;
   color: #0A0A0A;
-  font-family: Domine-Regular, Georgia, serif;
+  font-family: Muli, Helvetica, Arial, sans-serif !important;
   line-height: 1.5;
 }
 
 table.entry p.entry-title {
-  font-family: OpenSans, Arial, sans-serif;
+  font-family: Muli, Helvetica, Arial, sans-serif !important;
   font-size: 13px;
   font-weight: bold;
   line-height: 1.5;
@@ -89,7 +89,7 @@ table.entry p,
 table.entry ul {
   font-size: 15px;
   color: #0A0A0A;
-  font-family: Domine-Regular;
+  font-family: Muli, Helvetica, Arial, sans-serif !important;
   line-height: 1.5;
 }
 
@@ -97,7 +97,7 @@ table.entry h1,
 table.entry h2,
 table.entry h3,
 table.entry h4 {
-  font-family: Domine-Regular, Georgia, serif;
+  font-family: Muli, Helvetica, Arial, sans-serif !important;
   font-weight: 800;
   font-size: 18px;
   line-height: 1.5;
@@ -120,7 +120,7 @@ table.footer p,
 table.footer a {
   font-size: 15px;
   line-height: 1.3;
-  font-family: Domine-Regular, Georgia, serif;
+  font-family: Muli, Helvetica, Arial, sans-serif !important;
   color: #4e5a6b;
   -webkit-hyphens: none;
   -moz-hyphens: none;
