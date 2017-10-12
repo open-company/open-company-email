@@ -189,16 +189,16 @@
       (carrot-logo)
       (paragraph tagline)]))
 
-(defn- story-link-content [story]
-  (let [org-name (:org-name story)
+(defn- share-link-content [entry]
+  (let [org-name (:org-name entry)
         org-name? (not (s/blank? org-name))
-        title (:title story)
-        title? (not (s/blank? title))
-        link-title (if title? title (str org-name " Update"))
-        org-slug (:org-slug story)
-        secure-uuid (:secure-uuid story)
+        headline (:headline entry)
+        headline? (not (s/blank? headline))
+        link-title (if headline? headline (str org-name " Post"))
+        org-slug (:org-slug entry)
+        secure-uuid (:secure-uuid entry)
         origin-url config/web-url
-        update-url (s/join "/" [origin-url org-slug "story" secure-uuid])]
+        update-url (s/join "/" [origin-url org-slug "post" secure-uuid])]
     [:table {:class "note"}
       [:tr
         [:td 
@@ -237,16 +237,16 @@
 
 (defn- body [data]
   (let [type (:type data)
-        trail-space? (not= type :update-link)]
+        trail-space? (not= type :share-link)]
     [:body
       [:table {:class "body"}
         [:tr
           [:td {:class "float-center", :align "center", :valign "top"}
             (when-not (s/blank? (:note data)) (note data trail-space?))
-            (when (and (s/blank? (:note data)) (= type :update-link)) (spacer 15 "note"))
+            (when (and (s/blank? (:note data)) (= type :share-link)) (spacer 15 "note"))
             (when (= type :update) (spacer 55 "blank"))
-            (if (= type :update-link)
-              (story-link-content data)     
+            (if (= type :share-link)
+              (share-link-content data)     
               [:center
                 [:table {:class "container"}
                   [:tr
@@ -282,8 +282,8 @@
         org (if (s/blank? org-name) "" (str org-name " on "))]
     (str prefix " to join " org "Carrot.")))
 
-(defn story-link-html [update]
-  (html update :update-link))
+(defn share-link-html [update]
+  (html update :share-link))
 
 (defn update-html [update]
   (html update :update))
