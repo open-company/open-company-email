@@ -30,11 +30,23 @@
         [:table
           [:tr
             [:th
+              [:img {:class "float-left logo"
+                     :width 183
+                     :height 113
+                     :style {:max-width "initial"}
+                     :src "https://open-company-assets.s3.amazonaws.com/email_left_bubbles.png"}]]
+            [:th
               [:center
                 [:img {:class "float-center logo"
-                       :style "background-color: #ffffff;max-height: 71px;max-width: 213px;"
+                       :style "background-color: #ffffff;max-height: 120px;max-width: 213px;"
                        :src logo-url
-                       :alt (str org-name " logo")}]]]]]]
+                       :alt (str org-name " logo")}]]]
+            [:th
+              [:img {:class "float-left logo"
+                     :width 180
+                     :height 121
+                     :style {:max-width "initial"}
+                     :src "https://open-company-assets.s3.amazonaws.com/email_right_bubbles.png"}]]]]]
       [:th {:class "small-1 large-2 last columns"}]]])
 
 (defn- carrot-logo []

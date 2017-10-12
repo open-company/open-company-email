@@ -162,6 +162,10 @@ To run the tests locally:
 lein test!
 ```
 
+## Images
+
+Some images are kept in [this folder](dev-resources/images/) only as backup since they are already on our CDN. They belong at the top level of the production assets bucket.
+
 
 ## Participation
 
