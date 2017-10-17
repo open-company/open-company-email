@@ -10,7 +10,7 @@
 
 (def doc-type "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
 
-(def tagline "News and company updates that create greater transparency and alignment.")
+(def tagline "Grow together with announcements, updates, and stories that bring teams closer.")
 
 (def reset-message "Someone (hopefully you) requested a new password for your Carrot account.")
 (def reset-instructions "Click the link below to reset your password.")
@@ -83,31 +83,6 @@
                         :style (str "font-size:" pixels "px;line-height:" pixels "px;")} " "]]]]
             [:th {:class "expander"}]]]]]]))
 
-(defn- entry [update topic-slug entry last-entry?]
-  (let [title (:title entry)
-        title? (not (s/blank? title))
-        headline (:headline entry)
-        headline? (not (s/blank? headline))
-        body (:body entry)
-        body? (not (s/blank? body))
-        image-url (:image-url entry)
-        image-url? (not (s/blank? image-url))
-        entry-class (str "row entry" (when last-entry? " last"))]
-    (when (or image-url? title? headline? body?)
-      [:table {:class entry-class}
-        [:tr
-          [:th {:class "small-12 large-12 columns first last"}
-            (spacer 18)
-            (when title?
-              [:p {:class "entry-title"} (s/upper-case title)])
-            (when headline?
-              [:p {:class "entry-headline"} headline])
-            (when image-url?
-              [:img {:class "entry-image" :src image-url}])
-            (when body? body)
-            (when body? (spacer 10))]
-          [:th {:class "expander"}]]])))
-
 (defn- paragraph [content]
   [:table {:class "row"}
     [:tr
@@ -115,14 +90,6 @@
       [:th {:class "small-10 large-8 columns"}
         [:p {:class "text-center"} content]]
       [:th {:class "small-1 large-2 last columns"}]]])
-
-(defn- update-content [update]
-  [:td
-    [:table
-      [:tr
-        (let [entries (:entries update)]
-          (into [:td]
-            (map #(entry update (:topic-slug %) % (= (:topic-slug %) (:topic-slug (last entries)))) entries)))]]])
 
 (defn- cta-button [cta url]
   [:table {:class "row"}
@@ -218,23 +185,6 @@
         (message update)
         (when trail-space? (spacer 22 "note"))]]])
 
-(defn- footer []
-  [:table {:class "footer"}
-    [:tr
-      [:td
-        [:center
-          [:table {:class "container"}
-            [:tr
-              [:td
-                (spacer 31 "footer")
-                [:table {:class "row footer"}
-                  [:tr
-                    [:th {:class "small-12 large-12 first columns"} 
-                      [:p {:class "text-center"}
-                        "Updates by "
-                        [:a {:href "https://carrot.io/"} "Carrot"]]]]]
-                (spacer 28 "footer")]]]]]]])
-
 (defn- body [data]
   (let [type (:type data)
         trail-space? (not= type :share-link)]
@@ -244,23 +194,19 @@
           [:td {:class "float-center", :align "center", :valign "top"}
             (when-not (s/blank? (:note data)) (note data trail-space?))
             (when (and (s/blank? (:note data)) (= type :share-link)) (spacer 15 "note"))
-            (when (= type :update) (spacer 55 "blank"))
             (if (= type :share-link)
               (share-link-content data)     
               [:center
                 [:table {:class "container"}
                   [:tr
                     (case type
-                      :update (update-content data)
                       :reset (token-content type data)
                       :verify (token-content type data)
-                      :invite (invite-content data))]]])
-            (when (= type :update) (footer))
-            (when (= type :update) (spacer 55 "blank"))]]]]))
+                      :invite (invite-content data))]]])]]]]))
 
 (defn- head [data]
   (let [type (:type data)
-        css (if (= type :update) "oc-update.css" "oc-transactional.css")]
+        css "oc-transactional.css"]
     [:html {:xmlns "http://www.w3.org/1999/xhtml"} 
       [:head 
         [:meta {:http-equiv "Content-Type", :content "text/html; charset=utf-8"}]
@@ -282,11 +228,43 @@
         org (if (s/blank? org-name) "" (str org-name " on "))]
     (str prefix " to join " org "Carrot.")))
 
-(defn share-link-html [update]
-  (html update :share-link))
+(defn share-link-html [entry]
+  (html entry :share-link))
 
-(defn update-html [update]
-  (html update :update))
+; (defn- share-link-content [entry]
+;   (let [org-name (:org-name entry)
+;         org-name? (not (s/blank? org-name))
+;         headline (:headline entry)
+;         headline? (not (s/blank? headline))
+;         link-title (if headline? headline (str org-name " Post"))
+;         org-slug (:org-slug entry)
+;         secure-uuid (:secure-uuid entry)
+;         origin-url config/web-url
+;         update-url (s/join "/" [origin-url org-slug "post" secure-uuid])]
+;     [:table {:class "note"}
+;       [:tr
+;         [:td 
+;           [:table {:class "row note"}
+;             [:tr
+;               [:th {:class "small-12 large-12 first last columns note"}
+;                 "Check out the latest"
+;                 (when org-name? (str " from " org-name))
+;                 ": " [:a {:href update-url} link-title]]]]]]]))
+
+(defn share-link-text [entry]
+  (let [note (:note entry)
+        note? (not (s/blank? note))
+        org-name (:org-name entry)
+        org-name? (not (s/blank? org-name))
+        headline (:headline entry)
+        headline? (not (s/blank? headline))
+        org-slug (:org-slug entry)
+        secure-uuid (:secure-uuid entry)
+        origin-url config/web-url
+        update-url (s/join "/" [origin-url org-slug "post" secure-uuid])]
+    (str (when note? (str note "\n\n"))
+         "Check out the latest" (when org-name? (str " from " org-name)) ":"
+         "\n\n" (when headline? (str headline "- ")) update-url)))
 
 (defn invite-html [invite]
   (html (-> invite

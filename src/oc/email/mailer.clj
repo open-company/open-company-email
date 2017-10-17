@@ -40,7 +40,7 @@
                         :source (str org-name " <" org-slug "@" c/email-from-domain ">")
                         :reply-to (if (s/blank? reply-to) default-reply-to reply-to)
                         :subject subject}
-                  {:html body})
+                  {:text body}) ; TEMP as text only
             to)))
 
 (defn- inline-css [html-file inline-file]
@@ -58,10 +58,13 @@
         html-file (str uuid-fragment ".html")
         inline-file (str uuid-fragment ".inline.html")]
     (try
-      (spit html-file (content/share-link-html entry)) ; create the email in a tmp file
-      (inline-css html-file inline-file) ; inline the CSS
+      ;; COMMENTED OUT HTML EMAIL
+      ;;(spit html-file (content/share-link-html entry)) ; create the email in a tmp file
+      ;;(inline-css html-file inline-file) ; inline the CSS
       ;; Email the recipients
-      (email-entry entry (slurp inline-file))
+      ;;(email-entry entry (slurp inline-file))
+      ;; TEXT EMAIL
+      (email-entry entry (content/share-link-text entry))
       (finally
         ;; remove the tmp files
         (io/delete-file html-file true)
