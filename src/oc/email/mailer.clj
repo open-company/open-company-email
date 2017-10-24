@@ -33,14 +33,14 @@
       :message {:subject subject
                 :body html-body})))
 
-(defn- email-story
+(defn- email-entry
   "Send emails to all to recipients in parallel."
   [{:keys [to reply-to subject org-slug org-name]} body]
   (doall (pmap #(email {:to %
                         :source (str org-name " <" org-slug "@" c/email-from-domain ">")
                         :reply-to (if (s/blank? reply-to) default-reply-to reply-to)
                         :subject subject}
-                  {:html body})
+                  {:text body}) ; TEMP as text only
             to)))
 
 (defn- inline-css [html-file inline-file]
@@ -51,17 +51,20 @@
             "--preserve-font-faces" "false"
             html-file inline-file))
 
-(defn send-story
-  "Create an HTML story share and email it to the specified recipients."
-  [story]
+(defn send-entry
+  "Create an HTML email for the specified recipients."
+  [entry]
   (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
         html-file (str uuid-fragment ".html")
         inline-file (str uuid-fragment ".inline.html")]
     (try
-      (spit html-file (content/story-link-html story)) ; create the email in a tmp file
-      (inline-css html-file inline-file) ; inline the CSS
+      ;; COMMENTED OUT HTML EMAIL
+      ;;(spit html-file (content/share-link-html entry)) ; create the email in a tmp file
+      ;;(inline-css html-file inline-file) ; inline the CSS
       ;; Email the recipients
-      (email-story story (slurp inline-file))
+      ;;(email-entry entry (slurp inline-file))
+      ;; TEXT EMAIL
+      (email-entry entry (content/share-link-text entry))
       (finally
         ;; remove the tmp files
         (io/delete-file html-file true)
