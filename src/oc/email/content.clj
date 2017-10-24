@@ -231,26 +231,6 @@
 (defn share-link-html [entry]
   (html entry :share-link))
 
-; (defn- share-link-content [entry]
-;   (let [org-name (:org-name entry)
-;         org-name? (not (s/blank? org-name))
-;         headline (:headline entry)
-;         headline? (not (s/blank? headline))
-;         link-title (if headline? headline (str org-name " Post"))
-;         org-slug (:org-slug entry)
-;         secure-uuid (:secure-uuid entry)
-;         origin-url config/web-url
-;         update-url (s/join "/" [origin-url org-slug "post" secure-uuid])]
-;     [:table {:class "note"}
-;       [:tr
-;         [:td 
-;           [:table {:class "row note"}
-;             [:tr
-;               [:th {:class "small-12 large-12 first last columns note"}
-;                 "Check out the latest"
-;                 (when org-name? (str " from " org-name))
-;                 ": " [:a {:href update-url} link-title]]]]]]]))
-
 (defn share-link-text [entry]
   (let [note (:note entry)
         note? (not (s/blank? note))
