@@ -95,7 +95,7 @@ npm install -g juice
 You can verify your juice installation by running:
 
 ```console
-juice -V
+juice --version
 ```
 
 #### Required Configuration & Secrets
