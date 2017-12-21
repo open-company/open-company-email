@@ -1200,9 +1200,10 @@ body.outlook p {
   display: inline !important; }
 
 @media only screen and (max-width: 596px) {
-  table.body img {
-    width: auto;
-    height: auto; }
+  // Removed by OC!
+  // table.body img {
+  //   width: auto;
+  //   height: auto; }
   table.body center {
     min-width: 0 !important; }
   table.body .container {
