@@ -3,8 +3,8 @@
   "org-slug": "apple",
   "org-name": "Apple",
   "logo-url": null,
-  "logo-height": "",
-  "logo-width": "",
+  "logo-height": null,
+  "logo-width": null,
   "boards": [
     {
       "name": "General",

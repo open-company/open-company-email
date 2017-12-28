@@ -62,23 +62,26 @@
 (defn- minimal-logo
   "Centered company alone."
   [{org-name :org-name logo-url :logo-url logo-height :logo-height logo-width :logo-width}]
-  (let [dimension (if (> logo-height logo-width) :height :width)
-        size (if (= dimension :height)
-                (if (> logo-height max-logo) max-logo logo-height)
-                (if (> logo-width max-logo) max-logo logo-width))]
-    [:table {:class "row logo"}
-      [:tr 
-        [:th {:class "small-12 large-12 first last columns"}
-          [:table 
-            [:tr 
-              [:th
-                [:center 
-                  [:img {:class "float-center logo"
-                         :align "center"
-                         :style (str "background-color: #fff; max-height: " max-logo "px; max-width: " max-logo "px;")
-                         dimension size
-                         :src logo-url
-                         :alt (str org-name" logo")}]]]]]]]]))
+  (let [logo? (and logo-url logo-height logo-width)
+        dimension (when logo? (if (> logo-height logo-width) :height :width))
+        size (when logo?
+                (if (= dimension :height)
+                  (if (> logo-height max-logo) max-logo logo-height)
+                  (if (> logo-width max-logo) max-logo logo-width)))]
+    (when logo?
+      [:table {:class "row logo"}
+        [:tr 
+          [:th {:class "small-12 large-12 first last columns"}
+            [:table 
+              [:tr 
+                [:th
+                  [:center 
+                    [:img {:class "float-center logo"
+                           :align "center"
+                           :style (str "background-color: #fff; max-height: " max-logo "px; max-width: " max-logo "px;")
+                           dimension size
+                           :src logo-url
+                           :alt (str org-name" logo")}]]]]]]]])))
 
 (defn- carrot-logo []
   [:table {:class "row header"} 
@@ -572,7 +575,13 @@
   (def data (clean-html (slurp "./resources/digest/change-to.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
+  (def digest (json/decode (slurp "./opt/samples/digests/carrot.json")))
+  (spit "./hiccup.html" (content/digest-html digest))
+
   (def digest (json/decode (slurp "./opt/samples/digests/apple.json")))
+  (spit "./hiccup.html" (content/digest-html digest))
+
+  (def digest (json/decode (slurp "./opt/samples/digests/no-logo.json")))
   (spit "./hiccup.html" (content/digest-html digest))
 
   )
