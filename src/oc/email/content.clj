@@ -279,18 +279,21 @@
     (change-to)
     (tr-spacer 40)])
 
-(defn- post-attribution [publisher published-at]
-  [:tr
-    [:th {:class "small-1 large-1 first columns"}]
-    [:th {:class "small-10 large-10 columns"}
-      [:table
-        [:tr
-          [:th
-            [:p {:class "attribution"} (str (:name publisher) " on " (->> published-at
-                                                                        (format/parse iso-format)
-                                                                        (format/unparse attribution-format)))]]
-          [:th {:class "expander"}]]]]
-    [:th {:class "small-1 large-1 last columns"}]])
+(defn- post-attribution [publisher published-at frequency]
+  (let [attribution (if (= (keyword frequency) :daily)
+                      (:name publisher)
+                      (str (str (:name publisher) " on " (->> published-at
+                                                            (format/parse iso-format)
+                                                            (format/unparse attribution-format)))))]
+    [:tr
+      [:th {:class "small-1 large-1 first columns"}]
+      [:th {:class "small-10 large-10 columns"}
+        [:table
+          [:tr
+            [:th
+              [:p {:class "attribution"} attribution]]
+            [:th {:class "expander"}]]]]
+      [:th {:class "small-1 large-1 last columns"}]]))
 
 (defn- post-link [headline url]
   [:tr
@@ -316,20 +319,20 @@
           [:th {:class "expander"}]]]]
     [:th {:class "small-1 large-1 last columns"}]])
 
-(defn- post [data]
+(defn- post [data frequency]
   [:div
     (tr-spacer 27)
     (post-link (:headline data) (:url data))
     (tr-spacer 11)
-    (post-attribution (:publisher data) (:published-at data))])
+    (post-attribution (:publisher data) (:published-at data) frequency)])
 
-(defn- board [data]
+(defn- board [data frequency]
   [:table {:class "row board"}
     (tr-spacer 33)
     (board-name (:name data))
     (let [posts (:posts data)]
       (into [:div]
-        (map post posts)))
+        (map #(post % frequency) posts)))
     (tr-spacer 39)])
 
 (defn- digest-content [digest]
@@ -340,7 +343,7 @@
     (digest-banner (:digest-frequency digest))
     (let [boards (:boards digest)]
       (into [:div]
-        (map board boards)))
+        (map #(board % (:digest-frequency digest)) boards)))
     (digest-footer digest)])
 
 (defn- note 
