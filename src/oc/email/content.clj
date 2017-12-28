@@ -103,15 +103,22 @@
               [:img {:width "22", :height "39", :src "https://open-company.s3.amazonaws.com/carrot-grey-logo-min.png", :alt "Carrot logo"}]]]
           [:th {:class "expander"}]]]]])
 
-(defn- digest-banner []
-  [:table {:class "row banner"}
-    [:tr
-      [:th {:class "small-12 large-12 first last columns"}
-        [:table
-          [:tr
-            [:th
-              [:img {:src "https://open-company.s3.amazonaws.com/digest-header-min.png", :alt "Your weekly digest"}]]
-            [:th {:class "expander"}]]]]]])
+(defn- digest-banner [frequency]
+  (let [weekly? (= (keyword frequency) :weekly)
+        banner-src (if weekly?
+                      "https://open-company.s3.amazonaws.com/weekly-digest-header-min.png"
+                      "https://open-company.s3.amazonaws.com/daily-digest-header-min.png")
+        banner-alt (if weekly?
+                      "Your weekly digest"
+                      "Your daily digest")]
+    [:table {:class "row banner"}
+      [:tr
+        [:th {:class "small-12 large-12 first last columns"}
+          [:table
+            [:tr
+              [:th
+                [:img {:src banner-src, :alt banner-alt}]]
+              [:th {:class "expander"}]]]]]]))
 
 (defn- message [update]
   [:table {:class "row note"}
@@ -330,7 +337,7 @@
     (spacer 40)
     (minimal-logo digest)
     (spacer 32)
-    (digest-banner)
+    (digest-banner (:digest-frequency digest))
     (let [boards (:boards digest)]
       (into [:div]
         (map board boards)))
