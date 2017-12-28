@@ -17,6 +17,7 @@
 
 (def default-reply-to (str "hello@" c/email-from-domain))
 (def default-from "Carrot")
+(def default-source (str default-from " <" default-reply-to ">"))
 
 (defn- email
   "Send an email."
@@ -78,7 +79,7 @@
         inline-file (str uuid-fragment ".inline.html")
         invitation (-> message 
                     (keywordize-keys)
-                    (assoc :source (str default-from " <" default-reply-to ">"))
+                    (assoc :source default-source)
                     (assoc :subject (content/invite-subject message false)))]
     (try
       (spit html-file (content/invite-html invitation)) ; create the email in a tmp file
@@ -99,7 +100,7 @@
         inline-file (str uuid-fragment ".inline.html")
         msg (-> message 
               (keywordize-keys)
-              (assoc :source (str default-from " <" default-reply-to ">"))
+              (assoc :source default-source)
               (assoc :from default-from)
               (assoc :reply-to default-reply-to)
               (assoc :subject (case token-type
@@ -111,6 +112,30 @@
       ;; Email it to the recipient
       (email msg {:text (content/token-text token-type msg)
                   :html (slurp inline-file)})
+      (finally
+        ; remove the tmp files
+        (io/delete-file html-file true)
+        (io/delete-file inline-file true)))))
+
+(defn send-digest
+  "Create an HTML digest and email it to the specified recipient."
+  [message]
+  (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
+        html-file (str uuid-fragment ".html")
+        inline-file (str uuid-fragment ".inline.html")
+        msg (keywordize-keys message)
+        org-name (:org-name msg)
+        frequency (if (= (:digest-frequency msg) "daily") "Daily" "Weekly")]
+    (try
+      (spit html-file (content/digest-html msg)) ; create the email in a tmp file
+      (inline-css html-file inline-file) ; inline the CSS
+      ;; Email it to the recipient
+      (email {:to (:email msg)
+              :source default-source
+              :from default-from
+              :reply-to default-reply-to
+              :subject (str org-name " " frequency " Digest")}
+             {:html (slurp inline-file)})
       (finally
         ; remove the tmp files
         (io/delete-file html-file true)

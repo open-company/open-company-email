@@ -19,6 +19,7 @@
       "verify" (mailer/send-token :verify msg-body)
       "invite" (mailer/send-invite msg-body)
       "share-entry" (mailer/send-entry msg-body)
+      "digest" (mailer/send-digest msg-body)
       (timbre/error "Unrecognized message type" msg-type)))
   (sqs/ack done-channel msg))
 
