@@ -10,7 +10,7 @@
 (def profile-url (str config/web-url "/profile"))
 
 (def iso-format (format/formatters :date-time)) ; ISO 8601
-(def attribution-format (format/formatter "MMMM d, YYYY")) ; Format for date in URL of stakeholder-update links
+(def attribution-format (format/formatter "MMMM d"))
 
 (def doc-type "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
 
