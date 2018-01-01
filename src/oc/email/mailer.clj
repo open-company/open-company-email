@@ -154,12 +154,11 @@
                        :subject "Latest GreenLabs Update"
                        :note "Enjoy this groovy update!"}))
 
-  (def update (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/updates/new.json"))))
-  (mailer/send-update (merge update {
+  (def digest (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/digest/carrot.json"))))
+  (mailer/send-update (merge digest {
                        :to ["change@me.com"]
                        :reply-to "change@me.com"
                        :subject "Latest New.ly Update"
-                       :note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week."
                        :origin "http://localhost:3559"}))
 
   (def invite (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/invites/microsoft.json"))))

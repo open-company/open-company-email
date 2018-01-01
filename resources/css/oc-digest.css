@@ -6,16 +6,10 @@ html,
 }
 
 @media only screen and (max-device-width: 564px) {
-    // body { width: 320px !important; margin: 0; padding: 0; }
-    // img.entry-image { height:auto !important; max-width:100% !important; }
     table.body th.columns { padding-left: 0px !important; padding-right: 0px !important; }
-    table.container { max-width: 564px; }
 }
 
-@media only screen and (min-device-width: 564px) {
-  // table.container th { padding-left: 25px; padding-right: 25px; }
-  table.container { max-width: 564px; }
-}
+table.container { max-width: 564px; }
 
 h2 {
   font-size: 16px !important;

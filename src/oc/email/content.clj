@@ -131,12 +131,14 @@
 
 (defn- tr-spacer [pixels]        
   [:tr
-    [:th
+    [:th {:class "small-1 large-1 first columns"}]
+    [:th {:class "small-10 large-10 columns"}
       [:table {:class "spacer"}
         [:tr
-          [:td {:height (str "font-size:" pixels "px")
-                :style (str "font-size:" pixels "px;line-height:" pixels "px;")} " "]]]]
-    [:th {:class "expander"}]])
+          [:th {:height (str "font-size:" pixels "px")
+                :style (str "font-size:" pixels "px;line-height:" pixels "px;")} " "]
+          [:th {:class "expander"}]]]]
+    [:th {:class "small-1 large-1 last columns"}]])
 
 (defn- spacer
   ([pixels] (spacer pixels ""))
@@ -145,8 +147,13 @@
     [:tr
       [:th {:class "small-12 large-12 first last columns"}
         [:table
-          (tr-spacer pixels)]]]]))
-
+          [:tr
+            [:th
+              [:table {:class "spacer"}
+                [:tr
+                  [:td {:height (str "font-size:" pixels "px")
+                        :style (str "font-size:" pixels "px;line-height:" pixels "px;")} " "]]]]
+                [:th {:class "expander"}]]]]]]))
 
 (defn- paragraph [content]
   [:table {:class "row"}
@@ -323,18 +330,17 @@
     [:th {:class "small-1 large-1 last columns"}]])
 
 (defn- post [data frequency]
-  [:div
-    (tr-spacer 27)
-    (post-link (:headline data) (:url data))
-    (tr-spacer 11)
-    (post-attribution (:publisher data) (:published-at data) frequency)])
+  [(tr-spacer 27)
+   (post-link (:headline data) (:url data))
+   (tr-spacer 11)
+   (post-attribution (:publisher data) (:published-at data) frequency)])
 
 (defn- board [data frequency]
   [:table {:class "row board"}
     (tr-spacer 33)
     (board-name (:name data))
-    (let [posts (:posts data)]
-      (into [:div]
+    (apply concat ; flattens 1-level
+      (let [posts (:posts data)]
         (map #(post % frequency) posts)))
     (tr-spacer 39)])
 
@@ -345,8 +351,7 @@
     (spacer 32)
     (digest-banner (:digest-frequency digest))
     (let [boards (:boards digest)]
-      (into [:div]
-        (map #(board % (:digest-frequency digest)) boards)))
+      (map #(board % (:digest-frequency digest)) boards))
     (digest-footer digest)])
 
 (defn- note 
@@ -461,73 +466,31 @@
       (s/replace "\n" "")
       (s/replace "\t" "")))
 
-  (def data (clean-html (slurp "./resources/update/head.html")))
-  (-> (hickory/parse data) hickory/as-hiccup first)
+  ;; Generate test email HTML content from sample data
 
-  (def data (clean-html (slurp "./resources/update/body.html")))
-  (-> (hickory/parse data) hickory/as-hiccup first (nth 3))
+  (require '[oc.email.content :as content] :reload)
 
-  (def data (clean-html (slurp "./resources/update/spacer.html")))
-  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-html (slurp "./resources/update/note.html")))
-  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
+  ;; Shares
 
-  (def data (clean-htnml (slurp "./resources/update/logo.html")))
-  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
+  (def note "Enjoy the groovy update.")
+  (def share-request (json/decode (slurp "./opt/samples/share/green-labs.json")))
+  (spit "./hiccup.html" (content/share-link-html (assoc share-request :note note)))
 
-  (def data (clean-html (slurp "./resources/update/name.html")))
-  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
+  (def share-request (json/decode (slurp "./opt/samples/share/new.json")))
+  (spit "./hiccup.html" (content/share-link-html (assoc share-request :note "")))
 
-  (def data (clean-html (slurp "./resources/update/title.html")))
-  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
+  (def share-request (json/decode (slurp "./opt/samples/updates/bago.json")))
+  (spit "./hiccup.html" (content/share-link-html (assoc share-request :note "")))
 
-  (def data (clean-html (slurp "./resources/update/topic.html")))
-  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-html (slurp "./resources/update/data-topic.html")))
-  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
-
-  (def data (clean-html (slurp "./resources/update/footer.html")))
-  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
+  ;; Invites
 
   (def data (clean-html (slurp "./resources/invite/paragraph.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
   (def data (clean-html (slurp "./resources/invite/cta-button.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
-
-  ;; Generate test email HTML content from sample data
-
-  (require '[oc.email.content :as content] :reload)
-
-  (def note "Enjoy the groovy update.")
-  (def share-request (json/decode (slurp "./opt/samples/updates/green-labs.json")))
-  (spit "./hiccup.html" (content/story-link-html (assoc share-request :note note)))
-
-  (spit "./hiccup.html" (content/snapshot-link-html (assoc update :note note)))
-
-  (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
-  (def update (json/decode (slurp "./opt/samples/updates/buff.json")))
-  (spit "./hiccup.html" (content/update-html (assoc update :note note)))
-
-  (def update (json/decode (slurp "./opt/samples/updates/new.json")))
-  (spit "./hiccup.html" (content/update-html (assoc update :note "")))
-
-  (def update (json/decode (slurp "./opt/samples/updates/bago.json")))
-  (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note "") (assoc :company-slug "bago"))))
-
-  (def update (json/decode (slurp "./opt/samples/updates/bago-no-symbol.json")))
-  (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note "") (assoc :company-slug "bago"))))
-
-  (def update (json/decode (slurp "./opt/samples/updates/growth-options.json")))
-  (spit "./hiccup.html" (content/update-html (assoc update :note "")))
-
-  (def update (json/decode (slurp "./opt/samples/updates/blanks-test.json")))
-  (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note "") (assoc :company-slug "blanks-test"))))
-
-  (def update (json/decode (slurp "./opt/samples/updates/sparse.json")))
-  (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note "") (assoc :company-slug "sparse"))))
 
   (def invite (json/decode (slurp "./opt/samples/invites/apple.json")))
   (spit "./hiccup.html" (content/invite-html invite))
@@ -544,9 +507,15 @@
   (spit "./hiccup.html" (content/invite-html invite))
   (content/invite-text invite)
 
+  
+  ;; Resets
+
   (spit "./hiccup.html" (content/token-html :reset {:token-link "http://test.it/123"}))
   
   (content/token-text :verify {:token-link "http://test.it/123"})
+
+  
+  ;; Digests
 
   (def data (clean-html (slurp "./resources/digest/logo.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
