@@ -147,13 +147,7 @@
     [:tr
       [:th {:class "small-12 large-12 first last columns"}
         [:table
-          [:tr
-            [:th
-              [:table {:class "spacer"}
-                [:tr
-                  [:td {:height (str "font-size:" pixels "px")
-                        :style (str "font-size:" pixels "px;line-height:" pixels "px;")} " "]]]]
-                [:th {:class "expander"}]]]]]]))
+          (tr-spacer pixels)]]]]))
 
 (defn- paragraph [content]
   [:table {:class "row"}
