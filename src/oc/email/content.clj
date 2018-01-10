@@ -248,7 +248,7 @@
       [:table
         [:tr
           [:th
-            [:p {:class "text-center"} "You receive " [:b interval] " emails."]]
+            [:p {:class "text-center"} "You receive " [:b interval] " digests."]]
           [:th {:class "expander"}]]]]])
 
 (def sent-by
@@ -260,17 +260,18 @@
           [:p {:class "text-center"} [:b {} sent-by-text]]]
         [:th {:class "expander"}]]]]])
 
-(defn- change-to []
-  [:tr
-    [:th {:class "small-12 large-12 first last columns"}
-    [:table
-      [:tr
-        [:th
-          [:p {:class "text-center"}
-            [:a {:href profile-url} "Change to daily?"]
-            " ∙ "
-            [:a {:href profile-url} "Unsubscribe"]]]
-        [:th {:class "expander"}]]]]])
+(defn- change-to [interval]
+  (let [new-interval (if (= (keyword interval) :daily) "weekly" "daily")]
+    [:tr
+      [:th {:class "small-12 large-12 first last columns"}
+      [:table
+        [:tr
+          [:th
+            [:p {:class "text-center"}
+              [:a {:href profile-url} (str "Change to " new-interval "?")]
+              " ∙ "
+              [:a {:href profile-url} "Turn off digests"]]]
+          [:th {:class "expander"}]]]]]))
 
 (defn- digest-footer [digest]
   [:table {:class "row footer"}
@@ -280,7 +281,7 @@
     sent-by
     (tr-spacer 17)
     (you-receive (:digest-frequency digest))
-    (change-to)
+    (change-to (:digest-frequency digest))
     (tr-spacer 40)])
 
 (defn- post-attribution [publisher published-at frequency]
