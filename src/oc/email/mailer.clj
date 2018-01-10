@@ -19,6 +19,9 @@
 (def default-from "Carrot")
 (def default-source (str default-from " <" default-reply-to ">"))
 
+(def digest-reply-to (str "digest@" c/email-from-domain))
+(def digest-source (str default-from " <" digest-reply-to ">"))
+
 (defn- email
   "Send an email."
   [{:keys [to source reply-to subject]} body]
@@ -125,13 +128,13 @@
         inline-file (str uuid-fragment ".inline.html")
         msg (keywordize-keys message)
         org-name (:org-name msg)
-        frequency (if (= (:digest-frequency msg) "daily") "Daily" "Weekly")]
+        frequency (if (= (keyword (:digest-frequency msg)) :daily) "Daily" "Weekly")]
     (try
       (spit html-file (content/digest-html msg)) ; create the email in a tmp file
       (inline-css html-file inline-file) ; inline the CSS
       ;; Email it to the recipient
       (email {:to (:email msg)
-              :source default-source
+              :source digest-source
               :from default-from
               :reply-to default-reply-to
               :subject (str org-name " " frequency " Digest")}
