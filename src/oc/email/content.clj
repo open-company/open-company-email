@@ -340,12 +340,12 @@
 (defn- post [data frequency]
   (let [comment-count (:comment-count data)
         comments? (pos? comment-count)]
-  [(tr-spacer 27)
-   (post-link (:headline data) (:url data))
-   (tr-spacer 11)
-   (post-attribution (:publisher data) (:published-at data) frequency)
-   (when comments? (tr-spacer 3))
-   (when comments? (comment-attrubition comment-count (:comment-authors data))])
+    [(tr-spacer 27)
+     (post-link (:headline data) (:url data))
+     (tr-spacer 11)
+     (post-attribution (:publisher data) (:published-at data) frequency)
+     (when comments? (tr-spacer 3))
+     (when comments? (comment-attribution comment-count (:comment-authors data)))]))
 
 (defn- board [data frequency]
   [:table {:class "row board"}
