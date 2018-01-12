@@ -17,7 +17,9 @@
             "name" : "Lisa Malo",
             "user-id" : "d6e9-4529-8e7b"
           },
-          "published-at": "2017-11-5T17:00:48.729Z"
+          "published-at": "2017-11-5T17:00:48.729Z",
+          "comment-count": 0,
+          "comment-authors": []
         }, {
           "headline": "We've hit 2,000 paid subscribers!",
           "url": "http://localhost:3000/carrot/all-hands/post/e921-4f0c-9b9c",
@@ -26,7 +28,9 @@
             "name" : "David Smith",
             "user-id" : "d6e9-4529-8e7b"
           },
-          "published-at": "2017-11-5T17:00:48.729Z"
+          "published-at": "2017-11-5T17:00:48.729Z",
+          "comment-count": 0,
+          "comment-authors": []
         }
       ]
     }, {
@@ -42,7 +46,9 @@
             "name" : "Lisa Malo",
             "user-id" : "d6e9-4529-8e7b"
           },
-          "published-at": "2017-11-5T17:00:48.729Z"
+          "published-at": "2017-11-5T17:00:48.729Z",
+          "comment-count": 0,
+          "comment-authors": []
         }, {
           "headline": "Versioning, Licensing and Sketch 4.0",
           "url": "http://localhost:3000/carrot/design/post/e921-4f0c-9b9c",
@@ -51,7 +57,9 @@
             "name" : "David Smith",
             "user-id" : "d6e9-4529-8e7b"
           },
-          "published-at": "2017-11-5T17:00:48.729Z"
+          "published-at": "2017-11-5T17:00:48.729Z",
+          "comment-count": 0,
+          "comment-authors": []
         }
       ]
     }

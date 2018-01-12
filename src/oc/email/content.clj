@@ -3,6 +3,7 @@
             [clojure.walk :refer (keywordize-keys)]
             [clj-time.format :as format]
             [hiccup.core :as h]
+            [oc.lib.text :as text]
             [oc.email.config :as config]))
 
 (def max-logo 50)
@@ -284,6 +285,18 @@
     (change-to (:digest-frequency digest))
     (tr-spacer 40)])
 
+(defn- comment-attribution [comment-count comment-authors]
+  (let [attribution (text/attribution 2 comment-count "comment" comment-authors)]
+    [:tr
+      [:th {:class "small-1 large-1 first columns"}]
+      [:th {:class "small-10 large-10 columns"}
+        [:table
+          [:tr
+            [:th
+              [:p {:class "attribution"} attribution]]
+            [:th {:class "expander"}]]]]
+      [:th {:class "small-1 large-1 last columns"}]]))
+
 (defn- post-attribution [publisher published-at frequency]
   (let [attribution (if (= (keyword frequency) :daily)
                       (:name publisher)
@@ -325,10 +338,14 @@
     [:th {:class "small-1 large-1 last columns"}]])
 
 (defn- post [data frequency]
+  (let [comment-count (:comment-count data)
+        comments? (pos? comment-count)]
   [(tr-spacer 27)
    (post-link (:headline data) (:url data))
    (tr-spacer 11)
-   (post-attribution (:publisher data) (:published-at data) frequency)])
+   (post-attribution (:publisher data) (:published-at data) frequency)
+   (when comments? (tr-spacer 3))
+   (when comments? (comment-attrubition comment-count (:comment-authors data))])
 
 (defn- board [data frequency]
   [:table {:class "row board"}
