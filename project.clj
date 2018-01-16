@@ -65,6 +65,7 @@
         :aws-endpoint "us-east-1"
         :aws-sqs-email-queue "https://sqs.REGION.amazonaws.com/CHANGE/ME"
         :email-from-domain "change.me"
+        :email-digest-prefix "[Localhost] "
         :intro "true"
         :log-level "debug"
       }

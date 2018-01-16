@@ -137,7 +137,7 @@
               :source digest-source
               :from default-from
               :reply-to default-reply-to
-              :subject (str org-name " " frequency " Digest")}
+              :subject (str c/email-digest-prefix org-name " " frequency " Digest")}
              {:html (slurp inline-file)})
       (finally
         ; remove the tmp files
