@@ -14,7 +14,7 @@
   ;; All profile dependencies
   :dependencies [
     ;; Lisp on the JVM http://clojure.org/documentation
-    [org.clojure/clojure "1.9.0-RC1"]
+    [org.clojure/clojure "1.9.0"]
     ;; HTML rendering https://github.com/weavejester/hiccup
     [hiccup "2.0.0-alpha1"]
     ;; Async programming tools https://github.com/ztellman/manifold
@@ -24,7 +24,7 @@
     [org.clojure/tools.namespace "0.3.0-alpha4" :exclusions [org.clojure/tools.reader]] 
 
     ;; Library for OC projects https://github.com/open-company/open-company-lib
-    [open-company/lib "0.14.7"]
+    [open-company/lib "0.14.15"]
     ;; In addition to common functions, brings in the following common dependencies used by this project:
     ;; Component - Component Lifecycle https://github.com/stuartsierra/component
     ;; Schema - Data validation https://github.com/Prismatic/schema
@@ -65,6 +65,7 @@
         :aws-endpoint "us-east-1"
         :aws-sqs-email-queue "https://sqs.REGION.amazonaws.com/CHANGE/ME"
         :email-from-domain "change.me"
+        :email-digest-prefix "[Localhost] "
         :intro "true"
         :log-level "debug"
       }
@@ -80,13 +81,13 @@
         ;; pretty-print the lein project map https://github.com/technomancy/leiningen/tree/master/lein-pprint
         [lein-pprint "1.2.0"]
         ;; Check for outdated dependencies https://github.com/xsc/lein-ancient
-        [lein-ancient "0.6.14"]
+        [lein-ancient "0.6.15"]
         ;; Catch spelling mistakes in docs and docstrings https://github.com/cldwalker/lein-spell
         [lein-spell "0.1.0"]
         ;; Dead code finder https://github.com/venantius/yagni
         [venantius/yagni "0.1.4" :exclusions [org.clojure/clojure]]
         ;; Autotest https://github.com/jakemcc/lein-test-refresh
-        [com.jakemccrary/lein-test-refresh "0.21.1"]
+        [com.jakemccrary/lein-test-refresh "0.22.0"]
       ]  
     }]
 

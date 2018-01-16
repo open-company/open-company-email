@@ -3,14 +3,23 @@
             [clojure.walk :refer (keywordize-keys)]
             [clj-time.format :as format]
             [hiccup.core :as h]
+            [oc.lib.text :as text]
             [oc.email.config :as config]))
 
+(def max-logo 50)
+
+(def profile-url (str config/web-url "/profile"))
+
 (def iso-format (format/formatters :date-time)) ; ISO 8601
-(def link-format (format/formatter "YYYY-MM-dd")) ; Format for date in URL of stakeholder-update links
+(def attribution-format (format/formatter "MMMM d"))
 
 (def doc-type "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
 
 (def tagline "Grow together with announcements, updates, and stories that bring teams closer.")
+
+(def invite-cta "OK, Let's get started ➞")
+
+(def sent-by-text "Sent by Carrot")
 
 (def reset-message "Someone (hopefully you) requested a new password for your Carrot account.")
 (def reset-instructions "Click the link below to reset your password.")
@@ -22,7 +31,9 @@
 (def verify-button-text "VERIFY EMAIL ➞")
 (def verify-ignore "If you didn't create a Carrot account, you can ignore this email.")
 
-(defn- logo [logo-url org-name]
+(defn- logo
+  "Company logo that includes Carrot branding."
+  [logo-url org-name]
   [:table {:class "row header"} 
     [:tr
       [:th {:class "small-1 large-2 first columns"}]
@@ -49,6 +60,30 @@
                      :src "https://open-company-assets.s3.amazonaws.com/email_right_bubbles.png"}]]]]]
       [:th {:class "small-1 large-2 last columns"}]]])
 
+(defn- minimal-logo
+  "Centered company alone."
+  [{org-name :org-name logo-url :logo-url logo-height :logo-height logo-width :logo-width}]
+  (let [logo? (and logo-url logo-height logo-width)
+        dimension (when logo? (if (> logo-height logo-width) :height :width))
+        size (when logo?
+                (if (= dimension :height)
+                  (if (> logo-height max-logo) max-logo logo-height)
+                  (if (> logo-width max-logo) max-logo logo-width)))]
+    (when logo?
+      [:table {:class "row logo"}
+        [:tr 
+          [:th {:class "small-12 large-12 first last columns"}
+            [:table 
+              [:tr 
+                [:th
+                  [:center 
+                    [:img {:class "float-center logo"
+                           :align "center"
+                           :style (str "background-color: #fff; max-height: " max-logo "px; max-width: " max-logo "px;")
+                           dimension size
+                           :src logo-url
+                           :alt (str org-name" logo")}]]]]]]]])))
+
 (defn- carrot-logo []
   [:table {:class "row header"} 
     [:tr
@@ -62,11 +97,49 @@
                        :src "https://open-company-assets.s3.amazonaws.com/carrot-logo.png"
                        :alt "Carrot logo"}]]]]]]]])
 
+(defn- carrot-digest-logo []
+  [:tr
+    [:th {:class "small-12 large-12 first last columns"}
+      [:table
+        [:tr
+          [:th
+            [:center
+              [:img {:width "22", :height "39", :src "https://open-company.s3.amazonaws.com/carrot-grey-logo-min.png", :alt "Carrot logo"}]]]
+          [:th {:class "expander"}]]]]])
+
+(defn- digest-banner [frequency]
+  (let [weekly? (= (keyword frequency) :weekly)
+        banner-src (if weekly?
+                      "https://open-company.s3.amazonaws.com/weekly-digest-header-min.png"
+                      "https://open-company.s3.amazonaws.com/daily-digest-header-min.png")
+        banner-alt (if weekly?
+                      "Your weekly digest"
+                      "Your daily digest")]
+    [:table {:class "row banner"}
+      [:tr
+        [:th {:class "small-12 large-12 first last columns"}
+          [:table
+            [:tr
+              [:th
+                [:img {:src banner-src, :alt banner-alt}]]
+              [:th {:class "expander"}]]]]]]))
+
 (defn- message [update]
   [:table {:class "row note"}
     [:tr
       [:th {:class "small-12 large-12 first last columns note"}
         (:note update)]]])
+
+(defn- tr-spacer [pixels]        
+  [:tr
+    [:th {:class "small-1 large-1 first columns"}]
+    [:th {:class "small-10 large-10 columns"}
+      [:table {:class "spacer"}
+        [:tr
+          [:th {:height (str "font-size:" pixels "px")
+                :style (str "font-size:" pixels "px;line-height:" pixels "px;")} " "]
+          [:th {:class "expander"}]]]]
+    [:th {:class "small-1 large-1 last columns"}]])
 
 (defn- spacer
   ([pixels] (spacer pixels ""))
@@ -75,13 +148,7 @@
     [:tr
       [:th {:class "small-12 large-12 first last columns"}
         [:table
-          [:tr
-            [:th
-              [:table {:class "spacer"}
-                [:tr
-                  [:td {:height (str "font-size:" pixels "px")
-                        :style (str "font-size:" pixels "px;line-height:" pixels "px;")} " "]]]]
-            [:th {:class "expander"}]]]]]]))
+          (tr-spacer pixels)]]]]))
 
 (defn- paragraph [content]
   [:table {:class "row"}
@@ -123,7 +190,7 @@
       (spacer 15)
       (paragraph (str "Hi " first-name "! " (:text invite)))
       (spacer 15)
-      (cta-button "OK, Let's get started ➞" (:token-link invite))
+      (cta-button invite-cta (:token-link invite))
       (spacer 30)
       (paragraph tagline)]))
 
@@ -176,6 +243,129 @@
                 (when org-name? (str " from " org-name))
                 ": " [:a {:href update-url} link-title]]]]]]]))
 
+(defn- you-receive [interval]
+  [:tr
+    [:th {:class "small-12 large-12 first last columns"}
+      [:table
+        [:tr
+          [:th
+            [:p {:class "text-center"} "You receive " [:b interval] " digests."]]
+          [:th {:class "expander"}]]]]])
+
+(def sent-by
+  [:tr
+    [:th {:class "small-12 large-12 first last columns"}
+    [:table
+      [:tr
+        [:th
+          [:p {:class "text-center"} [:b {} sent-by-text]]]
+        [:th {:class "expander"}]]]]])
+
+(defn- change-to [interval]
+  (let [new-interval (if (= (keyword interval) :daily) "weekly" "daily")]
+    [:tr
+      [:th {:class "small-12 large-12 first last columns"}
+      [:table
+        [:tr
+          [:th
+            [:p {:class "text-center"}
+              [:a {:href profile-url} (str "Change to " new-interval "?")]
+              " ∙ "
+              [:a {:href profile-url} "Turn off digests"]]]
+          [:th {:class "expander"}]]]]]))
+
+(defn- digest-footer [digest]
+  [:table {:class "row footer"}
+    (tr-spacer 40)
+    (carrot-digest-logo)
+    (tr-spacer 17)
+    sent-by
+    (tr-spacer 17)
+    (you-receive (:digest-frequency digest))
+    (change-to (:digest-frequency digest))
+    (tr-spacer 40)])
+
+(defn- comment-attribution [comment-count comment-authors]
+  (let [attribution (text/attribution 2 comment-count "comment" comment-authors)]
+    [:tr
+      [:th {:class "small-1 large-1 first columns"}]
+      [:th {:class "small-10 large-10 columns"}
+        [:table
+          [:tr
+            [:th
+              [:p {:class "attribution"} attribution]]
+            [:th {:class "expander"}]]]]
+      [:th {:class "small-1 large-1 last columns"}]]))
+
+(defn- post-attribution [publisher published-at frequency]
+  (let [attribution (if (= (keyword frequency) :daily)
+                      (:name publisher)
+                      (str (str (:name publisher) " on " (->> published-at
+                                                            (format/parse iso-format)
+                                                            (format/unparse attribution-format)))))]
+    [:tr
+      [:th {:class "small-1 large-1 first columns"}]
+      [:th {:class "small-10 large-10 columns"}
+        [:table
+          [:tr
+            [:th
+              [:p {:class "attribution"} attribution]]
+            [:th {:class "expander"}]]]]
+      [:th {:class "small-1 large-1 last columns"}]]))
+
+(defn- post-link [headline url]
+  [:tr
+    [:th {:class "small-1 large-1 first columns"}]
+    [:th {:class "small-10 large-10 columns"}
+      [:table
+        [:tr
+          [:th
+            [:a {:class "post-link"
+                 :href url}
+              headline]]
+          [:th {:class "expander"}]]]]
+    [:th {:class "small-1 large-1 last columns"}]])
+
+(defn- board-name [bname]
+  [:tr
+    [:th {:class "small-1 large-1 first columns"}]
+    [:th {:class "small-10 large-10 columns"}
+      [:table
+        [:tr
+          [:th
+            [:h2 bname]]
+          [:th {:class "expander"}]]]]
+    [:th {:class "small-1 large-1 last columns"}]])
+
+(defn- post [data frequency]
+  (let [comment-count (:comment-count data)
+        comments? (pos? comment-count)]
+    [(tr-spacer 27)
+     (post-link (:headline data) (:url data))
+     (tr-spacer 11)
+     (post-attribution (:publisher data) (:published-at data) frequency)
+     (when comments? (tr-spacer 3))
+     (when comments? (comment-attribution comment-count (:comment-authors data)))]))
+
+(defn- board [data frequency]
+  [:table {:class "row board"}
+    (tr-spacer 33)
+    (board-name (:name data))
+    (apply concat ; flattens 1-level
+      (let [posts (:posts data)]
+        (map #(post % frequency) posts)))
+    (tr-spacer 39)])
+
+(defn- digest-content [digest]
+  [:td
+    (spacer 40)
+    (minimal-logo digest)
+    (spacer 32)
+    (digest-banner (:digest-frequency digest))
+    (let [boards (:boards digest)]
+      (map #(board % (:digest-frequency digest)) boards))
+    (digest-footer digest)])
+
 (defn- note 
   [update trail-space?]
   [:table {:class "note"}
@@ -202,18 +392,20 @@
                     (case type
                       :reset (token-content type data)
                       :verify (token-content type data)
-                      :invite (invite-content data))]]])]]]]))
+                      :invite (invite-content data)
+                      :digest (digest-content data))]]])]]]]))
 
 (defn- head [data]
   (let [type (:type data)
-        css "oc-transactional.css"]
+        css (if (= type :digest) "oc-digest.css" "oc-transactional.css")]
     [:html {:xmlns "http://www.w3.org/1999/xhtml"} 
       [:head 
         [:meta {:http-equiv "Content-Type", :content "text/html; charset=utf-8"}]
         [:meta {:name "viewport", :content "width=device-width"}]
         [:link {:rel "stylesheet", :href "resources/css/foundation.css"}]
         [:link {:rel "stylesheet", :href (str "resources/css/" css)}]
-        [:link {:href "http://fonts.googleapis.com/css?family=Muli", :rel "stylesheet", :type "text/css"}]
+        (when (not= type :digest)
+          [:link {:href "http://fonts.googleapis.com/css?family=Muli", :rel "stylesheet", :type "text/css"}])
         [:title]]
       (body data)]))
 
@@ -268,6 +460,9 @@
          (:link message) "\n\n"
          (:ignore message))))
 
+(defn digest-html [digest]
+  (html digest :digest))
+
 (comment
   
   ;; For REPL testing and content development
@@ -283,73 +478,31 @@
       (s/replace "\n" "")
       (s/replace "\t" "")))
 
-  (def data (clean-html (slurp "./resources/update/head.html")))
-  (-> (hickory/parse data) hickory/as-hiccup first)
+  ;; Generate test email HTML content from sample data
 
-  (def data (clean-html (slurp "./resources/update/body.html")))
-  (-> (hickory/parse data) hickory/as-hiccup first (nth 3))
+  (require '[oc.email.content :as content] :reload)
 
-  (def data (clean-html (slurp "./resources/update/spacer.html")))
-  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-html (slurp "./resources/update/note.html")))
-  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
+  ;; Shares
 
-  (def data (clean-htnml (slurp "./resources/update/logo.html")))
-  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
+  (def note "Enjoy the groovy update.")
+  (def share-request (json/decode (slurp "./opt/samples/share/green-labs.json")))
+  (spit "./hiccup.html" (content/share-link-html (assoc share-request :note note)))
 
-  (def data (clean-html (slurp "./resources/update/name.html")))
-  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
+  (def share-request (json/decode (slurp "./opt/samples/share/new.json")))
+  (spit "./hiccup.html" (content/share-link-html (assoc share-request :note "")))
 
-  (def data (clean-html (slurp "./resources/update/title.html")))
-  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
+  (def share-request (json/decode (slurp "./opt/samples/updates/bago.json")))
+  (spit "./hiccup.html" (content/share-link-html (assoc share-request :note "")))
 
-  (def data (clean-html (slurp "./resources/update/topic.html")))
-  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def data (clean-html (slurp "./resources/update/data-topic.html")))
-  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
-
-  (def data (clean-html (slurp "./resources/update/footer.html")))
-  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
+  ;; Invites
 
   (def data (clean-html (slurp "./resources/invite/paragraph.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
   (def data (clean-html (slurp "./resources/invite/cta-button.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
-
-  ;; Generate test email HTML content from various snapshots
-
-  (require '[oc.email.content :as content] :reload)
-
-  (def note "Enjoy the groovy update.")
-  (def share-request (json/decode (slurp "./opt/samples/updates/green-labs.json")))
-  (spit "./hiccup.html" (content/story-link-html (assoc share-request :note note)))
-
-  (spit "./hiccup.html" (content/snapshot-link-html (assoc update :note note)))
-
-  (def note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week.")
-  (def update (json/decode (slurp "./opt/samples/updates/buff.json")))
-  (spit "./hiccup.html" (content/update-html (assoc update :note note)))
-
-  (def update (json/decode (slurp "./opt/samples/updates/new.json")))
-  (spit "./hiccup.html" (content/update-html (assoc update :note "")))
-
-  (def update (json/decode (slurp "./opt/samples/updates/bago.json")))
-  (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note "") (assoc :company-slug "bago"))))
-
-  (def update (json/decode (slurp "./opt/samples/updates/bago-no-symbol.json")))
-  (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note "") (assoc :company-slug "bago"))))
-
-  (def update (json/decode (slurp "./opt/samples/updates/growth-options.json")))
-  (spit "./hiccup.html" (content/update-html (assoc update :note "")))
-
-  (def update (json/decode (slurp "./opt/samples/updates/blanks-test.json")))
-  (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note "") (assoc :company-slug "blanks-test"))))
-
-  (def update (json/decode (slurp "./opt/samples/updates/sparse.json")))
-  (spit "./hiccup.html" (content/update-html (-> snapshot (assoc :note "") (assoc :company-slug "sparse"))))
 
   (def invite (json/decode (slurp "./opt/samples/invites/apple.json")))
   (spit "./hiccup.html" (content/invite-html invite))
@@ -366,8 +519,50 @@
   (spit "./hiccup.html" (content/invite-html invite))
   (content/invite-text invite)
 
+  
+  ;; Resets
+
   (spit "./hiccup.html" (content/token-html :reset {:token-link "http://test.it/123"}))
   
   (content/token-text :verify {:token-link "http://test.it/123"})
+
+  
+  ;; Digests
+
+  (def data (clean-html (slurp "./resources/digest/logo.html")))
+  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
+
+  (def data (clean-html (slurp "./resources/digest/banner.html")))
+  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
+
+  (def data (clean-html (slurp "./resources/digest/board-name.html")))
+  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
+
+  (def data (clean-html (slurp "./resources/digest/post-link.html")))
+  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
+
+  (def data (clean-html (slurp "./resources/digest/post-attribution.html")))
+  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
+
+  (def data (clean-html (slurp "./resources/digest/carrot-logo.html")))
+  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
+
+  (def data (clean-html (slurp "./resources/digest/sent-by.html")))
+  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
+
+  (def data (clean-html (slurp "./resources/digest/you-receive.html")))
+  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
+
+  (def data (clean-html (slurp "./resources/digest/change-to.html")))
+  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
+
+  (def digest (json/decode (slurp "./opt/samples/digests/carrot.json")))
+  (spit "./hiccup.html" (content/digest-html digest))
+
+  (def digest (json/decode (slurp "./opt/samples/digests/apple.json")))
+  (spit "./hiccup.html" (content/digest-html digest))
+
+  (def digest (json/decode (slurp "./opt/samples/digests/no-logo.json")))
+  (spit "./hiccup.html" (content/digest-html digest))
 
   )

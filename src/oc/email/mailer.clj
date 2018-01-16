@@ -17,6 +17,10 @@
 
 (def default-reply-to (str "hello@" c/email-from-domain))
 (def default-from "Carrot")
+(def default-source (str default-from " <" default-reply-to ">"))
+
+(def digest-reply-to (str "digest@" c/email-from-domain))
+(def digest-source (str default-from " <" digest-reply-to ">"))
 
 (defn- email
   "Send an email."
@@ -78,7 +82,7 @@
         inline-file (str uuid-fragment ".inline.html")
         invitation (-> message 
                     (keywordize-keys)
-                    (assoc :source (str default-from " <" default-reply-to ">"))
+                    (assoc :source default-source)
                     (assoc :subject (content/invite-subject message false)))]
     (try
       (spit html-file (content/invite-html invitation)) ; create the email in a tmp file
@@ -99,7 +103,7 @@
         inline-file (str uuid-fragment ".inline.html")
         msg (-> message 
               (keywordize-keys)
-              (assoc :source (str default-from " <" default-reply-to ">"))
+              (assoc :source default-source)
               (assoc :from default-from)
               (assoc :reply-to default-reply-to)
               (assoc :subject (case token-type
@@ -111,6 +115,30 @@
       ;; Email it to the recipient
       (email msg {:text (content/token-text token-type msg)
                   :html (slurp inline-file)})
+      (finally
+        ; remove the tmp files
+        (io/delete-file html-file true)
+        (io/delete-file inline-file true)))))
+
+(defn send-digest
+  "Create an HTML digest and email it to the specified recipient."
+  [message]
+  (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
+        html-file (str uuid-fragment ".html")
+        inline-file (str uuid-fragment ".inline.html")
+        msg (keywordize-keys message)
+        org-name (:org-name msg)
+        frequency (if (= (keyword (:digest-frequency msg)) :daily) "Daily" "Weekly")]
+    (try
+      (spit html-file (content/digest-html msg)) ; create the email in a tmp file
+      (inline-css html-file inline-file) ; inline the CSS
+      ;; Email it to the recipient
+      (email {:to (:email msg)
+              :source digest-source
+              :from default-from
+              :reply-to default-reply-to
+              :subject (str c/email-digest-prefix org-name " " frequency " Digest")}
+             {:html (slurp inline-file)})
       (finally
         ; remove the tmp files
         (io/delete-file html-file true)
@@ -129,12 +157,11 @@
                        :subject "Latest GreenLabs Update"
                        :note "Enjoy this groovy update!"}))
 
-  (def update (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/updates/new.json"))))
-  (mailer/send-update (merge update {
+  (def digest (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/digest/carrot.json"))))
+  (mailer/send-update (merge digest {
                        :to ["change@me.com"]
                        :reply-to "change@me.com"
                        :subject "Latest New.ly Update"
-                       :note "Hi all, here’s the latest info. Recruiting efforts paid off! Retention is down though, we’ll fix it. Let me know if you want to discuss before we meet next week."
                        :origin "http://localhost:3559"}))
 
   (def invite (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/invites/microsoft.json"))))
