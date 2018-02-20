@@ -36,7 +36,7 @@
     ;; Environ - Get environment settings from different sources https://github.com/weavejester/environ
   ]
 
-  :repositories [["jfreechart" "http://central.maven.org/maven2/"]]
+  :repositories [["jfreechart" "https://central.maven.org/maven2/"]]
 
   ;; All profile plugins
   :plugins [
