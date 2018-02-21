@@ -3,7 +3,6 @@
             [clojure.walk :refer (keywordize-keys)]
             [clj-time.format :as format]
             [hiccup.core :as h]
-            [taoensso.timbre :as timbre]
             [oc.lib.text :as text]
             [oc.email.config :as config]))
 
