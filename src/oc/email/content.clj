@@ -3,6 +3,7 @@
             [clojure.walk :refer (keywordize-keys)]
             [clj-time.format :as format]
             [hiccup.core :as h]
+            [taoensso.timbre :as timbre]
             [oc.lib.text :as text]
             [oc.email.config :as config]))
 
@@ -178,6 +179,19 @@
                                   [:td
                                     [:a {:href url} cta]]]]]]]]]]]
                 [:th {:class "expander"}]]]]]]]])
+
+(defn- board-notification-content [data]
+  (let [org-name (:org data)
+        user (:user data)
+        board-url (:board-url data)
+        first-name (if (s/blank? (:first-name user)) "there" (:first-name user))]
+    [:td
+      (spacer 15)
+      (paragraph (str "Hi " first-name "! " (:text data)))
+      (spacer 15)
+      (cta-button "Check it out." board-url)
+      (spacer 30)
+      (paragraph tagline)]))
 
 (defn- invite-content [invite]
   (let [logo-url (:logo-url invite)
@@ -393,6 +407,7 @@
                       :reset (token-content type data)
                       :verify (token-content type data)
                       :invite (invite-content data)
+                      :board-notification (board-notification-content data)
                       :digest (digest-content data))]]])]]]]))
 
 (defn- head [data]
@@ -462,6 +477,9 @@
 
 (defn digest-html [digest]
   (html digest :digest))
+
+(defn board-notification-html [message]
+  (html message :board-notification))
 
 (comment
   
