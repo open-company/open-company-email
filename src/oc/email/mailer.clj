@@ -174,17 +174,18 @@
   "
   [message]
   (let [msg-parsed (json/parse-string (:Message message) true)]
-    (when (and
-           (or
-            (= (:notification-type msg-parsed) "update")
-            (= (:notification-type msg-parsed) "add"))
-           (= (:resource-type msg-parsed) "board"))
-      (let [notifications (:notifications (:content msg-parsed))
-            board (:new (:content msg-parsed))
+    (when (and ; update or add on a board
+            (or
+              (= (:notification-type msg-parsed) "update")
+              (= (:notification-type msg-parsed) "add"))
+            (= (:resource-type msg-parsed) "board"))
+      (let [notifications (-> msg-parsed :content :notifications)
+            board (-> msg-parsed :content :new)
             user (:user msg-parsed)]
+
         (doseq [notify notifications]
           (let [slack-info (first (vals (:slack-users notify)))]
-            (when-not slack-info
+            (when-not slack-info ; Slack users get notified elsewhere via Slack
               (let [board-url (s/join "/" [c/web-url
                                            (:slug (:org msg-parsed))
                                            (:slug board)])

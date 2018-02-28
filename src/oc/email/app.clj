@@ -24,7 +24,7 @@
         msg-type (or (when (:Message msg-body) :sns) (:type msg-body))
         error (if (:test-error msg-body) (/ 1 0) false)] ; test Sentry error reporting
     (timbre/info "Received message from SQS.")
-    (timbre/tracef "\nMessage from SQS: %s\n" msg-body)
+    (timbre/debug "\nMessage (" msg-type ") from SQS:" msg-body "\n")
     (case (keyword msg-type)
       :reset (mailer/send-token :reset msg-body)
       :verify (mailer/send-token :verify msg-body)

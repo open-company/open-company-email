@@ -24,7 +24,7 @@
     [org.clojure/tools.namespace "0.3.0-alpha4" :exclusions [org.clojure/tools.reader]] 
 
     ;; Library for OC projects https://github.com/open-company/open-company-lib
-    [open-company/lib "0.14.15"]
+    [open-company/lib "0.16.2"]
     ;; In addition to common functions, brings in the following common dependencies used by this project:
     ;; Component - Component Lifecycle https://github.com/stuartsierra/component
     ;; Schema - Data validation https://github.com/Prismatic/schema
@@ -35,8 +35,6 @@
     ;; clj-time - Date and time lib https://github.com/clj-time/clj-time
     ;; Environ - Get environment settings from different sources https://github.com/weavejester/environ
   ]
-
-  :repositories [["jfreechart" "https://central.maven.org/maven2/"]]
 
   ;; All profile plugins
   :plugins [
@@ -75,7 +73,7 @@
       :plugins [
         ;; Check for code smells https://github.com/dakrone/lein-bikeshed
         ;; NB: org.clojure/tools.cli is pulled in by lein-kibit
-        [lein-bikeshed "0.5.0" :exclusions [org.clojure/tools.cli]] 
+        [lein-bikeshed "0.5.1" :exclusions [org.clojure/tools.cli]] 
         ;; Runs bikeshed, kibit and eastwood https://github.com/itang/lein-checkall
         [lein-checkall "0.1.1"]
         ;; pretty-print the lein project map https://github.com/technomancy/leiningen/tree/master/lein-pprint
