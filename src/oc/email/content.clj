@@ -6,7 +6,7 @@
             [oc.lib.text :as text]
             [oc.email.config :as config]))
 
-(def max-logo 50)
+(def max-logo 32)
 
 (def profile-url (str config/web-url "/profile"))
 
@@ -15,9 +15,8 @@
 
 (def doc-type "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
 
-(def tagline "Grow together with announcements, updates, and stories that bring teams closer.")
-
-(def invite-cta "OK, Let's get started ➞")
+(def tagline "Better informed, less noise.")
+(def carrot-explainer "Carrot is a company digest that gives everyone time to read and react to important information without worrying they missed it.")
 
 (def sent-by-text "Sent by Carrot")
 
@@ -83,6 +82,18 @@
                            dimension size
                            :src logo-url
                            :alt (str org-name" logo")}]]]]]]]])))
+
+(defn- carrot-footer-logo []
+  [:tr
+    [:th {:class "small-12 large-12 first last columns"} 
+      [:table
+        [:tr
+          [:th
+            [:center
+              [:img {:width 13
+                     :height 24
+                     :src "https://open-company-assets.s3.amazonaws.com/carrot-logo-grey-min.png"
+                     :alt "Carrot logo"}]]]]]]])
 
 (defn- carrot-logo []
   [:table {:class "row header"} 
@@ -150,49 +161,92 @@
         [:table
           (tr-spacer pixels)]]]]))
 
-(defn- paragraph [content]
-  [:table {:class "row"}
+(defn- paragraph
+  ([content] (paragraph content ""))
+  ([content css-class]
+  [:table {:class (str "row " css-class)}
     [:tr
       [:th {:class "small-1 large-2 first columns"}]
       [:th {:class "small-10 large-8 columns"}
         [:p {:class "text-center"} content]]
-      [:th {:class "small-1 large-2 last columns"}]]])
+      [:th {:class "small-1 large-2 last columns"}]]]))
 
-(defn- cta-button [cta url]
+(defn- h1 [content]
   [:table {:class "row"}
-    [:tbody
-      [:tr
-        [:th {:class "small-12 large-12 columns first last"}
-          [:table
-            [:tbody
-              [:tr
-                [:th
-                  [:center
-                    [:table {:class "button oc radius large float-center"}
-                      [:tbody
-                        [:tr
-                          [:td
-                            [:table
-                              [:tbody
-                                [:tr
-                                  [:td
-                                    [:a {:href url} cta]]]]]]]]]]]
-                [:th {:class "expander"}]]]]]]]])
+    [:tr
+      [:th {:class "small-2 large-2 first columns"}]
+      [:th {:class "small-8 large-8 columns"}
+        [:h1 {:class "text-center"} content]]
+      [:th {:class "small-2 large-2 last columns"}]
+      [:th {:class "expander"}]]])
+
+(defn- h2 [content css-class]
+  [:table {:class (str "row " css-class)}
+    [:tr
+      [:th {:class "small-2 large-2 first columns"}]
+      [:th {:class "small-8 large-8 columns"}
+        [:h2 {:class "text-center"} content]]
+      [:th {:class "small-2 large-2 last columns"}]
+      [:th {:class "expander"}]]])
+
+(defn- cta-button [cta url css-class]
+  [:table {:class (str "row " css-class)}
+    [:tr
+      [:th {:class "small-2 large-2 columns first"}]
+      [:th {:class "small-8 large-8 columns"}
+        [:a {:href url}
+          [:table {:class "cta-button"}
+            [:tr
+              [:th
+                [:span {:class "text-center button-text"}
+                  cta]]]]]]
+      [:th {:class "small-2 large-2 columns last"}]
+      [:th {:class "expander"}]]])
+
+; (defn- digest-footer [digest]
+;   [:table {:class "row footer"}
+;     (tr-spacer 40)
+;     (carrot-digest-logo)
+;     (tr-spacer 17)
+;     sent-by
+;     (tr-spacer 17)
+;     (you-receive (:digest-frequency digest))
+;     (change-to (:digest-frequency digest))
+;     (tr-spacer 40)])
+
+(defn- transactional-footer []
+  [:table {:class "row footer"}
+    (carrot-footer-logo)
+    (tr-spacer 10)
+    [:tr
+      [:th {:class "small-12 large-12 first last columns"}
+        [:table
+          [:tr
+            [:th
+              [:p {:class "text-center"}
+                sent-by-text]]]]]]
+    (tr-spacer 10)])
 
 (defn- invite-content [invite]
   (let [logo-url (:logo-url invite)
         logo? (not (s/blank? logo-url))
         org-name (:org-name invite)
-        first-name (if (s/blank? (:first-name invite)) "there" (:first-name invite))]
+        from (if (s/blank? (:from invite)) "Someone" (:from invite))]
     [:td
-      (when logo? (spacer 20))
+      (spacer 40)
       (when logo? (logo logo-url org-name))
-      (spacer 15)
-      (paragraph (str "Hi " first-name "! " (:text invite)))
-      (spacer 15)
-      (cta-button invite-cta (:token-link invite))
-      (spacer 30)
-      (paragraph tagline)]))
+      (when logo? (spacer 35))
+      (h1 (str from " invited you to join the team on Carrot"))
+      (spacer 31)
+      (spacer 35 "body-block")
+      (h2 org-name "body-block")
+      (spacer 28 "body-block")
+      (paragraph carrot-explainer "body-block")
+      (spacer 35 "body-block")
+      (cta-button (str "Join " org-name) (:token-link invite) "body-block")
+      (spacer 40 "body-block")
+      (spacer 33)
+      (transactional-footer)]))
 
 (defn- token-prep [token-type msg]
   {:first-name (if (s/blank? (:first-name msg)) "there" (:first-name msg))
@@ -274,17 +328,6 @@
               [:a {:href profile-url} "Turn off digests"]]]
           [:th {:class "expander"}]]]]]))
 
-(defn- digest-footer [digest]
-  [:table {:class "row footer"}
-    (tr-spacer 40)
-    (carrot-digest-logo)
-    (tr-spacer 17)
-    sent-by
-    (tr-spacer 17)
-    (you-receive (:digest-frequency digest))
-    (change-to (:digest-frequency digest))
-    (tr-spacer 40)])
-
 (defn- comment-attribution [comment-count comment-authors]
   (let [attribution (text/attribution 2 comment-count "comment" comment-authors)]
     [:tr
@@ -364,7 +407,8 @@
     (digest-banner (:digest-frequency digest))
     (let [boards (:boards digest)]
       (map #(board % (:digest-frequency digest)) boards))
-    (digest-footer digest)])
+    ;(digest-footer digest)
+    ])
 
 (defn- note 
   [update trail-space?]

@@ -1,28 +1,76 @@
 body,
 html,
 .body {
-  background: white !important;
+  background: #FBFAF7;
+}
+
+table {
+  background: #FBFAF7 !important;  
+}
+
+table.body-block {
+  background: white !important;    
+  border-left: 1px solid #F2F1ED;
+  border-right: 1px solid #F2F1ED;
+}
+
+table.body-block.top {
+  border-top: 1px solid #F2F1ED;
+}
+
+table.body-block.bottom {
+  border-bottom: 1px solid #F2F1ED;
+}
+
+table th, 
+table.body .columns,
+table.body .column {
+  padding: 0px !important;
+}
+
+img.logo {
+  padding: 12px;
+  border-radius: 3px;
+  border: 1px solid #F2F1ED;
+}
+
+h1 {
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-size: 28px;
+  font-weight: bold;  
+  color: #34414F;
+}
+
+h2 {
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-size: 22px;
+  font-weight: bold;  
+  color: #34414F;
 }
 
 p {
-    font-family: Muli, Helvetica, Arial, sans-serif !important;
-    font-size: 18px;
-    color: #4e5a6b;
-    line-height: 1.6;
-    -webkit-hyphens: manual;
-    -moz-hyphens: manual;
-    hyphens: manual;
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-size: 17px;
+  color: #34414F;
+  line-height: 1.5;
 }
 
-table.button.oc table td {
-  background: #4C67FC;
+table.cta-button {
+  height: 40px;
+  border-radius: 40px;
+  border-bottom-color: white;
+  background: #3FBD7C !important;
 }
 
-table.button.oc table a {
-  font-family: Muli, Helvetica, Arial, sans-serif !important;
-  font-size: 16px;
+span.button-text {
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-size: 14px;
   font-weight: bold;
-  line-height: 1.6;
-  letter-spacing: 1px;
-  color: #FFF;
+  color: white;
+  padding-top: 13px;
+}
+
+table.footer p {
+  color: #C4C6C9;
+  font-size: 14px;
 }
