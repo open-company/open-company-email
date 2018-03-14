@@ -3,23 +3,35 @@
   (:require [com.stuartsierra.component :as component]
             [manifold.stream :as stream]
             [taoensso.timbre :as timbre]
+            [cheshire.core :as json]
             [oc.email.config :as c]
             [oc.lib.sentry-appender :as sentry]
             [oc.lib.sqs :as sqs]
             [oc.email.mailer :as mailer]))
 
+(defn- read-message-body
+  "
+  Try to parse as json, otherwise use read-string.
+  "
+  [msg]
+  (try
+    (json/parse-string msg true)
+    (catch Exception e
+      (read-string msg))))
+
 (defn sqs-handler [msg done-channel]
-  (let [msg-body (read-string (:body msg))
-        msg-type (:type msg-body)
+  (let [msg-body (read-message-body (:body msg))
+        msg-type (or (when (:Message msg-body) :sns) (:type msg-body))
         error (if (:test-error msg-body) (/ 1 0) false)] ; test Sentry error reporting
     (timbre/info "Received message from SQS.")
-    (timbre/tracef "\nMessage from SQS: %s\n" msg-body)
+    (timbre/debug "\nMessage (" msg-type ") from SQS:" msg-body "\n")
     (case (keyword msg-type)
       :reset (mailer/send-token :reset msg-body)
       :verify (mailer/send-token :verify msg-body)
       :invite (mailer/send-invite msg-body)
       :share-entry (mailer/send-entry msg-body)
       :digest (mailer/send-digest msg-body)
+      :sns (mailer/handle-data-change msg-body)
       (timbre/error "Unrecognized message type" msg-type)))
   (sqs/ack done-channel msg))
 

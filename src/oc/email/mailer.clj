@@ -5,6 +5,7 @@
             [clojure.walk :refer (keywordize-keys)]
             [taoensso.timbre :as timbre]
             [amazonica.aws.simpleemail :as ses]
+            [cheshire.core :as json]
             [oc.email.config :as c]
             [oc.email.content :as content]))
 
@@ -143,6 +144,57 @@
         ; remove the tmp files
         (io/delete-file html-file true)
         (io/delete-file inline-file true)))))
+
+(defn- send-private-board-notification
+  "Creates an html email and sends it to the recipient."
+  [msg]
+  (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
+        html-file (str uuid-fragment ".html")
+        inline-file (str uuid-fragment ".inline.html")
+        org-name (:name (:org msg))]
+    (try
+      (spit html-file (content/board-notification-html msg)) ; create the email in a tmp file
+      (inline-css html-file inline-file) ; inline the CSS
+       ;; Email it to the recipient
+      (email {:to (:email (:user msg))
+              :source default-source
+              :from default-from
+              :reply-to default-reply-to
+              :subject (str c/email-digest-prefix org-name)}
+             {:html (slurp inline-file)})
+      (finally
+       ;; remove the tmp files
+       (io/delete-file html-file true)
+       (io/delete-file inline-file true)))))
+
+(defn handle-data-change
+  "
+  Test to see if message is a board change and that it has notifications.
+  If so, check if they are slack users and if not send an email.
+  "
+  [message]
+  (let [msg-parsed (json/parse-string (:Message message) true)]
+    (when (and ; update or add on a board
+            (or
+              (= (:notification-type msg-parsed) "update")
+              (= (:notification-type msg-parsed) "add"))
+            (= (:resource-type msg-parsed) "board"))
+      (let [notifications (-> msg-parsed :content :notifications)
+            board (-> msg-parsed :content :new)
+            user (:user msg-parsed)]
+
+        (doseq [notify notifications]
+          (let [slack-info (first (vals (:slack-users notify)))]
+            (when-not slack-info ; Slack users get notified elsewhere via Slack
+              (let [board-url (s/join "/" [c/web-url
+                                           (:slug (:org msg-parsed))
+                                           (:slug board)])
+                    message "You have been invited to a private board. "]
+                (send-private-board-notification {
+                                                  :user notify
+                                                  :org (:org msg-parsed)
+                                                  :board-url board-url
+                                                  :text message})))))))))
 
 (comment
 
