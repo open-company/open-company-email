@@ -16,21 +16,24 @@
 (def doc-type "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
 
 (def tagline "Better informed, less noise.")
-(def carrot-explainer "Carrot is a company digest that gives everyone time to read and react to important information without worrying they missed it.")
+(def carrot-explainer "Carrot is the company digest that keeps everyone aligned around what matters most.")
 
 (def sent-by-text "Sent by Carrot")
 
 (def invite-message "invited you to join your team on Carrot")
 
-(def reset-message "Someone (hopefully you) requested a new password for your Carrot account.")
-(def reset-instructions "Click the link below to reset your password.")
-(def reset-button-text "RESET PASSWORD ➞")
-(def reset-ignore "If you didn't request a password reset, you can ignore this email.")
+(def board-invite-message "You've been invited to a private section on Carrot")
+(def board-invite-explainer "Private sections of the digest are only available to invited team members.")
 
-(def verify-message "Someone (hopefully you) created a Carrot account.")
+(def reset-message "Someone (hopefully you) requested a new password for your Carrot account")
+(def reset-instructions "Click the link below to reset your password.")
+(def reset-button-text "Reset Password")
+(def reset-ignore "If you didn't request a password reset, you can safely ignore this email.")
+
+(def verify-message "Someone (hopefully you) created a Carrot account")
 (def verify-instructions "Click the link below to verify your email address.")
-(def verify-button-text "VERIFY EMAIL ➞")
-(def verify-ignore "If you didn't create a Carrot account, you can ignore this email.")
+(def verify-button-text "Verify Email")
+(def verify-ignore "If you didn't create a Carrot account, you can safely ignore this email.")
 
 (defn- logo
   "Company logo that includes Carrot branding."
@@ -234,18 +237,27 @@
                 sent-by-text]]]]]]
     (tr-spacer 10)])
 
-(defn- board-notification-content [data]
-  (let [org-name (:org data)
-        user (:user data)
-        board-url (:board-url data)
-        first-name (if (s/blank? (:first-name user)) "there" (:first-name user))]
+(defn- board-notification-content [notice]
+  (let [logo-url (:logo-url notice)
+        logo? (not (s/blank? logo-url))
+        board-url (:board-url notice)
+        board-name (:board-name notice)
+        org-name (:org-name notice)]
     [:td
-      (spacer 15)
-      (paragraph (str "Hi " first-name "! " (:text data)))
-      (spacer 15)
-      (cta-button "Check it out." board-url)
-      (spacer 30)
-      (paragraph tagline)]))
+      (spacer 40)
+      (when logo? (minimal-logo notice))
+      (when logo? (spacer 35))
+      (h1 board-invite-message)
+      (spacer 31)
+      (spacer 35 "body-block top" "body-spacer")
+      (h2 board-name "body-block")
+      (spacer 28 "body-block" "body-spacer")
+      (paragraph board-invite-explainer "body-block")
+      (spacer 35 "body-block" "body-spacer")
+      (cta-button (str "View " board-name) board-url "body-block")
+      (spacer 40 "body-block bottom" "body-spacer")
+      (spacer 33)
+      (transactional-footer)]))
 
 (defn- invite-content [invite]
   (let [logo-url (:logo-url invite)
@@ -263,19 +275,19 @@
       (spacer 28 "body-block" "body-spacer")
       (paragraph carrot-explainer "body-block")
       (spacer 35 "body-block" "body-spacer")
-      (cta-button (str "Join " org-name) (:token-link invite) "body-block")
+      (cta-button (str "Join " org-name " on Carrot") (:token-link invite) "body-block")
       (spacer 40 "body-block bottom" "body-spacer")
       (spacer 33)
       (transactional-footer)]))
 
 (defn- token-prep [token-type msg]
-  {:first-name (if (s/blank? (:first-name msg)) "there" (:first-name msg))
-   :message (case token-type
+  {
+    :message (case token-type
               :reset reset-message
               :verify verify-message)
     :instructions (case token-type
-                     :reset reset-instructions
-                     :verify verify-instructions)
+                    :reset reset-instructions
+                    :verify verify-instructions)
     :button-text (case token-type
                     :reset reset-button-text
                     :verify verify-button-text)
@@ -285,17 +297,23 @@
                 :verify verify-ignore)})
 
 (defn- token-content [token-type msg]
-  (let [message (token-prep token-type msg)]
+  (let [message (token-prep token-type msg)
+        logo-url (:logo-url msg)
+        logo? (not (s/blank? logo-url))
+        org-name (:org-name msg)]
     [:td
-      (spacer 15)
-      (paragraph (str "Hi " (:first-name message) "! " (:message message)))
-      (spacer 15)
-      (cta-button (:button-text message) (:link message))
-      (spacer 15)
-      (paragraph (:ignore message))
-      (spacer 15)
-      (carrot-logo)
-      (paragraph tagline)]))
+      (spacer 40)
+      (when logo? (minimal-logo msg))
+      (when logo? (spacer 35))
+      (spacer 35 "body-block top" "body-spacer")
+      (h2 (:message message) "body-block")
+      (spacer 28 "body-block" "body-spacer")
+      (paragraph (:ignore message) "body-block")
+      (spacer 35 "body-block" "body-spacer")
+      (cta-button (:button-text message) (:token-link msg) "body-block")
+      (spacer 40 "body-block bottom" "body-spacer")
+      (spacer 33)
+      (transactional-footer)]))
 
 (defn- share-link-content [entry]
   (let [org-name (:org-name entry)
@@ -518,7 +536,7 @@
 
 (defn token-text [token-type msg]
   (let [message (token-prep token-type msg)]
-    (str "Hi " (:first-name message) "! " (:message message) "\n\n"
+    (str (:message message) "\n\n"
          (:instructions message) "\n\n"
          (:link message) "\n\n"
          (:ignore message))))
@@ -548,7 +566,6 @@
 
   (require '[oc.email.content :as content] :reload)
 
-
   ;; Carrot invites
 
   (def data (clean-html (slurp "./resources/invite/paragraph.html")))
@@ -572,7 +589,10 @@
   (spit "./hiccup.html" (content/invite-html invite))
   (content/invite-text invite)
 
-  ;; Private section invites
+  ;; Private board invites
+
+  (def notification (json/decode (slurp "./opt/samples/board-invites/investors.json")))
+  (spit "./hiccup.html" (content/board-notification-html notification))
 
   ;; Shares
 
@@ -589,9 +609,21 @@
   
   ;; Resets
 
-  (spit "./hiccup.html" (content/token-html :reset {:token-link "http://test.it/123"}))
+  (def token-request (json/decode (slurp "./opt/samples/token/apple.json")))
   
-  (content/token-text :verify {:token-link "http://test.it/123"})
+  (spit "./hiccup.html" (content/token-html :reset token-request))
+  (content/token-text :reset token-request)
+
+  (spit "./hiccup.html" (content/token-html :verify token-request))
+  (content/token-text :verify token-request)
+
+  (def token-request (json/decode (slurp "./opt/samples/token/sparse-data.json")))
+
+  (spit "./hiccup.html" (content/token-html :reset token-request))
+  (content/token-text :reset token-request)
+
+  (spit "./hiccup.html" (content/token-html :verify token-request))
+  (content/token-text :verify token-request)
 
   
   ;; Digests

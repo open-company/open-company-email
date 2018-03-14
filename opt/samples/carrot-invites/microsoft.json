@@ -1,5 +1,4 @@
 {
-  "type": "invite",
   "from": "Bill Gates",
   "reply-to": "billg@microsoft.com",
   "email": "change@me.com",
