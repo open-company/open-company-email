@@ -164,7 +164,7 @@
                        :subject "Latest New.ly Update"
                        :origin "http://localhost:3559"}))
 
-  (def invite (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/invites/microsoft.json"))))
+  (def invite (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/carrot-invites/microsoft.json"))))
   (mailer/send-invite (assoc invite :to "change@me.com"))
 
   (mailer/send-token :reset {:to "change@me.com"

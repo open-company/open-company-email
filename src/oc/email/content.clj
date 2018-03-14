@@ -467,7 +467,7 @@
         from (:from msg)
         prefix (if (s/blank? from) "You've been invited" (str from " invited you"))
         org (if (s/blank? org-name) "" (str org-name " on "))]
-    (str prefix " to join " org "Carrot.")))
+    (str prefix " to join " org "Carrot")))
 
 (defn share-link-html [entry]
   (html entry :share-link))
@@ -495,7 +495,7 @@
 (defn invite-text [invite]
   (let [link (:token-link (keywordize-keys invite))]
     (str (invite-subject invite false) ".\n\n"
-         tagline "\n\n"
+         carrot-explainer "\n\n"
          "Open the link below to check it out.\n\n"
          link "\n\n")))
 
@@ -532,6 +532,31 @@
   (require '[oc.email.content :as content] :reload)
 
 
+  ;; Carrot invites
+
+  (def data (clean-html (slurp "./resources/invite/paragraph.html")))
+  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
+
+  (def data (clean-html (slurp "./resources/invite/cta-button.html")))
+  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
+
+  (def invite (json/decode (slurp "./opt/samples/carrot-invites/apple.json")))
+  (spit "./hiccup.html" (content/invite-html invite))
+
+  (def invite (json/decode (slurp "./opt/samples/carrot-invites/microsoft.json")))
+  (spit "./hiccup.html" (content/invite-html invite))
+  (content/invite-text invite)
+
+  (def invite (json/decode (slurp "./opt/samples/carrot-invites/combat.json")))
+  (spit "./hiccup.html" (content/invite-html invite))
+  (content/invite-text invite)
+
+  (def invite (json/decode (slurp "./opt/samples/carrot-invites/sparse-data.json")))
+  (spit "./hiccup.html" (content/invite-html invite))
+  (content/invite-text invite)
+
+  ;; Private section invites
+
   ;; Shares
 
   (def note "Enjoy the groovy update.")
@@ -543,30 +568,6 @@
 
   (def share-request (json/decode (slurp "./opt/samples/updates/bago.json")))
   (spit "./hiccup.html" (content/share-link-html (assoc share-request :note "")))
-
-
-  ;; Invites
-
-  (def data (clean-html (slurp "./resources/invite/paragraph.html")))
-  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
-
-  (def data (clean-html (slurp "./resources/invite/cta-button.html")))
-  (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
-
-  (def invite (json/decode (slurp "./opt/samples/invites/apple.json")))
-  (spit "./hiccup.html" (content/invite-html invite))
-
-  (def invite (json/decode (slurp "./opt/samples/invites/microsoft.json")))
-  (spit "./hiccup.html" (content/invite-html invite))
-  (content/invite-text invite)
-
-  (def invite (json/decode (slurp "./opt/samples/invites/combat.json")))
-  (spit "./hiccup.html" (content/invite-html invite))
-  (content/invite-text invite)
-
-  (def invite (json/decode (slurp "./opt/samples/invites/sparse-data.json")))
-  (spit "./hiccup.html" (content/invite-html invite))
-  (content/invite-text invite)
 
   
   ;; Resets

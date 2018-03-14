@@ -5,7 +5,7 @@
   "email": "change@me.com",
   "org-name": "Apple",
   "logo-url": "https://www.apple.com/ac/structured-data/images/knowledge_graph_logo.png",
-  "logo-height": 302,
   "logo-width": 302,
+  "logo-height": 302,
   "token-link": "http://localhost:3000/invite?token=dd7c0bfe-2068-4de0-aa3c-4913eeeaa360"
 }
