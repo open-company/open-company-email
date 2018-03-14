@@ -2,7 +2,7 @@
   "board-url": "",
   "board-name": "Investors",
   "org-name": "Apple",
-  "logo-url": "https://www.apple.com/ac/structured-data/images/knowledge_graph_logo.png",
-  "logo-width": 302,
-  "logo-height": 302
+  "org-logo-url": "https://www.apple.com/ac/structured-data/images/knowledge_graph_logo.png",
+  "org-logo-width": 302,
+  "org-logo-height": 302
 }

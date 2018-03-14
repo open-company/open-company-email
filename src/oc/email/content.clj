@@ -22,6 +22,9 @@
 
 (def invite-message "invited you to join your team on Carrot")
 
+(def share-message "sent you a post")
+(def share-cta "View the post")
+
 (def board-invite-message "You've been invited to a private section on Carrot")
 (def board-invite-explainer "Private sections of the digest are only available to invited team members.")
 
@@ -66,7 +69,7 @@
 
 (defn- minimal-logo
   "Centered company alone."
-  [{org-name :org-name logo-url :logo-url logo-height :logo-height logo-width :logo-width}]
+  [{org-name :org-name logo-url :org-logo-url logo-height :org-logo-height logo-width :org-logo-width}]
   (let [logo? (and logo-url logo-height logo-width)
         dimension (when logo? (if (> logo-height logo-width) :height :width))
         size (when logo?
@@ -173,12 +176,13 @@
 
 (defn- paragraph
   ([content] (paragraph content ""))
-  ([content css-class]
+  ([content css-class] (paragraph content css-class ""))
+  ([content css-class content-css-class]
   [:table {:class (str "row " css-class)}
     [:tr
       [:th {:class "small-1 large-2 first columns"}]
       [:th {:class "small-10 large-8 columns"}
-        [:p {:class "text-center"} content]]
+        [:p {:class (str "text-center " content-css-class)} content]]
       [:th {:class "small-1 large-2 last columns"}]]]))
 
 (defn- h1 [content]
@@ -238,7 +242,7 @@
     (tr-spacer 10)])
 
 (defn- board-notification-content [notice]
-  (let [logo-url (:logo-url notice)
+  (let [logo-url (:org-logo-url notice)
         logo? (not (s/blank? logo-url))
         board-url (:board-url notice)
         board-name (:board-name notice)
@@ -260,7 +264,7 @@
       (transactional-footer)]))
 
 (defn- invite-content [invite]
-  (let [logo-url (:logo-url invite)
+  (let [logo-url (:org-logo-url invite)
         logo? (not (s/blank? logo-url))
         org-name (:org-name invite)
         from (if (s/blank? (:from invite)) "Someone" (:from invite))]
@@ -298,7 +302,7 @@
 
 (defn- token-content [token-type msg]
   (let [message (token-prep token-type msg)
-        logo-url (:logo-url msg)
+        logo-url (:org-logo-url msg)
         logo? (not (s/blank? logo-url))
         org-name (:org-name msg)]
     [:td
@@ -315,25 +319,38 @@
       (spacer 33)
       (transactional-footer)]))
 
-(defn- share-link-content [entry]
-  (let [org-name (:org-name entry)
+(defn- share-content [entry]
+  (let [logo-url (:org-logo-url entry)
+        logo? (not (s/blank? logo-url))
+        org-name (:org-name entry)
         org-name? (not (s/blank? org-name))
         headline (:headline entry)
-        headline? (not (s/blank? headline))
-        link-title (if headline? headline (str org-name " Post"))
         org-slug (:org-slug entry)
+        sharer (:sharer-name entry)
+        attribution (str (-> entry :publisher :name) " posted to " (:board-name entry))
+        note (:note entry)
+        note? (not (s/blank? note))
+        from (if (s/blank? sharer) "Someone" sharer)
         secure-uuid (:secure-uuid entry)
         origin-url config/web-url
-        update-url (s/join "/" [origin-url org-slug "post" secure-uuid])]
-    [:table {:class "note"}
-      [:tr
-        [:td 
-          [:table {:class "row note"}
-            [:tr
-              [:th {:class "small-12 large-12 first last columns note"}
-                "Check out the latest"
-                (when org-name? (str " from " org-name))
-                ": " [:a {:href update-url} link-title]]]]]]]))
+        entry-url (s/join "/" [origin-url org-slug "post" secure-uuid])]
+    [:td
+      (spacer 40)
+      (when logo? (minimal-logo entry))
+      (when logo? (spacer 35))
+      (h1 (str from " " share-message))
+      (spacer 31)
+      (spacer 35 "body-block top" "body-spacer")
+      (h2 headline "body-block")
+      (spacer 11 "body-block" "body-spacer")
+      (paragraph attribution "body-block" "attribution")
+      (when note? (spacer 28 "body-block" "body-spacer"))
+      (when note? (paragraph note "body-block"))
+      (spacer 35 "body-block" "body-spacer")
+      (cta-button share-cta entry-url "body-block")
+      (spacer 40 "body-block bottom" "body-spacer")
+      (spacer 33)
+      (transactional-footer)]))
 
 (defn- you-receive [interval]
   [:tr
@@ -464,19 +481,16 @@
       [:table {:class "body"}
         [:tr
           [:td {:class "float-center", :align "center", :valign "top"}
-            (when-not (s/blank? (:note data)) (note data trail-space?))
-            (when (and (s/blank? (:note data)) (= type :share-link)) (spacer 15 "note"))
-            (if (= type :share-link)
-              (share-link-content data)     
-              [:center
-                [:table {:class "container"}
-                  [:tr
-                    (case type
-                      :reset (token-content type data)
-                      :verify (token-content type data)
-                      :invite (invite-content data)
-                      :board-notification (board-notification-content data)
-                      :digest (digest-content data))]]])]]]]))
+            [:center
+              [:table {:class "container"}
+                [:tr
+                  (case type
+                    :reset (token-content type data)
+                    :verify (token-content type data)
+                    :invite (invite-content data)
+                    :board-notification (board-notification-content data)
+                    :share-link (share-content data)
+                    :digest (digest-content data))]]]]]]]))
 
 (defn- head [data]
   (let [type (:type data)
@@ -597,15 +611,10 @@
   ;; Shares
 
   (def note "Enjoy the groovy update.")
-  (def share-request (json/decode (slurp "./opt/samples/share/green-labs.json")))
+  (def share-request (json/decode (slurp "./opt/samples/share/bago.json")))
   (spit "./hiccup.html" (content/share-link-html (assoc share-request :note note)))
 
-  (def share-request (json/decode (slurp "./opt/samples/share/new.json")))
-  (spit "./hiccup.html" (content/share-link-html (assoc share-request :note "")))
-
-  (def share-request (json/decode (slurp "./opt/samples/updates/bago.json")))
-  (spit "./hiccup.html" (content/share-link-html (assoc share-request :note "")))
-
+  
   
   ;; Resets
 

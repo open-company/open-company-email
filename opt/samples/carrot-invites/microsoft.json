@@ -3,8 +3,8 @@
   "reply-to": "billg@microsoft.com",
   "email": "change@me.com",
   "org-name": "Microsoft",
-  "logo-url": "https://ncmedia.azureedge.net/ncmedia/2014/10/MSFT_logo_rgb_C-Gray.png",
-  "logo-width": 1280,
-  "logo-height": 470,
+  "org-logo-url": "https://ncmedia.azureedge.net/ncmedia/2014/10/MSFT_logo_rgb_C-Gray.png",
+  "org-logo-width": 1280,
+  "org-logo-height": 470,
   "token-link": "http://localhost:3000/invite?token=dd7c0bfe-2068-4de0-aa3c-4913eeeaa360"
 }

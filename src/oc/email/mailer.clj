@@ -45,7 +45,7 @@
                         :source (str org-name " <" org-slug "@" c/email-from-domain ">")
                         :reply-to (if (s/blank? reply-to) default-reply-to reply-to)
                         :subject subject}
-                  {:text body}) ; TEMP as text only
+                  {:html body})
             to)))
 
 (defn- inline-css [html-file inline-file]
@@ -63,13 +63,12 @@
         html-file (str uuid-fragment ".html")
         inline-file (str uuid-fragment ".inline.html")]
     (try
-      ;; COMMENTED OUT HTML EMAIL
-      ;;(spit html-file (content/share-link-html entry)) ; create the email in a tmp file
-      ;;(inline-css html-file inline-file) ; inline the CSS
+      (spit html-file (content/share-link-html entry)) ; create the email in a tmp file
+      (inline-css html-file inline-file) ; inline the CSS
       ;; Email the recipients
-      ;;(email-entry entry (slurp inline-file))
+      (email-entry entry (slurp inline-file))
       ;; TEXT EMAIL
-      (email-entry entry (content/share-link-text entry))
+      ;; (email-entry entry (content/share-link-text entry))
       (finally
         ;; remove the tmp files
         (io/delete-file html-file true)
@@ -219,7 +218,8 @@
   (def invite (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/carrot-invites/microsoft.json"))))
   (mailer/send-invite (assoc invite :to "change@me.com"))
 
-  (def reset (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/token/apple-password-reset.json"))))
-  (mailer/send-token :reset (assoc reset :to "change@me.com")
+  (def token-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/token/apple.json"))))
+  (mailer/send-token :reset (assoc reset :to "change@me.com"))
+  (mailer/send-token :verify (assoc reset :to "change@me.com"))
 
 )
