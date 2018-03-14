@@ -28,6 +28,10 @@ table.body .column {
   padding: 0px !important;
 }
 
+table th.body-spacer {
+  background: white !important;
+}
+
 img.logo {
   padding: 12px;
   border-radius: 3px;

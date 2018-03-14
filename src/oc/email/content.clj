@@ -144,9 +144,10 @@
         (:note update)]]])
 
 (defn- spacer-table [pixels css-class]
-  [:table {:class (str "spacer " css-class)}
+  [:table {:class "spacer"}
     [:tr
-      [:th {:height (str "font-size:" pixels "px")
+      [:th {:class css-class
+            :height (str "font-size:" pixels "px")
             :style (str "font-size:" pixels "px;line-height:" pixels "px;")} " "]
       [:th {:class "expander"}]]])
 
@@ -157,13 +158,15 @@
 
 (defn- spacer
   ([pixels] (spacer pixels ""))
-  ([pixels css-class]
-  [:table {:class "row"}
+  ([pixels outer-css-class] (spacer pixels outer-css-class ""))
+  ([pixels outer-css-class inner-css-class]
+  [:table {:class (str "row " outer-css-class)}
     [:tr
-      [:th {:class "small-12 large-12 first last columns"}
-        [:table
-          [:tr
-            [:th (spacer-table pixels css-class)]]]]]]))
+      [:th {:class "small-1 large-2 first columns"}]
+      [:th {:class "small-10 large-8 columns"}
+        (spacer-table pixels inner-css-class)]
+      [:th {:class "small-1 large-2 last columns"}]
+      [:th {:class "expander"}]]]))
 
 (defn- paragraph
   ([content] (paragraph content ""))
@@ -187,24 +190,24 @@
 (defn- h2 [content css-class]
   [:table {:class (str "row " css-class)}
     [:tr
-      [:th {:class "small-2 large-2 first columns"}]
-      [:th {:class "small-8 large-8 columns"}
+      [:th {:class "small-1 large-2 first columns"}]
+      [:th {:class "small-10 large-8 columns"}
         [:h2 {:class "text-center"} content]]
-      [:th {:class "small-2 large-2 last columns"}]
+      [:th {:class "small-1 large-2 last columns"}]
       [:th {:class "expander"}]]])
 
 (defn- cta-button [cta url css-class]
   [:table {:class (str "row " css-class)}
     [:tr
-      [:th {:class "small-2 large-2 columns first"}]
-      [:th {:class "small-8 large-8 columns"}
+      [:th {:class "small-1 large-2 columns first"}]
+      [:th {:class "small-10 large-8 columns"}
         [:a {:href url}
           [:table {:class "cta-button"}
             [:tr
               [:th
                 [:span {:class "text-center button-text"}
                   cta]]]]]]
-      [:th {:class "small-2 large-2 columns last"}]
+      [:th {:class "small-1 large-2 columns last"}]
       [:th {:class "expander"}]]])
 
 ; (defn- digest-footer [digest]
@@ -242,13 +245,13 @@
       (when logo? (spacer 35))
       (h1 (str from " " invite-message))
       (spacer 31)
-      (spacer 35 "body-block")
+      (spacer 35 "body-block top" "body-spacer")
       (h2 org-name "body-block")
-      (spacer 28 "body-block")
+      (spacer 28 "body-block" "body-spacer")
       (paragraph carrot-explainer "body-block")
-      (spacer 35 "body-block")
+      (spacer 35 "body-block" "body-spacer")
       (cta-button (str "Join " org-name) (:token-link invite) "body-block")
-      (spacer 40 "body-block")
+      (spacer 40 "body-block bottom" "body-spacer")
       (spacer 33)
       (transactional-footer)]))
 
