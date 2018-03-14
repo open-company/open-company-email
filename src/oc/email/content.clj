@@ -20,6 +20,8 @@
 
 (def sent-by-text "Sent by Carrot")
 
+(def invite-message "invited you to join your team on Carrot")
+
 (def reset-message "Someone (hopefully you) requested a new password for your Carrot account.")
 (def reset-instructions "Click the link below to reset your password.")
 (def reset-button-text "RESET PASSWORD ➞")
@@ -81,7 +83,7 @@
                            :style (str "background-color: #fff; max-height: " max-logo "px; max-width: " max-logo "px;")
                            dimension size
                            :src logo-url
-                           :alt (str org-name" logo")}]]]]]]]])))
+                           :alt (str org-name " logo")}]]]]]]]])))
 
 (defn- carrot-footer-logo []
   [:tr
@@ -92,7 +94,7 @@
             [:center
               [:img {:width 13
                      :height 24
-                     :src "https://open-company-assets.s3.amazonaws.com/carrot-logo-grey-min.png"
+                     :src "https://open-company.s3.amazonaws.com/carrot-logo-grey-min.png"
                      :alt "Carrot logo"}]]]]]]])
 
 (defn- carrot-logo []
@@ -141,25 +143,27 @@
       [:th {:class "small-12 large-12 first last columns note"}
         (:note update)]]])
 
-(defn- tr-spacer [pixels]        
-  [:tr
-    [:th {:class "small-1 large-1 first columns"}]
-    [:th {:class "small-10 large-10 columns"}
-      [:table {:class "spacer"}
-        [:tr
-          [:th {:height (str "font-size:" pixels "px")
-                :style (str "font-size:" pixels "px;line-height:" pixels "px;")} " "]
-          [:th {:class "expander"}]]]]
-    [:th {:class "small-1 large-1 last columns"}]])
+(defn- spacer-table [pixels css-class]
+  [:table {:class (str "spacer " css-class)}
+    [:tr
+      [:th {:height (str "font-size:" pixels "px")
+            :style (str "font-size:" pixels "px;line-height:" pixels "px;")} " "]
+      [:th {:class "expander"}]]])
+
+(defn- tr-spacer
+  ([pixels] (tr-spacer pixels ""))
+  ([pixels css-class]
+  [:tr [:th (spacer-table pixels css-class)]]))
 
 (defn- spacer
   ([pixels] (spacer pixels ""))
-  ([pixels class-name]
-  [:table {:class (str "row " class-name)}
+  ([pixels css-class]
+  [:table {:class "row"}
     [:tr
       [:th {:class "small-12 large-12 first last columns"}
         [:table
-          (tr-spacer pixels)]]]]))
+          [:tr
+            [:th (spacer-table pixels css-class)]]]]]]))
 
 (defn- paragraph
   ([content] (paragraph content ""))
@@ -234,9 +238,9 @@
         from (if (s/blank? (:from invite)) "Someone" (:from invite))]
     [:td
       (spacer 40)
-      (when logo? (logo logo-url org-name))
+      (when logo? (minimal-logo invite))
       (when logo? (spacer 35))
-      (h1 (str from " invited you to join the team on Carrot"))
+      (h1 (str from " " invite-message))
       (spacer 31)
       (spacer 35 "body-block")
       (h2 org-name "body-block")
@@ -448,8 +452,6 @@
         [:meta {:name "viewport", :content "width=device-width"}]
         [:link {:rel "stylesheet", :href "resources/css/foundation.css"}]
         [:link {:rel "stylesheet", :href (str "resources/css/" css)}]
-        (when (not= type :digest)
-          [:link {:href "http://fonts.googleapis.com/css?family=Muli", :rel "stylesheet", :type "text/css"}])
         [:title]]
       (body data)]))
 
