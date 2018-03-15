@@ -155,7 +155,7 @@
       (spit html-file (content/board-notification-html msg)) ; create the email in a tmp file
       (inline-css html-file inline-file) ; inline the CSS
        ;; Email it to the recipient
-      (email {:to (:email (:user msg))
+      (email {:to (-> msg :user :email)
               :source default-source
               :from default-from
               :reply-to default-reply-to
@@ -189,6 +189,7 @@
                                            (:slug (:org msg-parsed))
                                            (:slug board)])]
                 (send-private-board-notification {:user notify
+                                                  :inviter user
                                                   :org (:org msg-parsed)
                                                   :board board
                                                   :board-url board-url})))))))))
@@ -213,8 +214,11 @@
                        :subject "Latest New.ly Update"
                        :origin "http://localhost:3559"}))
 
-  (def invite (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/carrot-invites/microsoft.json"))))
-  (mailer/send-invite (assoc invite :to "change@me.com"))
+  (def carrot-invite (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/carrot-invites/microsoft.json"))))
+  (mailer/send-invite (assoc carrot-invite :to "change@me.com"))
+
+  (def board-invite (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/board-invites/investors.json"))))
+  (mailer/send-private-board-notification (assoc board-invite :to "change@me.com"))
 
   (def token-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/token/apple.json"))))
   (mailer/send-token :reset (assoc reset :to "change@me.com"))

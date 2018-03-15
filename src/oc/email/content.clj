@@ -300,8 +300,8 @@
         logo? (not (s/blank? logo-url))
         board-url (:board-url notice)
         board-name (-> notice :board :name)
-        first-name (-> notice :user :first-name)
-        last-name (-> notice :user :last-name)
+        first-name (-> notice :inviter :first-name)
+        last-name (-> notice :inviter :last-name)
         from (s/join " " [first-name last-name])
         invite-message (if (s/blank? from) anonymous-board-invite-message (str (s/trim from) " " board-invite-message))]
     [:td
@@ -558,8 +558,6 @@
   (def share-request (json/decode (slurp "./opt/samples/share/bago.json")))
   (spit "./hiccup.html" (content/share-link-html (assoc share-request :note note)))
 
-  
-  
   ;; Resets
 
   (def token-request (json/decode (slurp "./opt/samples/token/apple.json")))
@@ -578,7 +576,6 @@
   (spit "./hiccup.html" (content/token-html :verify token-request))
   (content/token-text :verify token-request)
 
-  
   ;; Digests
 
   (def data (clean-html (slurp "./resources/digest/logo.html")))
