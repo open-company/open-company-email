@@ -144,7 +144,7 @@
         (io/delete-file html-file true)
         (io/delete-file inline-file true)))))
 
-(defn- send-private-board-notification
+(defn send-private-board-notification
   "Creates an html email and sends it to the recipient."
   [msg]
   (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
@@ -218,7 +218,7 @@
   (mailer/send-invite (assoc carrot-invite :to "change@me.com"))
 
   (def board-invite (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/board-invites/investors.json"))))
-  (mailer/send-private-board-notification (assoc board-invite :to "change@me.com"))
+  (mailer/send-private-board-notification (assoc board-invite :user {:email "change@me.com"}))
 
   (def token-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/token/apple.json"))))
   (mailer/send-token :reset (assoc reset :to "change@me.com"))

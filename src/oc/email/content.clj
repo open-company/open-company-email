@@ -78,12 +78,6 @@
                      :src "https://open-company.s3.amazonaws.com/carrot-logo-grey-min.png"
                      :alt "Carrot logo"}]]]]]]])
 
-(defn- message [update]
-  [:table {:class "row note"}
-    [:tr
-      [:th {:class "small-12 large-12 first last columns note"}
-        (:note update)]]])
-
 (defn- spacer-table [pixels css-class]
   [:table {:class "spacer"}
     [:tr
