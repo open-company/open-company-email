@@ -187,13 +187,11 @@
             (when-not slack-info ; Slack users get notified elsewhere via Slack
               (let [board-url (s/join "/" [c/web-url
                                            (:slug (:org msg-parsed))
-                                           (:slug board)])
-                    message "You have been invited to a private board. "]
-                (send-private-board-notification {
-                                                  :user notify
+                                           (:slug board)])]
+                (send-private-board-notification {:user notify
                                                   :org (:org msg-parsed)
-                                                  :board-url board-url
-                                                  :text message})))))))))
+                                                  :board board
+                                                  :board-url board-url})))))))))
 
 (comment
 

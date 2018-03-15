@@ -15,6 +15,8 @@
 
 (def doc-type "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
 
+;; ----- Copy -----
+
 (def tagline "Better informed, less noise.")
 (def carrot-explainer "Carrot is the company digest that keeps everyone aligned around what matters most.")
 
@@ -25,7 +27,8 @@
 (def share-message "sent you a post")
 (def share-cta "View the post")
 
-(def board-invite-message "You've been invited to a private section on Carrot")
+(def board-invite-message "invited you to a private section on Carrot")
+(def anonymous-board-invite-message "You've been invited to a private section on Carrot")
 (def board-invite-explainer "Private sections of the digest are only available to invited team members.")
 
 (def reset-message "Someone (hopefully you) requested a new password for your Carrot account")
@@ -38,37 +41,9 @@
 (def verify-button-text "Verify Email")
 (def verify-ignore "If you didn't create a Carrot account, you can safely ignore this email.")
 
-(defn- logo
-  "Company logo that includes Carrot branding."
-  [logo-url org-name]
-  [:table {:class "row header"} 
-    [:tr
-      [:th {:class "small-1 large-2 first columns"}]
-      [:th {:class "small-10 large-8 columns"}
-        [:table
-          [:tr
-            [:th
-              [:img {:class "float-left logo"
-                     :width 183
-                     :height 113
-                     :style {:max-width "initial"}
-                     :src "https://open-company-assets.s3.amazonaws.com/email_left_bubbles.png"}]]
-            [:th
-              [:center
-                [:img {:class "float-center logo"
-                       :style "background-color: #ffffff;max-height: 120px;max-width: 213px;"
-                       :src logo-url
-                       :alt (str org-name " logo")}]]]
-            [:th
-              [:img {:class "float-left logo"
-                     :width 180
-                     :height 121
-                     :style {:max-width "initial"}
-                     :src "https://open-company-assets.s3.amazonaws.com/email_right_bubbles.png"}]]]]]
-      [:th {:class "small-1 large-2 last columns"}]]])
+;; ----- HTML Fragments -----
 
-(defn- minimal-logo
-  "Centered company alone."
+(defn- org-logo
   [{org-name :org-name logo-url :org-logo-url logo-height :org-logo-height logo-width :org-logo-width}]
   (let [logo? (and logo-url logo-height logo-width)
         dimension (when logo? (if (> logo-height logo-width) :height :width))
@@ -102,46 +77,6 @@
                      :height 24
                      :src "https://open-company.s3.amazonaws.com/carrot-logo-grey-min.png"
                      :alt "Carrot logo"}]]]]]]])
-
-(defn- carrot-logo []
-  [:table {:class "row header"} 
-    [:tr
-      [:th {:class "small-12 large-12 first last columns"} 
-        [:table
-          [:tr
-            [:th
-              [:center
-                [:img {:class "float-center logo"
-                       :style "background-color: #ffffff;max-height: 71px;max-width: 71px;"
-                       :src "https://open-company-assets.s3.amazonaws.com/carrot-logo.png"
-                       :alt "Carrot logo"}]]]]]]]])
-
-(defn- carrot-digest-logo []
-  [:tr
-    [:th {:class "small-12 large-12 first last columns"}
-      [:table
-        [:tr
-          [:th
-            [:center
-              [:img {:width "22", :height "39", :src "https://open-company.s3.amazonaws.com/carrot-grey-logo-min.png", :alt "Carrot logo"}]]]
-          [:th {:class "expander"}]]]]])
-
-(defn- digest-banner [frequency]
-  (let [weekly? (= (keyword frequency) :weekly)
-        banner-src (if weekly?
-                      "https://open-company.s3.amazonaws.com/weekly-digest-header-min.png"
-                      "https://open-company.s3.amazonaws.com/daily-digest-header-min.png")
-        banner-alt (if weekly?
-                      "Your weekly digest"
-                      "Your daily digest")]
-    [:table {:class "row banner"}
-      [:tr
-        [:th {:class "small-12 large-12 first last columns"}
-          [:table
-            [:tr
-              [:th
-                [:img {:src banner-src, :alt banner-alt}]]
-              [:th {:class "expander"}]]]]]]))
 
 (defn- message [update]
   [:table {:class "row note"}
@@ -216,141 +151,6 @@
                   cta]]]]]]
       [:th {:class "small-1 large-2 columns last"}]
       [:th {:class "expander"}]]])
-
-; (defn- digest-footer [digest]
-;   [:table {:class "row footer"}
-;     (tr-spacer 40)
-;     (carrot-digest-logo)
-;     (tr-spacer 17)
-;     sent-by
-;     (tr-spacer 17)
-;     (you-receive (:digest-frequency digest))
-;     (change-to (:digest-frequency digest))
-;     (tr-spacer 40)])
-
-(defn- transactional-footer []
-  [:table {:class "row footer"}
-    (carrot-footer-logo)
-    (tr-spacer 10)
-    [:tr
-      [:th {:class "small-12 large-12 first last columns"}
-        [:table
-          [:tr
-            [:th
-              [:p {:class "text-center"}
-                sent-by-text]]]]]]
-    (tr-spacer 10)])
-
-(defn- board-notification-content [notice]
-  (let [logo-url (:org-logo-url notice)
-        logo? (not (s/blank? logo-url))
-        board-url (:board-url notice)
-        board-name (:board-name notice)
-        org-name (:org-name notice)]
-    [:td
-      (spacer 40)
-      (when logo? (minimal-logo notice))
-      (when logo? (spacer 35))
-      (h1 board-invite-message)
-      (spacer 31)
-      (spacer 35 "body-block top" "body-spacer")
-      (h2 board-name "body-block")
-      (spacer 28 "body-block" "body-spacer")
-      (paragraph board-invite-explainer "body-block")
-      (spacer 35 "body-block" "body-spacer")
-      (cta-button (str "View " board-name) board-url "body-block")
-      (spacer 40 "body-block bottom" "body-spacer")
-      (spacer 33)
-      (transactional-footer)]))
-
-(defn- invite-content [invite]
-  (let [logo-url (:org-logo-url invite)
-        logo? (not (s/blank? logo-url))
-        org-name (:org-name invite)
-        from (if (s/blank? (:from invite)) "Someone" (:from invite))]
-    [:td
-      (spacer 40)
-      (when logo? (minimal-logo invite))
-      (when logo? (spacer 35))
-      (h1 (str from " " invite-message))
-      (spacer 31)
-      (spacer 35 "body-block top" "body-spacer")
-      (h2 org-name "body-block")
-      (spacer 28 "body-block" "body-spacer")
-      (paragraph carrot-explainer "body-block")
-      (spacer 35 "body-block" "body-spacer")
-      (cta-button (str "Join " org-name " on Carrot") (:token-link invite) "body-block")
-      (spacer 40 "body-block bottom" "body-spacer")
-      (spacer 33)
-      (transactional-footer)]))
-
-(defn- token-prep [token-type msg]
-  {
-    :message (case token-type
-              :reset reset-message
-              :verify verify-message)
-    :instructions (case token-type
-                    :reset reset-instructions
-                    :verify verify-instructions)
-    :button-text (case token-type
-                    :reset reset-button-text
-                    :verify verify-button-text)
-    :link (:token-link (keywordize-keys msg))
-    :ignore (case token-type
-                :reset reset-ignore
-                :verify verify-ignore)})
-
-(defn- token-content [token-type msg]
-  (let [message (token-prep token-type msg)
-        logo-url (:org-logo-url msg)
-        logo? (not (s/blank? logo-url))
-        org-name (:org-name msg)]
-    [:td
-      (spacer 40)
-      (when logo? (minimal-logo msg))
-      (when logo? (spacer 35))
-      (spacer 35 "body-block top" "body-spacer")
-      (h2 (:message message) "body-block")
-      (spacer 28 "body-block" "body-spacer")
-      (paragraph (:ignore message) "body-block")
-      (spacer 35 "body-block" "body-spacer")
-      (cta-button (:button-text message) (:token-link msg) "body-block")
-      (spacer 40 "body-block bottom" "body-spacer")
-      (spacer 33)
-      (transactional-footer)]))
-
-(defn- share-content [entry]
-  (let [logo-url (:org-logo-url entry)
-        logo? (not (s/blank? logo-url))
-        org-name (:org-name entry)
-        org-name? (not (s/blank? org-name))
-        headline (:headline entry)
-        org-slug (:org-slug entry)
-        sharer (:sharer-name entry)
-        attribution (str (-> entry :publisher :name) " posted to " (:board-name entry))
-        note (:note entry)
-        note? (not (s/blank? note))
-        from (if (s/blank? sharer) "Someone" sharer)
-        secure-uuid (:secure-uuid entry)
-        origin-url config/web-url
-        entry-url (s/join "/" [origin-url org-slug "post" secure-uuid])]
-    [:td
-      (spacer 40)
-      (when logo? (minimal-logo entry))
-      (when logo? (spacer 35))
-      (h1 (str from " " share-message))
-      (spacer 31)
-      (spacer 35 "body-block top" "body-spacer")
-      (h2 headline "body-block")
-      (spacer 11 "body-block" "body-spacer")
-      (paragraph attribution "body-block" "attribution")
-      (when note? (spacer 28 "body-block" "body-spacer"))
-      (when note? (paragraph note "body-block"))
-      (spacer 35 "body-block" "body-spacer")
-      (cta-button share-cta entry-url "body-block")
-      (spacer 40 "body-block bottom" "body-spacer")
-      (spacer 33)
-      (transactional-footer)]))
 
 (defn- you-receive [interval]
   [:tr
@@ -435,6 +235,32 @@
           [:th {:class "expander"}]]]]
     [:th {:class "small-1 large-1 last columns"}]])
 
+(defn- transactional-footer []
+  [:table {:class "row footer"}
+    (carrot-footer-logo)
+    (tr-spacer 10)
+    [:tr
+      [:th {:class "small-12 large-12 first last columns"}
+        [:table
+          [:tr
+            [:th
+              [:p {:class "text-center"}
+                sent-by-text]]]]]]
+    (tr-spacer 10)])
+
+;; ----- Digest -----
+
+(defn- digest-footer [digest]
+  [:table {:class "row footer"}
+    (tr-spacer 40)
+    (carrot-footer-logo)
+    (tr-spacer 17)
+    sent-by
+    (tr-spacer 17)
+    (you-receive (:digest-frequency digest))
+    (change-to (:digest-frequency digest))
+    (tr-spacer 40)])
+
 (defn- post [data frequency]
   (let [comment-count (:comment-count data)
         comments? (pos? comment-count)]
@@ -457,22 +283,136 @@
 (defn- digest-content [digest]
   [:td
     (spacer 40)
-    (minimal-logo digest)
+    (org-logo digest)
     (spacer 32)
-    (digest-banner (:digest-frequency digest))
     (let [boards (:boards digest)]
       (map #(board % (:digest-frequency digest)) boards))
-    ;(digest-footer digest)
-    ])
+    (digest-footer digest)])
 
-(defn- note 
-  [update trail-space?]
-  [:table {:class "note"}
-    [:tr
-      [:td
-        (spacer 15 "note")
-        (message update)
-        (when trail-space? (spacer 22 "note"))]]])
+;; ----- Transactional Emails -----
+
+(defn- board-notification-content [notice]
+  (let [org (:org notice)
+        org-name (:name org)
+        logo-url (:logo-url org)
+        logo-width (:logo-width org)
+        logo-height (:logo-height org)
+        logo? (not (s/blank? logo-url))
+        board-url (:board-url notice)
+        board-name (-> notice :board :name)
+        first-name (-> notice :user :first-name)
+        last-name (-> notice :user :last-name)
+        from (s/join " " [first-name last-name])
+        invite-message (if (s/blank? from) anonymous-board-invite-message (str (s/trim from) " " board-invite-message))]
+    [:td
+      (spacer 40)
+      (when logo? (org-logo {:org-name org-name
+                             :org-logo-url logo-url
+                             :org-logo-width logo-width
+                             :org-logo-height logo-height}))
+      (when logo? (spacer 35))
+      (h1 invite-message)
+      (spacer 31)
+      (spacer 35 "body-block top" "body-spacer")
+      (h2 board-name "body-block")
+      (spacer 28 "body-block" "body-spacer")
+      (paragraph board-invite-explainer "body-block")
+      (spacer 35 "body-block" "body-spacer")
+      (cta-button (str "View " board-name) board-url "body-block")
+      (spacer 40 "body-block bottom" "body-spacer")
+      (spacer 33)
+      (transactional-footer)]))
+
+(defn- invite-content [invite]
+  (let [logo-url (:org-logo-url invite)
+        logo? (not (s/blank? logo-url))
+        org-name (:org-name invite)
+        from (if (s/blank? (:from invite)) "Someone" (:from invite))]
+    [:td
+      (spacer 40)
+      (when logo? (org-logo invite))
+      (when logo? (spacer 35))
+      (h1 (str from " " invite-message))
+      (spacer 31)
+      (spacer 35 "body-block top" "body-spacer")
+      (h2 org-name "body-block")
+      (spacer 28 "body-block" "body-spacer")
+      (paragraph carrot-explainer "body-block")
+      (spacer 35 "body-block" "body-spacer")
+      (cta-button (str "Join " org-name " on Carrot") (:token-link invite) "body-block")
+      (spacer 40 "body-block bottom" "body-spacer")
+      (spacer 33)
+      (transactional-footer)]))
+
+(defn- token-prep [token-type msg]
+  {
+    :message (case token-type
+              :reset reset-message
+              :verify verify-message)
+    :instructions (case token-type
+                    :reset reset-instructions
+                    :verify verify-instructions)
+    :button-text (case token-type
+                    :reset reset-button-text
+                    :verify verify-button-text)
+    :link (:token-link (keywordize-keys msg))
+    :ignore (case token-type
+                :reset reset-ignore
+                :verify verify-ignore)})
+
+(defn- token-content [token-type msg]
+  (let [message (token-prep token-type msg)
+        logo-url (:org-logo-url msg)
+        logo? (not (s/blank? logo-url))
+        org-name (:org-name msg)]
+    [:td
+      (spacer 40)
+      (when logo? (org-logo msg))
+      (when logo? (spacer 35))
+      (spacer 35 "body-block top" "body-spacer")
+      (h2 (:message message) "body-block")
+      (spacer 28 "body-block" "body-spacer")
+      (paragraph (:ignore message) "body-block")
+      (spacer 35 "body-block" "body-spacer")
+      (cta-button (:button-text message) (:token-link msg) "body-block")
+      (spacer 40 "body-block bottom" "body-spacer")
+      (spacer 33)
+      (transactional-footer)]))
+
+(defn- share-content [entry]
+  (let [logo-url (:org-logo-url entry)
+        logo? (not (s/blank? logo-url))
+        org-name (:org-name entry)
+        org-name? (not (s/blank? org-name))
+        headline (:headline entry)
+        org-slug (:org-slug entry)
+        sharer (:sharer-name entry)
+        attribution (str (-> entry :publisher :name) " posted to " (:board-name entry))
+        note (:note entry)
+        note? (not (s/blank? note))
+        from (if (s/blank? sharer) "Someone" sharer)
+        secure-uuid (:secure-uuid entry)
+        origin-url config/web-url
+        entry-url (s/join "/" [origin-url org-slug "post" secure-uuid])]
+    [:td
+      (spacer 40)
+      (when logo? (org-logo entry))
+      (when logo? (spacer 35))
+      (h1 (str from " " share-message))
+      (spacer 31)
+      (spacer 35 "body-block top" "body-spacer")
+      (h2 headline "body-block")
+      (spacer 11 "body-block" "body-spacer")
+      (paragraph attribution "body-block" "attribution")
+      (when note? (spacer 28 "body-block" "body-spacer"))
+      (when note? (paragraph note "body-block"))
+      (spacer 35 "body-block" "body-spacer")
+      (cta-button share-cta entry-url "body-block")
+      (spacer 40 "body-block bottom" "body-spacer")
+      (spacer 33)
+      (transactional-footer)]))
+
+;; ----- General HTML, common to all emails -----
 
 (defn- body [data]
   (let [type (:type data)
@@ -506,6 +446,8 @@
 
 (defn- html [data type]
   (str doc-type (h/html (head (assoc (keywordize-keys data) :type type)))))
+
+;; ----- External -----
 
 (defn invite-subject [invite bold?]
   (let [msg (keywordize-keys invite)
@@ -560,6 +502,8 @@
 
 (defn board-notification-html [message]
   (html message :board-notification))
+
+;; ----- REPL Usage -----
 
 (comment
   
