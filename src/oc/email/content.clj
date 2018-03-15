@@ -3,7 +3,6 @@
             [clojure.walk :refer (keywordize-keys)]
             [clj-time.format :as format]
             [hiccup.core :as h]
-            [oc.lib.text :as text]
             [oc.email.config :as config]))
 
 (def max-logo 32)
@@ -240,7 +239,7 @@
         org-name (:org-name digest)
         title (if weekly? (str org-name " Weekly Digest") (str org-name " Daily Digest"))
         boards (map posts-with-board-name (:boards digest))
-        posts (apply concat (map :posts boards))]
+        posts (mapcat :posts boards)]
     [:td
       (spacer 40)
       (when logo? (org-logo digest))
