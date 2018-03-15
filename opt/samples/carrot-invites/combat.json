@@ -3,8 +3,8 @@
   "reply-to": "simone@lyceela.org",
   "email": "e.cioran@fu-berlin.de",
   "org-name": "Combat",
-  "logo-url": "https://open-company-assets.s3.amazonaws.com/combat.png",
-  "logo-width": 448,
-  "logo-height": 172,
+  "org-logo-url": "https://open-company-assets.s3.amazonaws.com/combat.png",
+  "org-logo-width": 448,
+  "org-logo-height": 172,
   "token-link": "http://localhost:3000/invite?token=dd7c0bfe-2068-4de0-aa3c-4913eeeaa360"
 }

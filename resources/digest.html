@@ -1,585 +1,451 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-
-<head>
+  <head>
     <!-- The character set should be utf-8 -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <!-- Enables media queries -->
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width"/>
     <title></title>
     <!-- Link to the email's CSS, which will be inlined into the email -->
-    <link rel="stylesheet" href="css/foundation.css" />
-    <link rel="stylesheet" href="css/oc-digest.css" />
-</head>
+    <link rel="stylesheet" href="css/foundation.css"/>
+    <link rel="stylesheet" href="css/oc.css"/>
+  </head>
 
-<body>
-    <!-- Wrapper for the body of the email -->
-    <table class="body">
+  <body>
+
+      <!-- Wrapper for the body of the email -->
+      <table class="body">
         <tr>
-            <!-- The class, align, and <center> tag center the container -->
-            <td class="float-center" align="center" valign="top">
-                <center>
-                    <table class="container">
+          <!-- The class, align, and <center> tag center the container -->
+          <td class="float-center" align="center" valign="top">
+            <center>
+
+              <table class="container">
+                <tr>
+                  <td>
+              
+                    <!-- The content of your email goes here. -->
+                
+                    <!-- spacer -->
+                    <table class="row">
+                      <tr>
+                        <th class="small-1 large-2 first columns"></th>
+                        <th class="small-10 large-8 columns">
+                          <table>
+                            <tr>
+                              <th height="40px" class="" style="font-size:40px;line-height:40px;">&#xA0;</td>
+                              <th class="expander"></th>
+                            </tr>
+                          </table>
+                        </th>
+                        <th class="small-1 large-2 last columns"></th>
+                        <th class="expander"></th>
+                      </tr>
+                    </table>
+                    <!-- spacer -->
+
+                    <!-- company logo -->
+                    <table class="row logo">
                         <tr>
-                            <td>
-                                <!-- The content of your email goes here. -->
-                                <!-- spacer -->
-                                <table class="row header">
+                            <th class="small-12 large-12 first last columns">
+                                <table>
                                     <tr>
-                                        <th class="small-12 large-12 first last columns">
-                                            <table>
-                                                <tr>
-                                                    <th>
-                                                        <table class="spacer">
-                                                            <tr>
-                                                                <td height="40px" style="font-size:40px;line-height:40px;">&#xA0;</td>
-                                                            </tr>
-                                                        </table>
-                                                    </th>
-                                                    <th class="expander"></th>
-                                                </tr>
-                                            </table>
+                                        <th>
+                                            <center>
+                                                <img class="float-center logo" align="center" style="background-color: #ffffff; max-height: 32px; max-width: 32px;" height="32px" width="32px" src="https://www.apple.com/ac/structured-data/images/knowledge_graph_logo.png" alt="Apple logo" />
+                                            </center>
                                         </th>
                                     </tr>
                                 </table>
-                                <!-- spacer -->
-                                <!-- company logo -->
-                                <table class="row logo header">
-                                    <tr>
-                                        <th class="small-12 large-12 first last columns">
-                                            <table>
-                                                <tr>
-                                                    <th>
-                                                        <center>
-                                                            <img class="float-center logo" align="center" style="background-color: #ffffff; max-height: 50px; max-width: 50px;" height="50px" width="50px" src="https://www.apple.com/ac/structured-data/images/knowledge_graph_logo.png" alt="Apple logo" />
-                                                        </center>
-                                                    </th>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                    </tr>
-                                </table>
-                                <!-- company logo -->
-                                <!-- spacer -->
-                                <table class="row header">
-                                    <tr>
-                                        <th class="small-12 large-12 first last columns">
-                                            <table>
-                                                <tr>
-                                                    <th>
-                                                        <table class="spacer">
-                                                            <tr>
-                                                                <td height="32px" style="font-size:32px;line-height:32px;">&#xA0;</td>
-                                                            </tr>
-                                                        </table>
-                                                    </th>
-                                                    <th class="expander"></th>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                    </tr>
-                                </table>
-                                <!-- spacer -->
-                                <!-- digest title -->
-                                <table class="row header">
-                                    <tr>
-                                        <th class="small-12 large-12 first last columns">
-                                            <table>
-                                                <tr>
-                                                    <th>
-                                                        <center>
-                                                            <h1>Weekly Digest</h1>
-                                                        </center>
-                                                    </th>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                    </tr>
-                                </table>
-                                <!-- digest title -->                                
-                                <!-- spacer -->
-                                <table class="row header">
-                                    <tr>
-                                        <th class="small-12 large-12 first last columns">
-                                            <table>
-                                                <tr>
-                                                    <th>
-                                                        <table class="spacer">
-                                                            <tr>
-                                                                <td height="50px" style="font-size:50px;line-height:50px;">&#xA0;</td>
-                                                            </tr>
-                                                        </table>
-                                                    </th>
-                                                    <th class="expander"></th>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                    </tr>
-                                </table>
-                                <!-- spacer -->
-                                <!-- board -->
-                                <table class="row board first">
-                                    <!-- spacer -->
-                                    <tr>
-                                        <th class="small-1 large-1 first columns"></th>
-                                        <th class="small-10 large-10 columns">
-                                            <table class="spacer">
-                                                <tr>
-                                                    <th height="33px" style="font-size:33px;line-height:33px;">&#xA0;</th>
-                                                    <th class="expander"></th>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                        <th class="small-1 large-1 last columns"></th>
-                                    </tr>
-                                    <!-- spacer -->
-                                    <!-- board name -->
-                                    <tr>
-                                        <th class="small-1 large-1 first columns"></th>
-                                        <th class="small-10 large-10 columns">
-                                            <table>
-                                                <tr>
-                                                    <th>
-                                                        <h2>General</h2>
-                                                    </th>
-                                                    <th class="expander"></th>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                        <th class="small-1 large-1 last columns"></th>
-                                    </tr>
-                                    <!-- board name -->
-                                    <!-- spacer -->
-                                    <tr>
-                                        <th class="small-1 large-1 first columns"></th>
-                                        <th class="small-10 large-10 columns">
-                                            <table class="spacer">
-                                                <tr>
-                                                    <th height="27px" style="font-size:27px;line-height:27px;">&#xA0;</th>
-                                                    <th class="expander"></th>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                        <th class="small-1 large-1 last columns"></th>
-                                    </tr>
-                                    <!-- spacer -->
-                                    <!-- post link -->
-                                    <tr>
-                                        <th class="small-1 large-1 first columns"></th>
-                                        <th class="small-10 large-10 columns">
-                                            <table>
-                                                <tr>
-                                                    <th>
-                                                        <a class="post-link">Introducing some new faces!</a>
-                                                    </th>
-                                                    <th class="expander"></th>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                        <th class="small-1 large-1 last columns"></th>
-                                    </tr>
-                                    <!-- post link -->
-                                    <!-- spacer -->
-                                    <tr>
-                                        <th class="small-1 large-1 first columns"></th>
-                                        <th class="small-10 large-10 columns">
-                                            <table class="spacer">
-                                                <tr>
-                                                    <th height="11px" style="font-size:11px;line-height:11px;">&#xA0;</th>
-                                                    <th class="expander"></th>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                        <th class="small-1 large-1 last columns"></th>
-                                    </tr>
-                                    <!-- spacer -->
-                                    <tr>
-                                        <!-- post attribution -->
-                                        <th class="small-1 large-1 first columns"></th>
-                                        <th class="small-10 large-10 columns">
-                                            <table>
-                                                <tr>
-                                                    <th>
-                                                        <p class="attribution">Lisa Malo on November 5, 2017</p>
-                                                    </th>
-                                                    <th class="expander"></th>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                        <th class="small-1 large-1 last columns"></th>
-                                    </tr>
-                                    <!-- post attribution -->
-                                    <!-- spacer -->
-                                    <tr>
-                                        <th class="small-1 large-1 first columns"></th>
-                                        <th class="small-10 large-10 columns">
-                                            <table class="spacer">
-                                                <tr>
-                                                    <th height="27px" style="font-size:27px;line-height:27px;">&#xA0;</th>
-                                                    <th class="expander"></th>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                        <th class="small-1 large-1 last columns"></th>
-                                    </tr>
-                                    <!-- spacer -->
-                                    <!-- post link -->
-                                    <tr>
-                                        <th class="small-1 large-1 first columns"></th>
-                                        <th class="small-10 large-10 columns">
-                                            <table>
-                                                <tr>
-                                                    <th>
-                                                        <a class="post-link">We've hit 2,000 paid subscribers!</a>
-                                                    </th>
-                                                    <th class="expander"></th>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                        <th class="small-1 large-1 last columns"></th>
-                                    </tr>
-                                    <!-- post link -->
-                                    <!-- spacer -->
-                                    <tr>
-                                        <th>
-                                            <table class="spacer">
-                                                <tr>
-                                                    <td height="11px" style="font-size:11px;line-height:11px;">&#xA0;</td>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                        <th class="expander"></th>
-                                    </tr>
-                                    <!-- spacer -->
-                                    <!-- post attribution -->
-                                    <tr>
-                                        <th class="small-1 large-1 first columns"></th>
-                                        <th class="small-10 large-10 columns">
-                                            <table>
-                                                <tr>
-                                                    <th>
-                                                        <p class="attribution">David Smith on November 5, 2017</p>
-                                                    </th>
-                                                    <th class="expander"></th>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                        <th class="small-1 large-1 last columns"></th>
-                                    </tr>
-                                    <!-- post attribution -->
-                                    <!-- spacer -->
-                                    <tr>
-                                        <th>
-                                            <table class="spacer">
-                                                <tr>
-                                                    <td height="3px" style="font-size:3px;line-height:3px;">&#xA0;</td>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                        <th class="expander"></th>
-                                    </tr>
-                                    <!-- spacer -->
-                                    <!-- comment attribution -->
-                                    <tr>
-                                        <th class="small-1 large-1 first columns"></th>
-                                        <th class="small-10 large-10 columns">
-                                            <table>
-                                                <tr>
-                                                    <th>
-                                                        <p class="attribution">5 comments by Tyler Biggs, Lee Harmony and others</p>
-                                                    </th>
-                                                    <th class="expander"></th>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                        <th class="small-1 large-1 last columns"></th>
-                                    </tr>
-                                    <!-- comment attribution -->
-                                    <!-- spacer -->
-                                    <tr>
-                                        <th>
-                                            <table class="spacer">
-                                                <tr>
-                                                    <td height="39px" style="font-size:39px;line-height:39px;">&#xA0;</td>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                        <th class="expander"></th>
-                                    </tr>
-                                    <!-- spacer -->
-                                </table>
-                                <!-- board -->
-                                <table class="row board last">
-                                    <tr>
-                                        <!-- spacer -->
-                                        <th>
-                                            <table class="spacer">
-                                                <tr>
-                                                    <td height="33px" style="font-size:33px;line-height:33px;">&#xA0;</td>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                        <th class="expander"></th>
-                                    </tr>
-                                    <!-- spacer -->
-                                    <tr>
-                                        <!-- board name -->
-                                        <th class="small-1 large-1 first columns"></th>
-                                        <th class="small-10 large-10 columns">
-                                            <table>
-                                                <tr>
-                                                    <th>
-                                                        <h2>Design</h2>
-                                                    </th>
-                                                    <th class="expander"></th>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                        <th class="small-1 large-1 last columns"></th>
-                                    </tr>
-                                    <!-- board name -->
-                                    <tr>
-                                        <!-- spacer -->
-                                        <th>
-                                            <table class="spacer">
-                                                <tr>
-                                                    <td height="27px" style="font-size:27px;line-height:27px;">&#xA0;</td>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                        <th class="expander"></th>
-                                    </tr>
-                                    <!-- spacer -->
-                                    <tr>
-                                        <!-- post link -->
-                                        <th class="small-1 large-1 first columns"></th>
-                                        <th class="small-10 large-10 columns">
-                                            <table>
-                                                <tr>
-                                                    <th>
-                                                        <a class="post-link">Building Design Collaboration into our Workflow</a>
-                                                    </th>
-                                                    <th class="expander"></th>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                        <th class="small-1 large-1 last columns"></th>
-                                    </tr>
-                                    <!-- post link -->
-                                    <tr>
-                                        <!-- spacer -->
-                                        <th>
-                                            <table class="spacer">
-                                                <tr>
-                                                    <td height="11px" style="font-size:11px;line-height:11px;">&#xA0;</td>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                        <th class="expander"></th>
-                                    </tr>
-                                    <!-- spacer -->
-                                    <tr>
-                                        <!-- post attribution -->
-                                        <th class="small-1 large-1 first columns"></th>
-                                        <th class="small-10 large-10 columns">
-                                            <table>
-                                                <tr>
-                                                    <th>
-                                                        <p class="attribution">Lisa Malo on November 5, 2017</p>
-                                                    </th>
-                                                    <th class="expander"></th>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                        <th class="small-1 large-1 last columns"></th>
-                                    </tr>
-                                    <!-- post attribution -->
-                                    <tr>
-                                        <!-- spacer -->
-                                        <th>
-                                            <table class="spacer">
-                                                <tr>
-                                                    <td height="27px" style="font-size:27px;line-height:27px;">&#xA0;</td>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                        <th class="expander"></th>
-                                    </tr>
-                                    <!-- spacer -->
-                                    <tr>
-                                        <!-- post link -->
-                                        <th class="small-1 large-1 first columns"></th>
-                                        <th class="small-10 large-10 columns">
-                                            <table>
-                                                <tr>
-                                                    <th>
-                                                        <a class="post-link">Versioning, Licensing and Sketch 4.0</a>
-                                                    </th>
-                                                    <th class="expander"></th>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                        <th class="small-1 large-1 last columns"></th>
-                                    </tr>
-                                    <!-- post link -->
-                                    <tr>
-                                        <!-- spacer -->
-                                        <th>
-                                            <table class="spacer">
-                                                <tr>
-                                                    <td height="11px" style="font-size:11px;line-height:11px;">&#xA0;</td>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                        <th class="expander"></th>
-                                    </tr>
-                                    <!-- spacer -->
-                                    <tr>
-                                        <!-- post attribution -->
-                                        <th class="small-1 large-1 first columns"></th>
-                                        <th class="small-10 large-10 columns">
-                                            <table>
-                                                <tr>
-                                                    <th>
-                                                        <p class="attribution">David Smith on November 5, 2017</p>
-                                                    </th>
-                                                    <th class="expander"></th>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                        <th class="small-1 large-1 last columns"></th>
-                                    </tr>
-                                    <!-- post attribution -->
-                                    <tr>
-                                        <!-- spacer -->
-                                        <th>
-                                            <table class="spacer">
-                                                <tr>
-                                                    <td height="39px" style="font-size:39px;line-height:39px;">&#xA0;</td>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                        <th class="expander"></th>
-                                    </tr>
-                                    <!-- spacer -->
-                                </table>
-                                <!-- board -->
-                                <table class="row footer">
-                                    <!-- footer -->
-                                    <tr>
-                                        <!-- spacer -->
-                                        <th>
-                                            <table class="spacer">
-                                                <tr>
-                                                    <td height="40px" style="font-size:40px;line-height:40px;">&#xA0;</td>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                        <th class="expander"></th>
-                                    </tr>
-                                    <!-- spacer -->
-                                    <!-- Carrot logo -->
-                                    <tr>
-                                        <th class="small-12 large-12 first last columns">
-                                            <table>
-                                                <tr>
-                                                    <th>
-                                                        <center>
-                                                            <img width="22" height="39" src="https://open-company.s3.amazonaws.com/carrot-grey-logo-min.png" alt="Carrot logo" />
-                                                        </center>
-                                                    </th>
-                                                    <th class="expander"></th>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                    </tr>
-                                    <!-- spacer -->
-                                    <tr>
-                                        <th>
-                                            <table class="spacer">
-                                                <tr>
-                                                    <td height="17px" style="font-size:17px;line-height:17px;">&#xA0;</td>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                        <th class="expander"></th>
-                                    </tr>
-                                    <!-- spacer -->
-                                    <!-- sent by -->
-                                    <tr>
-                                        <th class="small-12 large-12 first last columns">
-                                            <table>
-                                                <tr>
-                                                    <th>
-                                                        <p class="text-center"><b>Sent by Carrot</b></p>
-                                                    </th>
-                                                    <th class="expander"></th>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                    </tr>
-                                    <!-- sent by -->
-                                    <tr>
-                                        <!-- spacer -->
-                                        <th>
-                                            <table class="spacer">
-                                                <tr>
-                                                    <td height="17px" style="font-size:17px;line-height:17px;">&#xA0;</td>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                        <th class="expander"></th>
-                                    </tr>
-                                    <!-- spacer -->
-                                    <!-- digest interval -->
-                                    <tr>
-                                        <th class="small-12 large-12 first last columns">
-                                            <table>
-                                                <tr>
-                                                    <th>
-                                                        <p class="text-center">You receive <b>weekly</b> emails.</p>
-                                                    </th>
-                                                    <th class="expander"></th>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th class="small-12 large-12 first last columns">
-                                            <table>
-                                                <tr>
-                                                    <th>
-                                                        <p class="text-center"><a>Change to daily?</a> ∙ <a>Unsubscribe</a></p>
-                                                    </th>
-                                                    <th class="expander"></th>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                    </tr>
-                                    <!-- digest interval -->
-                                    <tr>
-                                        <!-- spacer -->
-                                        <th>
-                                            <table class="spacer">
-                                                <tr>
-                                                    <td height="40px" style="font-size:40px;line-height:40px;">&#xA0;</td>
-                                                </tr>
-                                            </table>
-                                        </th>
-                                        <th class="expander"></th>
-                                    </tr>
-                                    <!-- spacer -->
-                                </table>
-                                <!-- footer -->
-                            </td>
+                            </th>
                         </tr>
                     </table>
-                    <!-- container -->
-                </center>
-            </td>
-        </tr>
-    </table>
-    <!-- body -->
-</body>
+                    <!-- company logo -->
 
+                     <!-- spacer -->
+                    <table class="row">
+                      <tr>
+                        <th class="small-1 large-2 first columns"></th>
+                        <th class="small-10 large-8 columns">
+                          <table>
+                            <tr>
+                              <th height="35px" class="" style="font-size:35px;line-height:35px;">&#xA0;</td>
+                              <th class="expander"></th>
+                            </tr>
+                          </table>
+                        </th>
+                        <th class="small-1 large-2 last columns"></th>
+                        <th class="expander"></th>
+                      </tr>
+                    </table>
+                    <!-- spacer -->
+                    
+                    <!-- invite header -->
+                    <table class="row">
+                      <tr>
+                        <th class="small-2 large-2 first columns">
+                        </th>
+                        <th class="small-8 large-8 columns">
+                          <h1 class="text-center">Apple Weekly Digest</h1>
+                        </th>
+                        <th class="small-2 large-2 last columns">
+                        </th>
+                        <th class="expander"></th>
+                      </tr>
+                    </table>
+                    <!-- invite header -->
+
+                    <!-- spacer -->
+                    <table class="row">
+                      <tr>
+                        <th class="small-1 large-2 first columns"></th>
+                        <th class="small-10 large-8 columns">
+                          <table>
+                            <tr>
+                              <th height="31px" class="" style="font-size:31px;line-height:31px;">&#xA0;</td>
+                              <th class="expander"></th>
+                            </tr>
+                          </table>
+                        </th>
+                        <th class="small-1 large-2 last columns"></th>
+                        <th class="expander"></th>
+                      </tr>
+                    </table>
+                    <!-- spacer -->
+
+                    <!-- spacer -->
+                    <table class="row body-block top">
+                      <tr>
+                        <th class="small-1 large-2 first columns"></th>
+                        <th class="small-10 large-8 columns">
+                          <table>
+                            <tr>
+                              <th height="36px" class="body-spacer" style="font-size:36px;line-height:36px;">&#xA0;</td>
+                              <th class="expander"></th>
+                            </tr>
+                          </table>
+                        </th>
+                        <th class="small-1 large-2 last columns"></th>
+                        <th class="expander"></th>
+                      </tr>
+                    </table>
+                    <!-- spacer -->
+                  
+                    <!-- attribution -->
+                    <table class="row body-block">
+                      <tr>
+                        <th class="small-1 large-2 columns first"></th>
+                        <th class="small-10 large-8 columns">
+                          <p class="attribution">Ryan Le Roux posted in Design</p>
+                        </th>
+                        <th class="small-1 large-2 columns last"></th>
+                      </tr>
+                    </table>
+                    <!-- attribution -->
+
+                    <!-- spacer -->
+                    <table class="row body-block">
+                      <tr>
+                        <th class="small-1 large-2 first columns"></th>
+                        <th class="small-10 large-8 columns">
+                          <table>
+                            <tr>
+                              <th height="17px" class="body-spacer" style="font-size:17px;line-height:17px;">&#xA0;</td>
+                              <th class="expander"></th>
+                            </tr>
+                          </table>
+                        </th>
+                        <th class="small-1 large-2 last columns"></th>
+                        <th class="expander"></th>
+                      </tr>
+                    </table>
+                    <!-- spacer -->
+
+                    <!-- headline -->
+                    <table class="row body-block">
+                      <tr>
+                        <th class="small-1 large-2 columns first"></th>
+                        <th class="small-10 large-8 columns">
+                          <h2>Introducing the Design Team Onboarding Process</h2>
+                        </th>
+                        <th class="small-1 large-2 columns last"></th>
+                      </tr>
+                    </table>
+                    <!-- headline -->
+
+                    <!-- spacer -->
+                    <table class="row body-block">
+                      <tr>
+                        <th class="small-1 large-2 first columns"></th>
+                        <th class="small-10 large-8 columns">
+                          <table>
+                            <tr>
+                              <th height="15px" class="body-spacer" style="font-size:15px;line-height:15px;">&#xA0;</td>
+                              <th class="expander"></th>
+                            </tr>
+                          </table>
+                        </th>
+                        <th class="small-1 large-2 last columns"></th>
+                        <th class="expander"></th>
+                      </tr>
+                    </table>
+                    <!-- spacer -->
+
+                    <!-- view button -->
+                    <table class="row body-block">
+                      <tr>
+                        <th class="small-1 large-2 columns first"></th>
+                        <th class="small-10 large-8 columns">
+                          <a href="#">
+                            <table class="post-button">
+                              <tr>
+                                <th>
+                                  <span class="text-center button-text">View the post</span>
+                                </th>
+                              </tr>
+                            </table>
+                          </a>
+                        </th>
+                        <th class="small-1 large-2 columns last"></th>
+                        <th class="expander"></th>
+                      </tr>
+                    </table>
+                    <!-- view button -->
+
+                    <!-- spacer -->
+                    <table class="row body-block">
+                      <tr>
+                        <th class="small-1 large-2 first columns"></th>
+                        <th class="small-10 large-8 columns">
+                          <table>
+                            <tr>
+                              <th height="36px" class="body-spacer" style="font-size:36px;line-height:36px;">&#xA0;</td>
+                              <th class="expander"></th>
+                            </tr>
+                          </table>
+                        </th>
+                        <th class="small-1 large-2 last columns"></th>
+                        <th class="expander"></th>
+                      </tr>
+                    </table>
+                    <!-- spacer -->
+                  
+                    <!-- attribution -->
+                    <table class="row body-block">
+                      <tr>
+                        <th class="small-1 large-2 columns first"></th>
+                        <th class="small-10 large-8 columns">
+                          <p class="attribution">Tim Cook posted in Finance</p>
+                        </th>
+                        <th class="small-1 large-2 columns last"></th>
+                      </tr>
+                    </table>
+                    <!-- attribution -->
+
+                    <!-- spacer -->
+                    <table class="row body-block">
+                      <tr>
+                        <th class="small-1 large-2 first columns"></th>
+                        <th class="small-10 large-8 columns">
+                          <table>
+                            <tr>
+                              <th height="17px" class="body-spacer" style="font-size:17px;line-height:17px;">&#xA0;</td>
+                              <th class="expander"></th>
+                            </tr>
+                          </table>
+                        </th>
+                        <th class="small-1 large-2 last columns"></th>
+                        <th class="expander"></th>
+                      </tr>
+                    </table>
+                    <!-- spacer -->
+
+                    <!-- headline -->
+                    <table class="row body-block">
+                      <tr>
+                        <th class="small-1 large-2 columns first"></th>
+                        <th class="small-10 large-8 columns">
+                          <h2>Q1 Results Update</h2>
+                        </th>
+                        <th class="small-1 large-2 columns last"></th>
+                      </tr>
+                    </table>
+                    <!-- headline -->
+
+                    <!-- spacer -->
+                    <table class="row body-block">
+                      <tr>
+                        <th class="small-1 large-2 first columns"></th>
+                        <th class="small-10 large-8 columns">
+                          <table>
+                            <tr>
+                              <th height="15px" class="body-spacer" style="font-size:15px;line-height:15px;">&#xA0;</td>
+                              <th class="expander"></th>
+                            </tr>
+                          </table>
+                        </th>
+                        <th class="small-1 large-2 last columns"></th>
+                        <th class="expander"></th>
+                      </tr>
+                    </table>
+                    <!-- spacer -->
+
+                    <!-- view button -->
+                    <table class="row body-block">
+                      <tr>
+                        <th class="small-1 large-2 columns first"></th>
+                        <th class="small-10 large-8 columns">
+                          <a href="#">
+                            <table class="post-button">
+                              <tr>
+                                <th>
+                                  <span class="text-center button-text">View the post</span>
+                                </th>
+                              </tr>
+                            </table>
+                          </a>
+                        </th>
+                        <th class="small-1 large-2 columns last"></th>
+                        <th class="expander"></th>
+                      </tr>
+                    </table>
+                    <!-- view button -->
+
+                    <!-- spacer -->
+                    <table class="row body-block bottom">
+                      <tr>
+                        <th class="small-1 large-2 first columns"></th>
+                        <th class="small-10 large-8 columns">
+                          <table>
+                            <tr>
+                              <th height="40px" class="body-spacer" style="font-size:40px;line-height:40px;">&#xA0;</td>
+                              <th class="expander"></th>
+                            </tr>
+                          </table>
+                        </th>
+                        <th class="small-1 large-2 last columns"></th>
+                        <th class="expander"></th>
+                      </tr>
+                    </table>
+                    <!-- spacer -->
+                  
+                    <!-- spacer -->
+                    <table class="row">
+                      <tr>
+                        <th class="small-1 large-2 first columns"></th>
+                        <th class="small-10 large-8 columns">
+                          <table>
+                            <tr>
+                              <th height="33px" class="" style="font-size:33px;line-height:33px;">&#xA0;</td>
+                              <th class="expander"></th>
+                            </tr>
+                          </table>
+                        </th>
+                        <th class="small-1 large-2 last columns"></th>
+                        <th class="expander"></th>
+                      </tr>
+                    </table>
+                    <!-- spacer -->
+
+                    <!-- footer -->
+                    <table class="row footer">
+
+                      <!-- digest interval -->
+                      <tr>
+                          <th class="small-12 large-12 first last columns">
+                              <table>
+                                  <tr>
+                                      <th>
+                                          <p class="text-center">You're receiving this digest weekly.</p>
+                                      </th>
+                                      <th class="expander"></th>
+                                  </tr>
+                              </table>
+                          </th>
+                      </tr>
+                      <tr>
+                          <th class="small-12 large-12 first last columns">
+                              <table>
+                                  <tr>
+                                      <th>
+                                          <p class="text-center">Change your <a>delivery settings</a> or <a>unsubscribe</a></p>
+                                      </th>
+                                      <th class="expander"></th>
+                                  </tr>
+                              </table>
+                          </th>
+                      </tr>
+                      <!-- digest interval -->
+
+                      <!-- spacer -->
+                      <tr>
+                          <th>
+                              <table class="spacer">
+                                  <tr>
+                                      <th class="" height="26px" style="font-size:26px;line-height:26px;">&#xA0;</td>
+                                  </tr>
+                              </table>
+                          </th>
+                          <th class="expander"></th>
+                      </tr>
+                      <!-- spacer -->
+
+                      <!-- Carrot logo -->
+                      <tr>
+                        <th class="small-12 large-12 first last columns">
+                            <table>
+                                <tr>
+                                    <th>
+                                        <center>
+                                            <img width="13" height="24" src="https://open-company.s3.amazonaws.com/carrot-logo-grey-min.png" alt="Carrot logo" />
+                                        </center>
+                                    </th>
+                                    <th class="expander"></th>
+                                </tr>
+                            </table>
+                        </th>
+                      </tr>
+                      <!-- Carrot logo -->
+
+                      <!-- spacer -->
+                      <tr>
+                          <th>
+                              <table class="spacer">
+                                  <tr>
+                                      <th class="" height="10px" style="font-size:10px;line-height:10px;">&#xA0;</td>
+                                  </tr>
+                              </table>
+                          </th>
+                          <th class="expander"></th>
+                      </tr>
+                      <!-- spacer -->
+
+                      <!-- sent by -->
+                      <tr>
+                        <th class="small-12 large-12 first last columns">
+                            <table>
+                                <tr>
+                                    <th>
+                                        <p class="text-center">Sent by Carrot</p>
+                                    </th>
+                                    <th class="expander"></th>
+                                </tr>
+                            </table>
+                        </th>
+                      </tr>
+                      <!-- sent by -->
+
+                    </table>
+                    <!-- footer -->
+                 
+                </td>
+              </tr>
+            </table>
+
+          </center>
+        </td>
+      </tr>
+    </table>
+
+  </body>
 </html>

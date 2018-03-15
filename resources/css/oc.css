@@ -70,19 +70,38 @@ p.attribution {
 table.cta-button {
   height: 40px;
   border-radius: 40px;
-  border-bottom-color: white;
   background: #3FBD7C !important;
+}
+
+table.post-button {
+  border-collapse: separate;
+  height: 40px;
+  border-radius: 40px;
+  border: 1px solid #D4F6E4;
+  background: white !important;
 }
 
 span.button-text {
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 14px;
   font-weight: bold;
-  color: white;
   padding-top: 13px;
+}
+
+table.cta-button span.button-text {
+  color: white;
+}
+
+table.post-button span.button-text {
+  color: #3FBD7C;
 }
 
 table.footer p {
   color: #C4C6C9;
   font-size: 14px;
+}
+
+table.footer a {
+  font-weight: bold;
+  color: #3FBD7C;
 }

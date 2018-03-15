@@ -105,13 +105,13 @@
 
 (defn- paragraph
   ([content] (paragraph content ""))
-  ([content css-class] (paragraph content css-class ""))
+  ([content css-class] (paragraph content css-class "text-center"))
   ([content css-class content-css-class]
   [:table {:class (str "row " css-class)}
     [:tr
       [:th {:class "small-1 large-2 first columns"}]
       [:th {:class "small-10 large-8 columns"}
-        [:p {:class (str "text-center " content-css-class)} content]]
+        [:p {:class content-css-class} content]]
       [:th {:class "small-1 large-2 last columns"}]]]))
 
 (defn- h1 [content]
@@ -123,28 +123,33 @@
       [:th {:class "small-2 large-2 last columns"}]
       [:th {:class "expander"}]]])
 
-(defn- h2 [content css-class]
+(defn- h2 
+  ([content css-class] (h2 content css-class "text-center"))
+  ([content css-class h2-class]
   [:table {:class (str "row " css-class)}
     [:tr
       [:th {:class "small-1 large-2 first columns"}]
       [:th {:class "small-10 large-8 columns"}
-        [:h2 {:class "text-center"} content]]
+        [:h2 {:class h2-class} content]]
       [:th {:class "small-1 large-2 last columns"}]
-      [:th {:class "expander"}]]])
+      [:th {:class "expander"}]]]))
 
-(defn- cta-button [cta url css-class]
+(defn- button [button-text url css-class button-class]
   [:table {:class (str "row " css-class)}
     [:tr
       [:th {:class "small-1 large-2 columns first"}]
       [:th {:class "small-10 large-8 columns"}
         [:a {:href url}
-          [:table {:class "cta-button"}
+          [:table {:class button-class}
             [:tr
               [:th
                 [:span {:class "text-center button-text"}
-                  cta]]]]]]
+                  button-text]]]]]]
       [:th {:class "small-1 large-2 columns last"}]
       [:th {:class "expander"}]]])
+
+(defn- cta-button [cta-text url]
+  (button cta-text url "body-block" "cta-button"))
 
 (defn- you-receive [interval]
   [:tr
@@ -177,57 +182,18 @@
               [:a {:href profile-url} "Turn off digests"]]]
           [:th {:class "expander"}]]]]]))
 
-(defn- comment-attribution [comment-count comment-authors]
-  (let [attribution (text/attribution 2 comment-count "comment" comment-authors)]
-    [:tr
-      [:th {:class "small-1 large-1 first columns"}]
-      [:th {:class "small-10 large-10 columns"}
-        [:table
-          [:tr
-            [:th
-              [:p {:class "attribution"} attribution]]
-            [:th {:class "expander"}]]]]
-      [:th {:class "small-1 large-1 last columns"}]]))
-
-(defn- post-attribution [publisher published-at frequency]
-  (let [attribution (if (= (keyword frequency) :daily)
-                      (:name publisher)
-                      (str (str (:name publisher) " on " (->> published-at
-                                                            (format/parse iso-format)
-                                                            (format/unparse attribution-format)))))]
-    [:tr
-      [:th {:class "small-1 large-1 first columns"}]
-      [:th {:class "small-10 large-10 columns"}
-        [:table
-          [:tr
-            [:th
-              [:p {:class "attribution"} attribution]]
-            [:th {:class "expander"}]]]]
-      [:th {:class "small-1 large-1 last columns"}]]))
-
-(defn- post-link [headline url]
-  [:tr
-    [:th {:class "small-1 large-1 first columns"}]
-    [:th {:class "small-10 large-10 columns"}
-      [:table
-        [:tr
-          [:th
-            [:a {:class "post-link"
-                 :href url}
-              headline]]
-          [:th {:class "expander"}]]]]
-    [:th {:class "small-1 large-1 last columns"}]])
-
-(defn- board-name [bname]
-  [:tr
-    [:th {:class "small-1 large-1 first columns"}]
-    [:th {:class "small-10 large-10 columns"}
-      [:table
-        [:tr
-          [:th
-            [:h2 bname]]
-          [:th {:class "expander"}]]]]
-    [:th {:class "small-1 large-1 last columns"}]])
+;; Comments not shown in digests at the moment
+; (defn- comment-attribution [comment-count comment-authors]
+;   (let [attribution (text/attribution 2 comment-count "comment" comment-authors)]
+;     [:tr
+;       [:th {:class "small-1 large-1 first columns"}]
+;       [:th {:class "small-10 large-10 columns"}
+;         [:table
+;           [:tr
+;             [:th
+;               [:p {:class "attribution"} attribution]]
+;             [:th {:class "expander"}]]]]
+;       [:th {:class "small-1 large-1 last columns"}]]))
 
 (defn- transactional-footer []
   [:table {:class "row footer"}
@@ -255,33 +221,36 @@
     (change-to (:digest-frequency digest))
     (tr-spacer 40)])
 
-(defn- post [data frequency]
-  (let [comment-count (:comment-count data)
-        comments? (pos? comment-count)]
-    [(tr-spacer 27)
-     (post-link (:headline data) (:url data))
-     (tr-spacer 11)
-     (post-attribution (:publisher data) (:published-at data) frequency)
-     (when comments? (tr-spacer 3))
-     (when comments? (comment-attribution comment-count (:comment-authors data)))]))
+(defn- post [entry]
+  [(spacer 36 "body-block" "body-spacer")
+   (paragraph (str (-> entry :publisher :name) " posted in " (:board-name entry)) "body-block" "attribution")
+   (spacer 15 "body-block" "body-spacer")
+   (h2 (:headline entry) "body-block" "post-title")
+   (spacer 15 "body-block" "body-spacer")
+   (button "View the post" "" "body-block" "post-button")])
 
-(defn- board [data frequency]
-  [:table {:class "row board"}
-    (tr-spacer 33)
-    (board-name (:name data))
-    (apply concat ; flattens 1-level
-      (let [posts (:posts data)]
-        (map #(post % frequency) posts)))
-    (tr-spacer 39)])
+(defn- posts-with-board-name [board]
+  (let [board-name (:name board)]
+    (assoc board :posts (map #(assoc % :board-name board-name) (:posts board)))))
 
 (defn- digest-content [digest]
-  [:td
-    (spacer 40)
-    (org-logo digest)
-    (spacer 32)
-    (let [boards (:boards digest)]
-      (map #(board % (:digest-frequency digest)) boards))
-    (digest-footer digest)])
+  (let [logo-url (:org-logo-url digest)
+        logo? (not (s/blank? logo-url))
+        weekly? (= "weekly" (:digest-frequency digest))
+        org-name (:org-name digest)
+        title (if weekly? (str org-name " Weekly Digest") (str org-name " Daily Digest"))
+        boards (map posts-with-board-name (:boards digest))
+        posts (apply concat (map :posts boards))]
+    [:td
+      (spacer 40)
+      (when logo? (org-logo digest))
+      (when logo? (spacer 35))
+      (h1 title)
+      (spacer 31)
+      (spacer 1 "body-block top" "body-spacer")
+      (apply concat (map post posts))
+      (spacer 40 "body-block bottom" "body-spacer")
+      (digest-footer digest)]))
 
 ;; ----- Transactional Emails -----
 
@@ -312,7 +281,7 @@
       (spacer 28 "body-block" "body-spacer")
       (paragraph board-invite-explainer "body-block")
       (spacer 35 "body-block" "body-spacer")
-      (cta-button (str "View " board-name) board-url "body-block")
+      (cta-button (str "View " board-name) board-url)
       (spacer 40 "body-block bottom" "body-spacer")
       (spacer 33)
       (transactional-footer)]))
@@ -333,7 +302,7 @@
       (spacer 28 "body-block" "body-spacer")
       (paragraph carrot-explainer "body-block")
       (spacer 35 "body-block" "body-spacer")
-      (cta-button (str "Join " org-name " on Carrot") (:token-link invite) "body-block")
+      (cta-button (str "Join " org-name " on Carrot") (:token-link invite))
       (spacer 40 "body-block bottom" "body-spacer")
       (spacer 33)
       (transactional-footer)]))
@@ -368,7 +337,7 @@
       (spacer 28 "body-block" "body-spacer")
       (paragraph (:ignore message) "body-block")
       (spacer 35 "body-block" "body-spacer")
-      (cta-button (:button-text message) (:token-link msg) "body-block")
+      (cta-button (:button-text message) (:token-link msg))
       (spacer 40 "body-block bottom" "body-spacer")
       (spacer 33)
       (transactional-footer)]))
@@ -397,11 +366,11 @@
       (spacer 35 "body-block top" "body-spacer")
       (h2 headline "body-block")
       (spacer 11 "body-block" "body-spacer")
-      (paragraph attribution "body-block" "attribution")
+      (paragraph attribution "body-block" "text-center attribution")
       (when note? (spacer 28 "body-block" "body-spacer"))
       (when note? (paragraph note "body-block"))
       (spacer 35 "body-block" "body-spacer")
-      (cta-button share-cta entry-url "body-block")
+      (cta-button share-cta entry-url)
       (spacer 40 "body-block bottom" "body-spacer")
       (spacer 33)
       (transactional-footer)]))
@@ -427,16 +396,14 @@
                     :digest (digest-content data))]]]]]]]))
 
 (defn- head [data]
-  (let [type (:type data)
-        css (if (= type :digest) "oc-digest.css" "oc-transactional.css")]
-    [:html {:xmlns "http://www.w3.org/1999/xhtml"} 
-      [:head 
-        [:meta {:http-equiv "Content-Type", :content "text/html; charset=utf-8"}]
-        [:meta {:name "viewport", :content "width=device-width"}]
-        [:link {:rel "stylesheet", :href "resources/css/foundation.css"}]
-        [:link {:rel "stylesheet", :href (str "resources/css/" css)}]
-        [:title]]
-      (body data)]))
+  [:html {:xmlns "http://www.w3.org/1999/xhtml"} 
+    [:head 
+      [:meta {:http-equiv "Content-Type", :content "text/html; charset=utf-8"}]
+      [:meta {:name "viewport", :content "width=device-width"}]
+      [:link {:rel "stylesheet", :href "resources/css/foundation.css"}]
+      [:link {:rel "stylesheet", :href (str "resources/css/oc.css")}]
+      [:title]]
+    (body data)])
 
 (defn- html [data type]
   (str doc-type (h/html (head (assoc (keywordize-keys data) :type type)))))
