@@ -247,7 +247,7 @@
       (h1 title)
       (spacer 31)
       (spacer 1 "body-block top" "body-spacer")
-      (apply concat (map post posts))
+      (mapcat post posts)
       (spacer 40 "body-block bottom" "body-spacer")
       (digest-footer digest)]))
 
