@@ -2,9 +2,9 @@
   "digest-frequency": "weekly",
   "org-slug": "apple",
   "org-name": "Apple",
-  "logo-url": "https://www.apple.com/ac/structured-data/images/knowledge_graph_logo.png",
-  "logo-height": 302,
-  "logo-width": 302,
+  "org-logo-url": "https://www.apple.com/ac/structured-data/images/knowledge_graph_logo.png",
+  "org-logo-height": 302,
+  "org-logo-width": 302,
   "boards": [
     {
       "name": "General",

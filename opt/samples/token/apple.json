@@ -1,0 +1,8 @@
+ {
+  "to": "minion@apple.com",
+  "token-link": "http://localhost:3559/reset?token=6fc3820b-4376-4cf1-86f8-c1544dc17a8f",
+  "org-name": "Apple",
+  "org-logo-url": "https://www.apple.com/ac/structured-data/images/knowledge_graph_logo.png",
+  "org-logo-width": 302,
+  "org-logo-height": 302
+}

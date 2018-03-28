@@ -1,0 +1,23 @@
+{
+  "board-url": "",
+  "board": {
+    "name": "Investors"
+  },
+  "inviter": {
+    "first-name": "Tim",
+    "last-name": "Cook"
+  },
+  "user": {
+    "email": "change@me.com",
+    "first-name": "Stuart",
+    "last-name": "Levinson",
+    "user-id": "5bb2-4d8d-a926",
+    "avatar-url": "https://secure.gravatar.com/avatar/866a6350e399e67e749c6f2aef0b96c0.jpg?s=512&d=https%3A%2F%2Fa.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0020-512.png"
+  },
+  "org": {  
+    "name": "Apple",
+    "logo-url": "https://www.apple.com/ac/structured-data/images/knowledge_graph_logo.png",
+    "logo-width": 302,
+    "logo-height": 302
+  }
+}

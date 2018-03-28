@@ -45,7 +45,7 @@
                         :source (str org-name " <" org-slug "@" c/email-from-domain ">")
                         :reply-to (if (s/blank? reply-to) default-reply-to reply-to)
                         :subject subject}
-                  {:text body}) ; TEMP as text only
+                  {:html body})
             to)))
 
 (defn- inline-css [html-file inline-file]
@@ -63,13 +63,12 @@
         html-file (str uuid-fragment ".html")
         inline-file (str uuid-fragment ".inline.html")]
     (try
-      ;; COMMENTED OUT HTML EMAIL
-      ;;(spit html-file (content/share-link-html entry)) ; create the email in a tmp file
-      ;;(inline-css html-file inline-file) ; inline the CSS
+      (spit html-file (content/share-link-html entry)) ; create the email in a tmp file
+      (inline-css html-file inline-file) ; inline the CSS
       ;; Email the recipients
-      ;;(email-entry entry (slurp inline-file))
+      (email-entry entry (slurp inline-file))
       ;; TEXT EMAIL
-      (email-entry entry (content/share-link-text entry))
+      ;; (email-entry entry (content/share-link-text entry))
       (finally
         ;; remove the tmp files
         (io/delete-file html-file true)
@@ -145,7 +144,7 @@
         (io/delete-file html-file true)
         (io/delete-file inline-file true)))))
 
-(defn- send-private-board-notification
+(defn send-private-board-notification
   "Creates an html email and sends it to the recipient."
   [msg]
   (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
@@ -156,7 +155,7 @@
       (spit html-file (content/board-notification-html msg)) ; create the email in a tmp file
       (inline-css html-file inline-file) ; inline the CSS
        ;; Email it to the recipient
-      (email {:to (:email (:user msg))
+      (email {:to (-> msg :user :email)
               :source default-source
               :from default-from
               :reply-to default-reply-to
@@ -188,13 +187,12 @@
             (when-not slack-info ; Slack users get notified elsewhere via Slack
               (let [board-url (s/join "/" [c/web-url
                                            (:slug (:org msg-parsed))
-                                           (:slug board)])
-                    message "You have been invited to a private board. "]
-                (send-private-board-notification {
-                                                  :user notify
+                                           (:slug board)])]
+                (send-private-board-notification {:user notify
+                                                  :inviter user
                                                   :org (:org msg-parsed)
-                                                  :board-url board-url
-                                                  :text message})))))))))
+                                                  :board board
+                                                  :board-url board-url})))))))))
 
 (comment
 
@@ -202,24 +200,21 @@
 
   (require '[oc.email.mailer :as mailer] :reload)
 
-  (def share-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/updates/green-labs.json"))))
-  (mailer/send-story (merge share-request {
+  (def share-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/share/bago.json"))))
+  (mailer/send-entry (merge share-request {
                        :to ["change@me.com"]
                        :reply-to "change@me.com"
-                       :subject "Latest GreenLabs Update"
+                       :subject "Latest Update"
                        :note "Enjoy this groovy update!"}))
 
-  (def digest (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/digest/carrot.json"))))
-  (mailer/send-update (merge digest {
-                       :to ["change@me.com"]
-                       :reply-to "change@me.com"
-                       :subject "Latest New.ly Update"
-                       :origin "http://localhost:3559"}))
+  (def carrot-invite (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/carrot-invites/microsoft.json"))))
+  (mailer/send-invite (assoc carrot-invite :to "change@me.com"))
 
-  (def invite (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/invites/microsoft.json"))))
-  (mailer/send-invite (assoc invite :to "change@me.com"))
+  (def board-invite (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/board-invites/investors.json"))))
+  (mailer/send-private-board-notification (assoc board-invite :user {:email "change@me.com"}))
 
-  (mailer/send-token :reset {:to "change@me.com"
-                             :token-link "http://localhost:3000/invite?token=dd7c0bfe-2068-4de0-aa3c-4913eeeaa360"})
+  (def token-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/token/apple.json"))))
+  (mailer/send-token :reset (assoc reset :to "change@me.com"))
+  (mailer/send-token :verify (assoc reset :to "change@me.com"))
 
 )

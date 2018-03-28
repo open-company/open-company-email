@@ -1,0 +1,107 @@
+body,
+html,
+.body {
+  background: #FBFAF7;
+}
+
+table {
+  background: #FBFAF7 !important;
+}
+
+table.body-block {
+  background: white !important;    
+  border-left: 1px solid #F2F1ED;
+  border-right: 1px solid #F2F1ED;
+}
+
+table.body-block.top {
+  border-top: 1px solid #F2F1ED;
+}
+
+table.body-block.bottom {
+  border-bottom: 1px solid #F2F1ED;
+}
+
+table th, 
+table.body .columns,
+table.body .column {
+  padding: 0px !important;
+}
+
+table th.body-spacer {
+  background: white !important;
+}
+
+img.logo {
+  padding: 12px;
+  border-radius: 3px;
+  border: 1px solid #F2F1ED;
+}
+
+h1 {
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-size: 28px;
+  font-weight: bold;  
+  color: #34414F;
+  margin: 0px;
+}
+
+h2 {
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-size: 22px;
+  font-weight: bold;  
+  color: #34414F;
+  margin: 0px;
+}
+
+p {
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-size: 17px;
+  color: #34414F;
+  line-height: 1.5;
+  margin: 0px;
+}
+
+p.attribution {
+  font-size: 14px;
+  color: #898D93;
+}
+
+table.cta-button {
+  height: 40px;
+  border-radius: 40px;
+  background: #3FBD7C !important;
+}
+
+table.post-button {
+  border-collapse: separate;
+  height: 40px;
+  border-radius: 40px;
+  border: 1px solid #D4F6E4;
+  background: white !important;
+}
+
+span.button-text {
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-size: 14px;
+  font-weight: bold;
+  padding-top: 13px;
+}
+
+table.cta-button span.button-text {
+  color: white;
+}
+
+table.post-button span.button-text {
+  color: #3FBD7C;
+}
+
+table.footer p {
+  color: #C4C6C9;
+  font-size: 14px;
+}
+
+table.footer a {
+  font-weight: bold;
+  color: #3FBD7C;
+}
