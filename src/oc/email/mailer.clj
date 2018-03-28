@@ -200,19 +200,12 @@
 
   (require '[oc.email.mailer :as mailer] :reload)
 
-  (def share-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/updates/green-labs.json"))))
-  (mailer/send-story (merge share-request {
+  (def share-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/share/bago.json"))))
+  (mailer/send-entry (merge share-request {
                        :to ["change@me.com"]
                        :reply-to "change@me.com"
-                       :subject "Latest GreenLabs Update"
+                       :subject "Latest Update"
                        :note "Enjoy this groovy update!"}))
-
-  (def digest (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/digest/carrot.json"))))
-  (mailer/send-update (merge digest {
-                       :to ["change@me.com"]
-                       :reply-to "change@me.com"
-                       :subject "Latest New.ly Update"
-                       :origin "http://localhost:3559"}))
 
   (def carrot-invite (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/carrot-invites/microsoft.json"))))
   (mailer/send-invite (assoc carrot-invite :to "change@me.com"))

@@ -82,8 +82,7 @@
     [:tr
       [:th {:class css-class
             :height (str "font-size:" pixels "px")
-            :style (str "font-size:" pixels "px;line-height:" pixels "px;")} " "]
-      [:th {:class "expander"}]]])
+            :style (str "font-size:" pixels "px;line-height:" pixels "px;")} " "]]])
 
 (defn- tr-spacer
   ([pixels] (tr-spacer pixels ""))
@@ -99,8 +98,7 @@
       [:th {:class "small-1 large-2 first columns"}]
       [:th {:class "small-10 large-8 columns"}
         (spacer-table pixels inner-css-class)]
-      [:th {:class "small-1 large-2 last columns"}]
-      [:th {:class "expander"}]]]))
+      [:th {:class "small-1 large-2 last columns"}]]]))
 
 (defn- paragraph
   ([content] (paragraph content ""))
@@ -119,8 +117,7 @@
       [:th {:class "small-2 large-2 first columns"}]
       [:th {:class "small-8 large-8 columns"}
         [:h1 {:class "text-center"} content]]
-      [:th {:class "small-2 large-2 last columns"}]
-      [:th {:class "expander"}]]])
+      [:th {:class "small-2 large-2 last columns"}]]])
 
 (defn- h2 
   ([content css-class] (h2 content css-class "text-center"))
@@ -130,8 +127,7 @@
       [:th {:class "small-1 large-2 first columns"}]
       [:th {:class "small-10 large-8 columns"}
         [:h2 {:class h2-class} content]]
-      [:th {:class "small-1 large-2 last columns"}]
-      [:th {:class "expander"}]]]))
+      [:th {:class "small-1 large-2 last columns"}]]]))
 
 (defn- button [button-text url css-class button-class]
   [:table {:class (str "row " css-class)}
@@ -144,8 +140,7 @@
               [:th
                 [:span {:class "text-center button-text"}
                   button-text]]]]]]
-      [:th {:class "small-1 large-2 columns last"}]
-      [:th {:class "expander"}]]])
+      [:th {:class "small-1 large-2 columns last"}]]])
 
 (defn- cta-button [cta-text url]
   (button cta-text url "body-block" "cta-button"))
@@ -156,8 +151,7 @@
       [:table
         [:tr
           [:th
-            [:p {:class "text-center"} "You receive " [:b interval] " digests."]]
-          [:th {:class "expander"}]]]]])
+            [:p {:class "text-center"} "You receive " [:b interval] " digests."]]]]]])
 
 (def sent-by
   [:tr
@@ -165,8 +159,7 @@
     [:table
       [:tr
         [:th
-          [:p {:class "text-center"} [:b {} sent-by-text]]]
-        [:th {:class "expander"}]]]]])
+          [:p {:class "text-center"} [:b {} sent-by-text]]]]]]])
 
 (defn- change-to [interval]
   (let [new-interval (if (= (keyword interval) :daily) "weekly" "daily")]
@@ -178,8 +171,7 @@
             [:p {:class "text-center"}
               [:a {:href profile-url} (str "Change to " new-interval "?")]
               " ∙ "
-              [:a {:href profile-url} "Turn off digests"]]]
-          [:th {:class "expander"}]]]]]))
+              [:a {:href profile-url} "Turn off digests"]]]]]]]))
 
 ;; Comments not shown in digests at the moment
 ; (defn- comment-attribution [comment-count comment-authors]
@@ -190,8 +182,7 @@
 ;         [:table
 ;           [:tr
 ;             [:th
-;               [:p {:class "attribution"} attribution]]
-;             [:th {:class "expander"}]]]]
+;               [:p {:class "attribution"} attribution]]]]]
 ;       [:th {:class "small-1 large-1 last columns"}]]))
 
 (defn- transactional-footer []
