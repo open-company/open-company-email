@@ -217,7 +217,7 @@
    (spacer 15 "body-block" "body-spacer")
    (h2 (:headline entry) "body-block" "post-title")
    (spacer 15 "body-block" "body-spacer")
-   (button "View the post" "" "body-block" "post-button")])
+   (button "View the post" (:url entry) "body-block" "post-button")])
 
 (defn- posts-with-board-name [board]
   (let [board-name (:name board)]
