@@ -278,12 +278,17 @@
 
 (defn- invite-content [invite]
   (let [logo-url (:org-logo-url invite)
+        logo-width (:org-logo-width invite)
+        logo-height (:org-logo-height invite)
         logo? (not (s/blank? logo-url))
         org-name (:org-name invite)
         from (if (s/blank? (:from invite)) "Someone" (:from invite))]
     [:td
       (spacer 40)
-      (when logo? (org-logo invite))
+      (when logo? (org-logo {:org-name org-name
+                             :org-logo-url logo-url
+                             :org-logo-width logo-width
+                             :org-logo-height logo-height}))
       (when logo? (spacer 35))
       (h1 (str from " " invite-message))
       (spacer 31)
