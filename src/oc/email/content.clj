@@ -129,6 +129,38 @@
         [:h2 {:class h2-class} content]]
       [:th {:class "small-1 large-2 last columns"}]]]))
 
+(defn- share-note [body avatar-url author]
+  [:table {:class "row body-block share-note"}
+    [:tr
+      [:th {:class "small-1 large-2 first columns"}]
+      [:th {:class "small-10 large-8 columns"}
+        [:table {:class "row note-block top"}
+          [:tr
+            [:th {:class "small-1 large-1 first columns"}]
+            [:th {:class "small-10 large-10 columns"}
+              (spacer 10 "body-block" "body-spacer")]
+            [:th {:class "small-1 large-1 last columns"}]]]
+        [:table {:class "row note-block"}
+          [:tr
+            [:th {:class "small-1 large-1 first columns"}]
+            [:th {:class "small-10 large-10 columns"}
+              [:img {:class "note-author-avatar" :src avatar-url}]
+              [:span {:class "note-author"} author]]
+            [:th {:class "small-1 large-1 last columns"}]]]
+        [:table {:class "row note-block"}
+          [:tr
+            [:th {:class "small-1 large-1 first columns"}]
+            [:th {:class "small-10 large-10 columns"}
+              body]
+            [:th {:class "small-1 large-1 last columns"}]]]
+        [:table {:class "row note-block bottom"}
+          [:tr
+            [:th {:class "small-1 large-1 first columns"}]
+            [:th {:class "small-10 large-10 columns"}
+              (spacer 10 "body-block" "body-spacer")]
+            [:th {:class "small-1 large-1 last columns"}]]]]
+      [:th {:class "small-1 large-2 last columns"}]]])
+
 (defn- button [button-text url css-class button-class]
   [:table {:class (str "row " css-class)}
     [:tr
@@ -343,6 +375,7 @@
         org-name (:org-name entry)
         org-name? (not (s/blank? org-name))
         headline (:headline entry)
+        entry-body (:body entry)
         org-slug (:org-slug entry)
         sharer (:sharer-name entry)
         attribution (str (-> entry :publisher :name) " posted to " (:board-name entry))
@@ -356,14 +389,17 @@
       (spacer 40)
       (when logo? (org-logo entry))
       (when logo? (spacer 35))
-      (h1 (str from " " share-message))
+      (h1 (str from "<br>" share-message))
       (spacer 31)
       (spacer 35 "body-block top" "body-spacer")
-      (h2 headline "body-block")
-      (spacer 11 "body-block" "body-spacer")
-      (paragraph attribution "body-block" "text-center attribution")
-      (when note? (spacer 28 "body-block" "body-spacer"))
-      (when note? (paragraph note "body-block"))
+      (spacer 15 "body-block" "body-spacer")
+      (share-note "Hello here is the note" "https://avatars.slack-edge.com/2016-06-15/51137241648_610b295fb5917ff2a2af_72.jpg" "Iacopo Carraro")
+      (spacer 15 "body-block" "body-spacer")
+      (h2 headline "body-block" "")
+      (spacer 5 "body-block" "body-spacer")
+      (paragraph attribution "body-block" "attribution")
+      (when note? (spacer 5 "body-block" "body-spacer"))
+      (when note? (paragraph entry-body "body-block" ""))
       (spacer 35 "body-block" "body-spacer")
       (cta-button share-cta entry-url)
       (spacer 40 "body-block bottom" "body-spacer")
