@@ -30,12 +30,12 @@
 (def anonymous-board-invite-message "You've been invited to a private section on Carrot")
 (def board-invite-explainer "Private sections of the digest are only available to invited team members.")
 
-(def reset-message "Someone (hopefully you) requested a new password for your Carrot account")
+(def reset-message "Please reset the password for your Carrot account")
 (def reset-instructions "Click the link below to reset your password.")
 (def reset-button-text "Reset Password")
 (def reset-ignore "If you didn't request a password reset, you can safely ignore this email.")
 
-(def verify-message "Someone (hopefully you) created a Carrot account")
+(def verify-message "Please verify your email for Carrot")
 (def verify-instructions "Click the link below to verify your email address.")
 (def verify-button-text "Verify Email")
 (def verify-ignore "If you didn't create a Carrot account, you can safely ignore this email.")
