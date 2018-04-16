@@ -3,9 +3,11 @@
             [clojure.walk :refer (keywordize-keys)]
             [clj-time.format :as format]
             [hiccup.core :as h]
-            [oc.email.config :as config]))
+            [oc.email.config :as config]
+            [jsoup.soup :as soup]))
 
 (def max-logo 32)
+(def author-logo 32)
 
 (def profile-url (str config/web-url "/profile"))
 
@@ -140,11 +142,11 @@
     (str "https://process.filestackapi.com/"
          (when-not is-filestack-resource?
            (str config/filestack-api-key "/"))
-         "resize=w:32,h:32,fit:crop,align:faces/"
+         "resize=w:" author-logo ",h:" author-logo ",fit:crop,align:faces/"
          "circle/"
          filestack-resource)))
 
-(defn- share-note [body avatar-url author]
+(defn- personal-note [note-body avatar-url author]
   [:table {:class "row body-block share-note"}
     [:tr
       [:th {:class "small-1 large-2 first columns"}]
@@ -162,12 +164,13 @@
               [:table {:class "row white-block"}
                 [:tr
                   [:th {:class "small-1 large-1"}
-                    [:img {:class "note-author-avatar" :src (circle-image avatar-url 32)}]]
+                    (when-not (s/blank? avatar-url)
+                      [:img {:class "note-author-avatar" :src (circle-image avatar-url 32)}])]
                   [:th {:class "small-11 large-11"}
                     [:table {:class "white-block"}
                       [:tr
                         [:th
-                          (spacer 8 "white-block" "body-spacer")]]]
+                          (spacer 7 "white-block" "body-spacer")]]]
                     [:table {:class "white-block"}
                       [:tr
                         [:th
@@ -184,7 +187,7 @@
             [:th {:class "small-1 large-1 first columns"}]
             [:th {:class "small-10 large-10 columns"}
               [:span {:class "note-body"}
-                body]]
+                note-body]]
             [:th {:class "small-1 large-1 last columns"}]]]
         [:table {:class "row note-block bottom"}
           [:tr
@@ -347,7 +350,10 @@
         logo-height (:org-logo-height invite)
         logo? (not (s/blank? logo-url))
         org-name (:org-name invite)
-        from (if (s/blank? (:from invite)) "Someone" (:from invite))]
+        from (if (s/blank? (:from invite)) "Someone" (:from invite))
+        from-avatar (when-not (s/blank? (:from invite)) (:from-avatar invite))
+        note (:note invite)
+        note? (not (s/blank? note))]
     [:td
       (spacer 40)
       (when logo? (org-logo {:org-name org-name
@@ -362,6 +368,8 @@
       (spacer 28 "body-block" "body-spacer")
       (paragraph carrot-explainer "body-block")
       (spacer 35 "body-block" "body-spacer")
+      (when note? (personal-note note from-avatar from))
+      (when note? (spacer 35 "body-block" "body-spacer"))
       (cta-button (str "Join " org-name " on Carrot") (:token-link invite))
       (spacer 40 "body-block bottom" "body-spacer")
       (spacer 33)
@@ -408,13 +416,20 @@
         org-name (:org-name entry)
         org-name? (not (s/blank? org-name))
         headline (:headline entry)
-        entry-body (:body entry)
+        parsed-body (.text (soup/parse (:body entry)))
+        body-length 159
+        entry-body (if (> (count parsed-body) body-length)
+                      (str (subs parsed-body 0 (- body-length 3)) "...")
+                      parsed-body)
+        entry-body? (not (s/blank? entry-body))
         org-slug (:org-slug entry)
         sharer (:sharer-name entry)
-        attribution (str (-> entry :publisher :name) " posted to " (:board-name entry))
+        publisher (:publisher entry)
+        attribution (str (:name publisher) " posted to " (:board-name entry))
         note (:note entry)
         note? (not (s/blank? note))
         from (if (s/blank? sharer) "Someone" sharer)
+        from-avatar (when-not (s/blank? sharer) (:sharer-avatar-url entry))
         secure-uuid (:secure-uuid entry)
         origin-url config/web-url
         entry-url (s/join "/" [origin-url org-slug "post" secure-uuid])]
@@ -425,14 +440,14 @@
       (h1 (str from "<br>" share-message))
       (spacer 31)
       (spacer 35 "body-block top" "body-spacer")
-      (spacer 15 "body-block" "body-spacer")
-      (share-note "Hello here is the note" "https://cdn.filestackcontent.com/qemc9YslR9yabfqL4GTe" "Iacopo Carraro")
-      (spacer 15 "body-block" "body-spacer")
+      (spacer 5 "body-block" "body-spacer")
+      (when note? (personal-note note from-avatar from))
+      (when note? (spacer 35 "body-block" "body-spacer"))
       (h2 headline "body-block" "")
       (spacer 5 "body-block" "body-spacer")
       (paragraph attribution "body-block" "attribution")
-      (when note? (spacer 5 "body-block" "body-spacer"))
-      (when note? (paragraph entry-body "body-block" ""))
+      (when entry-body? (spacer 5 "body-block" "body-spacer"))
+      (when entry-body? (paragraph entry-body "body-block" ""))
       (spacer 35 "body-block" "body-spacer")
       (cta-button share-cta entry-url)
       (spacer 40 "body-block bottom" "body-spacer")
