@@ -129,6 +129,21 @@
         [:h2 {:class h2-class} content]]
       [:th {:class "small-1 large-2 last columns"}]]]))
 
+(defn- circle-image [image-url size]
+  "Return an on the fly url of the image circle and resized."
+  ;; Filestack URL https://cdn.filestackcontent.com/qemc9YslR9yabfqL4GTe
+  (let [filestack-static-url "https://cdn.filestackcontent.com/"
+        is-filestack-resource? (clojure.string/starts-with? image-url filestack-static-url)
+        filestack-resource (if is-filestack-resource?
+                             (subs image-url (count filestack-static-url))
+                             image-url)]
+    (str "https://process.filestackapi.com/"
+         (when-not is-filestack-resource?
+           (str config/filestack-api-key "/"))
+         "resize=w:32,h:32,fit:crop,align:faces/"
+         "circle/"
+         filestack-resource)))
+
 (defn- share-note [body avatar-url author]
   [:table {:class "row body-block share-note"}
     [:tr
@@ -138,26 +153,44 @@
           [:tr
             [:th {:class "small-1 large-1 first columns"}]
             [:th {:class "small-10 large-10 columns"}
-              (spacer 10 "body-block" "body-spacer")]
+              (spacer 10 "white-block" "body-spacer")]
             [:th {:class "small-1 large-1 last columns"}]]]
         [:table {:class "row note-block"}
           [:tr
             [:th {:class "small-1 large-1 first columns"}]
             [:th {:class "small-10 large-10 columns"}
-              [:img {:class "note-author-avatar" :src avatar-url}]
-              [:span {:class "note-author"} author]]
+              [:table {:class "row white-block"}
+                [:tr
+                  [:th {:class "small-1 large-1"}
+                    [:img {:class "note-author-avatar" :src (circle-image avatar-url 32)}]]
+                  [:th {:class "small-11 large-11"}
+                    [:table {:class "white-block"}
+                      [:tr
+                        [:th
+                          (spacer 8 "white-block" "body-spacer")]]]
+                    [:table {:class "white-block"}
+                      [:tr
+                        [:th
+                          [:span {:class "note-author"} author]]]]]]]]
             [:th {:class "small-1 large-1 last columns"}]]]
         [:table {:class "row note-block"}
           [:tr
             [:th {:class "small-1 large-1 first columns"}]
             [:th {:class "small-10 large-10 columns"}
-              body]
+              (spacer 12 "white-block" "body-spacer")]
+            [:th {:class "small-1 large-1 last columns"}]]]
+        [:table {:class "row note-block"}
+          [:tr
+            [:th {:class "small-1 large-1 first columns"}]
+            [:th {:class "small-10 large-10 columns"}
+              [:span {:class "note-body"}
+                body]]
             [:th {:class "small-1 large-1 last columns"}]]]
         [:table {:class "row note-block bottom"}
           [:tr
             [:th {:class "small-1 large-1 first columns"}]
             [:th {:class "small-10 large-10 columns"}
-              (spacer 10 "body-block" "body-spacer")]
+              (spacer 10 "white-block" "body-spacer")]
             [:th {:class "small-1 large-1 last columns"}]]]]
       [:th {:class "small-1 large-2 last columns"}]]])
 
@@ -249,7 +282,7 @@
    (spacer 15 "body-block" "body-spacer")
    (h2 (:headline entry) "body-block" "post-title")
    (spacer 15 "body-block" "body-spacer")
-   (button "View the post" (:url entry) "body-block" "post-button")])
+   (button "Continue reading" (:url entry) "body-block" "post-button")])
 
 (defn- posts-with-board-name [board]
   (let [board-name (:name board)]
@@ -393,7 +426,7 @@
       (spacer 31)
       (spacer 35 "body-block top" "body-spacer")
       (spacer 15 "body-block" "body-spacer")
-      (share-note "Hello here is the note" "https://avatars.slack-edge.com/2016-06-15/51137241648_610b295fb5917ff2a2af_72.jpg" "Iacopo Carraro")
+      (share-note "Hello here is the note" "https://cdn.filestackcontent.com/qemc9YslR9yabfqL4GTe" "Iacopo Carraro")
       (spacer 15 "body-block" "body-spacer")
       (h2 headline "body-block" "")
       (spacer 5 "body-block" "body-spacer")
