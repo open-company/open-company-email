@@ -19,7 +19,11 @@ table.body-block {
 }
 
 table.body-block.top {
-  border-top: 1px solid #F2F1ED;
+  border-top: 1px solid rgba(228, 227, 222, 0.7);
+  border-left: 1px solid rgba(228, 227, 222, 0.7);
+  border-right: 1px solid rgba(228, 227, 222, 0.7);
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
 }
 
 table.body-block.bottom {
@@ -46,6 +50,10 @@ table.note-block.top {
 
 table.note-block.bottom {
   border-bottom: 1px solid rgba(228, 227, 222, 0.7);
+  border-left: 1px solid rgba(228, 227, 222, 0.7);
+  border-right: 1px solid rgba(228, 227, 222, 0.7);
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
 }
 
 table th, 
