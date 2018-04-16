@@ -23,7 +23,7 @@
 
 (def sent-by-text "Sent by Carrot")
 
-(def invite-message "invited you to join your team on Carrot")
+(def invite-message "invited you to his team on Carrot")
 
 (def share-message "sent you a post")
 (def share-cta "View the post")
