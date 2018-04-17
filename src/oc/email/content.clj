@@ -131,8 +131,9 @@
         [:h2 {:class h2-class} content]]
       [:th {:class "small-1 large-2 last columns"}]]]))
 
-(defn- circle-image [image-url size]
+(defn- circle-image
   "Return an on the fly url of the image circle and resized."
+  [image-url size]
   ;; Filestack URL https://cdn.filestackcontent.com/qemc9YslR9yabfqL4GTe
   (let [filestack-static-url "https://cdn.filestackcontent.com/"
         is-filestack-resource? (clojure.string/starts-with? image-url filestack-static-url)
