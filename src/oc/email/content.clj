@@ -324,7 +324,10 @@
         first-name (-> notice :inviter :first-name)
         last-name (-> notice :inviter :last-name)
         from (s/join " " [first-name last-name])
-        invite-message (if (s/blank? from) anonymous-board-invite-message (str (s/trim from) " " board-invite-message))]
+        invite-message (if (s/blank? from) anonymous-board-invite-message (str (s/trim from) " " board-invite-message))
+        from-avatar (-> notice :inviter :avatar-url)
+        note (:note notice)
+        note? (not (s/blank? note))]
     [:td
       (spacer 40)
       (when logo? (org-logo {:org-name org-name
@@ -339,6 +342,8 @@
       (spacer 28 "body-block" "body-spacer")
       (paragraph board-invite-explainer "body-block")
       (spacer 35 "body-block" "body-spacer")
+      (when note? (personal-note note from-avatar from))
+      (when note? (spacer 35 "body-block" "body-spacer"))
       (cta-button (str "View " board-name) board-url)
       (spacer 40 "body-block bottom" "body-spacer")
       (spacer 33)
