@@ -8,6 +8,10 @@ table {
   background: #FBFAF7 !important;
 }
 
+table.white-block {
+  background: white !important;
+}
+
 table.body-block {
   background: white !important;    
   border-left: 1px solid #F2F1ED;
@@ -15,11 +19,41 @@ table.body-block {
 }
 
 table.body-block.top {
-  border-top: 1px solid #F2F1ED;
+  border-top: 1px solid rgba(228, 227, 222, 0.7);
+  border-left: 1px solid rgba(228, 227, 222, 0.7);
+  border-right: 1px solid rgba(228, 227, 222, 0.7);
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
 }
 
 table.body-block.bottom {
-  border-bottom: 1px solid #F2F1ED;
+  border-bottom: 1px solid rgba(228, 227, 222, 0.7);
+  border-left: 1px solid rgba(228, 227, 222, 0.7);
+  border-right: 1px solid rgba(228, 227, 222, 0.7);
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+table.note-block {
+  background: white !important;
+  border-left: 1px solid rgba(228, 227, 222, 0.7);
+  border-right: 1px solid rgba(228, 227, 222, 0.7);
+}
+
+table.note-block.top {
+  border-top: 1px solid rgba(228, 227, 222, 0.7);
+  border-left: 1px solid rgba(228, 227, 222, 0.7);
+  border-right: 1px solid rgba(228, 227, 222, 0.7);
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+table.note-block.bottom {
+  border-bottom: 1px solid rgba(228, 227, 222, 0.7);
+  border-left: 1px solid rgba(228, 227, 222, 0.7);
+  border-right: 1px solid rgba(228, 227, 222, 0.7);
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
 }
 
 table th, 
@@ -79,6 +113,20 @@ table.post-button {
   border-radius: 40px;
   border: 1px solid #D4F6E4;
   background: white !important;
+}
+
+span.note-author {
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-size: 12px;
+  font-weight: bold;
+  padding-top: 12px;
+  padding-left: 8px;
+}
+
+span.note-body {
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-size: 14px;
+  font-weight: 400;
 }
 
 span.button-text {

@@ -3,9 +3,11 @@
             [clojure.walk :refer (keywordize-keys)]
             [clj-time.format :as format]
             [hiccup.core :as h]
-            [oc.email.config :as config]))
+            [oc.email.config :as config]
+            [jsoup.soup :as soup]))
 
 (def max-logo 32)
+(def author-logo 32)
 
 (def profile-url (str config/web-url "/profile"))
 
@@ -21,7 +23,7 @@
 
 (def sent-by-text "Sent by Carrot")
 
-(def invite-message "invited you to join your team on Carrot")
+(def invite-message "invited you to his team on Carrot")
 
 (def share-message "sent you a post")
 (def share-cta "View the post")
@@ -129,6 +131,73 @@
         [:h2 {:class h2-class} content]]
       [:th {:class "small-1 large-2 last columns"}]]]))
 
+(defn- circle-image
+  "Return an on the fly url of the image circle and resized."
+  [image-url size]
+  ;; Filestack URL https://cdn.filestackcontent.com/qemc9YslR9yabfqL4GTe
+  (let [filestack-static-url "https://cdn.filestackcontent.com/"
+        is-filestack-resource? (clojure.string/starts-with? image-url filestack-static-url)
+        filestack-resource (if is-filestack-resource?
+                             (subs image-url (count filestack-static-url))
+                             image-url)]
+    (str "https://process.filestackapi.com/"
+         (when-not is-filestack-resource?
+           (str config/filestack-api-key "/"))
+         "resize=w:" author-logo ",h:" author-logo ",fit:crop,align:faces/"
+         "circle/"
+         filestack-resource)))
+
+(defn- personal-note [note-body avatar-url author]
+  [:table {:class "row body-block share-note"}
+    [:tr
+      [:th {:class "small-1 large-2 first columns"}]
+      [:th {:class "small-10 large-8 columns"}
+        [:table {:class "row note-block top"}
+          [:tr
+            [:th {:class "small-1 large-1 first columns"}]
+            [:th {:class "small-10 large-10 columns"}
+              (spacer 10 "white-block" "body-spacer")]
+            [:th {:class "small-1 large-1 last columns"}]]]
+        [:table {:class "row note-block"}
+          [:tr
+            [:th {:class "small-1 large-1 first columns"}]
+            [:th {:class "small-10 large-10 columns"}
+              [:table {:class "row white-block"}
+                [:tr
+                  [:th {:class "small-1 large-1"}
+                    (when-not (s/blank? avatar-url)
+                      [:img {:class "note-author-avatar" :src (circle-image avatar-url 32)}])]
+                  [:th {:class "small-11 large-11"}
+                    [:table {:class "white-block"}
+                      [:tr
+                        [:th
+                          (spacer 7 "white-block" "body-spacer")]]]
+                    [:table {:class "white-block"}
+                      [:tr
+                        [:th
+                          [:span {:class "note-author"} author]]]]]]]]
+            [:th {:class "small-1 large-1 last columns"}]]]
+        [:table {:class "row note-block"}
+          [:tr
+            [:th {:class "small-1 large-1 first columns"}]
+            [:th {:class "small-10 large-10 columns"}
+              (spacer 12 "white-block" "body-spacer")]
+            [:th {:class "small-1 large-1 last columns"}]]]
+        [:table {:class "row note-block"}
+          [:tr
+            [:th {:class "small-1 large-1 first columns"}]
+            [:th {:class "small-10 large-10 columns"}
+              [:span {:class "note-body"}
+                note-body]]
+            [:th {:class "small-1 large-1 last columns"}]]]
+        [:table {:class "row note-block bottom"}
+          [:tr
+            [:th {:class "small-1 large-1 first columns"}]
+            [:th {:class "small-10 large-10 columns"}
+              (spacer 10 "white-block" "body-spacer")]
+            [:th {:class "small-1 large-1 last columns"}]]]]
+      [:th {:class "small-1 large-2 last columns"}]]])
+
 (defn- button [button-text url css-class button-class]
   [:table {:class (str "row " css-class)}
     [:tr
@@ -217,7 +286,7 @@
    (spacer 15 "body-block" "body-spacer")
    (h2 (:headline entry) "body-block" "post-title")
    (spacer 15 "body-block" "body-spacer")
-   (button "View the post" (:url entry) "body-block" "post-button")])
+   (button "Continue reading" (:url entry) "body-block" "post-button")])
 
 (defn- posts-with-board-name [board]
   (let [board-name (:name board)]
@@ -256,7 +325,10 @@
         first-name (-> notice :inviter :first-name)
         last-name (-> notice :inviter :last-name)
         from (s/join " " [first-name last-name])
-        invite-message (if (s/blank? from) anonymous-board-invite-message (str (s/trim from) " " board-invite-message))]
+        invite-message (if (s/blank? from) anonymous-board-invite-message (str (s/trim from) " " board-invite-message))
+        from-avatar (-> notice :inviter :avatar-url)
+        note (:note notice)
+        note? (not (s/blank? note))]
     [:td
       (spacer 40)
       (when logo? (org-logo {:org-name org-name
@@ -271,6 +343,8 @@
       (spacer 28 "body-block" "body-spacer")
       (paragraph board-invite-explainer "body-block")
       (spacer 35 "body-block" "body-spacer")
+      (when note? (personal-note note from-avatar from))
+      (when note? (spacer 35 "body-block" "body-spacer"))
       (cta-button (str "View " board-name) board-url)
       (spacer 40 "body-block bottom" "body-spacer")
       (spacer 33)
@@ -282,7 +356,10 @@
         logo-height (:org-logo-height invite)
         logo? (not (s/blank? logo-url))
         org-name (:org-name invite)
-        from (if (s/blank? (:from invite)) "Someone" (:from invite))]
+        from (if (s/blank? (:from invite)) "Someone" (:from invite))
+        from-avatar (when-not (s/blank? (:from invite)) (:from-avatar invite))
+        note (:note invite)
+        note? (not (s/blank? note))]
     [:td
       (spacer 40)
       (when logo? (org-logo {:org-name org-name
@@ -297,6 +374,8 @@
       (spacer 28 "body-block" "body-spacer")
       (paragraph carrot-explainer "body-block")
       (spacer 35 "body-block" "body-spacer")
+      (when note? (personal-note note from-avatar from))
+      (when note? (spacer 35 "body-block" "body-spacer"))
       (cta-button (str "Join " org-name " on Carrot") (:token-link invite))
       (spacer 40 "body-block bottom" "body-spacer")
       (spacer 33)
@@ -343,12 +422,20 @@
         org-name (:org-name entry)
         org-name? (not (s/blank? org-name))
         headline (:headline entry)
+        parsed-body (.text (soup/parse (:body entry)))
+        body-length 159
+        entry-body (if (> (count parsed-body) body-length)
+                      (str (subs parsed-body 0 (- body-length 3)) "...")
+                      parsed-body)
+        entry-body? (not (s/blank? entry-body))
         org-slug (:org-slug entry)
         sharer (:sharer-name entry)
-        attribution (str (-> entry :publisher :name) " posted to " (:board-name entry))
+        publisher (:publisher entry)
+        attribution (str (:name publisher) " posted to " (:board-name entry))
         note (:note entry)
         note? (not (s/blank? note))
         from (if (s/blank? sharer) "Someone" sharer)
+        from-avatar (when-not (s/blank? sharer) (:sharer-avatar-url entry))
         secure-uuid (:secure-uuid entry)
         origin-url config/web-url
         entry-url (s/join "/" [origin-url org-slug "post" secure-uuid])]
@@ -356,14 +443,17 @@
       (spacer 40)
       (when logo? (org-logo entry))
       (when logo? (spacer 35))
-      (h1 (str from " " share-message))
+      (h1 (str from "<br>" share-message))
       (spacer 31)
       (spacer 35 "body-block top" "body-spacer")
-      (h2 headline "body-block")
-      (spacer 11 "body-block" "body-spacer")
-      (paragraph attribution "body-block" "text-center attribution")
-      (when note? (spacer 28 "body-block" "body-spacer"))
-      (when note? (paragraph note "body-block"))
+      (spacer 5 "body-block" "body-spacer")
+      (when note? (personal-note note from-avatar from))
+      (when note? (spacer 35 "body-block" "body-spacer"))
+      (h2 headline "body-block" "")
+      (spacer 5 "body-block" "body-spacer")
+      (paragraph attribution "body-block" "attribution")
+      (when entry-body? (spacer 5 "body-block" "body-spacer"))
+      (when entry-body? (paragraph entry-body "body-block" ""))
       (spacer 35 "body-block" "body-spacer")
       (cta-button share-cta entry-url)
       (spacer 40 "body-block bottom" "body-spacer")

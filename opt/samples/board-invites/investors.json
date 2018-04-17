@@ -1,11 +1,13 @@
 {
   "board-url": "",
+  "note": "Hello dude, this is the note that goes with the private board invitation.",
   "board": {
     "name": "Investors"
   },
   "inviter": {
     "first-name": "Tim",
-    "last-name": "Cook"
+    "last-name": "Cook",
+    "avatar-url": "https://secure.gravatar.com/avatar/866a6350e399e67e749c6f2aef0b96c0.jpg?s=512&d=https%3A%2F%2Fa.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0020-512.png"
   },
   "user": {
     "email": "change@me.com",

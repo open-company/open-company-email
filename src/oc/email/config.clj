@@ -39,3 +39,7 @@
 
 (defonce email-from-domain (env :email-from-domain))
 (defonce email-digest-prefix (env :email-digest-prefix))
+
+;; ----- Filestack -----
+
+(defonce filestack-api-key (env :filestack-api-key))
