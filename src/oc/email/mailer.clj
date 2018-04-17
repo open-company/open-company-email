@@ -180,7 +180,8 @@
             (= (:resource-type msg-parsed) "board"))
       (let [notifications (-> msg-parsed :content :notifications)
             board (-> msg-parsed :content :new)
-            user (:user msg-parsed)]
+            user (:user msg-parsed)
+            note (:note msg-parsed)]
 
         (doseq [notify notifications]
           (let [slack-info (first (vals (:slack-users notify)))]
@@ -190,6 +191,7 @@
                                            (:slug board)])]
                 (send-private-board-notification {:user notify
                                                   :inviter user
+                                                  :note note
                                                   :org (:org msg-parsed)
                                                   :board board
                                                   :board-url board-url})))))))))
