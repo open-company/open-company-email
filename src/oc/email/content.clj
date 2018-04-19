@@ -16,6 +16,12 @@
 
 (def doc-type "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
 
+;; Links
+
+(def carrot-hello-mailto "mailto:hello@carrot.io")
+
+(def carrot-help "http://help.carrot.io")
+
 ;; ----- Copy -----
 
 (def tagline "Better informed, less noise.")
@@ -24,27 +30,74 @@
 (def sent-by-text "Sent by Carrot")
 
 (def invite-message "invited you to his team on Carrot")
-(def invite-message-with-company "invited you to join the \"%s\" digest on Carrot")
+(def invite-message-with-company "invited you to join the “%s” digest on Carrot")
 (def invite-button "Accept invitation")
+(def invite-help-links
+  [:p {:class "digest-help"}
+    "Visit our "
+    [:a {:href carrot-help}
+      "getting started guide"]
+    " for tips and tricks on how to get the most out of Carrot."])
 
 (def share-message "sent you a post")
 (def share-cta "View the post")
+(def share-help-links
+  [:p {:class "digest-help"}
+    "Not sure what a post is? Head over to our "
+    [:a {:href carrot-help} "support center"]
+    " to learn more"])
 
-(def board-invite-message "invited you to a private section on Carrot")
-(def anonymous-board-invite-message "You've been invited to a private section on Carrot")
+(def board-invite-message "invited you to join the private section “%s” within your company digest")
+(def anonymous-board-invite-message "You've been invited to join the private section “%s” within your company digest")
 (def board-invite-explainer "Private sections of the digest are only available to invited team members.")
+(def board-invite-help-links
+  [:p {:class "digest-help"}
+    "Not sure what a private section is? Head over to our "
+    [:a {:href carrot-help} "support center"]
+    " to learn more"])
 
-(def reset-message "Please reset the password for your Carrot account")
-(def reset-instructions "Click the link below to reset your password.")
+(def reset-message "Password reset")
+(def reset-instructions "Click the button below to reset your password. If you didn't request a password reset, you can ignore this email.")
 (def reset-button-text "Reset Password")
 (def reset-ignore "If you didn't request a password reset, you can safely ignore this email.")
+(def reset-help-links
+  [:p {:class "digest-help"}
+    [:a {:href carrot-hello-mailto} "Contact us"]
+    " or visit our "
+    [:a {:href carrot-help} "support center"]
+    " if you’re in need of assistance"])
 
 (def verify-message "Please verify your email for Carrot")
 (def verify-instructions "Click the link below to verify your email address.")
 (def verify-button-text "Verify Email")
 (def verify-ignore "If you didn't create a Carrot account, you can safely ignore this email.")
+(def verify-help-links
+  [:p {:class "digest-help"}
+    [:a {:href carrot-hello-mailto} "Contact us"]
+    " or visit our "
+    [:a {:href carrot-help} "support center"]
+    " if you’re in need of assistance"])
+
+(def digest-help-links
+  [:p {:class "digest-help"}
+    "You’re receing this digest weekly. You can change your "
+    [:a {:href profile-url} "delivery frequency"]
+    "."])
+
 
 ;; ----- HTML Fragments -----
+
+(defn- help-links [token-type]
+  [:table {:class "row"}
+    [:tr
+      [:th {:class "small-12 large-12 columns"}
+        (case token-type
+          :reset reset-help-links
+          :verify verify-help-links
+          :invite invite-help-links
+          :board-notification board-invite-help-links
+          :share-link share-help-links
+          :digest digest-help-links)]]])
 
 (defn- org-logo
   [{org-name :org-name logo-url :org-logo-url logo-height :org-logo-height logo-width :org-logo-width}]
@@ -305,9 +358,9 @@
             [:th {:class "small-12 large-12 columns"}
               [:p {:class "footer-paragraph"}
                 "You can "
-                [:a {:href "https://beta.carrot.io/profile"} "unsubscribe"]
+                [:a {:href profile-url} "unsubscribe"]
                 " to these emails or update your "
-                [:a {:href "https://beta.carrot.io/profile"} "notification settings"]
+                [:a {:href profile-url} "notification settings"]
                 " at anytime."]]]]
         (vspacer 15 "footer-table" "footer-table")
         [:table {:class "row footer-table"}
@@ -378,28 +431,29 @@
         last-name (-> notice :inviter :last-name)
         from (s/join " " [first-name last-name])
         invite-message (if (s/blank? from) anonymous-board-invite-message (str (s/trim from) " " board-invite-message))
+        formatted-invite-message (format invite-message from)
         from-avatar (-> notice :inviter :avatar-url)
+        from-avatar? (not (s/blank? from-avatar))
         note (:note notice)
         note? (not (s/blank? note))]
-    [:td
+    [:td {:class "small-10 large-8 columns"}
       (spacer 40)
       (when logo? (org-logo {:org-name org-name
                              :org-logo-url logo-url
                              :org-logo-width logo-width
                              :org-logo-height logo-height}))
       (when logo? (spacer 35))
-      (h1 invite-message)
-      (spacer 31)
-      (spacer 35 "body-block top" "body-spacer")
-      (h2 board-name "body-block")
-      (spacer 28 "body-block" "body-spacer")
-      (paragraph board-invite-explainer "body-block")
-      (spacer 35 "body-block" "body-spacer")
-      (when note? (personal-note note from-avatar from))
-      (when note? (spacer 35 "body-block" "body-spacer"))
-      (cta-button (str "View " board-name) board-url)
-      (spacer 40 "body-block bottom" "body-spacer")
-      (spacer 33)]))
+      (h1 formatted-invite-message)
+      (spacer 35)
+      (when from-avatar? (note-author from-avatar from))
+      (when note? (spacer 20))
+      (when note? (paragraph note))
+      (spacer 35)
+      (left-button "Accept invitation" board-url)
+      (spacer 24)
+      horizontal-line
+      (help-links :invite)
+      (spacer 73)]))
 
 (defn- invite-content [td-classes invite]
   (let [logo-url (:org-logo-url invite)
@@ -408,8 +462,8 @@
         logo? (not (s/blank? logo-url))
         org-name (:org-name invite)
         from (if (s/blank? (:from invite)) "Someone" (:from invite))
-        from-avatar? (not (s/blank? (:from-avatar invite)))
-        from-avatar (when from-avatar? (:from-avatar invite))
+        from-avatar (:from-avatar invite)
+        from-avatar? (not (s/blank? from-avatar))
         note (:note invite)
         note? (not (s/blank? note))
         invite-message (str from " "
@@ -432,9 +486,8 @@
       (left-button invite-button (:token-link invite))
       (spacer 24)
       horizontal-line
-      (paragraph carrot-explainer)
-      (spacer 40)
-      (spacer 33)]))
+      (help-links :invite)
+      (spacer 73)]))
 
 (defn- share-content [entry]
   (let [logo-url (:org-logo-url entry)
@@ -506,9 +559,14 @@
       (spacer 35)
       (h2 (:message message))
       (spacer 28)
-      (paragraph (:ignore message))
+      (paragraph (:instructions message))
       (spacer 35)
       (left-button (:button-text message) (:token-link msg))
+      (spacer 35)
+      (paragraph (:ignore message))
+      (spacer 35)
+      horizontal-line
+      (help-links token-type)
       (spacer 40)
       (spacer 33)]))
 

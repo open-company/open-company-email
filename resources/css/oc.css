@@ -226,3 +226,13 @@ span.note-author-name {
 table.horizontal-line {
   border-top: 1px solid #F0F0F1;
 }
+
+p.digest-help {
+  color: #898D93;
+  font-size: 14px;
+}
+
+p.digest-help a{
+  color: #3FBD7C;
+  text-decoration: underline;
+}
