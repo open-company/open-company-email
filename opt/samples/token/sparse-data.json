@@ -1,6 +1,9 @@
 {
-  "to": "change@me.com",
-  "token-link": "http://localhost:3000/invite?token=dd7c0bfe-2068-4de0-aa3c-4913eeeaa360",
-  "org-name": "S",
-  "org-logo-url": ""
+  "from": "iacopo@staging.carrot.io",
+  "to": "iacopo@rc0.eu",
+  "org-name": "BaGo",
+  "org-logo-url": "https://open-company-assets.s3.amazonaws.com/bago.png",
+  "org-logo-width": 300,
+  "org-logo-height": 96,
+  "token-link": "http://localhost:3000/invite?token=dd7c0bfe-2068-4de0-aa3c-4913eeeaa360"
 }
