@@ -32,7 +32,7 @@
         html (:html body)
         html-body (if html (assoc text-body :html html) text-body)]
     (ses/send-email creds
-      :destination {:to-addresses [to]}
+      :destination {:to-addresses (vec to)}
       :source source
       :reply-to-addresses [reply-to]
       :message {:subject subject
@@ -201,6 +201,16 @@
   ;; For REPL testing
 
   (require '[oc.email.mailer :as mailer] :reload)
+
+  ;; To quickly send an email from a local file to check it on email client
+  (defn send-email-from-file
+    [email-setup html-file-name]
+    (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
+          inline-html-file (str (subs html-file-name 0 (- (count html-file-name) 4)) "inline.html")]
+      (mailer/inline-css html-file-name inline-html-file)
+      (mailer/email email-setup {:text "Alternative text for send-test-email."
+                                 :html (slurp inline-html-file)})))
+  (send-email-from-file email-setup "./hiccup.html")
 
   (def share-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/share/bago.json"))))
   (mailer/send-entry (merge share-request {
