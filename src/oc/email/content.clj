@@ -24,6 +24,8 @@
 (def sent-by-text "Sent by Carrot")
 
 (def invite-message "invited you to his team on Carrot")
+(def invite-message-with-company "invited you to join the \"%s\" digest on Carrot")
+(def invite-button "Accept invitation")
 
 (def share-message "sent you a post")
 (def share-cta "View the post")
@@ -59,13 +61,12 @@
             [:table 
               [:tr 
                 [:th
-                  [:center 
-                    [:img {:class "float-center logo"
-                           :align "center"
-                           :style (str "background-color: #fff; max-height: " max-logo "px; max-width: " max-logo "px;")
-                           dimension size
-                           :src logo-url
-                           :alt (str org-name " logo")}]]]]]]]])))
+                  [:img {:class "float-left logo"
+                         :align "left"
+                         :style (str "background-color: #fff; max-height: " max-logo "px; max-width: " max-logo "px;")
+                         dimension size
+                         :src logo-url
+                         :alt (str org-name " logo")}]]]]]]])))
 
 (defn- carrot-footer-logo []
   [:tr
@@ -73,18 +74,17 @@
       [:table
         [:tr
           [:th
-            [:center
-              [:img {:width 13
-                     :height 24
-                     :src "https://open-company.s3.amazonaws.com/carrot-logo-grey-min.png"
-                     :alt "Carrot logo"}]]]]]]])
+            [:img {:width 13
+                   :height 24
+                   :src "https://open-company.s3.amazonaws.com/carrot-logo-grey-min.png"
+                   :alt "Carrot logo"}]]]]]])
 
 (defn- spacer-table [pixels css-class]
   [:table {:class "spacer"}
     [:tr
       [:th {:class css-class
-            :height (str "font-size:" pixels "px")
-            :style (str "font-size:" pixels "px;line-height:" pixels "px;")} " "]]])
+            :height (str pixels "px")
+            :style (str "font-size:" pixels "px; line-height:" pixels "px;")} " "]]])
 
 (defn- tr-spacer
   ([pixels] (tr-spacer pixels ""))
@@ -97,36 +97,45 @@
   ([pixels outer-css-class inner-css-class]
   [:table {:class (str "row " outer-css-class)}
     [:tr
-      [:th {:class "small-1 large-2 first columns"}]
-      [:th {:class "small-10 large-8 columns"}
-        (spacer-table pixels inner-css-class)]
-      [:th {:class "small-1 large-2 last columns"}]]]))
+      [:th {:class "small-12 large-12 columns"}
+        (spacer-table pixels inner-css-class)]]]))
+
+(defn- vspacer
+  ([pixels] (spacer pixels ""))
+  ([pixels outer-css-class] (spacer pixels outer-css-class ""))
+  ([pixels outer-css-class inner-css-class]
+  [:table {:class (str "row " outer-css-class)}
+    [:tr
+      [:th {:class "small-12 large-12 columns"}
+        (spacer-table pixels inner-css-class)]]]))
+
+(def horizontal-line
+  [:table {:class "row horizontal-line"}
+    [:tr
+      [:td {:class "small-12 large-12"}
+        (spacer 8)]]])
 
 (defn- paragraph
   ([content] (paragraph content ""))
-  ([content css-class] (paragraph content css-class "text-center"))
+  ([content css-class] (paragraph content css-class "text-left"))
   ([content css-class content-css-class]
   [:table {:class (str "row " css-class)}
     [:tr
-      [:th {:class "small-1 large-2 first columns"}]
-      [:th {:class "small-10 large-8 columns"}
-        [:p {:class content-css-class} content]]
-      [:th {:class "small-1 large-2 last columns"}]]]))
+      [:th {:class "small-12 large-12 columns"}
+        [:p {:class content-css-class} content]]]]))
 
 (defn- h1 [content]
   [:table {:class "row"}
     [:tr
-      [:th {:class "small-2 large-2 first columns"}]
-      [:th {:class "small-8 large-8 columns"}
-        [:h1 {:class "text-center"} content]]
-      [:th {:class "small-2 large-2 last columns"}]]])
+      [:th {:class "small-12 large-12 columns"}
+        [:h1 {:class "text-left"} content]]]])
 
-(defn- h2 
-  ([content css-class] (h2 content css-class "text-center"))
+(defn- h2
+  ([content] (h2 content "" ""))
+  ([content css-class] (h2 content css-class "text-left"))
   ([content css-class h2-class]
   [:table {:class (str "row " css-class)}
     [:tr
-      [:th {:class "small-1 large-2 first columns"}]
       [:th {:class "small-10 large-8 columns"}
         [:h2 {:class h2-class} content]]
       [:th {:class "small-1 large-2 last columns"}]]]))
@@ -146,6 +155,13 @@
          "resize=w:" author-logo ",h:" author-logo ",fit:crop,align:faces/"
          "circle/"
          filestack-resource)))
+
+(defn- note-author [avatar-url author]
+  [:table {:class "row"}
+    [:tr
+      [:th {:class "small-12 large-12"}
+        [:img {:class "note-author-avatar" :src (circle-image avatar-url 32)}]
+        [:span {:class "note-author-name"} author]]]])
 
 (defn- personal-note [note-body avatar-url author]
   [:table {:class "row body-block share-note"}
@@ -201,18 +217,21 @@
 (defn- button [button-text url css-class button-class]
   [:table {:class (str "row " css-class)}
     [:tr
-      [:th {:class "small-1 large-2 columns first"}]
-      [:th {:class "small-10 large-8 columns"}
+      [:th {:class "small-12 large-12 columns"}
         [:a {:href url}
           [:table {:class button-class}
             [:tr
               [:th
                 [:span {:class "text-center button-text"}
-                  button-text]]]]]]
-      [:th {:class "small-1 large-2 columns last"}]]])
+                  button-text]]]]]]]])
 
 (defn- cta-button [cta-text url]
-  (button cta-text url "body-block" "cta-button"))
+  (button cta-text url "" "cta-button"))
+
+(defn- left-button [cta-text url]
+  [:a {:href url}
+    [:span {:class "cta-text"}
+      cta-text]])
 
 (defn- you-receive [interval]
   [:tr
@@ -220,7 +239,7 @@
       [:table
         [:tr
           [:th
-            [:p {:class "text-center"} "You receive " [:b interval] " digests."]]]]]])
+            [:p {:class "text-left"} "You receive " [:b interval] " digests."]]]]]])
 
 (def sent-by
   [:tr
@@ -228,7 +247,7 @@
     [:table
       [:tr
         [:th
-          [:p {:class "text-center"} [:b {} sent-by-text]]]]]]])
+          [:p {:class "text-left"} [:b {} sent-by-text]]]]]]])
 
 (defn- change-to [interval]
   (let [new-interval (if (= (keyword interval) :daily) "weekly" "daily")]
@@ -237,7 +256,7 @@
       [:table
         [:tr
           [:th
-            [:p {:class "text-center"}
+            [:p {:class "text-left"}
               [:a {:href profile-url} (str "Change to " new-interval "?")]
               " ∙ "
               [:a {:href profile-url} "Turn off digests"]]]]]]]))
@@ -254,31 +273,65 @@
 ;               [:p {:class "attribution"} attribution]]]]]
 ;       [:th {:class "small-1 large-1 last columns"}]]))
 
-(defn- transactional-footer []
-  [:table {:class "row footer"}
-    (carrot-footer-logo)
-    (tr-spacer 10)
+(defn- transactional-header []
+  [:table {:class "row"}
     [:tr
-      [:th {:class "small-12 large-12 first last columns"}
-        [:table
+      [:td {:class "small-1 large-2 columns"}]
+      [:td {:class "small-10 large-8 columns"}
+        (vspacer 15)
+        [:table {:class "row"}
           [:tr
-            [:th
-              [:p {:class "text-center"}
-                sent-by-text]]]]]]
-    (tr-spacer 10)])
+            [:th {:class "small-2 large-2 columns"}
+              [:img {:width 13
+                     :height 24
+                     :src "https://open-company.s3.amazonaws.com/carrot_logo.png"
+                     :alt "Carrot logo"}]]
+            [:th {:class "small-10 large-10 columns"}
+              [:p {:class "text-right header-paragraph"}
+                "Find team alignment with "
+                [:a {:href "https://carrot.io"}
+                  "Carrot"]]]]]
+        (vspacer 15 "header-bottom")]
+      [:td {:class "small-1 large-2 columns"}]]])
+
+(defn- transactional-footer []
+  [:table {:class "row footer-table"}
+    [:tr
+      [:td {:class "small-1 large-2 columns"}]
+      [:td {:class "small-10 large-8 columns"}
+        (vspacer 15 "footer-table" "footer-table")
+        [:table {:class "row footer-table"}
+          [:tr
+            [:th {:class "small-12 large-12 columns"}
+              [:p {:class "footer-paragraph"}
+                "You can "
+                [:a {:href "https://beta.carrot.io/profile"} "unsubscribe"]
+                " to these emails or update your "
+                [:a {:href "https://beta.carrot.io/profile"} "notification settings"]
+                " at anytime."]]]]
+        (vspacer 15 "footer-table" "footer-table")
+        [:table {:class "row footer-table"}
+          [:tr
+            [:th {:class "small-6 large-6 columns"}
+              [:p {:class "footer-paragraph bottom-footer"}
+                "Find team alignment with Carrot"]]
+            [:th {:class "small-6 large-6 columns"}
+              [:a {:class "footer-link" :href "https://blog.carrot.io"}
+                [:img {:alt "Blog"
+                       :src "https://open-company.s3.amazonaws.com/carrot_medium.png"
+                       :width 18
+                       :height 15}]]
+              "  "
+              [:a {:class "footer-link"
+                   :href "https://twitter.com/carrot_hq"}
+                [:img {:alt "Twitter"
+                       :src "https://open-company.s3.amazonaws.com/carrot_twitter.png"
+                       :width 19
+                       :height 16}]]]]]
+        (vspacer 15 "footer-table" "footer-table")]
+      [:td {:class "small-1 large-2 columns"}]]])
 
 ;; ----- Digest -----
-
-(defn- digest-footer [digest]
-  [:table {:class "row footer"}
-    (tr-spacer 40)
-    (carrot-footer-logo)
-    (tr-spacer 17)
-    sent-by
-    (tr-spacer 17)
-    (you-receive (:digest-frequency digest))
-    (change-to (:digest-frequency digest))
-    (tr-spacer 40)])
 
 (defn- post [entry]
   [(spacer 36 "body-block" "body-spacer")
@@ -308,8 +361,7 @@
       (spacer 31)
       (spacer 1 "body-block top" "body-spacer")
       (mapcat post posts)
-      (spacer 40 "body-block bottom" "body-spacer")
-      (digest-footer digest)]))
+      (spacer 40 "body-block bottom" "body-spacer")]))
 
 ;; ----- Transactional Emails -----
 
@@ -347,74 +399,42 @@
       (when note? (spacer 35 "body-block" "body-spacer"))
       (cta-button (str "View " board-name) board-url)
       (spacer 40 "body-block bottom" "body-spacer")
-      (spacer 33)
-      (transactional-footer)]))
+      (spacer 33)]))
 
-(defn- invite-content [invite]
+(defn- invite-content [td-classes invite]
   (let [logo-url (:org-logo-url invite)
         logo-width (:org-logo-width invite)
         logo-height (:org-logo-height invite)
         logo? (not (s/blank? logo-url))
         org-name (:org-name invite)
         from (if (s/blank? (:from invite)) "Someone" (:from invite))
-        from-avatar (when-not (s/blank? (:from invite)) (:from-avatar invite))
+        from-avatar? (not (s/blank? (:from-avatar invite)))
+        from-avatar (when from-avatar? (:from-avatar invite))
         note (:note invite)
-        note? (not (s/blank? note))]
-    [:td
+        note? (not (s/blank? note))
+        invite-message (str from " "
+                        (if (s/blank? org-name)
+                          invite-message
+                          (format invite-message-with-company org-name)))]
+    [:td {:class td-classes}
       (spacer 40)
       (when logo? (org-logo {:org-name org-name
                              :org-logo-url logo-url
                              :org-logo-width logo-width
                              :org-logo-height logo-height}))
       (when logo? (spacer 35))
-      (h1 (str from " " invite-message))
-      (spacer 31)
-      (spacer 35 "body-block top" "body-spacer")
-      (h2 org-name "body-block")
-      (spacer 28 "body-block" "body-spacer")
-      (paragraph carrot-explainer "body-block")
-      (spacer 35 "body-block" "body-spacer")
-      (when note? (personal-note note from-avatar from))
-      (when note? (spacer 35 "body-block" "body-spacer"))
-      (cta-button (str "Join " org-name " on Carrot") (:token-link invite))
-      (spacer 40 "body-block bottom" "body-spacer")
-      (spacer 33)
-      (transactional-footer)]))
-
-(defn- token-prep [token-type msg]
-  {
-    :message (case token-type
-              :reset reset-message
-              :verify verify-message)
-    :instructions (case token-type
-                    :reset reset-instructions
-                    :verify verify-instructions)
-    :button-text (case token-type
-                    :reset reset-button-text
-                    :verify verify-button-text)
-    :link (:token-link (keywordize-keys msg))
-    :ignore (case token-type
-                :reset reset-ignore
-                :verify verify-ignore)})
-
-(defn- token-content [token-type msg]
-  (let [message (token-prep token-type msg)
-        logo-url (:org-logo-url msg)
-        logo? (not (s/blank? logo-url))
-        org-name (:org-name msg)]
-    [:td
+      (h1 invite-message)
+      (spacer 20)
+      (when from-avatar? (note-author from-avatar from))
+      (when note? (spacer 20))
+      (when note? (paragraph note))
+      (spacer 35)
+      (left-button invite-button (:token-link invite))
+      (spacer 24)
+      horizontal-line
+      (paragraph carrot-explainer)
       (spacer 40)
-      (when logo? (org-logo msg))
-      (when logo? (spacer 35))
-      (spacer 35 "body-block top" "body-spacer")
-      (h2 (:message message) "body-block")
-      (spacer 28 "body-block" "body-spacer")
-      (paragraph (:ignore message) "body-block")
-      (spacer 35 "body-block" "body-spacer")
-      (cta-button (:button-text message) (:token-link msg))
-      (spacer 40 "body-block bottom" "body-spacer")
-      (spacer 33)
-      (transactional-footer)]))
+      (spacer 33)]))
 
 (defn- share-content [entry]
   (let [logo-url (:org-logo-url entry)
@@ -446,39 +466,73 @@
       (h1 (str from "<br>" share-message))
       (spacer 31)
       (spacer 35 "body-block top" "body-spacer")
-      (spacer 5 "body-block" "body-spacer")
       (when note? (personal-note note from-avatar from))
       (when note? (spacer 35 "body-block" "body-spacer"))
-      (h2 headline "body-block" "")
+      (h2 headline "body-block")
       (spacer 5 "body-block" "body-spacer")
-      (paragraph attribution "body-block" "attribution")
+      (paragraph attribution "body-block" "text-left attribution")
       (when entry-body? (spacer 5 "body-block" "body-spacer"))
       (when entry-body? (paragraph entry-body "body-block" ""))
       (spacer 35 "body-block" "body-spacer")
       (cta-button share-cta entry-url)
       (spacer 40 "body-block bottom" "body-spacer")
-      (spacer 33)
-      (transactional-footer)]))
+      (spacer 33)]))
+
+(defn- token-prep [token-type msg]
+  {
+    :message (case token-type
+              :reset reset-message
+              :verify verify-message)
+    :instructions (case token-type
+                    :reset reset-instructions
+                    :verify verify-instructions)
+    :button-text (case token-type
+                    :reset reset-button-text
+                    :verify verify-button-text)
+    :link (:token-link (keywordize-keys msg))
+    :ignore (case token-type
+                :reset reset-ignore
+                :verify verify-ignore)})
+
+(defn- token-content [td-classes token-type msg]
+  (let [message (token-prep token-type msg)
+        logo-url (:org-logo-url msg)
+        logo? (not (s/blank? logo-url))
+        org-name (:org-name msg)]
+    [:td {:class td-classes}
+      (spacer 40)
+      (when logo? (org-logo msg))
+      (when logo? (spacer 35))
+      (spacer 35)
+      (h2 (:message message))
+      (spacer 28)
+      (paragraph (:ignore message))
+      (spacer 35)
+      (left-button (:button-text message) (:token-link msg))
+      (spacer 40)
+      (spacer 33)]))
 
 ;; ----- General HTML, common to all emails -----
 
 (defn- body [data]
-  (let [type (:type data)
-        trail-space? (not= type :share-link)]
+  (let [type (:type data)]
     [:body
       [:table {:class "body"}
         [:tr
-          [:td {:class "float-center", :align "center", :valign "top"}
-            [:center
-              [:table {:class "container"}
-                [:tr
-                  (case type
-                    :reset (token-content type data)
-                    :verify (token-content type data)
-                    :invite (invite-content data)
-                    :board-notification (board-notification-content data)
-                    :share-link (share-content data)
-                    :digest (digest-content data))]]]]]]]))
+          [:td
+            (transactional-header)
+            [:table {:class "row"}
+              [:tr
+                [:td {:class "small-1 large-2 columns"}]
+                (case type
+                  :reset (token-content "small-10 large-8 columns" type data)
+                  :verify (token-content "small-10 large-8 columns" type data)
+                  :invite (invite-content "small-10 large-8 columns" data)
+                  :board-notification (board-notification-content data)
+                  :share-link (share-content data)
+                  :digest (digest-content data))
+                [:td {:class "small-1 large-2 columns"}]]]
+            (transactional-footer)]]]]))
 
 (defn- head [data]
   [:html {:xmlns "http://www.w3.org/1999/xhtml"} 
