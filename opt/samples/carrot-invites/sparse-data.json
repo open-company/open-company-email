@@ -1,8 +1,12 @@
 {
-  "from": "",
-  "reply-to": "",
-  "email": "change@me.com",
-  "org-name": "S",
-  "org-logo-url": "",
+  "from": "iacopo@staging.carrot.io",
+  "from-avatar": "https://secure.gravatar.com/avatar/866a6350e399e67e749c6f2aef0b96c0.jpg?s=512&d=https%3A%2F%2Fa.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0020-512.png",
+  "note": "This is the note we used to show the user hahah",
+  "reply-to": "team@carrot.io",
+  "email": "iacopo@carrot.io",
+  "org-name": "BaGo",
+  "org-logo-url": "https://open-company-assets.s3.amazonaws.com/bago.png",
+  "org-logo-width": 300,
+  "org-logo-height": 96,
   "token-link": "http://localhost:3000/invite?token=dd7c0bfe-2068-4de0-aa3c-4913eeeaa360"
 }
