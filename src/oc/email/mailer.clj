@@ -32,7 +32,7 @@
         html (:html body)
         html-body (if html (assoc text-body :html html) text-body)]
     (ses/send-email creds
-      :destination {:to-addresses (vec to)}
+      :destination {:to-addresses [to]}
       :source source
       :reply-to-addresses [reply-to]
       :message {:subject subject
