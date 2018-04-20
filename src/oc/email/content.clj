@@ -3,16 +3,12 @@
             [clojure.walk :refer (keywordize-keys)]
             [clj-time.format :as format]
             [hiccup.core :as h]
-            [oc.email.config :as config]
-            [jsoup.soup :as soup]))
+            [oc.email.config :as config]))
 
 (def max-logo 32)
 (def author-logo 32)
 
 (def profile-url (str config/web-url "/profile"))
-
-(def iso-format (format/formatters :date-time)) ; ISO 8601
-(def attribution-format (format/formatter "MMMM d"))
 
 (def doc-type "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
 
@@ -24,10 +20,7 @@
 
 ;; ----- Copy -----
 
-(def tagline "Better informed, less noise.")
 (def carrot-explainer "Carrot is the company digest that keeps everyone aligned around what matters most.")
-
-(def sent-by-text "Sent by Carrot")
 
 (def invite-message "invited you to his team on Carrot")
 (def invite-message-with-company "invited you to join the “%s” digest on Carrot")
@@ -40,7 +33,7 @@
     " for tips and tricks on how to get the most out of Carrot."])
 
 (def share-message "sent you a post")
-(def share-cta "View the post")
+(def share-cta "Read post")
 (def share-help-links
   [:p {:class "digest-help"}
     "Not sure what a post is? Head over to our "
@@ -121,28 +114,12 @@
                          :src logo-url
                          :alt (str org-name " logo")}]]]]]]])))
 
-(defn- carrot-footer-logo []
-  [:tr
-    [:th {:class "small-12 large-12 first last columns"} 
-      [:table
-        [:tr
-          [:th
-            [:img {:width 13
-                   :height 24
-                   :src "https://open-company.s3.amazonaws.com/carrot-logo-grey-min.png"
-                   :alt "Carrot logo"}]]]]]])
-
 (defn- spacer-table [pixels css-class]
   [:table {:class "spacer"}
     [:tr
       [:th {:class css-class
             :height (str pixels "px")
             :style (str "font-size:" pixels "px; line-height:" pixels "px;")} " "]]])
-
-(defn- tr-spacer
-  ([pixels] (tr-spacer pixels ""))
-  ([pixels css-class]
-  [:tr [:th (spacer-table pixels css-class)]]))
 
 (defn- spacer
   ([pixels] (spacer pixels ""))
@@ -216,103 +193,19 @@
         [:img {:class "note-author-avatar" :src (circle-image avatar-url 32)}]
         [:span {:class "note-author-name"} author]]]])
 
-(defn- personal-note [note-body avatar-url author]
-  [:table {:class "row body-block share-note"}
-    [:tr
-      [:th {:class "small-1 large-2 first columns"}]
-      [:th {:class "small-10 large-8 columns"}
-        [:table {:class "row note-block top"}
-          [:tr
-            [:th {:class "small-1 large-1 first columns"}]
-            [:th {:class "small-10 large-10 columns"}
-              (spacer 10 "white-block" "body-spacer")]
-            [:th {:class "small-1 large-1 last columns"}]]]
-        [:table {:class "row note-block"}
-          [:tr
-            [:th {:class "small-1 large-1 first columns"}]
-            [:th {:class "small-10 large-10 columns"}
-              [:table {:class "row white-block"}
-                [:tr
-                  [:th {:class "small-1 large-1"}
-                    (when-not (s/blank? avatar-url)
-                      [:img {:class "note-author-avatar" :src (circle-image avatar-url 32)}])]
-                  [:th {:class "small-11 large-11"}
-                    [:table {:class "white-block"}
-                      [:tr
-                        [:th
-                          (spacer 7 "white-block" "body-spacer")]]]
-                    [:table {:class "white-block"}
-                      [:tr
-                        [:th
-                          [:span {:class "note-author"} author]]]]]]]]
-            [:th {:class "small-1 large-1 last columns"}]]]
-        [:table {:class "row note-block"}
-          [:tr
-            [:th {:class "small-1 large-1 first columns"}]
-            [:th {:class "small-10 large-10 columns"}
-              (spacer 12 "white-block" "body-spacer")]
-            [:th {:class "small-1 large-1 last columns"}]]]
-        [:table {:class "row note-block"}
-          [:tr
-            [:th {:class "small-1 large-1 first columns"}]
-            [:th {:class "small-10 large-10 columns"}
-              [:span {:class "note-body"}
-                note-body]]
-            [:th {:class "small-1 large-1 last columns"}]]]
-        [:table {:class "row note-block bottom"}
-          [:tr
-            [:th {:class "small-1 large-1 first columns"}]
-            [:th {:class "small-10 large-10 columns"}
-              (spacer 10 "white-block" "body-spacer")]
-            [:th {:class "small-1 large-1 last columns"}]]]]
-      [:th {:class "small-1 large-2 last columns"}]]])
-
-(defn- button [button-text url css-class button-class]
-  [:table {:class (str "row " css-class)}
-    [:tr
-      [:th {:class "small-12 large-12 columns"}
-        [:a {:href url}
-          [:table {:class button-class}
-            [:tr
-              [:th
-                [:span {:class "text-center button-text"}
-                  button-text]]]]]]]])
-
-(defn- cta-button [cta-text url]
-  (button cta-text url "" "cta-button"))
+(defn- read-post-button [link-text link-url]
+  [:a {:href link-url}
+    [:img {:src "https://open-company.s3.amazonaws.com/read_post.png"
+           :class "read-post-image"
+           :width 16
+           :height 16}]
+    [:span {:class "read-post-text"}
+      link-text]])
 
 (defn- left-button [cta-text url]
   [:a {:href url}
     [:span {:class "cta-text"}
       cta-text]])
-
-(defn- you-receive [interval]
-  [:tr
-    [:th {:class "small-12 large-12 first last columns"}
-      [:table
-        [:tr
-          [:th
-            [:p {:class "text-left"} "You receive " [:b interval] " digests."]]]]]])
-
-(def sent-by
-  [:tr
-    [:th {:class "small-12 large-12 first last columns"}
-    [:table
-      [:tr
-        [:th
-          [:p {:class "text-left"} [:b {} sent-by-text]]]]]]])
-
-(defn- change-to [interval]
-  (let [new-interval (if (= (keyword interval) :daily) "weekly" "daily")]
-    [:tr
-      [:th {:class "small-12 large-12 first last columns"}
-      [:table
-        [:tr
-          [:th
-            [:p {:class "text-left"}
-              [:a {:href profile-url} (str "Change to " new-interval "?")]
-              " ∙ "
-              [:a {:href profile-url} "Turn off digests"]]]]]]]))
 
 ;; Comments not shown in digests at the moment
 ; (defn- comment-attribution [comment-count comment-authors]
@@ -387,12 +280,14 @@
 ;; ----- Digest -----
 
 (defn- post [entry]
-  [(spacer 36 "body-block" "body-spacer")
+  [(spacer 32)
+   horizontal-line
+   (spacer 32)
+   (h2 (:headline entry))
+   (spacer 16)
    (paragraph (str (-> entry :publisher :name) " posted in " (:board-name entry)) "body-block" "attribution")
-   (spacer 15 "body-block" "body-spacer")
-   (h2 (:headline entry) "body-block" "post-title")
-   (spacer 15 "body-block" "body-spacer")
-   (button "Continue reading" (:url entry) "body-block" "post-button")])
+   (spacer 16)
+   (read-post-button "Read post" (:url entry))])
 
 (defn- posts-with-board-name [board]
   (let [board-name (:name board)]
@@ -406,15 +301,16 @@
         title (if weekly? (str org-name " Weekly Digest") (str org-name " Daily Digest"))
         boards (map posts-with-board-name (:boards digest))
         posts (mapcat :posts boards)]
-    [:td
+    [:td {:class "small-10 large-8 columns"}
       (spacer 40)
       (when logo? (org-logo digest))
-      (when logo? (spacer 35))
+      (when logo? (spacer 40))
       (h1 title)
-      (spacer 31)
-      (spacer 1 "body-block top" "body-spacer")
       (mapcat post posts)
-      (spacer 40 "body-block bottom" "body-spacer")]))
+      (spacer 24)
+      horizontal-line
+      (help-links :digest)
+      (spacer 73)]))
 
 ;; ----- Transactional Emails -----
 
@@ -446,7 +342,7 @@
       (h1 formatted-invite-message)
       (spacer 35)
       (when from-avatar? (note-author from-avatar from))
-      (when note? (spacer 20))
+      (when note? (spacer 16))
       (when note? (paragraph note))
       (spacer 35)
       (left-button "Accept invitation" board-url)
@@ -480,7 +376,7 @@
       (h1 invite-message)
       (spacer 20)
       (when from-avatar? (note-author from-avatar from))
-      (when note? (spacer 20))
+      (when note? (spacer 16))
       (when note? (paragraph note))
       (spacer 35)
       (left-button invite-button (:token-link invite))
@@ -495,12 +391,6 @@
         org-name (:org-name entry)
         org-name? (not (s/blank? org-name))
         headline (:headline entry)
-        parsed-body (.text (soup/parse (:body entry)))
-        body-length 159
-        entry-body (if (> (count parsed-body) body-length)
-                      (str (subs parsed-body 0 (- body-length 3)) "...")
-                      parsed-body)
-        entry-body? (not (s/blank? entry-body))
         org-slug (:org-slug entry)
         sharer (:sharer-name entry)
         publisher (:publisher entry)
@@ -508,28 +398,30 @@
         note (:note entry)
         note? (not (s/blank? note))
         from (if (s/blank? sharer) "Someone" sharer)
-        from-avatar (when-not (s/blank? sharer) (:sharer-avatar-url entry))
+        from-avatar (:sharer-avatar-url entry)
+        from-avatar? (not (s/blank? from-avatar))
         secure-uuid (:secure-uuid entry)
         origin-url config/web-url
         entry-url (s/join "/" [origin-url org-slug "post" secure-uuid])]
-    [:td
+    [:td {:class "small-10 large-8 columns"}
       (spacer 40)
       (when logo? (org-logo entry))
-      (when logo? (spacer 35))
-      (h1 (str from "<br>" share-message))
-      (spacer 31)
-      (spacer 35 "body-block top" "body-spacer")
-      (when note? (personal-note note from-avatar from))
-      (when note? (spacer 35 "body-block" "body-spacer"))
-      (h2 headline "body-block")
-      (spacer 5 "body-block" "body-spacer")
+      (when logo? (spacer 40))
+      (h1 (str from " " share-message))
+      (when from-avatar? (spacer 40))
+      (when from-avatar? (note-author from-avatar from))
+      (when note? (spacer 16))
+      (when note? (paragraph note))
+      (spacer 40)
+      (h2 headline)
+      (spacer 8)
       (paragraph attribution "body-block" "text-left attribution")
-      (when entry-body? (spacer 5 "body-block" "body-spacer"))
-      (when entry-body? (paragraph entry-body "body-block" ""))
-      (spacer 35 "body-block" "body-spacer")
-      (cta-button share-cta entry-url)
-      (spacer 40 "body-block bottom" "body-spacer")
-      (spacer 33)]))
+      (spacer 8)
+      (read-post-button share-cta entry-url)
+      (spacer 24)
+      horizontal-line
+      (help-links :share-link)
+      (spacer 73)]))
 
 (defn- token-prep [token-type msg]
   {

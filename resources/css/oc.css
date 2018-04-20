@@ -236,3 +236,16 @@ p.digest-help a{
   color: #3FBD7C;
   text-decoration: underline;
 }
+
+img.read-post-image {
+  width: 16px;
+  height: 16px;
+  float: left;
+}
+
+span.read-post-text {
+  float: left;
+  margin-left: 8px;
+  color: #3FBD7C;
+  font-size: 14px;
+}
