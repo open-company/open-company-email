@@ -1,0 +1,22 @@
+{
+  "org-slug": "bago",
+  "org-name": "Bago",
+  "org-logo-url": "https://open-company-assets.s3.amazonaws.com/bago.png",
+  "org-logo-width": 300,
+  "org-logo-height": 96,
+  "board-name": "Engineering",
+  "headline": "This is my post",
+  "body": "<p>Hello world</p>",
+  "secure-uuid": "1234-abcd-1234",
+  "publisher": {
+    "name": "Stuart Levinson",
+    "user-id": "5bb2-4d8d-a926",
+    "avatar-url": "https://secure.gravatar.com/avatar/866a6350e399e67e749c6f2aef0b96c0.jpg?s=512&d=https%3A%2F%2Fa.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0020-512.png"
+  },
+  "published-at": "2017-08-24T23:14:20.765Z",
+  "sharer-name": "Sean Johnson",
+  "shared-at": "2017-08-25T23:14:20.765Z",
+  "reply-to": "change@change.me",
+  "subject": "Carrot New1: Just a test",
+  "to": ["change@change.me"]}
+}
