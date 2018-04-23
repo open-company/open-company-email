@@ -219,27 +219,6 @@
 ;               [:p {:class "attribution"} attribution]]]]]
 ;       [:th {:class "small-1 large-1 last columns"}]]))
 
-(defn- transactional-header []
-  [:table {:class "row"}
-    [:tr
-      [:td {:class "small-1 large-2 columns"}]
-      [:td {:class "small-10 large-8 columns"}
-        (vspacer 15)
-        [:table {:class "row"}
-          [:tr
-            [:th {:class "small-2 large-2 columns"}
-              [:img {:width 13
-                     :height 24
-                     :src "https://open-company.s3.amazonaws.com/carrot_logo.png"
-                     :alt "Carrot logo"}]]
-            [:th {:class "small-10 large-10 columns"}
-              [:p {:class "text-right header-paragraph"}
-                "Find team alignment with "
-                [:a {:href "https://carrot.io"}
-                  "Carrot"]]]]]
-        (vspacer 15 "header-bottom")]
-      [:td {:class "small-1 large-2 columns"}]]])
-
 (defn- transactional-footer []
   [:table {:class "row footer-table"}
     [:tr
@@ -258,22 +237,9 @@
         (vspacer 15 "footer-table" "footer-table")
         [:table {:class "row footer-table"}
           [:tr
-            [:th {:class "small-6 large-6 columns"}
+            [:th {:class "small-12 large-12 columns"}
               [:p {:class "footer-paragraph bottom-footer"}
-                "Find team alignment with Carrot"]]
-            [:th {:class "small-6 large-6 columns"}
-              [:a {:class "footer-link" :href "https://blog.carrot.io"}
-                [:img {:alt "Blog"
-                       :src "https://open-company.s3.amazonaws.com/carrot_medium.png"
-                       :width 18
-                       :height 15}]]
-              "  "
-              [:a {:class "footer-link"
-                   :href "https://twitter.com/carrot_hq"}
-                [:img {:alt "Twitter"
-                       :src "https://open-company.s3.amazonaws.com/carrot_twitter.png"
-                       :width 19
-                       :height 16}]]]]]
+                "Sent with love from Carrot"]]]]
         (vspacer 15 "footer-table" "footer-table")]
       [:td {:class "small-1 large-2 columns"}]]])
 
@@ -470,7 +436,6 @@
       [:table {:class "body"}
         [:tr
           [:td
-            (transactional-header)
             [:table {:class "row"}
               [:tr
                 [:td {:class "small-1 large-2 columns"}]
