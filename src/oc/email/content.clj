@@ -276,7 +276,7 @@
     (assoc board :posts (map #(assoc % :board-name board-name) (:posts board)))))
 
 (defn- digest-content [digest]
-  (let [logo-url (:org-logo-url digest)
+  (let [logo-url (:logo-url digest)
         logo? (not (s/blank? logo-url))
         weekly? (= "weekly" (:digest-frequency digest))
         org-name (:org-name digest)
@@ -285,7 +285,10 @@
         posts (mapcat :posts boards)]
     [:td {:class "small-10 large-8 columns"}
       (spacer 40)
-      (when logo? (org-logo digest))
+      (when logo? (org-logo {:org-name (:org-name digest)
+                             :org-logo-url logo-url
+                             :org-logo-width (:logo-width digest)
+                             :org-logo-height (:logo-height digest)}))
       (when logo? (spacer 40))
       (h1 title)
       (mapcat post posts)
