@@ -366,6 +366,7 @@
         from (if (s/blank? sharer) "Someone" sharer)
         from-avatar (:sharer-avatar-url entry)
         from-avatar? (not (s/blank? from-avatar))
+        show-note? (and note? from-avatar?)
         secure-uuid (:secure-uuid entry)
         origin-url config/web-url
         entry-url (s/join "/" [origin-url org-slug "post" secure-uuid])]
@@ -374,10 +375,10 @@
       (when logo? (org-logo entry))
       (when logo? (spacer 40))
       (h1 (str from " " share-message))
-      (when from-avatar? (spacer 40))
-      (when from-avatar? (note-author from-avatar from))
-      (when note? (spacer 16))
-      (when note? (paragraph note))
+      (when show-note? (spacer 40))
+      (when show-note? (note-author from-avatar from))
+      (when show-note? (spacer 16))
+      (when show-note? (paragraph note))
       (spacer 40)
       (h2 headline)
       (spacer 8)
