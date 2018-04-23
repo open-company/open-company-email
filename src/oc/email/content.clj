@@ -315,6 +315,7 @@
         formatted-invite-message (format invite-message from)
         from-avatar (-> notice :inviter :avatar-url)
         from-avatar? (not (s/blank? from-avatar))
+        show-note? (and from-avatar? note?)
         note (:note notice)
         note? (not (s/blank? note))]
     [:td {:class "small-10 large-8 columns"}
@@ -326,9 +327,9 @@
       (when logo? (spacer 35))
       (h1 formatted-invite-message)
       (spacer 35)
-      (when from-avatar? (note-author from-avatar from))
-      (when note? (spacer 16))
-      (when note? (paragraph note))
+      (when show-note? (note-author from-avatar from))
+      (when show-note? (spacer 16))
+      (when show-note? (paragraph note))
       (spacer 35)
       (left-button "Accept invitation" board-url)
       (spacer 24)
@@ -347,6 +348,7 @@
         from-avatar? (not (s/blank? from-avatar))
         note (:note invite)
         note? (not (s/blank? note))
+        show-note? (and from-avatar? note?)
         invite-message (str from " "
                         (if (s/blank? org-name)
                           invite-message
@@ -360,9 +362,9 @@
       (when logo? (spacer 35))
       (h1 invite-message)
       (spacer 20)
-      (when from-avatar? (note-author from-avatar from))
-      (when note? (spacer 16))
-      (when note? (paragraph note))
+      (when show-note? (note-author from-avatar from))
+      (when show-note? (spacer 16))
+      (when show-note? (paragraph note))
       (spacer 35)
       (left-button invite-button (:token-link invite))
       (spacer 24)
