@@ -1,12 +1,16 @@
 (ns oc.email.content
   (:require [clojure.string :as s]
             [clojure.walk :refer (keywordize-keys)]
-            [clj-time.format :as format]
+            [clj-time.format :as time-format]
             [hiccup.core :as h]
             [oc.email.config :as config]))
 
 (def max-logo 32)
 (def author-logo 32)
+
+(def iso-format (time-format/formatters :date-time))
+(def date-format (time-format/formatter "MMMM d"))
+(def date-format-year (time-format/formatter "MMMM d YYYY"))
 
 (def profile-url (str config/web-url "/profile"))
 
@@ -243,7 +247,19 @@
         (vspacer 15 "footer-table" "footer-table")]
       [:td {:class "small-1 large-2 columns"}]]])
 
+;; ----- Posts common ----
+
+(defn- post-date [timestamp]
+  (let [d (time-format/parse iso-format timestamp)]
+    (time-format/unparse date-format d)))
+
+(defn- post-attribution [entry]
+  (paragraph (str "Posted by " (-> entry :publisher :name) " in " (:board-name entry) " on " (post-date (:published-at entry)))
+   "body-block" "text-left attribution"))
+
 ;; ----- Digest -----
+
+
 
 (defn- post [entry]
   [(spacer 32)
@@ -251,7 +267,7 @@
    (spacer 32)
    (h2 (:headline entry))
    (spacer 16)
-   (paragraph (str (-> entry :publisher :name) " posted in " (:board-name entry)) "body-block" "attribution")
+   (post-attribution entry)
    (spacer 16)
    (read-post-button "Read post" (:url entry))])
 
@@ -382,7 +398,7 @@
       (spacer 40)
       (h2 headline)
       (spacer 8)
-      (paragraph attribution "body-block" "text-left attribution")
+      (post-attribution entry)
       (spacer 8)
       (read-post-button share-cta entry-url)
       (spacer 24)
