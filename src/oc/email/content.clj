@@ -315,9 +315,9 @@
         formatted-invite-message (format invite-message from)
         from-avatar (-> notice :inviter :avatar-url)
         from-avatar? (not (s/blank? from-avatar))
-        show-note? (and from-avatar? note?)
         note (:note notice)
-        note? (not (s/blank? note))]
+        note? (not (s/blank? note))
+        show-note? (and from-avatar? note?)]
     [:td {:class "small-10 large-8 columns"}
       (spacer 40)
       (when logo? (org-logo {:org-name org-name
