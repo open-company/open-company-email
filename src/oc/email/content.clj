@@ -143,13 +143,17 @@
          filestack-resource)))
 
 (defn- fix-avatar-url
-  "If the url is pointing to one of our happy faces replace the ending svg with png to have it resizable.
+  "First it fix relative urls, it prepends our production CDN domain to it. Then if the url is
+   pointing to one of our happy faces replace the ending svg with png to have it resizable.
    If it's not use the on the fly resize url."
   [avatar-url]
-  (let [r (re-seq #"happy_face_(red|green|blue|purple|yellow).svg$" avatar-url)]
+  (let [absolute-avatar-url (if (s/starts-with? avatar-url "/img")
+                              (str "https://d1wc0stj82keig.cloudfront.net" avatar-url)
+                              avatar-url)
+        r (re-seq #"happy_face_(red|green|blue|purple|yellow).svg$" absolute-avatar-url)]
     (if r
-      (str (subs avatar-url 0 (- (count avatar-url) 3)) "png")
-      (circle-image avatar-url 32))))
+      (str (subs absolute-avatar-url 0 (- (count absolute-avatar-url) 3)) "png")
+      (circle-image absolute-avatar-url 32))))
 
 (defn- note-author [avatar-url author divider-line?]
   [:table {:class "row"}
@@ -257,9 +261,9 @@
    horizontal-line
    (spacer 32)
    (h2 (:headline entry))
-   (spacer 24)
+   (spacer 8)
    (post-attribution entry)
-   (spacer 24)
+   (spacer 8)
    (read-post-button "Read post" (:url entry))])
 
 (defn- posts-with-board-name [board]
@@ -395,7 +399,9 @@
       (when show-note? (note-author from-avatar from false))
       (when show-note? (spacer 16))
       (when show-note? (paragraph note))
-      (spacer 40)
+      (spacer 32)
+      horizontal-line
+      (spacer 24)
       (h2 headline)
       (spacer 8)
       (post-attribution entry)
