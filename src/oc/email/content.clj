@@ -228,22 +228,21 @@
     [:tr
       [:td {:class "small-1 large-2 columns"}]
       [:td {:class "small-10 large-8 columns"}
-        (vspacer 15 "footer-table" "footer-table")
+        (vspacer 15 "footer-table footer-top-border" "footer-table")
         [:table {:class "row footer-table"}
           [:tr
-            [:th {:class "small-12 large-12 columns"}
-              [:p {:class "footer-paragraph"}
-                "You can "
-                [:a {:href profile-url} "unsubscribe"]
-                " to these emails or update your "
-                [:a {:href profile-url} "notification settings"]
-                " at anytime."]]]]
-        (vspacer 15 "footer-table" "footer-table")
-        [:table {:class "row footer-table"}
-          [:tr
-            [:th {:class "small-12 large-12 columns"}
+            [:th {:class "small-10 large-10 columns"}
               [:p {:class "footer-paragraph bottom-footer"}
-                "Sent with love from Carrot"]]]]
+                "Sent via "
+                [:a {:href config/web-url}
+                  "Carrot"]]]
+            [:th {:class "small-2 large-2 columns footer-icon"}
+              [:a
+                {:href config/web-url}
+                [:img {:src "https://open-company.s3.amazonaws.com/carrot-logo-grey-min.png"
+                       :width "13"
+                       :height "24"
+                       :alt "Carrot"}]]]]]
         (vspacer 15 "footer-table" "footer-table")]
       [:td {:class "small-1 large-2 columns"}]]])
 

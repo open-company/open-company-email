@@ -171,7 +171,11 @@ table.footer a {
 
 /* New template specific css */
 .footer-table {
-  background-color: #F2F1ED !important;
+  background-color: white !important;
+}
+
+.footer-top-border {
+  border-top: 1px solid #F0F0F1;
 }
 
 p.header-paragraph {
@@ -194,15 +198,17 @@ table.header-bottom {
 p.footer-paragraph {
   color: #898D93;
   font-size: 14px;
+  font-weight: 400;
 }
 
-p.footer-paragraph.bottom-footer {
-  opacity: 0.5;
+p.footer-paragraph.bottom-footer, p.footer-paragraph.bottom-footer a {
+  color: #C4C6C7;
 }
 
 p.footer-paragraph a {
   color: #898D93;
   text-decoration: underline;
+  font-weight: 400;
 }
 
 table.footer-table a.footer-link {
@@ -235,6 +241,10 @@ p.digest-help {
 p.digest-help a{
   color: #3FBD7C;
   text-decoration: underline;
+}
+
+th.footer-icon img {
+  float: right;
 }
 
 img.read-post-image {
