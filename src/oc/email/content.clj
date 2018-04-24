@@ -279,7 +279,7 @@
         boards (map posts-with-board-name (:boards digest))
         posts (mapcat :posts boards)
         digests-url (s/join "/" [config/web-url (:org-slug digest) "all-posts"])
-        subtitle (str "Good morning! Here are the new posts shared to the " (:org-name digest) " digest this " (if weekly? "past week" "yesterday") ".")]
+        subtitle (str "Here are the new posts to the " (:org-name digest) " digest.")]
     [:td {:class "small-10 large-8 columns"}
       (spacer 40)
       (when logo? (org-logo {:org-name (:org-name digest)
