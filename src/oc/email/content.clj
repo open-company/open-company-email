@@ -351,6 +351,7 @@
       (h1 invite-message)
       (spacer 40)
       (paragraph (format invite-instructions from org-name))
+      (spacer 20)
       (when show-note? (note-author from-avatar from true))
       (when show-note? (spacer 16))
       (when show-note? (paragraph note))
