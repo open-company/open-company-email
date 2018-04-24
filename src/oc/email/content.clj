@@ -252,7 +252,7 @@
 
 (defn- post-attribution [entry]
   (paragraph (str "Posted by " (-> entry :publisher :name) " in " (:board-name entry) " on " (post-date (:published-at entry)))
-   "body-block" "text-left attribution"))
+   "" "text-left attribution"))
 
 ;; ----- Digest -----
 
