@@ -29,72 +29,23 @@
 (def invite-message "invited you to his team on Carrot")
 (def invite-message-with-company "invited you to join the “%s” digest on Carrot")
 (def invite-button "Accept invitation")
-(def invite-help-links
-  [:p {:class "digest-help"}
-    "Visit our "
-    [:a {:href carrot-help}
-      "getting started guide"]
-    " for tips and tricks on how to get the most out of Carrot."])
 
 (def share-message "sent you a post")
 (def share-cta "Read post")
-(def share-help-links
-  [:p {:class "digest-help"}
-    "Not sure what a post is? Head over to our "
-    [:a {:href carrot-help} "support center"]
-    " to learn more"])
 
 (def board-invite-message "invited you to join the private section “%s” within your company digest")
 (def anonymous-board-invite-message "You've been invited to join the private section “%s” within your company digest")
 (def board-invite-explainer "Private sections of the digest are only available to invited team members.")
-(def board-invite-help-links
-  [:p {:class "digest-help"}
-    "Not sure what a private section is? Head over to our "
-    [:a {:href carrot-help} "support center"]
-    " to learn more"])
 
 (def reset-message "Password reset")
 (def reset-instructions "Click the button below to reset your password. If you didn't request a password reset, you can ignore this email.")
 (def reset-button-text "Reset Password")
-(def reset-ignore "If you didn't request a password reset, you can safely ignore this email.")
-(def reset-help-links
-  [:p {:class "digest-help"}
-    [:a {:href carrot-hello-mailto} "Contact us"]
-    " or visit our "
-    [:a {:href carrot-help} "support center"]
-    " if you’re in need of assistance"])
 
-(def verify-message "Please verify your email for Carrot")
-(def verify-instructions "Click the link below to verify your email address.")
+(def verify-message "Please verify your email")
+(def verify-instructions "Click the link below to verify your account.")
 (def verify-button-text "Verify Email")
-(def verify-ignore "If you didn't create a Carrot account, you can safely ignore this email.")
-(def verify-help-links
-  [:p {:class "digest-help"}
-    [:a {:href carrot-hello-mailto} "Contact us"]
-    " or visit our "
-    [:a {:href carrot-help} "support center"]
-    " if you’re in need of assistance"])
-
-(def digest-help-links
-  [:p {:class "digest-help"}
-    "You’re receing this digest weekly. You can change your "
-    [:a {:href profile-url} "delivery frequency"]
-    "."])
-
 
 ;; ----- HTML Fragments -----
-
-(defn- help-links [token-type]
-  [:table {:class "row"}
-    [:tr
-      [:th {:class "small-12 large-12 columns"}
-        (case token-type
-          :reset reset-help-links
-          :verify verify-help-links
-          :invite invite-help-links
-          :board-notification board-invite-help-links
-          :share-link share-help-links
-          :digest digest-help-links)]]])
 
 (defn- org-logo
   [{org-name :org-name logo-url :org-logo-url logo-height :org-logo-height logo-width :org-logo-width}]
@@ -319,9 +270,6 @@
       (when logo? (spacer 40))
       (h1 title)
       (mapcat post posts)
-      (spacer 24)
-      horizontal-line
-      (help-links :digest)
       (spacer 73)]))
 
 ;; ----- Transactional Emails -----
@@ -359,9 +307,6 @@
       (when show-note? (paragraph note))
       (spacer 35)
       (left-button "Accept invitation" board-url)
-      (spacer 24)
-      horizontal-line
-      (help-links :invite)
       (spacer 73)]))
 
 (defn- invite-content [td-classes invite]
@@ -394,9 +339,6 @@
       (when show-note? (paragraph note))
       (spacer 35)
       (left-button invite-button (:token-link invite))
-      (spacer 24)
-      horizontal-line
-      (help-links :invite)
       (spacer 73)]))
 
 (defn- share-content [entry]
@@ -433,9 +375,6 @@
       (post-attribution entry)
       (spacer 8)
       (read-post-button share-cta entry-url)
-      (spacer 24)
-      horizontal-line
-      (help-links :share-link)
       (spacer 73)]))
 
 (defn- token-prep [token-type msg]
@@ -449,10 +388,7 @@
     :button-text (case token-type
                     :reset reset-button-text
                     :verify verify-button-text)
-    :link (:token-link (keywordize-keys msg))
-    :ignore (case token-type
-                :reset reset-ignore
-                :verify verify-ignore)})
+    :link (:token-link (keywordize-keys msg))})
 
 (defn- token-content [td-classes token-type msg]
   (let [message (token-prep token-type msg)
@@ -462,20 +398,13 @@
     [:td {:class td-classes}
       (spacer 40)
       (when logo? (org-logo msg))
-      (when logo? (spacer 35))
-      (spacer 35)
+      (when logo? (spacer 40))
       (h2 (:message message))
-      (spacer 28)
-      (paragraph (:instructions message))
-      (spacer 35)
-      (left-button (:button-text message) (:token-link msg))
-      (spacer 35)
-      (paragraph (:ignore message))
-      (spacer 35)
-      horizontal-line
-      (help-links token-type)
       (spacer 40)
-      (spacer 33)]))
+      (paragraph (:instructions message))
+      (spacer 20)
+      (left-button (:button-text message) (:token-link msg))
+      (spacer 72)]))
 
 ;; ----- General HTML, common to all emails -----
 
@@ -560,8 +489,7 @@
   (let [message (token-prep token-type msg)]
     (str (:message message) "\n\n"
          (:instructions message) "\n\n"
-         (:link message) "\n\n"
-         (:ignore message))))
+         (:link message))))
 
 (defn digest-html [digest]
   (html digest :digest))
