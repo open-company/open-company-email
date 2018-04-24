@@ -34,9 +34,9 @@
 (def share-message "sent you a post")
 (def share-cta "Read post")
 
-(def board-invite-message "invited you to join the private section “%s” within your company digest")
-(def anonymous-board-invite-message "You've been invited to join the private section “%s” within your company digest")
-(def board-invite-explainer "Private sections of the digest are only available to invited team members.")
+(def board-invite-message "%s invited you to join a private section")
+(def board-invite-explainer "%s (%s)")
+(def board-invite-button "View %s")
 
 (def reset-message "Password reset")
 (def reset-instructions "Click the button below to reset your password. If you didn't request a password reset, you can ignore this email.")
@@ -146,6 +146,8 @@
   [:table {:class "row"}
     [:tr
       [:th {:class "small-12 large-12"}
+        horizontal-line
+        (spacer 16)
         [:img {:class "note-author-avatar" :src (circle-image avatar-url 32)}]
         [:span {:class "note-author-name"} author]]]])
 
@@ -287,8 +289,8 @@
         first-name (-> notice :inviter :first-name)
         last-name (-> notice :inviter :last-name)
         from (s/join " " [first-name last-name])
-        invite-message (if (s/blank? from) anonymous-board-invite-message (str (s/trim from) " " board-invite-message))
-        formatted-invite-message (format invite-message from)
+        fixed-from (if (not (s/blank? from)) "Someone" from)
+        invite-message (format board-invite-message from)
         from-avatar (-> notice :inviter :avatar-url)
         from-avatar? (not (s/blank? from-avatar))
         note (:note notice)
@@ -300,14 +302,16 @@
                              :org-logo-url logo-url
                              :org-logo-width logo-width
                              :org-logo-height logo-height}))
-      (when logo? (spacer 35))
-      (h1 formatted-invite-message)
-      (spacer 35)
+      (when logo? (spacer 40))
+      (h1 invite-message)
+      (spacer 40)
+      (paragraph (format board-invite-explainer board-name board-url))
+      (when show-note? (spacer 40))
       (when show-note? (note-author from-avatar from))
       (when show-note? (spacer 16))
       (when show-note? (paragraph note))
-      (spacer 35)
-      (left-button "Accept invitation" board-url)
+      (spacer 20)
+      (left-button (format board-invite-button board-name) board-url)
       (spacer 73)]))
 
 (defn- invite-content [td-classes invite]
@@ -322,10 +326,9 @@
         note (:note invite)
         note? (not (s/blank? note))
         show-note? (and from-avatar? note?)
-        invite-message (str from " "
-                        (if (s/blank? org-name)
-                          invite-message
-                          (format invite-message-with-company org-name)))]
+        invite-message (if (s/blank? org-name)
+                         invite-message
+                         (format invite-message-with-company org-name))]
     [:td {:class td-classes}
       (spacer 40)
       (when logo? (org-logo {:org-name org-name
