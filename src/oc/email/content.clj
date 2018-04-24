@@ -26,8 +26,9 @@
 
 (def carrot-explainer "Carrot is the company digest that keeps everyone aligned around what matters most.")
 
-(def invite-message "invited you to his team on Carrot")
-(def invite-message-with-company "invited you to join the “%s” digest on Carrot")
+(def invite-message "Join your team on Carrot")
+(def invite-message-with-company "Join %s on Carrot")
+(def invite-instructions "%s has invited you to join the %s digest.")
 (def invite-button "Accept invitation")
 
 (def share-message "sent you a post")
@@ -42,7 +43,7 @@
 (def reset-button-text "Reset Password")
 
 (def verify-message "Please verify your email")
-(def verify-instructions "Click the link below to verify your account.")
+(def verify-instructions "Welcome to Carrot, your new company digest! Please click the link below to verify your account.")
 (def verify-button-text "Verify Email")
 
 ;; ----- HTML Fragments -----
@@ -331,13 +332,14 @@
                              :org-logo-url logo-url
                              :org-logo-width logo-width
                              :org-logo-height logo-height}))
-      (when logo? (spacer 35))
+      (when logo? (spacer 40))
       (h1 invite-message)
-      (spacer 20)
+      (spacer 40)
+      (paragraph (format invite-instructions from org-name))
       (when show-note? (note-author from-avatar from))
       (when show-note? (spacer 16))
       (when show-note? (paragraph note))
-      (spacer 35)
+      (spacer 20)
       (left-button invite-button (:token-link invite))
       (spacer 73)]))
 
