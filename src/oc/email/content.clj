@@ -258,14 +258,19 @@
   (let [board-name (:name board)]
     (assoc board :posts (map #(assoc % :board-name board-name) (:posts board)))))
 
+(defn- weekly-digest? [digest-data]
+  (or (= "weekly" (:digest-frequency digest-data))
+      (= :weekly (:digest-frequency digest-data))))
+
 (defn- digest-content [digest]
   (let [logo-url (:logo-url digest)
         logo? (not (s/blank? logo-url))
-        weekly? (= "weekly" (:digest-frequency digest))
+        weekly? (weekly-digest? digest)
         org-name (:org-name digest)
-        title (if weekly? (str org-name " Weekly Digest") (str org-name " Daily Digest"))
+        title (if weekly? "Your weekly brief" "Your morning brief")
         boards (map posts-with-board-name (:boards digest))
-        posts (mapcat :posts boards)]
+        posts (mapcat :posts boards)
+        digests-url (s/join "/" [config/web-url (:org-slug digest) "all-posts"])]
     [:td {:class "small-10 large-8 columns"}
       (spacer 40)
       (when logo? (org-logo {:org-name (:org-name digest)
@@ -274,6 +279,8 @@
                              :org-logo-height (:logo-height digest)}))
       (when logo? (spacer 40))
       (h1 title)
+      (spacer 20)
+      (left-button "Go to digest" digests-url)
       (mapcat post posts)
       (spacer 73)]))
 
@@ -433,7 +440,7 @@
                   :digest (digest-content data))
                 [:td {:class "small-1 large-2 columns"}]]]
             (case type
-              :digest (digest-footer (= "daily" (:digest-frequency data)))
+              :digest (digest-footer (not (weekly-digest? data)))
               (simple-footer))]]]]))
 
 (defn- head [data]
