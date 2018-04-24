@@ -223,12 +223,40 @@
 ;               [:p {:class "attribution"} attribution]]]]]
 ;       [:th {:class "small-1 large-1 last columns"}]]))
 
-(defn- transactional-footer []
+(defn- digest-footer [daily?]
+  [:table {:class "row digest-footer-table"}
+    [:tr
+      [:td {:class "small-1 large-2 columns"}]
+      [:td {:class "small-10 large-8 columns"}
+        (vspacer 16 "digest-footer-table" "digest-footer-table")
+        [:table {:class "row digest-footer-table"}
+          [:tr
+            [:th {:class "small-12 large-12 columns"}
+              [:p {:class "digest-footer-paragraph"}
+                "You're receiving this brief "
+                (if daily? "daily" "weekly")
+                ". Switch to "
+                [:a {:href profile-url}
+                  (if daily? "weekly" "daily")]
+                "? You may also "
+                [:a {:href profile-url}
+                  "unsubscribe"]
+                "."]]]]
+        (vspacer 16 "digest-footer-table" "digest-footer-table")
+        [:table {:class "row digest-footer-table"}
+          [:tr
+            [:th {:class "small-12 large-12 columns"}
+              [:p {:class "digest-bottom-footer-paragraph"}
+                "Sent via Carrot"]]]]
+        (vspacer 16 "digest-footer-table" "digest-footer-table")]
+      [:td {:class "small-1 large-2 columns"}]]])
+
+(defn- simple-footer []
   [:table {:class "row footer-table"}
     [:tr
       [:td {:class "small-1 large-2 columns"}]
       [:td {:class "small-10 large-8 columns"}
-        (vspacer 15 "footer-table footer-top-border" "footer-table")
+        (vspacer 16 "footer-table footer-top-border" "footer-table")
         [:table {:class "row footer-table"}
           [:tr
             [:th {:class "small-10 large-10 columns"}
@@ -243,7 +271,7 @@
                        :width "13"
                        :height "24"
                        :alt "Carrot"}]]]]]
-        (vspacer 15 "footer-table" "footer-table")]
+        (vspacer 16 "footer-table" "footer-table")]
       [:td {:class "small-1 large-2 columns"}]]])
 
 ;; ----- Posts common ----
@@ -468,7 +496,9 @@
                   :share-link (share-content data)
                   :digest (digest-content data))
                 [:td {:class "small-1 large-2 columns"}]]]
-            (transactional-footer)]]]]))
+            (case type
+              :digest (digest-footer (= "daily" (:digest-frequency data)))
+              (simple-footer))]]]]))
 
 (defn- head [data]
   [:html {:xmlns "http://www.w3.org/1999/xhtml"} 

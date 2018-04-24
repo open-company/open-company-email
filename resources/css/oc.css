@@ -5,6 +5,11 @@ html,
   color: #34414F;
 }
 
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 table {
   background-color: white !important;
 }
@@ -252,4 +257,25 @@ span.read-post-text {
   margin-left: 8px;
   color: #3FBD7C;
   font-size: 14px;
+}
+
+.digest-footer-table {
+  background-color: #F2F1ED !important;
+}
+
+p.digest-bottom-footer-paragraph {
+  color: rgba(137, 141, 147, 0.5);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+p.digest-footer-paragraph, p.digest-footer-paragraph a {
+  color: #898D93;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+p.digest-footer-paragraph a {
+  font-weight: 400;
+  text-decoration: underline;
 }
