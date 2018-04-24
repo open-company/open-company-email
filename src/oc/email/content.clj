@@ -249,9 +249,9 @@
    horizontal-line
    (spacer 32)
    (h2 (:headline entry))
-   (spacer 16)
+   (spacer 24)
    (post-attribution entry)
-   (spacer 16)
+   (spacer 24)
    (read-post-button "Read post" (:url entry))])
 
 (defn- posts-with-board-name [board]
@@ -270,7 +270,8 @@
         title (if weekly? "Your weekly brief" "Your morning brief")
         boards (map posts-with-board-name (:boards digest))
         posts (mapcat :posts boards)
-        digests-url (s/join "/" [config/web-url (:org-slug digest) "all-posts"])]
+        digests-url (s/join "/" [config/web-url (:org-slug digest) "all-posts"])
+        subtitle (str "Good morning! Here are the new posts shared to the " (:org-name digest) " digest this " (if weekly? "past week" "yesterday") ".")]
     [:td {:class "small-10 large-8 columns"}
       (spacer 40)
       (when logo? (org-logo {:org-name (:org-name digest)
@@ -279,6 +280,8 @@
                              :org-logo-height (:logo-height digest)}))
       (when logo? (spacer 40))
       (h1 title)
+      (spacer 20)
+      (paragraph subtitle)
       (spacer 20)
       (left-button "Go to digest" digests-url)
       (mapcat post posts)
