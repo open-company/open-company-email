@@ -142,6 +142,15 @@
          "circle/"
          filestack-resource)))
 
+(defn- fix-avatar-url
+  "If the url is pointing to one of our happy faces replace the ending svg with png to have it resizable.
+   If it's not use the on the fly resize url."
+  [avatar-url]
+  (let [r (re-seq #"happy_face_(red|green|blue|purple|yellow).svg$" avatar-url)]
+    (if r
+      (str (subs avatar-url 0 (- (count avatar-url) 3)) "png")
+      (circle-image avatar-url 32))))
+
 (defn- note-author [avatar-url author divider-line?]
   [:table {:class "row"}
     [:tr
@@ -150,7 +159,8 @@
           horizontal-line)
         (when divider-line?
           (spacer 16))
-        [:img {:class "note-author-avatar" :src (circle-image avatar-url 32)}]
+        [:img {:class "note-author-avatar"
+               :src (fix-avatar-url avatar-url)}]
         [:span {:class "note-author-name"} author]]]])
 
 (defn- read-post-button [link-text link-url]
@@ -241,8 +251,6 @@
    "body-block" "text-left attribution"))
 
 ;; ----- Digest -----
-
-
 
 (defn- post [entry]
   [(spacer 32)
