@@ -31,7 +31,7 @@
 (def invite-instructions "%s has invited you to join the %s digest.")
 (def invite-button "Accept invitation")
 
-(def share-message "sent you a post")
+(def share-message "%s sent you a post on Carrot")
 (def share-cta "Read post")
 
 (def board-invite-message "%s invited you to join a private section")
@@ -142,12 +142,14 @@
          "circle/"
          filestack-resource)))
 
-(defn- note-author [avatar-url author]
+(defn- note-author [avatar-url author divider-line?]
   [:table {:class "row"}
     [:tr
       [:th {:class "small-12 large-12"}
-        horizontal-line
-        (spacer 16)
+        (when divider-line?
+          horizontal-line)
+        (when divider-line?
+          (spacer 16))
         [:img {:class "note-author-avatar" :src (circle-image avatar-url 32)}]
         [:span {:class "note-author-name"} author]]]])
 
@@ -307,7 +309,7 @@
       (spacer 40)
       (paragraph (format board-invite-explainer board-name board-url))
       (when show-note? (spacer 40))
-      (when show-note? (note-author from-avatar from))
+      (when show-note? (note-author from-avatar from true))
       (when show-note? (spacer 16))
       (when show-note? (paragraph note))
       (spacer 20)
@@ -339,7 +341,7 @@
       (h1 invite-message)
       (spacer 40)
       (paragraph (format invite-instructions from org-name))
-      (when show-note? (note-author from-avatar from))
+      (when show-note? (note-author from-avatar from true))
       (when show-note? (spacer 16))
       (when show-note? (paragraph note))
       (spacer 20)
@@ -369,9 +371,9 @@
       (spacer 40)
       (when logo? (org-logo entry))
       (when logo? (spacer 40))
-      (h1 (str from " " share-message))
+      (h1 (format share-message from))
       (when show-note? (spacer 40))
-      (when show-note? (note-author from-avatar from))
+      (when show-note? (note-author from-avatar from false))
       (when show-note? (spacer 16))
       (when show-note? (paragraph note))
       (spacer 40)
