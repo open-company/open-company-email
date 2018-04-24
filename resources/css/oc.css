@@ -144,7 +144,10 @@ span.cta-text {
   font-weight: bold;
   height: 16px;
   display: block;
-  padding: 12px 20px;
+  padding-top: 12px;
+  padding-right: 20px;
+  padding-bottom: 12px;
+  padding-left: 20px;
   border-radius: 40px;
   background-color: #3FBD7C;
   color: white;
