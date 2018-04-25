@@ -49,7 +49,7 @@
 (def digest-weekly-title "Your weekly brief")
 (def digest-daily-title "Your daily brief")
 (def digest-message "Hi %s, here are the new posts to the %s digest.”")
-(def digest-message-no-name "Here are the new posts to the %s digest."
+(def digest-message-no-name "Here are the new posts to the %s digest.")
 (def digest-go-to-digest-button "go_to_digest")
 (def digest-read-post-button "read_post")
 
@@ -173,11 +173,37 @@
                :src (fix-avatar-url avatar-url)}]
         [:span {:class "note-author-name"} author]]]])
 
-(defn- left-button [cta-text url]
-  [:a {:href url}
-    [:img {:src (str "https://open-company.s3.amazonaws.com/email_bt_" cta-text ".png")
-           :src-set (str "https://open-company.s3.amazonaws.com/email_bt_" cta-text "@2x.png 2x")
-           :alt cta-text}]])
+(defn- left-button
+  "Image of the green button or read post button.
+  The image has to be retina and set only the width like this:
+  <img alt=\"Litmus\"
+       src=\"hero@2x.png\"
+       width=\"600\"
+       style=\"width: 100%;
+               max-width: 600px;
+               font-family: sans-serif;
+               color: #ffffff;
+               font-size: 20px;
+               display: block;
+               border: 0px;\"
+       border=\"0\">
+  As suggested here:
+  https://litmus.com/blog/understanding-retina-images-in-html-email"
+  [cta-text url]
+  (let [image-width (case cta-text
+                    "go_to_digest" 136
+                    "reset_password" 159
+                    "accept_invitation" 160
+                    "verify_email" 120
+                    "view_section" 128
+                    ;; default "read_post"
+                    94)]
+    [:a {:href url}
+      [:img {:class "green-button"
+             :src (str "https://open-company.s3.amazonaws.com/email_bt_" cta-text "@2x.png")
+             :width (str image-width)
+             :style (str "max-width: " image-width "px;")
+             :alt cta-text}]]))
 
 ;; Comments not shown in digests at the moment
 ; (defn- comment-attribution [comment-count comment-authors]

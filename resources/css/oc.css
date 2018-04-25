@@ -221,3 +221,12 @@ p.invite-carrot-disclaimer a {
   text-decoration: underline;
   font-weight: 400;
 }
+
+img.green-button {
+  width: 100%;
+  font-family: sans-serif;
+  color: #ffffff;
+  font-size: 20px;
+  display: block;
+  border: 0px;
+}
