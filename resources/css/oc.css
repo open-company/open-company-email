@@ -3,6 +3,13 @@ html,
 .body {
   background-color: white;
   color: #34414F;
+  width: 100%;
+  height: 100%;
+}
+
+.inner-body {
+  background-color: white;
+  max-width: 600px;
 }
 
 * {
@@ -26,7 +33,7 @@ table th.body-spacer {
 
 h1 {
   font-family: Helvetica, Arial, sans-serif !important;
-  font-size: 28px;
+  font-size: 24px;
   font-weight: bold;  
   color: #34414F;
   margin: 0px;
@@ -34,7 +41,7 @@ h1 {
 
 h2 {
   font-family: Helvetica, Arial, sans-serif !important;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: bold;  
   color: #34414F;
   margin: 0px;
@@ -42,7 +49,7 @@ h2 {
 
 p {
   font-family: Helvetica, Arial, sans-serif !important;
-  font-size: 17px;
+  font-size: 16px;
   color: #34414F;
   line-height: 1.5;
   margin: 0px;
@@ -51,29 +58,6 @@ p {
 p.attribution {
   font-size: 14px;
   color: #898D93;
-}
-
-table.cta-button {
-  height: 40px;
-  border-radius: 40px;
-  background-color: #3FBD7C !important;
-  width: auto !important;
-}
-
-table.post-button {
-  border-collapse: separate;
-  height: 40px;
-  border-radius: 40px;
-  border: 1px solid #D4F6E4;
-  background-color: white !important;
-}
-
-span.note-author {
-  font-family: Helvetica, Arial, sans-serif !important;
-  font-size: 12px;
-  font-weight: bold;
-  padding-top: 12px;
-  padding-left: 8px;
 }
 
 span.note-body {
@@ -87,22 +71,6 @@ span.button-text {
   font-size: 14px;
   font-weight: bold;
   padding-top: 13px;
-}
-
-span.cta-text {
-  float: left;
-  font-family: Helvetica, Arial, sans-serif !important;
-  font-size: 14px;
-  font-weight: bold;
-  height: 16px;
-  display: block;
-  padding-top: 11px;
-  padding-right: 20px;
-  padding-bottom: 13px;
-  padding-left: 20px;
-  border-radius: 40px;
-  background-color: #3FBD7C;
-  color: white;
 }
 
 table.cta-button span.button-text {
@@ -126,6 +94,16 @@ table.footer a {
 /* New template specific css */
 .footer-table {
   background-color: white !important;
+  max-width: 600px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.email-content {
+  max-width: 600px;
+  background-color: white !important;
+  text-align: center;
+  vertical-align: middle;
 }
 
 .footer-top-border {
@@ -214,10 +192,6 @@ span.read-post-text {
   font-size: 14px;
 }
 
-.digest-footer-table {
-  background-color: #F2F1ED !important;
-}
-
 p.digest-bottom-footer-paragraph {
   color: rgba(137, 141, 147, 0.5);
   font-size: 14px;
@@ -225,7 +199,7 @@ p.digest-bottom-footer-paragraph {
 }
 
 p.digest-footer-paragraph, p.digest-footer-paragraph a {
-  color: #898D93;
+  color: #C4C6C7;
   font-size: 14px;
   font-weight: 400;
 }

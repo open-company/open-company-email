@@ -29,22 +29,28 @@
 (def invite-message "Join your team on Carrot")
 (def invite-message-with-company "Join %s on Carrot")
 (def invite-instructions "%s has invited you to join the %s digest.")
-(def invite-button "Accept invitation")
+(def invite-button "accept_invitation")
 
 (def share-message "%s sent you a post on Carrot")
-(def share-cta "Read post")
+(def share-cta "read_post")
 
 (def board-invite-message "%s invited you to join a private section")
 (def board-invite-explainer "%s (%s)")
-(def board-invite-button "View %s")
+(def board-invite-button "view_section")
 
 (def reset-message "Password reset")
 (def reset-instructions "Click the button below to reset your password. If you didn't request a password reset, you can ignore this email.")
-(def reset-button-text "Reset Password")
+(def reset-button-text "reset_password")
 
 (def verify-message "Please verify your email")
 (def verify-instructions "Welcome to Carrot, your new company digest! Please click the link below to verify your account.")
-(def verify-button-text "Verify Email")
+(def verify-button-text "verify_email")
+
+(def digest-weekly-title "Your weekly brief")
+(def digest-daily-title "Your morning brief")
+(def digest-message "Here are the new posts to the %s digest.")
+(def digest-go-to-digest-button "go_to_digest")
+(def digest-read-post-button "read_post")
 
 ;; ----- HTML Fragments -----
 
@@ -122,9 +128,8 @@
   ([content css-class h2-class]
   [:table {:class (str "row " css-class)}
     [:tr
-      [:th {:class "small-10 large-8 columns"}
-        [:h2 {:class h2-class} content]]
-      [:th {:class "small-1 large-2 last columns"}]]]))
+      [:th {:class "small-12 large-12 columns"}
+        [:h2 {:class h2-class} content]]]]))
 
 (defn- circle-image
   "Return an on the fly url of the image circle and resized."
@@ -167,19 +172,10 @@
                :src (fix-avatar-url avatar-url)}]
         [:span {:class "note-author-name"} author]]]])
 
-(defn- read-post-button [link-text link-url]
-  [:a {:href link-url}
-    [:img {:src "https://open-company.s3.amazonaws.com/read_post.png"
-           :class "read-post-image"
-           :width 16
-           :height 16}]
-    [:span {:class "read-post-text"}
-      link-text]])
-
 (defn- left-button [cta-text url]
   [:a {:href url}
-    [:span {:class "cta-text"}
-      cta-text]])
+    [:img {:src (str "https://open-company.s3.amazonaws.com/email_bt_" cta-text ".png")
+           :alt cta-text}]])
 
 ;; Comments not shown in digests at the moment
 ; (defn- comment-attribution [comment-count comment-authors]
@@ -193,40 +189,14 @@
 ;               [:p {:class "attribution"} attribution]]]]]
 ;       [:th {:class "small-1 large-1 last columns"}]]))
 
-(defn- digest-footer [daily?]
-  [:table {:class "row digest-footer-table"}
+(defn- email-footer []
+  [:table {:class "row footer-table"
+           :valign "middle"
+           :align "center"}
     [:tr
-      [:td {:class "small-1 large-2 columns"}]
-      [:td {:class "small-10 large-8 columns"}
-        (vspacer 16 "digest-footer-table" "digest-footer-table")
-        [:table {:class "row digest-footer-table"}
-          [:tr
-            [:th {:class "small-12 large-12 columns"}
-              [:p {:class "digest-footer-paragraph"}
-                "You're receiving this brief "
-                (if daily? "daily" "weekly")
-                ". Switch to "
-                [:a {:href profile-url}
-                  (if daily? "weekly" "daily")]
-                "? You may also "
-                [:a {:href profile-url}
-                  "unsubscribe"]
-                "."]]]]
-        (vspacer 16 "digest-footer-table" "digest-footer-table")
-        [:table {:class "row digest-footer-table"}
-          [:tr
-            [:th {:class "small-12 large-12 columns"}
-              [:p {:class "digest-bottom-footer-paragraph"}
-                "Sent via Carrot"]]]]
-        (vspacer 16 "digest-footer-table" "digest-footer-table")]
-      [:td {:class "small-1 large-2 columns"}]]])
-
-(defn- simple-footer []
-  [:table {:class "row footer-table"}
-    [:tr
-      [:td {:class "small-1 large-2 columns"}]
-      [:td {:class "small-10 large-8 columns"}
-        (vspacer 16 "footer-table footer-top-border" "footer-table")
+      [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
+        (vspacer 24 "footer-table" "footer-table")
+        (vspacer 24 "footer-table footer-top-border" "footer-table")
         [:table {:class "row footer-table"}
           [:tr
             [:th {:class "small-10 large-10 columns"}
@@ -241,8 +211,7 @@
                        :width "13"
                        :height "24"
                        :alt "Carrot"}]]]]]
-        (vspacer 16 "footer-table" "footer-table")]
-      [:td {:class "small-1 large-2 columns"}]]])
+        (vspacer 40 "footer-table" "footer-table")]]])
 
 ;; ----- Posts common ----
 
@@ -257,14 +226,14 @@
 ;; ----- Digest -----
 
 (defn- post [entry]
-  [(spacer 32)
-   horizontal-line
-   (spacer 32)
+  [horizontal-line
+   (spacer 24)
    (h2 (:headline entry))
-   (spacer 8)
+   (spacer 16)
    (post-attribution entry)
-   (spacer 8)
-   (read-post-button "Read post" (:url entry))])
+   (spacer 16)
+   (left-button digest-read-post-button (:url entry))
+   (spacer 24)])
 
 (defn- posts-with-board-name [board]
   (let [board-name (:name board)]
@@ -279,25 +248,39 @@
         logo? (not (s/blank? logo-url))
         weekly? (weekly-digest? digest)
         org-name (:org-name digest)
-        title (if weekly? "Your weekly brief" "Your morning brief")
+        title (if weekly? digest-weekly-title digest-daily-title)
         boards (map posts-with-board-name (:boards digest))
         posts (mapcat :posts boards)
-        digests-url (s/join "/" [config/web-url (:org-slug digest) "all-posts"])
-        subtitle (str "Here are the new posts to the " (:org-name digest) " digest.")]
-    [:td {:class "small-10 large-8 columns"}
+        digest-url (s/join "/" [config/web-url (:org-slug digest) "all-posts"])
+        subtitle (format digest-message  (:org-name digest))]
+    [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
       (spacer 40)
       (when logo? (org-logo {:org-name (:org-name digest)
                              :org-logo-url logo-url
                              :org-logo-width (:logo-width digest)
                              :org-logo-height (:logo-height digest)}))
-      (when logo? (spacer 40))
+      (when logo? (spacer 32))
       (h1 title)
-      (spacer 20)
+      (spacer 24)
       (paragraph subtitle)
-      (spacer 20)
-      (left-button "Go to digest" digests-url)
+      (spacer 16)
+      (left-button digest-go-to-digest-button digest-url)
+      (spacer 40)
       (mapcat post posts)
-      (spacer 73)]))
+      (spacer 56)
+      [:table {:class "row"}
+        [:tr
+          [:th {:class "small-12 large-12 columns"}
+            [:p {:class "digest-footer-paragraph"}
+              "You're receiving this brief "
+              (if weekly? "weekly" "daily")
+              ". "
+              [:a {:href profile-url}
+                (str "Switch to " (if weekly? "daily" "weekly"))]
+              "? You may also "
+              [:a {:href profile-url}
+                "unsubscribe"]
+              "."]]]]]))
 
 ;; ----- Transactional Emails -----
 
@@ -320,23 +303,24 @@
         note (:note notice)
         note? (not (s/blank? note))
         show-note? (and from-avatar? note?)]
-    [:td {:class "small-10 large-8 columns"}
+    [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
       (spacer 40)
       (when logo? (org-logo {:org-name org-name
                              :org-logo-url logo-url
                              :org-logo-width logo-width
                              :org-logo-height logo-height}))
-      (when logo? (spacer 40))
+      (when logo? (spacer 32))
       (h1 invite-message)
-      (spacer 40)
+      (spacer 24)
       (paragraph (format board-invite-explainer board-name board-url))
-      (when show-note? (spacer 40))
+      (spacer 16)
+      (when show-note? (spacer 8))
       (when show-note? (note-author from-avatar from true))
       (when show-note? (spacer 16))
       (when show-note? (paragraph note))
-      (spacer 20)
-      (left-button (format board-invite-button board-name) board-url)
-      (spacer 73)]))
+      (when show-note? (spacer 16))
+      (left-button board-invite-button board-url)
+      (spacer 56)]))
 
 (defn- invite-content [td-classes invite]
   (let [logo-url (:org-logo-url invite)
@@ -353,23 +337,24 @@
         invite-message (if (s/blank? org-name)
                          invite-message
                          (format invite-message-with-company org-name))]
-    [:td {:class td-classes}
+    [:td {:class td-classes :valign "middle" :align "center"}
       (spacer 40)
       (when logo? (org-logo {:org-name org-name
                              :org-logo-url logo-url
                              :org-logo-width logo-width
                              :org-logo-height logo-height}))
-      (when logo? (spacer 40))
+      (when logo? (spacer 32))
       (h1 invite-message)
-      (spacer 30)
+      (spacer 24)
       (paragraph (format invite-instructions from org-name))
-      (spacer 40)
+      (spacer 16)
+      (when show-note? (spacer 8))
       (when show-note? (note-author from-avatar from true))
       (when show-note? (spacer 16))
       (when show-note? (paragraph note))
-      (spacer 20)
+      (when show-note? (spacer 16))
       (left-button invite-button (:token-link invite))
-      (spacer 73)]))
+      (spacer 56)]))
 
 (defn- share-content [entry]
   (let [logo-url (:org-logo-url entry)
@@ -390,24 +375,24 @@
         secure-uuid (:secure-uuid entry)
         origin-url config/web-url
         entry-url (s/join "/" [origin-url org-slug "post" secure-uuid])]
-    [:td {:class "small-10 large-8 columns"}
+    [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
       (spacer 40)
       (when logo? (org-logo entry))
-      (when logo? (spacer 40))
+      (when logo? (spacer 32))
       (h1 (format share-message from))
-      (when show-note? (spacer 40))
+      (spacer 24)
       (when show-note? (note-author from-avatar from false))
       (when show-note? (spacer 16))
       (when show-note? (paragraph note))
-      (spacer 32)
+      (when show-note? (spacer 40))
       horizontal-line
       (spacer 24)
       (h2 headline)
-      (spacer 8)
+      (spacer 16)
       (post-attribution entry)
-      (spacer 8)
-      (read-post-button share-cta entry-url)
-      (spacer 73)]))
+      (spacer 16)
+      (left-button share-cta entry-url)
+      (spacer 56)]))
 
 (defn- token-prep [token-type msg]
   {
@@ -427,39 +412,40 @@
         logo-url (:org-logo-url msg)
         logo? (not (s/blank? logo-url))
         org-name (:org-name msg)]
-    [:td {:class td-classes}
+    [:td {:class td-classes :valign "middle" :align "center"}
       (spacer 40)
       (when logo? (org-logo msg))
-      (when logo? (spacer 40))
-      (h2 (:message message))
-      (spacer 40)
+      (when logo? (spacer 32))
+      (h1 (:message message))
+      (spacer 24)
       (paragraph (:instructions message))
-      (spacer 20)
+      (spacer 16)
       (left-button (:button-text message) (:token-link msg))
-      (spacer 72)]))
+      (spacer 56)]))
 
 ;; ----- General HTML, common to all emails -----
 
 (defn- body [data]
   (let [type (:type data)]
     [:body
-      [:table {:class "body"}
+      [:table {:class "body"
+               :with "100%"}
         [:tr
-          [:td
-            [:table {:class "row"}
-              [:tr
-                [:td {:class "small-1 large-2 columns"}]
-                (case type
-                  :reset (token-content "small-10 large-8 columns" type data)
-                  :verify (token-content "small-10 large-8 columns" type data)
-                  :invite (invite-content "small-10 large-8 columns" data)
-                  :board-notification (board-notification-content data)
-                  :share-link (share-content data)
-                  :digest (digest-content data))
-                [:td {:class "small-1 large-2 columns"}]]]
-            (case type
-              :digest (digest-footer (not (weekly-digest? data)))
-              (simple-footer))]]]]))
+          [:td {:valign "middle"
+                :align "center"}
+            [:center
+              [:table {:class "row email-content"
+                       :valign "middle"
+                       :align "center"}
+                [:tr
+                  (case type
+                    :reset (token-content "small-12 large-12 columns" type data)
+                    :verify (token-content "small-12 large-12 columns" type data)
+                    :invite (invite-content "small-12 large-12 columns" data)
+                    :board-notification (board-notification-content data)
+                    :share-link (share-content data)
+                    :digest (digest-content data))]]
+              (email-footer)]]]]]))
 
 (defn- head [data]
   [:html {:xmlns "http://www.w3.org/1999/xhtml"} 
