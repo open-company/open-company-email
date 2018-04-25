@@ -208,3 +208,16 @@ p.digest-footer-paragraph a {
   font-weight: 400;
   text-decoration: underline;
 }
+
+p.invite-carrot-disclaimer {
+  color: #34414f;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+p.invite-carrot-disclaimer a {
+  color: #34414f;
+  font-size: 14px;
+  text-decoration: underline;
+  font-weight: 400;
+}

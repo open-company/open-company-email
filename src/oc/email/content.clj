@@ -175,6 +175,7 @@
 (defn- left-button [cta-text url]
   [:a {:href url}
     [:img {:src (str "https://open-company.s3.amazonaws.com/email_bt_" cta-text ".png")
+           :src-set (str "https://open-company.s3.amazonaws.com/email_bt_" cta-text "@2x.png 2x")
            :alt cta-text}]])
 
 ;; Comments not shown in digests at the moment
@@ -346,6 +347,15 @@
       (when logo? (spacer 32))
       (h1 invite-message)
       (spacer 24)
+      [:table {:class "row "}
+        [:tr
+          [:th {:class "small-12 large-12 columns"}
+            [:p {:class "invite-carrot-disclaimer"}
+              "Carrot is a company digest that keeps everyone aligned around what matters most. "
+              [:a {:href config/web-url}
+                "Learn More"]
+              "."]]]]
+      (spacer 16)
       (paragraph (format invite-instructions from org-name))
       (spacer 16)
       (when show-note? (spacer 8))
