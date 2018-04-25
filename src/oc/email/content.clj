@@ -347,6 +347,8 @@
       (when logo? (spacer 32))
       (h1 invite-message)
       (spacer 24)
+      (paragraph (format invite-instructions from org-name))
+      (spacer 16)
       [:table {:class "row "}
         [:tr
           [:th {:class "small-12 large-12 columns"}
@@ -355,8 +357,6 @@
               [:a {:href config/web-url}
                 "Learn More"]
               "."]]]]
-      (spacer 16)
-      (paragraph (format invite-instructions from org-name))
       (spacer 16)
       (when show-note? (spacer 8))
       (when show-note? (note-author from-avatar from true))
