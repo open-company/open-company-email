@@ -48,7 +48,8 @@
 
 (def digest-weekly-title "Your weekly brief")
 (def digest-daily-title "Your daily brief")
-(def digest-message "Here are the new posts to the %s digest.")
+(def digest-message "Hi %s, here are the new posts to the %s digest.”")
+(def digest-message-no-name "Here are the new posts to the %s digest."
 (def digest-go-to-digest-button "go_to_digest")
 (def digest-read-post-button "read_post")
 
@@ -253,7 +254,10 @@
         boards (map posts-with-board-name (:boards digest))
         posts (mapcat :posts boards)
         digest-url (s/join "/" [config/web-url (:org-slug digest) "all-posts"])
-        subtitle (format digest-message  (:org-name digest))]
+        first-name (:first-name digest)
+        subtitle (if (s/blank? first-name)
+                    (format digest-message-no-name (:org-name digest))
+                    (format digest-message first-name (:org-name digest)))]
     [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
       (spacer 40)
       (when logo? (org-logo {:org-name (:org-name digest)
