@@ -47,7 +47,7 @@
 (def verify-button-text "verify_email")
 
 (def digest-weekly-title "Your weekly brief")
-(def digest-daily-title "Your morning brief")
+(def digest-daily-title "Your daily brief")
 (def digest-message "Here are the new posts to the %s digest.")
 (def digest-go-to-digest-button "go_to_digest")
 (def digest-read-post-button "read_post")
@@ -229,9 +229,9 @@
   [horizontal-line
    (spacer 24)
    (h2 (:headline entry))
-   (spacer 16)
+   (spacer 12)
    (post-attribution entry)
-   (spacer 16)
+   (spacer 12)
    (left-button digest-read-post-button (:url entry))
    (spacer 24)])
 
@@ -388,9 +388,9 @@
       horizontal-line
       (spacer 24)
       (h2 headline)
-      (spacer 16)
+      (spacer 12)
       (post-attribution entry)
-      (spacer 16)
+      (spacer 12)
       (left-button share-cta entry-url)
       (spacer 56)]))
 
@@ -466,7 +466,7 @@
   (let [msg (keywordize-keys invite)
         org-name (if bold? (str "<b>" (:org-name msg) "</b>") (:org-name msg))
         from (:from msg)
-        prefix (if (s/blank? from) "You've been invited" (str from " invited you"))
+        prefix (if (s/blank? from) "You've been invited" (str from " has invited you"))
         org (if (s/blank? org-name) "" (str org-name " on "))]
     (str prefix " to join " org "Carrot")))
 
