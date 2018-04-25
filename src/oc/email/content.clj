@@ -247,8 +247,15 @@
   (let [d (time-format/parse iso-format timestamp)]
     (time-format/unparse date-format d)))
 
-(defn- post-attribution [entry]
-  (paragraph (str "Posted by " (-> entry :publisher :name) " in " (:board-name entry) " on " (post-date (:published-at entry)))
+(defn- post-attribution [entry show-board?]
+  (paragraph
+    (str "Posted by "
+         (-> entry :publisher :name)
+         (when show-board?
+          " in ")
+         (when show-board?
+          (:board-name entry))
+         " on " (post-date (:published-at entry)))
    "" "text-left attribution"))
 
 ;; ----- Digest -----
@@ -258,7 +265,7 @@
    (spacer 24)
    (h2 (:headline entry))
    (spacer 12)
-   (post-attribution entry)
+   (post-attribution entry true)
    (spacer 12)
    (left-button digest-read-post-button (:url entry))
    (spacer 24)])
@@ -429,7 +436,7 @@
       (spacer 24)
       (h2 headline)
       (spacer 12)
-      (post-attribution entry)
+      (post-attribution entry false)
       (spacer 12)
       (left-button share-cta entry-url)
       (spacer 56)]))
