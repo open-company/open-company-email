@@ -107,8 +107,8 @@
               (assoc :from default-from)
               (assoc :reply-to default-reply-to)
               (assoc :subject (case token-type
-                                  :reset "Carrot Password Reset"
-                                  :verify "Carrot Email Verification")))]
+                                  :reset "Reset your password"
+                                  :verify "Please verify your email")))]
     (try
       (spit html-file (content/token-html token-type msg)) ; create the email in a tmp file
       (inline-css html-file inline-file) ; inline the CSS
@@ -128,7 +128,9 @@
         inline-file (str uuid-fragment ".inline.html")
         msg (keywordize-keys message)
         org-name (:org-name msg)
-        frequency (if (= (keyword (:digest-frequency msg)) :daily) "Daily" "Weekly")]
+        daily? (= (keyword (:digest-frequency msg)) :daily)
+        frequency (if daily? "Daily" "Weekly")
+        digest-email-subject (if daily? "Your daily brief" "Your weekly brief")]
     (try
       (spit html-file (content/digest-html msg)) ; create the email in a tmp file
       (inline-css html-file inline-file) ; inline the CSS
@@ -137,7 +139,7 @@
               :source digest-source
               :from default-from
               :reply-to default-reply-to
-              :subject (str c/email-digest-prefix org-name " " frequency " Digest")}
+              :subject digest-email-subject}
              {:html (slurp inline-file)})
       (finally
         ; remove the tmp files
