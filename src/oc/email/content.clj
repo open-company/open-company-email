@@ -334,7 +334,7 @@
         first-name (-> notice :inviter :first-name)
         last-name (-> notice :inviter :last-name)
         from (s/join " " [first-name last-name])
-        fixed-from (if (not (s/blank? from)) "Someone" from)
+        fixed-from (if-not (s/blank? from) "Someone" from)
         invite-message (format board-invite-message from)
         from-avatar (-> notice :inviter :avatar-url)
         from-avatar? (not (s/blank? from-avatar))
