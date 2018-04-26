@@ -1,44 +1,57 @@
 (ns oc.email.content
   (:require [clojure.string :as s]
             [clojure.walk :refer (keywordize-keys)]
-            [clj-time.format :as format]
+            [clj-time.format :as time-format]
             [hiccup.core :as h]
             [oc.email.config :as config]))
 
 (def max-logo 32)
+(def author-logo 32)
+
+(def iso-format (time-format/formatters :date-time))
+(def date-format (time-format/formatter "MMMM d"))
+(def date-format-year (time-format/formatter "MMMM d YYYY"))
 
 (def profile-url (str config/web-url "/profile"))
 
-(def iso-format (format/formatters :date-time)) ; ISO 8601
-(def attribution-format (format/formatter "MMMM d"))
-
 (def doc-type "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
+
+;; Links
+
+(def carrot-hello-mailto "mailto:hello@carrot.io")
+
+(def carrot-help "http://help.carrot.io")
 
 ;; ----- Copy -----
 
-(def tagline "Better informed, less noise.")
 (def carrot-explainer "Carrot is the company digest that keeps everyone aligned around what matters most.")
 
-(def sent-by-text "Sent by Carrot")
+(def invite-message "Join your team on Carrot")
+(def invite-message-with-company "Join %s on Carrot")
+(def invite-instructions "%s has invited you to join the %s digest.")
+(def invite-button "accept_invitation")
 
-(def invite-message "invited you to join your team on Carrot")
+(def share-message "%s sent you a post on Carrot")
+(def share-cta "read_post")
 
-(def share-message "sent you a post")
-(def share-cta "View the post")
+(def board-invite-message "%s invited you to join a private section")
+(def board-invite-explainer "%s (%s)")
+(def board-invite-button "view_section")
 
-(def board-invite-message "invited you to a private section on Carrot")
-(def anonymous-board-invite-message "You've been invited to a private section on Carrot")
-(def board-invite-explainer "Private sections of the digest are only available to invited team members.")
+(def reset-message "Password reset")
+(def reset-instructions "Click the button below to reset your password. If you didn't request a password reset, you can ignore this email.")
+(def reset-button-text "reset_password")
 
-(def reset-message "Please reset the password for your Carrot account")
-(def reset-instructions "Click the link below to reset your password.")
-(def reset-button-text "Reset Password")
-(def reset-ignore "If you didn't request a password reset, you can safely ignore this email.")
+(def verify-message "Please verify your email")
+(def verify-instructions "Welcome to Carrot, your new company digest! Please click the link below to verify your account.")
+(def verify-button-text "verify_email")
 
-(def verify-message "Please verify your email for Carrot")
-(def verify-instructions "Click the link below to verify your email address.")
-(def verify-button-text "Verify Email")
-(def verify-ignore "If you didn't create a Carrot account, you can safely ignore this email.")
+(def digest-weekly-title "Your weekly brief")
+(def digest-daily-title "Your daily brief")
+(def digest-message "Hi %s, here are the new posts to the %s digest.")
+(def digest-message-no-name "Here are the new posts to the %s digest.")
+(def digest-go-to-digest-button "go_to_digest")
+(def digest-read-post-button "read_post")
 
 ;; ----- HTML Fragments -----
 
@@ -57,37 +70,19 @@
             [:table 
               [:tr 
                 [:th
-                  [:center 
-                    [:img {:class "float-center logo"
-                           :align "center"
-                           :style (str "background-color: #fff; max-height: " max-logo "px; max-width: " max-logo "px;")
-                           dimension size
-                           :src logo-url
-                           :alt (str org-name " logo")}]]]]]]]])))
-
-(defn- carrot-footer-logo []
-  [:tr
-    [:th {:class "small-12 large-12 first last columns"} 
-      [:table
-        [:tr
-          [:th
-            [:center
-              [:img {:width 13
-                     :height 24
-                     :src "https://open-company.s3.amazonaws.com/carrot-logo-grey-min.png"
-                     :alt "Carrot logo"}]]]]]]])
+                  [:img {:class "float-left logo"
+                         :align "left"
+                         :style (str "background-color: #fff; max-height: " max-logo "px; max-width: " max-logo "px;")
+                         dimension size
+                         :src logo-url
+                         :alt (str org-name " logo")}]]]]]]])))
 
 (defn- spacer-table [pixels css-class]
   [:table {:class "spacer"}
     [:tr
       [:th {:class css-class
-            :height (str "font-size:" pixels "px")
-            :style (str "font-size:" pixels "px;line-height:" pixels "px;")} " "]]])
-
-(defn- tr-spacer
-  ([pixels] (tr-spacer pixels ""))
-  ([pixels css-class]
-  [:tr [:th (spacer-table pixels css-class)]]))
+            :height (str pixels "px")
+            :style (str "font-size:" pixels "px; line-height:" pixels "px;")} " "]]])
 
 (defn- spacer
   ([pixels] (spacer pixels ""))
@@ -95,83 +90,120 @@
   ([pixels outer-css-class inner-css-class]
   [:table {:class (str "row " outer-css-class)}
     [:tr
-      [:th {:class "small-1 large-2 first columns"}]
-      [:th {:class "small-10 large-8 columns"}
-        (spacer-table pixels inner-css-class)]
-      [:th {:class "small-1 large-2 last columns"}]]]))
+      [:th {:class "small-12 large-12 columns"}
+        (spacer-table pixels inner-css-class)]]]))
+
+(defn- vspacer
+  ([pixels] (spacer pixels ""))
+  ([pixels outer-css-class] (spacer pixels outer-css-class ""))
+  ([pixels outer-css-class inner-css-class]
+  [:table {:class (str "row " outer-css-class)}
+    [:tr
+      [:th {:class "small-12 large-12 columns"}
+        (spacer-table pixels inner-css-class)]]]))
+
+(def horizontal-line
+  [:table {:class "row horizontal-line"}
+    [:tr
+      [:td {:class "small-12 large-12"}
+        (spacer 8)]]])
 
 (defn- paragraph
   ([content] (paragraph content ""))
-  ([content css-class] (paragraph content css-class "text-center"))
+  ([content css-class] (paragraph content css-class "text-left"))
   ([content css-class content-css-class]
   [:table {:class (str "row " css-class)}
     [:tr
-      [:th {:class "small-1 large-2 first columns"}]
-      [:th {:class "small-10 large-8 columns"}
-        [:p {:class content-css-class} content]]
-      [:th {:class "small-1 large-2 last columns"}]]]))
+      [:th {:class "small-12 large-12 columns"}
+        [:p {:class content-css-class} content]]]]))
 
 (defn- h1 [content]
   [:table {:class "row"}
     [:tr
-      [:th {:class "small-2 large-2 first columns"}]
-      [:th {:class "small-8 large-8 columns"}
-        [:h1 {:class "text-center"} content]]
-      [:th {:class "small-2 large-2 last columns"}]]])
+      [:th {:class "small-12 large-12 columns"}
+        [:h1 {:class "text-left"} content]]]])
 
-(defn- h2 
-  ([content css-class] (h2 content css-class "text-center"))
+(defn- h2
+  ([content] (h2 content "" ""))
+  ([content css-class] (h2 content css-class "text-left"))
   ([content css-class h2-class]
   [:table {:class (str "row " css-class)}
     [:tr
-      [:th {:class "small-1 large-2 first columns"}]
-      [:th {:class "small-10 large-8 columns"}
-        [:h2 {:class h2-class} content]]
-      [:th {:class "small-1 large-2 last columns"}]]]))
+      [:th {:class "small-12 large-12 columns"}
+        [:h2 {:class h2-class} content]]]]))
 
-(defn- button [button-text url css-class button-class]
-  [:table {:class (str "row " css-class)}
+(defn- circle-image
+  "Return an on the fly url of the image circle and resized."
+  [image-url size]
+  ;; Filestack URL https://cdn.filestackcontent.com/qemc9YslR9yabfqL4GTe
+  (let [filestack-static-url "https://cdn.filestackcontent.com/"
+        is-filestack-resource? (clojure.string/starts-with? image-url filestack-static-url)
+        filestack-resource (if is-filestack-resource?
+                             (subs image-url (count filestack-static-url))
+                             image-url)]
+    (str "https://process.filestackapi.com/"
+         (when-not is-filestack-resource?
+           (str config/filestack-api-key "/"))
+         "resize=w:" author-logo ",h:" author-logo ",fit:crop,align:faces/"
+         "circle/"
+         filestack-resource)))
+
+(defn- fix-avatar-url
+  "First it fix relative urls, it prepends our production CDN domain to it. Then if the url is
+   pointing to one of our happy faces replace the ending svg with png to have it resizable.
+   If it's not use the on the fly resize url."
+  [avatar-url]
+  (let [absolute-avatar-url (if (s/starts-with? avatar-url "/img")
+                              (str "https://d1wc0stj82keig.cloudfront.net" avatar-url)
+                              avatar-url)
+        r (re-seq #"happy_face_(red|green|blue|purple|yellow).svg$" absolute-avatar-url)]
+    (if r
+      (str (subs absolute-avatar-url 0 (- (count absolute-avatar-url) 3)) "png")
+      (circle-image absolute-avatar-url 32))))
+
+(defn- note-author [avatar-url author divider-line?]
+  [:table {:class "row"}
     [:tr
-      [:th {:class "small-1 large-2 columns first"}]
-      [:th {:class "small-10 large-8 columns"}
-        [:a {:href url}
-          [:table {:class button-class}
-            [:tr
-              [:th
-                [:span {:class "text-center button-text"}
-                  button-text]]]]]]
-      [:th {:class "small-1 large-2 columns last"}]]])
+      [:th {:class "small-12 large-12"}
+        (when divider-line?
+          horizontal-line)
+        (when divider-line?
+          (spacer 16))
+        [:img {:class "note-author-avatar"
+               :src (fix-avatar-url avatar-url)}]
+        [:span {:class "note-author-name"} author]]]])
 
-(defn- cta-button [cta-text url]
-  (button cta-text url "body-block" "cta-button"))
-
-(defn- you-receive [interval]
-  [:tr
-    [:th {:class "small-12 large-12 first last columns"}
-      [:table
-        [:tr
-          [:th
-            [:p {:class "text-center"} "You receive " [:b interval] " digests."]]]]]])
-
-(def sent-by
-  [:tr
-    [:th {:class "small-12 large-12 first last columns"}
-    [:table
-      [:tr
-        [:th
-          [:p {:class "text-center"} [:b {} sent-by-text]]]]]]])
-
-(defn- change-to [interval]
-  (let [new-interval (if (= (keyword interval) :daily) "weekly" "daily")]
-    [:tr
-      [:th {:class "small-12 large-12 first last columns"}
-      [:table
-        [:tr
-          [:th
-            [:p {:class "text-center"}
-              [:a {:href profile-url} (str "Change to " new-interval "?")]
-              " ∙ "
-              [:a {:href profile-url} "Turn off digests"]]]]]]]))
+(defn- left-button
+  "Image of the green button or read post button.
+  The image has to be retina and set only the width like this:
+  <img alt=\"Litmus\"
+       src=\"hero@2x.png\"
+       width=\"600\"
+       style=\"width: 100%;
+               max-width: 600px;
+               font-family: sans-serif;
+               color: #ffffff;
+               font-size: 20px;
+               display: block;
+               border: 0px;\"
+       border=\"0\">
+  As suggested here:
+  https://litmus.com/blog/understanding-retina-images-in-html-email"
+  [cta-text url]
+  (let [image-width (case cta-text
+                    "go_to_digest" 136
+                    "reset_password" 159
+                    "accept_invitation" 160
+                    "verify_email" 120
+                    "view_section" 128
+                    ;; default "read_post"
+                    94)]
+    [:a {:href url}
+      [:img {:class "green-button"
+             :src (str "https://open-company.s3.amazonaws.com/email_bt_" cta-text "@2x.png")
+             :width (str image-width)
+             :style (str "max-width: " image-width "px;")
+             :alt cta-text}]]))
 
 ;; Comments not shown in digests at the moment
 ; (defn- comment-attribution [comment-count comment-authors]
@@ -185,62 +217,108 @@
 ;               [:p {:class "attribution"} attribution]]]]]
 ;       [:th {:class "small-1 large-1 last columns"}]]))
 
-(defn- transactional-footer []
-  [:table {:class "row footer"}
-    (carrot-footer-logo)
-    (tr-spacer 10)
+(defn- email-footer []
+  [:table {:class "row footer-table"
+           :valign "middle"
+           :align "center"}
     [:tr
-      [:th {:class "small-12 large-12 first last columns"}
-        [:table
+      [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
+        (vspacer 24 "footer-table" "footer-table")
+        (vspacer 24 "footer-table footer-top-border" "footer-table")
+        [:table {:class "row footer-table"}
           [:tr
-            [:th
-              [:p {:class "text-center"}
-                sent-by-text]]]]]]
-    (tr-spacer 10)])
+            [:th {:class "small-10 large-10 columns"}
+              [:p {:class "footer-paragraph bottom-footer"}
+                "Sent via "
+                [:a {:href config/web-url}
+                  "Carrot"]]]
+            [:th {:class "small-2 large-2 columns footer-icon"}
+              [:a
+                {:href config/web-url}
+                [:img {:src "https://open-company.s3.amazonaws.com/carrot-logo-grey-min.png"
+                       :width "13"
+                       :height "24"
+                       :alt "Carrot"}]]]]]
+        (vspacer 40 "footer-table" "footer-table")]]])
+
+;; ----- Posts common ----
+
+(defn- post-date [timestamp]
+  (let [d (time-format/parse iso-format timestamp)]
+    (time-format/unparse date-format d)))
+
+(defn- post-attribution [entry show-board?]
+  (paragraph
+    (str "Posted by "
+         (-> entry :publisher :name)
+         (when show-board?
+          " in ")
+         (when show-board?
+          (:board-name entry))
+         " on " (post-date (:published-at entry)))
+   "" "text-left attribution"))
 
 ;; ----- Digest -----
 
-(defn- digest-footer [digest]
-  [:table {:class "row footer"}
-    (tr-spacer 40)
-    (carrot-footer-logo)
-    (tr-spacer 17)
-    sent-by
-    (tr-spacer 17)
-    (you-receive (:digest-frequency digest))
-    (change-to (:digest-frequency digest))
-    (tr-spacer 40)])
-
 (defn- post [entry]
-  [(spacer 36 "body-block" "body-spacer")
-   (paragraph (str (-> entry :publisher :name) " posted in " (:board-name entry)) "body-block" "attribution")
-   (spacer 15 "body-block" "body-spacer")
-   (h2 (:headline entry) "body-block" "post-title")
-   (spacer 15 "body-block" "body-spacer")
-   (button "View the post" (:url entry) "body-block" "post-button")])
+  [horizontal-line
+   (spacer 24)
+   (h2 (:headline entry))
+   (spacer 12)
+   (post-attribution entry true)
+   (spacer 12)
+   (left-button digest-read-post-button (:url entry))
+   (spacer 24)])
 
 (defn- posts-with-board-name [board]
   (let [board-name (:name board)]
     (assoc board :posts (map #(assoc % :board-name board-name) (:posts board)))))
 
+(defn- weekly-digest? [digest-data]
+  (or (= "weekly" (:digest-frequency digest-data))
+      (= :weekly (:digest-frequency digest-data))))
+
 (defn- digest-content [digest]
-  (let [logo-url (:org-logo-url digest)
+  (let [logo-url (:logo-url digest)
         logo? (not (s/blank? logo-url))
-        weekly? (= "weekly" (:digest-frequency digest))
+        weekly? (weekly-digest? digest)
         org-name (:org-name digest)
-        title (if weekly? (str org-name " Weekly Digest") (str org-name " Daily Digest"))
+        title (if weekly? digest-weekly-title digest-daily-title)
         boards (map posts-with-board-name (:boards digest))
-        posts (mapcat :posts boards)]
-    [:td
+        posts (mapcat :posts boards)
+        digest-url (s/join "/" [config/web-url (:org-slug digest) "all-posts"])
+        first-name (:first-name digest)
+        subtitle (if (s/blank? first-name)
+                    (format digest-message-no-name (:org-name digest))
+                    (format digest-message first-name (:org-name digest)))]
+    [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
       (spacer 40)
-      (when logo? (org-logo digest))
-      (when logo? (spacer 35))
+      (when logo? (org-logo {:org-name (:org-name digest)
+                             :org-logo-url logo-url
+                             :org-logo-width (:logo-width digest)
+                             :org-logo-height (:logo-height digest)}))
+      (when logo? (spacer 32))
       (h1 title)
-      (spacer 31)
-      (spacer 1 "body-block top" "body-spacer")
+      (spacer 24)
+      (paragraph subtitle)
+      (spacer 16)
+      (left-button digest-go-to-digest-button digest-url)
+      (spacer 40)
       (mapcat post posts)
-      (spacer 40 "body-block bottom" "body-spacer")
-      (digest-footer digest)]))
+      (spacer 56)
+      [:table {:class "row"}
+        [:tr
+          [:th {:class "small-12 large-12 columns"}
+            [:p {:class "digest-footer-paragraph"}
+              "You're receiving this brief "
+              (if weekly? "weekly" "daily")
+              ". "
+              [:a {:href profile-url}
+                (str "Switch to " (if weekly? "daily" "weekly"))]
+              "? You may also "
+              [:a {:href profile-url}
+                "unsubscribe"]
+              "."]]]]]))
 
 ;; ----- Transactional Emails -----
 
@@ -256,51 +334,112 @@
         first-name (-> notice :inviter :first-name)
         last-name (-> notice :inviter :last-name)
         from (s/join " " [first-name last-name])
-        invite-message (if (s/blank? from) anonymous-board-invite-message (str (s/trim from) " " board-invite-message))]
-    [:td
+        fixed-from (if-not (s/blank? from) "Someone" from)
+        invite-message (format board-invite-message from)
+        from-avatar (-> notice :inviter :avatar-url)
+        from-avatar? (not (s/blank? from-avatar))
+        note (:note notice)
+        note? (not (s/blank? note))
+        show-note? (and from-avatar? note?)]
+    [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
       (spacer 40)
       (when logo? (org-logo {:org-name org-name
                              :org-logo-url logo-url
                              :org-logo-width logo-width
                              :org-logo-height logo-height}))
-      (when logo? (spacer 35))
+      (when logo? (spacer 32))
       (h1 invite-message)
-      (spacer 31)
-      (spacer 35 "body-block top" "body-spacer")
-      (h2 board-name "body-block")
-      (spacer 28 "body-block" "body-spacer")
-      (paragraph board-invite-explainer "body-block")
-      (spacer 35 "body-block" "body-spacer")
-      (cta-button (str "View " board-name) board-url)
-      (spacer 40 "body-block bottom" "body-spacer")
-      (spacer 33)
-      (transactional-footer)]))
+      (spacer 24)
+      (paragraph (format board-invite-explainer board-name board-url))
+      (spacer 16)
+      (when show-note? (spacer 8))
+      (when show-note? (note-author from-avatar from true))
+      (when show-note? (spacer 16))
+      (when show-note? (paragraph note))
+      (when show-note? (spacer 16))
+      (left-button board-invite-button board-url)
+      (spacer 56)]))
 
-(defn- invite-content [invite]
+(defn- invite-content [td-classes invite]
   (let [logo-url (:org-logo-url invite)
         logo-width (:org-logo-width invite)
         logo-height (:org-logo-height invite)
         logo? (not (s/blank? logo-url))
         org-name (:org-name invite)
-        from (if (s/blank? (:from invite)) "Someone" (:from invite))]
-    [:td
+        from (if (s/blank? (:from invite)) "Someone" (:from invite))
+        from-avatar (:from-avatar invite)
+        from-avatar? (not (s/blank? from-avatar))
+        note (:note invite)
+        note? (not (s/blank? note))
+        show-note? (and from-avatar? note?)
+        invite-message (if (s/blank? org-name)
+                         invite-message
+                         (format invite-message-with-company org-name))]
+    [:td {:class td-classes :valign "middle" :align "center"}
       (spacer 40)
       (when logo? (org-logo {:org-name org-name
                              :org-logo-url logo-url
                              :org-logo-width logo-width
                              :org-logo-height logo-height}))
-      (when logo? (spacer 35))
-      (h1 (str from " " invite-message))
-      (spacer 31)
-      (spacer 35 "body-block top" "body-spacer")
-      (h2 org-name "body-block")
-      (spacer 28 "body-block" "body-spacer")
-      (paragraph carrot-explainer "body-block")
-      (spacer 35 "body-block" "body-spacer")
-      (cta-button (str "Join " org-name " on Carrot") (:token-link invite))
-      (spacer 40 "body-block bottom" "body-spacer")
-      (spacer 33)
-      (transactional-footer)]))
+      (when logo? (spacer 32))
+      (h1 invite-message)
+      (spacer 24)
+      (paragraph (format invite-instructions from org-name))
+      (spacer 16)
+      [:table {:class "row "}
+        [:tr
+          [:th {:class "small-12 large-12 columns"}
+            [:p {:class "invite-carrot-disclaimer"}
+              "Carrot is a company digest that keeps everyone aligned around what matters most. "
+              [:a {:href config/web-url}
+                "Learn More"]
+              "."]]]]
+      (spacer 16)
+      (when show-note? (spacer 8))
+      (when show-note? (note-author from-avatar from true))
+      (when show-note? (spacer 16))
+      (when show-note? (paragraph note))
+      (when show-note? (spacer 16))
+      (left-button invite-button (:token-link invite))
+      (spacer 56)]))
+
+(defn- share-content [entry]
+  (let [logo-url (:org-logo-url entry)
+        logo? (not (s/blank? logo-url))
+        org-name (:org-name entry)
+        org-name? (not (s/blank? org-name))
+        headline (:headline entry)
+        org-slug (:org-slug entry)
+        sharer (:sharer-name entry)
+        publisher (:publisher entry)
+        attribution (str (:name publisher) " posted to " (:board-name entry))
+        note (:note entry)
+        note? (not (s/blank? note))
+        from (if (s/blank? sharer) "Someone" sharer)
+        from-avatar (:sharer-avatar-url entry)
+        from-avatar? (not (s/blank? from-avatar))
+        show-note? (and note? from-avatar?)
+        secure-uuid (:secure-uuid entry)
+        origin-url config/web-url
+        entry-url (s/join "/" [origin-url org-slug "post" secure-uuid])]
+    [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
+      (spacer 40)
+      (when logo? (org-logo entry))
+      (when logo? (spacer 32))
+      (h1 (format share-message from))
+      (spacer 24)
+      (when show-note? (note-author from-avatar from false))
+      (when show-note? (spacer 16))
+      (when show-note? (paragraph note))
+      (when show-note? (spacer 40))
+      horizontal-line
+      (spacer 24)
+      (h2 headline)
+      (spacer 12)
+      (post-attribution entry false)
+      (spacer 12)
+      (left-button share-cta entry-url)
+      (spacer 56)]))
 
 (defn- token-prep [token-type msg]
   {
@@ -313,82 +452,47 @@
     :button-text (case token-type
                     :reset reset-button-text
                     :verify verify-button-text)
-    :link (:token-link (keywordize-keys msg))
-    :ignore (case token-type
-                :reset reset-ignore
-                :verify verify-ignore)})
+    :link (:token-link (keywordize-keys msg))})
 
-(defn- token-content [token-type msg]
+(defn- token-content [td-classes token-type msg]
   (let [message (token-prep token-type msg)
         logo-url (:org-logo-url msg)
         logo? (not (s/blank? logo-url))
         org-name (:org-name msg)]
-    [:td
+    [:td {:class td-classes :valign "middle" :align "center"}
       (spacer 40)
       (when logo? (org-logo msg))
-      (when logo? (spacer 35))
-      (spacer 35 "body-block top" "body-spacer")
-      (h2 (:message message) "body-block")
-      (spacer 28 "body-block" "body-spacer")
-      (paragraph (:ignore message) "body-block")
-      (spacer 35 "body-block" "body-spacer")
-      (cta-button (:button-text message) (:token-link msg))
-      (spacer 40 "body-block bottom" "body-spacer")
-      (spacer 33)
-      (transactional-footer)]))
-
-(defn- share-content [entry]
-  (let [logo-url (:org-logo-url entry)
-        logo? (not (s/blank? logo-url))
-        org-name (:org-name entry)
-        org-name? (not (s/blank? org-name))
-        headline (:headline entry)
-        org-slug (:org-slug entry)
-        sharer (:sharer-name entry)
-        attribution (str (-> entry :publisher :name) " posted to " (:board-name entry))
-        note (:note entry)
-        note? (not (s/blank? note))
-        from (if (s/blank? sharer) "Someone" sharer)
-        secure-uuid (:secure-uuid entry)
-        origin-url config/web-url
-        entry-url (s/join "/" [origin-url org-slug "post" secure-uuid])]
-    [:td
-      (spacer 40)
-      (when logo? (org-logo entry))
-      (when logo? (spacer 35))
-      (h1 (str from " " share-message))
-      (spacer 31)
-      (spacer 35 "body-block top" "body-spacer")
-      (h2 headline "body-block")
-      (spacer 11 "body-block" "body-spacer")
-      (paragraph attribution "body-block" "text-center attribution")
-      (when note? (spacer 28 "body-block" "body-spacer"))
-      (when note? (paragraph note "body-block"))
-      (spacer 35 "body-block" "body-spacer")
-      (cta-button share-cta entry-url)
-      (spacer 40 "body-block bottom" "body-spacer")
-      (spacer 33)
-      (transactional-footer)]))
+      (when logo? (spacer 32))
+      (h1 (:message message))
+      (spacer 24)
+      (paragraph (:instructions message))
+      (spacer 16)
+      (left-button (:button-text message) (:token-link msg))
+      (spacer 56)]))
 
 ;; ----- General HTML, common to all emails -----
 
 (defn- body [data]
-  (let [type (:type data)
-        trail-space? (not= type :share-link)]
+  (let [type (:type data)]
     [:body
-      [:table {:class "body"}
+      [:table {:class "body"
+               :with "100%"}
         [:tr
-          [:td {:class "float-center", :align "center", :valign "top"}
+          [:td {:valign "middle"
+                :align "center"}
             [:center
-              [:table {:class "container"}
+              [:table {:class "row email-content"
+                       :valign "middle"
+                       :align "center"}
                 [:tr
                   (case type
-                    :reset (token-content type data)
-                    :verify (token-content type data)
-                    :invite (invite-content data)
+                    :reset (token-content "small-12 large-12 columns" type data)
+                    :verify (token-content "small-12 large-12 columns" type data)
+                    :invite (invite-content "small-12 large-12 columns" data)
                     :board-notification (board-notification-content data)
                     :share-link (share-content data)
-                    :digest (digest-content data))]]]]]]]))
+                    :digest (digest-content data))]]
+              (email-footer)]]]]]))
 
 (defn- head [data]
   [:html {:xmlns "http://www.w3.org/1999/xhtml"} 
@@ -409,7 +513,7 @@
   (let [msg (keywordize-keys invite)
         org-name (if bold? (str "<b>" (:org-name msg) "</b>") (:org-name msg))
         from (:from msg)
-        prefix (if (s/blank? from) "You've been invited" (str from " invited you"))
+        prefix (if (s/blank? from) "You've been invited" (str from " has invited you"))
         org (if (s/blank? org-name) "" (str org-name " on "))]
     (str prefix " to join " org "Carrot")))
 
@@ -450,8 +554,7 @@
   (let [message (token-prep token-type msg)]
     (str (:message message) "\n\n"
          (:instructions message) "\n\n"
-         (:link message) "\n\n"
-         (:ignore message))))
+         (:link message))))
 
 (defn digest-html [digest]
   (html digest :digest))

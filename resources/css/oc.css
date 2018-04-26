@@ -1,25 +1,24 @@
 body,
 html,
 .body {
-  background: #FBFAF7;
+  background-color: white;
+  color: #34414F;
+  width: 100%;
+  height: 100%;
+}
+
+.inner-body {
+  background-color: white;
+  max-width: 600px;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 table {
-  background: #FBFAF7 !important;
-}
-
-table.body-block {
-  background: white !important;    
-  border-left: 1px solid #F2F1ED;
-  border-right: 1px solid #F2F1ED;
-}
-
-table.body-block.top {
-  border-top: 1px solid #F2F1ED;
-}
-
-table.body-block.bottom {
-  border-bottom: 1px solid #F2F1ED;
+  background-color: white !important;
 }
 
 table th, 
@@ -29,18 +28,12 @@ table.body .column {
 }
 
 table th.body-spacer {
-  background: white !important;
-}
-
-img.logo {
-  padding: 12px;
-  border-radius: 3px;
-  border: 1px solid #F2F1ED;
+  background-color: white !important;
 }
 
 h1 {
   font-family: Helvetica, Arial, sans-serif !important;
-  font-size: 28px;
+  font-size: 24px;
   font-weight: bold;  
   color: #34414F;
   margin: 0px;
@@ -48,7 +41,7 @@ h1 {
 
 h2 {
   font-family: Helvetica, Arial, sans-serif !important;
-  font-size: 22px;
+  font-size: 16px;
   font-weight: bold;  
   color: #34414F;
   margin: 0px;
@@ -56,7 +49,7 @@ h2 {
 
 p {
   font-family: Helvetica, Arial, sans-serif !important;
-  font-size: 17px;
+  font-size: 16px;
   color: #34414F;
   line-height: 1.5;
   margin: 0px;
@@ -67,18 +60,10 @@ p.attribution {
   color: #898D93;
 }
 
-table.cta-button {
-  height: 40px;
-  border-radius: 40px;
-  background: #3FBD7C !important;
-}
-
-table.post-button {
-  border-collapse: separate;
-  height: 40px;
-  border-radius: 40px;
-  border: 1px solid #D4F6E4;
-  background: white !important;
+span.note-body {
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-size: 14px;
+  font-weight: 400;
 }
 
 span.button-text {
@@ -104,4 +89,144 @@ table.footer p {
 table.footer a {
   font-weight: bold;
   color: #3FBD7C;
+}
+
+/* New template specific css */
+.footer-table {
+  background-color: white !important;
+  max-width: 600px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.email-content {
+  max-width: 600px;
+  background-color: white !important;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.footer-top-border {
+  border-top: 1px solid #F0F0F1;
+}
+
+p.header-paragraph {
+  text-align: right;
+  font-size: 14px;
+  color: #898D93;
+}
+
+p.header-paragraph a {
+  color: lightgreen;
+  font-size: 14px;
+  color: #3FBD7C;
+  text-decoration: underline;
+}
+
+table.header-bottom {
+  border-bottom: 1px solid #F0F0F1;
+}
+
+p.footer-paragraph {
+  color: #898D93;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+p.footer-paragraph.bottom-footer, p.footer-paragraph.bottom-footer a {
+  color: #C4C6C7;
+}
+
+p.footer-paragraph a {
+  color: #898D93;
+  text-decoration: underline;
+  font-weight: 400;
+}
+
+table.footer-table a.footer-link {
+  float: right;
+  margin-left: 16px;
+  text-decoration: underline;
+}
+
+.note-author-avatar {
+  float: left;
+}
+
+span.note-author-name {
+  float: left;
+  padding-top: 10px;
+  margin-left: 8px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+table.horizontal-line {
+  border-top: 1px solid #F0F0F1;
+}
+
+p.digest-help {
+  color: #898D93;
+  font-size: 14px;
+}
+
+p.digest-help a{
+  color: #3FBD7C;
+  text-decoration: underline;
+}
+
+th.footer-icon img {
+  float: right;
+}
+
+img.read-post-image {
+  width: 16px;
+  height: 16px;
+  float: left;
+}
+
+span.read-post-text {
+  float: left;
+  margin-left: 8px;
+  color: #3FBD7C;
+  font-size: 14px;
+}
+
+p.digest-bottom-footer-paragraph {
+  color: rgba(137, 141, 147, 0.5);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+p.digest-footer-paragraph, p.digest-footer-paragraph a {
+  color: #C4C6C7;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+p.digest-footer-paragraph a {
+  font-weight: 400;
+  text-decoration: underline;
+}
+
+p.invite-carrot-disclaimer {
+  color: #34414f;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+p.invite-carrot-disclaimer a {
+  color: #34414f;
+  font-size: 14px;
+  text-decoration: underline;
+  font-weight: 400;
+}
+
+img.green-button {
+  width: 100%;
+  font-family: sans-serif;
+  color: #ffffff;
+  font-size: 20px;
+  display: block;
+  border: 0px;
 }
