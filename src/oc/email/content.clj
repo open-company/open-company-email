@@ -124,8 +124,8 @@
         [:h1 {:class "text-left"} content]]]])
 
 (defn- h2
-  ([content entry-url] (h2 content "" ""))
-  ([content entry-url css-class] (h2 content css-class "text-left"))
+  ([content entry-url] (h2 content entry-url "" ""))
+  ([content entry-url css-class] (h2 content entry-url css-class "text-left"))
   ([content entry-url css-class h2-class]
   [:table {:class (str "row " css-class)}
     [:tr
