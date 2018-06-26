@@ -47,6 +47,10 @@ h2 {
   margin: 0px;
 }
 
+a:hover h2, a::hover h2 {
+  color: #3FBD7C;
+}
+
 p {
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 16px;
@@ -56,7 +60,8 @@ p {
 }
 
 p.attribution {
-  font-size: 14px;
+  font-size: 12px;
+  line-height: 18px;
   color: #898D93;
 }
 

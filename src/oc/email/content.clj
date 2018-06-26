@@ -124,13 +124,14 @@
         [:h1 {:class "text-left"} content]]]])
 
 (defn- h2
-  ([content] (h2 content "" ""))
-  ([content css-class] (h2 content css-class "text-left"))
-  ([content css-class h2-class]
+  ([content entry-url] (h2 content "" ""))
+  ([content entry-url css-class] (h2 content css-class "text-left"))
+  ([content entry-url css-class h2-class]
   [:table {:class (str "row " css-class)}
     [:tr
       [:th {:class "small-12 large-12 columns"}
-        [:h2 {:class h2-class} content]]]]))
+        [:a {:href entry-url}
+          [:h2 {:class h2-class} content]]]]]))
 
 (defn- circle-image
   "Return an on the fly url of the image circle and resized."
@@ -263,11 +264,9 @@
 (defn- post [entry]
   [horizontal-line
    (spacer 24)
-   (h2 (:headline entry))
+   (h2 (:headline entry) (:url entry))
    (spacer 12)
    (post-attribution entry true)
-   (spacer 12)
-   (left-button digest-read-post-button (:url entry))
    (spacer 24)])
 
 (defn- posts-with-board-name [board]
@@ -434,7 +433,7 @@
       (when show-note? (spacer 40))
       horizontal-line
       (spacer 24)
-      (h2 headline)
+      (h2 headline entry-url)
       (spacer 12)
       (post-attribution entry false)
       (spacer 12)
