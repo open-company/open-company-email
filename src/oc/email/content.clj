@@ -265,7 +265,7 @@
   [horizontal-line
    (spacer 24)
    (h2 (:headline entry) (:url entry))
-   (spacer 12)
+   (spacer 4)
    (post-attribution entry true)
    (spacer 24)])
 
@@ -434,7 +434,7 @@
       horizontal-line
       (spacer 24)
       (h2 headline entry-url)
-      (spacer 12)
+      (spacer 4)
       (post-attribution entry false)
       (spacer 12)
       (left-button share-cta entry-url)
