@@ -48,8 +48,8 @@
 
 (def digest-weekly-title "Your weekly brief")
 (def digest-daily-title "Your daily brief")
-(def digest-message "Hi %s, here are the new posts to the %s digest.")
-(def digest-message-no-name "Here are the new posts to the %s digest.")
+(def digest-message "Hi %s, here are the new posts from your team.")
+(def digest-message-no-name "Here are the new posts from your team.")
 (def digest-go-to-digest-button "go_to_digest")
 (def digest-read-post-button "read_post")
 
@@ -289,8 +289,8 @@
         digest-url (s/join "/" [config/web-url (:org-slug digest) "all-posts"])
         first-name (:first-name digest)
         subtitle (if (s/blank? first-name)
-                    (format digest-message-no-name (:org-name digest))
-                    (format digest-message first-name (:org-name digest)))]
+                    digest-message-no-name
+                    (format digest-message first-name))]
     [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
       (spacer 40)
       (when logo? (org-logo {:org-name (:org-name digest)
