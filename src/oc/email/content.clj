@@ -250,8 +250,7 @@
 
 (defn- post-attribution [entry show-board?]
   (paragraph
-    (str "Posted by "
-         (-> entry :publisher :name)
+    (str (-> entry :publisher :name)
          (when show-board?
           " in ")
          (when show-board?
