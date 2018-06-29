@@ -253,7 +253,7 @@
           " in ")
          (when show-board?
           (:board-name entry))
-         " on " (post-date (:published-at entry)))
+         " • " (post-date (:published-at entry)))
    "" "text-left attribution"))
 
 ;; ----- Digest -----
