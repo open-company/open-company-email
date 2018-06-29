@@ -50,8 +50,6 @@
 (def digest-daily-title "Your daily brief")
 (def digest-message "Hi %s, here are the new posts from your team.")
 (def digest-message-no-name "Here are the new posts from your team.")
-(def digest-go-to-digest-button "go_to_digest")
-(def digest-read-post-button "read_post")
 
 ;; ----- HTML Fragments -----
 
@@ -299,8 +297,6 @@
       (h1 title)
       (spacer 24)
       (paragraph subtitle)
-      (spacer 16)
-      (left-button digest-go-to-digest-button digest-url)
       (spacer 40)
       (mapcat post posts)
       (spacer 56)
