@@ -43,7 +43,7 @@ h2 {
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 16px;
   font-weight: bold;  
-  color: #34414F;
+  color: #3FBD7C;
   margin: 0px;
 }
 
@@ -56,7 +56,8 @@ p {
 }
 
 p.attribution {
-  font-size: 14px;
+  font-size: 12px;
+  line-height: 18px;
   color: #898D93;
 }
 

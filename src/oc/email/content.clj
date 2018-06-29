@@ -48,10 +48,8 @@
 
 (def digest-weekly-title "Your weekly brief")
 (def digest-daily-title "Your daily brief")
-(def digest-message "Hi %s, here are the new posts to the %s digest.")
-(def digest-message-no-name "Here are the new posts to the %s digest.")
-(def digest-go-to-digest-button "go_to_digest")
-(def digest-read-post-button "read_post")
+(def digest-message "Hi %s, here are the new posts from your team.")
+(def digest-message-no-name "Here are the new posts from your team.")
 
 ;; ----- HTML Fragments -----
 
@@ -124,13 +122,14 @@
         [:h1 {:class "text-left"} content]]]])
 
 (defn- h2
-  ([content] (h2 content "" ""))
-  ([content css-class] (h2 content css-class "text-left"))
-  ([content css-class h2-class]
+  ([content entry-url] (h2 content entry-url "" ""))
+  ([content entry-url css-class] (h2 content entry-url css-class "text-left"))
+  ([content entry-url css-class h2-class]
   [:table {:class (str "row " css-class)}
     [:tr
       [:th {:class "small-12 large-12 columns"}
-        [:h2 {:class h2-class} content]]]]))
+        [:a {:href entry-url}
+          [:h2 {:class h2-class} content]]]]]))
 
 (defn- circle-image
   "Return an on the fly url of the image circle and resized."
@@ -249,13 +248,12 @@
 
 (defn- post-attribution [entry show-board?]
   (paragraph
-    (str "Posted by "
-         (-> entry :publisher :name)
+    (str (-> entry :publisher :name)
          (when show-board?
           " in ")
          (when show-board?
           (:board-name entry))
-         " on " (post-date (:published-at entry)))
+         " • " (post-date (:published-at entry)))
    "" "text-left attribution"))
 
 ;; ----- Digest -----
@@ -263,11 +261,9 @@
 (defn- post [entry]
   [horizontal-line
    (spacer 24)
-   (h2 (:headline entry))
-   (spacer 12)
+   (h2 (:headline entry) (:url entry))
+   (spacer 4)
    (post-attribution entry true)
-   (spacer 12)
-   (left-button digest-read-post-button (:url entry))
    (spacer 24)])
 
 (defn- posts-with-board-name [board]
@@ -289,8 +285,8 @@
         digest-url (s/join "/" [config/web-url (:org-slug digest) "all-posts"])
         first-name (:first-name digest)
         subtitle (if (s/blank? first-name)
-                    (format digest-message-no-name (:org-name digest))
-                    (format digest-message first-name (:org-name digest)))]
+                    digest-message-no-name
+                    (format digest-message first-name))]
     [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
       (spacer 40)
       (when logo? (org-logo {:org-name (:org-name digest)
@@ -301,8 +297,6 @@
       (h1 title)
       (spacer 24)
       (paragraph subtitle)
-      (spacer 16)
-      (left-button digest-go-to-digest-button digest-url)
       (spacer 40)
       (mapcat post posts)
       (spacer 56)
@@ -434,8 +428,8 @@
       (when show-note? (spacer 40))
       horizontal-line
       (spacer 24)
-      (h2 headline)
-      (spacer 12)
+      (h2 headline entry-url)
+      (spacer 4)
       (post-attribution entry false)
       (spacer 12)
       (left-button share-cta entry-url)
