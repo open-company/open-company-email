@@ -14,17 +14,17 @@
   ;; All profile dependencies
   :dependencies [
     ;; Lisp on the JVM http://clojure.org/documentation
-    [org.clojure/clojure "1.9.0"]
+    [org.clojure/clojure "1.10.0-alpha6"]
     ;; HTML rendering https://github.com/weavejester/hiccup
     [hiccup "2.0.0-alpha1"]
     ;; Async programming tools https://github.com/ztellman/manifold
-    [manifold "0.1.7-alpha6"]
+    [manifold "0.1.8"]
     ;; Namespace management https://github.com/clojure/tools.namespace
     ;; NB: org.clojure/tools.reader is pulled in by oc.lib
     [org.clojure/tools.namespace "0.3.0-alpha4" :exclusions [org.clojure/tools.reader]] 
 
     ;; Library for OC projects https://github.com/open-company/open-company-lib
-    [open-company/lib "0.16.4"]
+    [open-company/lib "0.16.13"]
     ;; In addition to common functions, brings in the following common dependencies used by this project:
     ;; Component - Component Lifecycle https://github.com/stuartsierra/component
     ;; Schema - Data validation https://github.com/Prismatic/schema
@@ -50,7 +50,7 @@
       }
       :plugins [
         ;; Linter https://github.com/jonase/eastwood
-        [jonase/eastwood "0.2.6-beta2"]
+        [jonase/eastwood "0.2.9"]
         ;; Static code search for non-idiomatic code https://github.com/jonase/kibit
         [lein-kibit "0.1.6" :exclusions [org.clojure/clojure]]
       ]
@@ -86,7 +86,7 @@
         ;; Dead code finder https://github.com/venantius/yagni
         [venantius/yagni "0.1.4" :exclusions [org.clojure/clojure]]
         ;; Autotest https://github.com/jakemcc/lein-test-refresh
-        [com.jakemccrary/lein-test-refresh "0.22.0"]
+        [com.jakemccrary/lein-test-refresh "0.23.0"]
       ]  
     }]
 

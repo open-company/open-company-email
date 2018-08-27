@@ -32,6 +32,7 @@
       :share-entry (mailer/send-entry msg-body)
       :digest (mailer/send-digest msg-body)
       :sns (mailer/handle-data-change msg-body)
+      :notify (mailer/send-notification msg-body)
       (timbre/error "Unrecognized message type" msg-type)))
   (sqs/ack done-channel msg))
 

@@ -148,9 +148,10 @@
          filestack-resource)))
 
 (defn- fix-avatar-url
-  "First it fix relative urls, it prepends our production CDN domain to it. Then if the url is
-   pointing to one of our happy faces replace the ending svg with png to have it resizable.
-   If it's not use the on the fly resize url."
+  "
+  First it fixes relative URLs, it prepends our production CDN domain to it if it's relative.
+  Then if the url is pointing to one of our happy faces, it replaces the SVG extension with PNG
+  to have it resizable. If it's not one of our happy faces, it uses the on-the-fly resize url."
   [avatar-url]
   (let [absolute-avatar-url (if (s/starts-with? avatar-url "/img")
                               (str "https://d1wc0stj82keig.cloudfront.net" avatar-url)
@@ -435,6 +436,56 @@
       (left-button share-cta entry-url)
       (spacer 56)]))
 
+(defn- notify-content [msg]
+  (let [notification (:notification msg)
+        org (:org msg)
+        logo-url (:logo-url org)
+        logo? (not (s/blank? logo-url))
+        org-name (:name org)
+        org-name? (not (s/blank? org-name))
+        org-slug (:slug org)
+        mention? (:mention notification)
+        comment? (:interaction-id notification)
+        first-name (:first-name msg)
+        first-name? (not (s/blank? first-name))
+        author (:author notification)
+        greeting (if first-name? (str "Hello " first-name ",") "Hello,")
+        intro (if mention?
+                (str "You were mentioned in a " (if comment? "comment" "post") ":")
+                (str "You have a new comment on your post:"))
+        notification-author (:author notification)
+        notification-author-name (:name notification-author)
+        notification-author-url (fix-avatar-url (:avatar-url notification-author))
+        attribution (if mention?
+                      (str notification-author-name " mentioned you")
+                      (str notification-author-name " commented"))
+  ;       publisher (:publisher entry)
+  ;       attribution (str (:name publisher) " posted to " (:board-name entry))
+  ;       from (if (s/blank? sharer) "Someone" sharer)
+  ;       from-avatar (:sharer-avatar-url entry)
+  ;       from-avatar? (not (s/blank? from-avatar))
+  ;       origin-url config/web-url
+  ;       entry-url (s/join "/" [origin-url org-slug "post" secure-uuid])]
+        ]
+    [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
+      (spacer 40)
+      (when logo? (org-logo (clojure.set/rename-keys org {:logo-url :org-logo-url
+                                                          :name :org-name
+                                                          :logo-height :org-logo-height
+                                                          :logo-width :org-logo-width})))
+      (when logo? (spacer 32))
+      (h1 greeting)
+      (spacer 10)
+      (paragraph intro)
+      (spacer 24)
+      horizontal-line
+      (spacer 25)
+      (paragraph attribution)
+      ; (post-attribution entry false)
+      ; (spacer 12)
+      ; (left-button share-cta entry-url)
+      (spacer 56)]))
+
 (defn- token-prep [token-type msg]
   {
     :message (case token-type
@@ -485,7 +536,8 @@
                     :invite (invite-content "small-12 large-12 columns" data)
                     :board-notification (board-notification-content data)
                     :share-link (share-content data)
-                    :digest (digest-content data))]]
+                    :digest (digest-content data)
+                    :notify (notify-content data))]]
               (email-footer)]]]]]))
 
 (defn- head [data]
@@ -510,6 +562,9 @@
         prefix (if (s/blank? from) "You've been invited" (str from " has invited you"))
         org (if (s/blank? org-name) "" (str org-name " on "))]
     (str prefix " to join " org "Carrot")))
+
+(defn notify-html [msg]
+  (html msg :notify))
 
 (defn share-link-html [entry]
   (html entry :share-link))
@@ -666,5 +721,11 @@
 
   (def digest (json/decode (slurp "./opt/samples/digests/no-logo.json")))
   (spit "./hiccup.html" (content/digest-html digest))
+
+
+  ;; Notifications
+
+  (def comment-notify (json/decode (slurp "./opt/samples/notifications/comment.json")))
+  (spit "./hiccup.html" (content/notify-html comment-notify))
 
   )
