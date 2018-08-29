@@ -1,6 +1,6 @@
 # [OpenCompany](https://github.com/open-company) Email Service
 
-[![AGPL License](http://img.shields.io/badge/license-AGPL-blue.svg?style=flat)](https://www.mozilla.org/MPL/2.0/)
+[![AGPL License](http://img.shields.io/badge/license-AGPL-blue.svg?style=flat)](https://www.gnu.org/licenses/agpl-3.0.en.html)
 [![Build Status](http://img.shields.io/travis/open-company/open-company-email.svg?style=flat)](https://travis-ci.org/open-company/open-company-email)
 [![Dependencies Status](https://versions.deps.co/open-company/open-company-email/status.svg)](https://versions.deps.co/open-company/open-company-email)
 
