@@ -43,7 +43,7 @@
 (def reset-button-text "reset_password")
 
 (def verify-message "Please verify your email")
-(def verify-instructions "Welcome to Carrot, your new company digest! Please click the link below to verify your account.")
+(def verify-instructions "Welcome to Carrot, where leaders rise above the noise to keep teams aligned. Please click the link below to verify your account.")
 (def verify-button-text "verify_email")
 
 (def digest-weekly-title "Your weekly brief")
