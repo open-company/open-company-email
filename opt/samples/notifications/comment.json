@@ -1,6 +1,6 @@
 {
   "type": "notify",
-  "notification": {"content": "<p>That was profound.</p>",
+  "notification": {"content": "<p>That was profound.</p><p>So was this.</p>",
                    "org-id": "fba2-4dae-b799",
                    "user-id": "b7f2-41f2-be42",
                    "author": {"name": "Jean-Paul Sartre", "user-id": "c357-4516-a1b8", "avatar-url": "/img/ML/happy_face_yellow.svg"},

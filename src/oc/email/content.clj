@@ -3,6 +3,7 @@
             [clojure.walk :refer (keywordize-keys)]
             [clj-time.format :as time-format]
             [hiccup.core :as h]
+            [hickory.core :as hickory]
             [oc.email.config :as config]))
 
 (def max-logo 32)
@@ -438,6 +439,7 @@
 
 (defn- notify-content [msg]
   (let [notification (:notification msg)
+        content (:content notification)
         org (:org msg)
         logo-url (:logo-url org)
         logo? (not (s/blank? logo-url))
@@ -457,8 +459,8 @@
         notification-author-name (:name notification-author)
         notification-author-url (fix-avatar-url (:avatar-url notification-author))
         attribution (if mention?
-                      (str notification-author-name " mentioned you")
-                      (str notification-author-name " commented"))
+                      [:a (str notification-author-name " mentioned you")]
+                      [:a (str notification-author-name " commented")])
   ;       publisher (:publisher entry)
   ;       attribution (str (:name publisher) " posted to " (:board-name entry))
   ;       from (if (s/blank? sharer) "Someone" sharer)
@@ -480,7 +482,10 @@
       (spacer 24)
       horizontal-line
       (spacer 25)
-      (paragraph attribution)
+      (paragraph attribution "notification-attribution" "notification-link")
+      (spacer 8)
+      [:span {:class "notification-content"}
+        (-> (hickory/parse content) hickory/as-hiccup first (nth 3) rest rest)]
       ; (post-attribution entry false)
       ; (spacer 12)
       ; (left-button share-cta entry-url)

@@ -14,7 +14,7 @@
   ;; All profile dependencies
   :dependencies [
     ;; Lisp on the JVM http://clojure.org/documentation
-    [org.clojure/clojure "1.10.0-alpha6"]
+    [org.clojure/clojure "1.10.0-alpha8"]
     ;; HTML rendering https://github.com/weavejester/hiccup
     [hiccup "2.0.0-alpha1"]
     ;; Async programming tools https://github.com/ztellman/manifold
@@ -24,7 +24,7 @@
     [org.clojure/tools.namespace "0.3.0-alpha4" :exclusions [org.clojure/tools.reader]] 
 
     ;; Library for OC projects https://github.com/open-company/open-company-lib
-    [open-company/lib "0.16.13"]
+    [open-company/lib "0.16.14"]
     ;; In addition to common functions, brings in the following common dependencies used by this project:
     ;; Component - Component Lifecycle https://github.com/stuartsierra/component
     ;; Schema - Data validation https://github.com/Prismatic/schema
@@ -84,7 +84,7 @@
         ;; Catch spelling mistakes in docs and docstrings https://github.com/cldwalker/lein-spell
         [lein-spell "0.1.0"]
         ;; Dead code finder https://github.com/venantius/yagni
-        [venantius/yagni "0.1.4" :exclusions [org.clojure/clojure]]
+        [venantius/yagni "0.1.6" :exclusions [org.clojure/clojure]]
         ;; Autotest https://github.com/jakemcc/lein-test-refresh
         [com.jakemccrary/lein-test-refresh "0.23.0"]
       ]  
