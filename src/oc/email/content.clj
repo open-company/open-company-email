@@ -458,17 +458,12 @@
         notification-author (:author notification)
         notification-author-name (:name notification-author)
         notification-author-url (fix-avatar-url (:avatar-url notification-author))
-        attribution (if mention?
-                      [:a (str notification-author-name " mentioned you")]
-                      [:a (str notification-author-name " commented")])
-  ;       publisher (:publisher entry)
-  ;       attribution (str (:name publisher) " posted to " (:board-name entry))
-  ;       from (if (s/blank? sharer) "Someone" sharer)
-  ;       from-avatar (:sharer-avatar-url entry)
-  ;       from-avatar? (not (s/blank? from-avatar))
-  ;       origin-url config/web-url
-  ;       entry-url (s/join "/" [origin-url org-slug "post" secure-uuid])]
-        ]
+        secure-uuid (:secure-uuid notification)
+        origin-url config/web-url
+        entry-url (s/join "/" [origin-url org-slug "post" secure-uuid])
+                attribution (if mention?
+                    [:a {:href entry-url} (str notification-author-name " mentioned you")]
+                    [:a {:href entry-url} (str notification-author-name " commented")])]
     [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
       (spacer 40)
       (when logo? (org-logo (clojure.set/rename-keys org {:logo-url :org-logo-url
@@ -486,9 +481,6 @@
       (spacer 8)
       [:span {:class "notification-content"}
         (-> (hickory/parse content) hickory/as-hiccup first (nth 3) rest rest)]
-      ; (post-attribution entry false)
-      ; (spacer 12)
-      ; (left-button share-cta entry-url)
       (spacer 56)]))
 
 (defn- token-prep [token-type msg]
@@ -730,7 +722,13 @@
 
   ;; Notifications
 
-  (def comment-notify (json/decode (slurp "./opt/samples/notifications/comment.json")))
-  (spit "./hiccup.html" (content/notify-html comment-notify))
+  (def comment-notification (json/decode (slurp "./opt/samples/notifications/comment.json")))
+  (spit "./hiccup.html" (content/notify-html comment-notification))
+
+  (def post-mention-notification (json/decode (slurp "./opt/samples/notifications/post-mention.json")))
+  (spit "./hiccup.html" (content/notify-html post-mention-notification))
+
+  (def comment-mention-notification (json/decode (slurp "./opt/samples/notifications/comment-mention.json")))
+  (spit "./hiccup.html" (content/notify-html comment-mention-notification))
 
   )

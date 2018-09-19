@@ -240,3 +240,7 @@ p.notification-link a {
 span.notification-content, span.notification-content p, span.notification-content div {
   color: #898D93;
 }
+
+span.oc-mention {
+  font-weight: bold;
+}
