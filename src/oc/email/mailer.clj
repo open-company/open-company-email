@@ -147,7 +147,7 @@
         (io/delete-file inline-file true)))))
 
 (defn send-private-board-notification
-  "Creates an html email and sends it to the recipient."
+  "Creates an HTML private board invite email and sends it to the recipient."
   [msg]
   (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
         html-file (str uuid-fragment ".html")
@@ -162,6 +162,29 @@
               :from default-from
               :reply-to default-reply-to
               :subject (str c/email-digest-prefix org-name)}
+             {:html (slurp inline-file)})
+      (finally
+       ;; remove the tmp files
+       (io/delete-file html-file true)
+       (io/delete-file inline-file true)))))
+
+(defn send-notification
+  "Creates an HTML email notifying user of being mentioned or replied to and sends it to the recipient."
+  [msg]
+  (timbre/info "Sending notification for:" msg)
+  (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
+        html-file (str uuid-fragment ".html")
+        inline-file (str uuid-fragment ".inline.html")
+        notification (:notification msg)]
+    (try
+      (spit html-file (content/notify-html msg)) ; create the email in a tmp file
+      (inline-css html-file inline-file) ; inline the CSS
+       ;; Email it to the recipient
+      (email {:to (-> msg :to)
+              :source default-source
+              :from default-from
+              :reply-to default-reply-to
+              :subject ""}
              {:html (slurp inline-file)})
       (finally
        ;; remove the tmp files

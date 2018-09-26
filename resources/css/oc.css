@@ -92,7 +92,6 @@ table.footer a {
   color: #3FBD7C;
 }
 
-/* New template specific css */
 .footer-table {
   background-color: white !important;
   max-width: 600px;
@@ -230,4 +229,18 @@ img.green-button {
   font-size: 20px;
   display: block;
   border: 0px;
+}
+
+p.notification-link a {
+  font-size: 14px;
+  font-weight: bold;
+  color: #3FBD7C;
+}
+
+span.notification-content, span.notification-content p, span.notification-content div {
+  color: #898D93;
+}
+
+span.oc-mention {
+  font-weight: bold;
 }

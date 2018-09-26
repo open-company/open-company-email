@@ -3,6 +3,7 @@
             [clojure.walk :refer (keywordize-keys)]
             [clj-time.format :as time-format]
             [hiccup.core :as h]
+            [hickory.core :as hickory]
             [oc.email.config :as config]))
 
 (def max-logo 32)
@@ -43,7 +44,7 @@
 (def reset-button-text "reset_password")
 
 (def verify-message "Please verify your email")
-(def verify-instructions "Welcome to Carrot, your new company digest! Please click the link below to verify your account.")
+(def verify-instructions "Welcome to Carrot, where leaders rise above the noise to keep teams aligned. Please click the link below to verify your account.")
 (def verify-button-text "verify_email")
 
 (def digest-weekly-title "Your weekly brief")
@@ -148,9 +149,10 @@
          filestack-resource)))
 
 (defn- fix-avatar-url
-  "First it fix relative urls, it prepends our production CDN domain to it. Then if the url is
-   pointing to one of our happy faces replace the ending svg with png to have it resizable.
-   If it's not use the on the fly resize url."
+  "
+  First it fixes relative URLs, it prepends our production CDN domain to it if it's relative.
+  Then if the url is pointing to one of our happy faces, it replaces the SVG extension with PNG
+  to have it resizable. If it's not one of our happy faces, it uses the on-the-fly resize url."
   [avatar-url]
   (let [absolute-avatar-url (if (s/starts-with? avatar-url "/img")
                               (str "https://d1wc0stj82keig.cloudfront.net" avatar-url)
@@ -416,9 +418,8 @@
         from-avatar? (not (s/blank? from-avatar))
         show-note? (and note? from-avatar?)
         secure-uuid (:secure-uuid entry)
-        origin-url config/web-url
-        entry-url (s/join "/" [origin-url org-slug "post" secure-uuid])]
-    [:td {:class "small-10 large-12 columns" :valign "middle" :align "center"}
+        entry-url (s/join "/" [config/web-url org-slug "post" secure-uuid])]
+    [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
       (spacer 40)
       (when logo? (org-logo entry))
       (when logo? (spacer 32))
@@ -435,6 +436,52 @@
       (post-attribution entry false)
       (spacer 12)
       (left-button share-cta entry-url)
+      (spacer 56)]))
+
+(defn- notify-content [msg]
+  (let [notification (:notification msg)
+        content (:content notification)
+        org (:org msg)
+        logo-url (:logo-url org)
+        logo? (not (s/blank? logo-url))
+        org-name (:name org)
+        org-name? (not (s/blank? org-name))
+        org-slug (:slug org)
+        mention? (:mention notification)
+        comment? (:interaction-id notification)
+        first-name (:first-name msg)
+        first-name? (not (s/blank? first-name))
+        author (:author notification)
+        greeting (if first-name? (str "Hello " first-name ",") "Hello,")
+        intro (if mention?
+                (str "You were mentioned in a " (if comment? "comment" "post") ":")
+                (str "You have a new comment on your post:"))
+        notification-author (:author notification)
+        notification-author-name (:name notification-author)
+        notification-author-url (fix-avatar-url (:avatar-url notification-author))
+        secure-uuid (:secure-uuid notification)
+        origin-url config/web-url
+        entry-url (s/join "/" [origin-url org-slug "post" secure-uuid])
+                attribution (if mention?
+                    [:a {:href entry-url} (str notification-author-name " mentioned you")]
+                    [:a {:href entry-url} (str notification-author-name " commented")])]
+    [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
+      (spacer 40)
+      (when logo? (org-logo (clojure.set/rename-keys org {:logo-url :org-logo-url
+                                                          :name :org-name
+                                                          :logo-height :org-logo-height
+                                                          :logo-width :org-logo-width})))
+      (when logo? (spacer 32))
+      (h1 greeting)
+      (spacer 10)
+      (paragraph intro)
+      (spacer 24)
+      horizontal-line
+      (spacer 25)
+      (paragraph attribution "notification-attribution" "notification-link")
+      (spacer 8)
+      [:span {:class "notification-content"}
+        (-> (hickory/parse content) hickory/as-hiccup first (nth 3) rest rest)]
       (spacer 56)]))
 
 (defn- token-prep [token-type msg]
@@ -490,7 +537,8 @@
                     :invite (invite-content "small-10 large-12 columns" data)
                     :board-notification (board-notification-content data)
                     :share-link (share-content data)
-                    :digest (digest-content data))
+                    :digest (digest-content data)
+                    :notify (notify-content data))
                   [:td {:class "small-1 hide-for-large columns"
                         :valign "middle"
                         :align "right"}]]]
@@ -519,6 +567,9 @@
         org (if (s/blank? org-name) "" (str org-name " on "))]
     (str prefix " to join " org "Carrot")))
 
+(defn notify-html [msg]
+  (html msg :notify))
+
 (defn share-link-html [entry]
   (html entry :share-link))
 
@@ -531,8 +582,7 @@
         headline? (not (s/blank? headline))
         org-slug (:org-slug entry)
         secure-uuid (:secure-uuid entry)
-        origin-url config/web-url
-        update-url (s/join "/" [origin-url org-slug "post" secure-uuid])]
+        update-url (s/join "/" [config/web-url org-slug "post" secure-uuid])]
     (str (when note? (str note "\n\n"))
          "Check out the latest" (when org-name? (str " from " org-name)) ":"
          "\n\n" (when headline? (str headline "- ")) update-url)))
@@ -674,5 +724,17 @@
 
   (def digest (json/decode (slurp "./opt/samples/digests/no-logo.json")))
   (spit "./hiccup.html" (content/digest-html digest))
+
+
+  ;; Notifications
+
+  (def comment-notification (json/decode (slurp "./opt/samples/notifications/comment.json")))
+  (spit "./hiccup.html" (content/notify-html comment-notification))
+
+  (def post-mention-notification (json/decode (slurp "./opt/samples/notifications/post-mention.json")))
+  (spit "./hiccup.html" (content/notify-html post-mention-notification))
+
+  (def comment-mention-notification (json/decode (slurp "./opt/samples/notifications/comment-mention.json")))
+  (spit "./hiccup.html" (content/notify-html comment-mention-notification))
 
   )
