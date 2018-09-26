@@ -418,7 +418,7 @@
         from-avatar? (not (s/blank? from-avatar))
         show-note? (and note? from-avatar?)
         secure-uuid (:secure-uuid entry)
-        entry-url (s/join "/" [origin-url org-slug "post" secure-uuid])]
+        entry-url (s/join "/" [config/web-url org-slug "post" secure-uuid])]
     [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
       (spacer 40)
       (when logo? (org-logo entry))
