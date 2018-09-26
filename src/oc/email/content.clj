@@ -419,7 +419,6 @@
         show-note? (and note? from-avatar?)
         secure-uuid (:secure-uuid entry)
         entry-url (s/join "/" [origin-url org-slug "post" secure-uuid])]
-    [:td {:class "small-10 large-12 columns" :valign "middle" :align "center"}
     [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
       (spacer 40)
       (when logo? (org-logo entry))
