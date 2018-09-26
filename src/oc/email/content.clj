@@ -416,8 +416,7 @@
         from-avatar? (not (s/blank? from-avatar))
         show-note? (and note? from-avatar?)
         secure-uuid (:secure-uuid entry)
-        origin-url config/web-url
-        entry-url (s/join "/" [origin-url org-slug "post" secure-uuid])]
+        entry-url (s/join "/" [config/web-url org-slug "post" secure-uuid])]
     [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
       (spacer 40)
       (when logo? (org-logo entry))
@@ -575,8 +574,7 @@
         headline? (not (s/blank? headline))
         org-slug (:org-slug entry)
         secure-uuid (:secure-uuid entry)
-        origin-url config/web-url
-        update-url (s/join "/" [origin-url org-slug "post" secure-uuid])]
+        update-url (s/join "/" [config/web-url org-slug "post" secure-uuid])]
     (str (when note? (str note "\n\n"))
          "Check out the latest" (when org-name? (str " from " org-name)) ":"
          "\n\n" (when headline? (str headline "- ")) update-url)))
