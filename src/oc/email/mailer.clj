@@ -175,7 +175,15 @@
   (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
         html-file (str uuid-fragment ".html")
         inline-file (str uuid-fragment ".inline.html")
-        notification (:notification msg)]
+        notification (:notification msg)
+        org (:org msg)
+        org-name (:name org)
+        org-name? (not (s/blank? org-name))
+        mention? (:mention notification)
+        comment? (:interaction-id notification)
+        subject (if mention?
+                  (str "You were mentioned in a " (if comment? "comment" "post"))
+                  (str "There is a new comment on your post"))]
     (try
       (spit html-file (content/notify-html msg)) ; create the email in a tmp file
       (inline-css html-file inline-file) ; inline the CSS
@@ -184,7 +192,7 @@
               :source default-source
               :from default-from
               :reply-to default-reply-to
-              :subject ""}
+              :subject subject}
              {:html (slurp inline-file)})
       (finally
        ;; remove the tmp files

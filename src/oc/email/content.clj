@@ -455,7 +455,7 @@
         greeting (if first-name? (str "Hello " first-name ",") "Hello,")
         intro (if mention?
                 (str "You were mentioned in a " (if comment? "comment" "post") ":")
-                (str "You have a new comment on your post:"))
+                (str "There is a new comment on your post:"))
         notification-author (:author notification)
         notification-author-name (:name notification-author)
         notification-author-url (fix-avatar-url (:avatar-url notification-author))
