@@ -1,0 +1,31 @@
+{
+  "type": "notify",
+  "notification": {"content": "<p>That was profound.</p><p>So was this.</p>",
+                   "mention": false,
+                   "org-id": "fba2-4dae-b799",
+                   "user-id": "b7f2-41f2-be42",
+                   "author": {"name": "Jean-Paul Sartre",
+                              "user-id": "c357-4516-a1b8",
+                              "avatar-url": "/img/ML/happy_face_yellow.svg"},
+                   "board-id": "ded3-4e36-b5fd",
+                   "notify-at": "2018-08-27T12:56:38.788Z",
+                   "secure-uuid": "a474-4ed9-7ee1",
+                   "entry-id": "7ee1-4ed9-a474",
+                   "interaction-id": "fb2d-46ff-8f06"},
+  "to": "camus@combat.org",
+  "user-id": "b7f2-41f2-be42",
+  "status": "active",
+  "first-name": "Albert",
+  "last-name": "Camus",
+  "name": "Albert Camus",
+  "timezone": "America/New_York", 
+  "org": {
+    "slug": "Combat",
+    "team-id": "5744-47eb-98b8",
+    "name": "Combat",
+    "logo-url": "https://cl.ly/257df885419a/combat.jpg",
+    "uuid": "fba2-4dae-b799",
+    "logo-width": 550, 
+    "logo-height": 550
+  }
+}
