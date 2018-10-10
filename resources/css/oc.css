@@ -92,6 +92,13 @@ table.footer a {
   color: #3FBD7C;
 }
 
+.header-table {
+  background-color: white !important;
+  max-width: 600px;
+  text-align: center;
+  vertical-align: middle;
+}
+
 .footer-table {
   background-color: white !important;
   max-width: 600px;
@@ -104,6 +111,10 @@ table.footer a {
   background-color: white !important;
   text-align: center;
   vertical-align: middle;
+}
+
+.header-bottom-border {
+  border-bottom: 1px solid #F0F0F1;
 }
 
 .footer-top-border {
@@ -133,11 +144,27 @@ p.footer-paragraph {
   font-weight: 400;
 }
 
+p.header-paragraph {
+  color: #898D93;
+  font-size: 14px;
+  font-weight: 400;
+}
+
 p.footer-paragraph.bottom-footer, p.footer-paragraph.bottom-footer a {
   color: #C4C6C7;
 }
 
+p.header-paragraph.top-header, p.footer-paragraph.top-header a {
+  color: #C4C6C7;
+}
+
 p.footer-paragraph a {
+  color: #898D93;
+  text-decoration: underline;
+  font-weight: 400;
+}
+
+p.header-paragraph a {
   color: #898D93;
   text-decoration: underline;
   font-weight: 400;
@@ -156,9 +183,9 @@ table.footer-table a.footer-link {
 span.note-author-name {
   float: left;
   padding-top: 10px;
-  margin-left: 8px;
   font-weight: bold;
   font-size: 14px;
+  margin-left: 24px;
 }
 
 table.horizontal-line {
@@ -177,6 +204,10 @@ p.digest-help a{
 
 th.footer-icon img {
   float: right;
+}
+
+th.header-icon img {
+  float: left;
 }
 
 img.read-post-image {
@@ -243,4 +274,23 @@ span.notification-content, span.notification-content p, span.notification-conten
 
 span.oc-mention {
   font-weight: bold;
+}
+
+
+.note-paragraph {
+  background-color: #FDF6E4 !important;
+}
+
+.note-paragraph.top-note-paragraph, .note-paragraph.top-note-paragraph tr, .note-paragraph.top-note-paragraph tr th {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.note-paragraph.bottom-note-paragraph, .note-paragraph.bottom-note-paragraph tr, .note-paragraph.bottom-note-paragraph tr th {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.note-paragraph .text-left {
+  margin-left: 24px;
 }

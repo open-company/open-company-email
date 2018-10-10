@@ -44,7 +44,7 @@
 (def reset-button-text "reset_password")
 
 (def verify-message "Please verify your email")
-(def verify-instructions "Welcome to Carrot, where leaders rise above the noise to keep teams aligned. Please click the link below to verify your account.")
+(def verify-instructions "Welcome to Carrot! Carrot helps leaders rise above noisy chat and email to keep teams aligned. Please click the link below to verify your account.")
 (def verify-button-text "verify_email")
 
 (def digest-weekly-title "Your weekly brief")
@@ -162,16 +162,10 @@
       (str (subs absolute-avatar-url 0 (- (count absolute-avatar-url) 3)) "png")
       (circle-image absolute-avatar-url 32))))
 
-(defn- note-author [avatar-url author divider-line?]
-  [:table {:class "row"}
+(defn- note-author [author]
+  [:table {:class "row note-paragraph"}
     [:tr
       [:th {:class "small-12 large-12"}
-        (when divider-line?
-          horizontal-line)
-        (when divider-line?
-          (spacer 16))
-        [:img {:class "note-author-avatar"
-               :src (fix-avatar-url avatar-url)}]
         [:span {:class "note-author-name"} author]]]])
 
 (defn- left-button
@@ -218,6 +212,31 @@
 ;               [:p {:class "attribution"} attribution]]]]]
 ;       [:th {:class "small-1 large-1 last columns"}]]))
 
+(defn- email-header [& [right-copy]]
+  [:table {:class "row header-table"
+           :valign "middle"
+           :align "center"}
+    [:tr
+      [:td {:class "small-1 hide-for-large columns" :valign "middle" :align "left"}]
+      [:td {:class "small-10 large-12 columns" :valign "middle" :align "center"}
+        (vspacer 24 "header-table" "header-table")
+        [:table {:class "row header-table"}
+          [:tr
+            [:th {:class "small-2 large-2 columns header-icon"}
+              [:a
+                {:href config/web-url}
+                [:img {:src "https://open-company-assets.s3.amazonaws.com/img/ML/carrot_logo_with_copy_colors.png"
+                       :srcSet "https://open-company-assets.s3.amazonaws.com/img/ML/carrot_logo_with_copy_colors@2x.png 2x"
+                       :width "74"
+                       :height "18"
+                       :alt "Carrot"}]]]
+            [:th {:class "small-10 large-10 columns"}
+              [:p {:class "header-paragraph top-header"}
+                "Leadership communication for teams"]]]]
+        (vspacer 24 "header-table header-bottom-border" "header-table")
+        (vspacer 40 "header-table" "header-table")]
+      [:td {:class "small-1 hide-for-large columns" :valign "middle" :align "right"}]]])
+
 (defn- email-footer []
   [:table {:class "row footer-table"
            :valign "middle"
@@ -237,7 +256,8 @@
             [:th {:class "small-2 large-2 columns footer-icon"}
               [:a
                 {:href config/web-url}
-                [:img {:src "https://open-company.s3.amazonaws.com/carrot-logo-grey-min.png"
+                [:img {:src "https://open-company-assets.s3.amazonaws.com/img/ML/carrot_logo_grey_email.png"
+                       :srcSet "https://open-company-assets.s3.amazonaws.com/img/ML/carrot_logo_grey_email@2x.png 2x"
                        :width "13"
                        :height "24"
                        :alt "Carrot"}]]]]]
@@ -350,10 +370,11 @@
       (spacer 24)
       (paragraph (format board-invite-explainer board-name board-url))
       (spacer 16)
-      (when show-note? (spacer 8))
-      (when show-note? (note-author from-avatar from true))
-      (when show-note? (spacer 16))
-      (when show-note? (paragraph note))
+      (when show-note? (spacer 8 "note-paragraph top-note-paragraph" "note-paragraph top-note-paragraph"))
+      (when show-note? (note-author from))
+      (when show-note? (spacer 16 "note-paragraph" "note-paragraph"))
+      (when show-note? (paragraph note "note-paragraph"))
+      (when show-note? (spacer 16 "note-paragraph bottom-note-paragraph" "note-paragraph bottom-note-paragraph"))
       (when show-note? (spacer 16))
       (left-button board-invite-button board-url)
       (spacer 56)]))
@@ -369,7 +390,6 @@
         from-avatar? (not (s/blank? from-avatar))
         note (:note invite)
         note? (not (s/blank? note))
-        show-note? (and from-avatar? note?)
         invite-message (if (s/blank? org-name)
                          invite-message
                          (format invite-message-with-company org-name))]
@@ -393,11 +413,19 @@
                 "Learn More"]
               "."]]]]
       (spacer 16)
-      (when show-note? (spacer 8))
-      (when show-note? (note-author from-avatar from true))
-      (when show-note? (spacer 16))
-      (when show-note? (paragraph note))
-      (when show-note? (spacer 16))
+      ; (when note? (spacer 8))
+      ; (when note? (note-author from))
+      ; (when note? (spacer 16))
+      ; (when note? (paragraph note))
+
+      (when note? (spacer 8 "note-paragraph top-note-paragraph" "note-paragraph"))
+      (when note? (note-author from))
+      (when note? (spacer 16 "note-paragraph" "note-paragraph"))
+      (when note? (paragraph note "note-paragraph"))
+      (when note? (spacer 16 "note-paragraph bottom-note-paragraph" "note-paragraph"))
+
+
+      (when note? (spacer 16))
       (left-button invite-button (:token-link invite))
       (spacer 56)]))
 
@@ -425,7 +453,7 @@
       (when logo? (spacer 32))
       (h1 (format share-message from))
       (spacer 24)
-      (when show-note? (note-author from-avatar from false))
+      (when show-note? (note-author from false))
       (when show-note? (spacer 16))
       (when show-note? (paragraph note))
       (when show-note? (spacer 40))
@@ -524,6 +552,7 @@
           [:td {:valign "middle"
                 :align "center"}
             [:center
+              (email-header)
               [:table {:class "row email-content"
                        :valign "middle"
                        :align "center"}
