@@ -246,6 +246,15 @@
                                  :html (slurp inline-html-file)})))
   (send-email-from-file email-setup "./hiccup.html")
 
+  (def notification-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/notifications/post-mention.json"))))
+  (mailer/send-notification (assoc notification-request :to "change@me.com"))
+
+  (def notification-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/notifications/comment.json"))))
+  (mailer/send-notification (assoc notification-request :to "change@me.com"))
+
+  (def notification-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/notifications/comment-mention.json"))))
+  (mailer/send-notification (assoc notification-request :to "change@me.com"))
+
   (def share-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/share/bago.json"))))
   (mailer/send-entry (merge share-request {
                        :to ["change@me.com"]
