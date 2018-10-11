@@ -39,6 +39,7 @@
 
 (defonce email-from-domain (env :email-from-domain))
 (defonce email-digest-prefix (env :email-digest-prefix))
+(defonce email-images-prefix (env :email-images-prefix))
 
 ;; ----- Filestack -----
 

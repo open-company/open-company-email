@@ -65,6 +65,7 @@
         :aws-sqs-email-queue "https://sqs.REGION.amazonaws.com/CHANGE/ME"
         :email-from-domain "change.me"
         :email-digest-prefix "[Localhost] "
+        :email-images-prefix "https://open-company-assets-non-prod.s3.amazonaws.com"
         :intro "true"
         :log-level "debug"
       }
