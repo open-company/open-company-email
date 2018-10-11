@@ -152,7 +152,8 @@
   (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
         html-file (str uuid-fragment ".html")
         inline-file (str uuid-fragment ".inline.html")
-        org-name (:name (:org msg))]
+        org-name (:name (:org msg))
+        subject "You’ve been invited to a private section on Carrot"]
     (try
       (spit html-file (content/board-notification-html msg)) ; create the email in a tmp file
       (inline-css html-file inline-file) ; inline the CSS
@@ -161,7 +162,7 @@
               :source default-source
               :from default-from
               :reply-to default-reply-to
-              :subject (str c/email-digest-prefix org-name)}
+              :subject (str c/email-digest-prefix subject)}
              {:html (slurp inline-file)})
       (finally
        ;; remove the tmp files

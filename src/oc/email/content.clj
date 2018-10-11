@@ -35,8 +35,9 @@
 (def share-message "%s sent you a post on Carrot")
 (def share-cta "read_post")
 
-(def board-invite-message "%s invited you to join a private section")
-(def board-invite-explainer "%s (%s)")
+(def board-invite-message "%s has invited you to join a private section on Carrot called “%s” (%s).")
+(def board-invite-message-2 "Carrot is a leadership communication platform that keeps everyone focused on what matters.")
+; "%s invited you to join a private section")
 (def board-invite-button "view_section")
 
 (def reset-message "Password reset")
@@ -191,7 +192,7 @@
                     "reset_password" 159
                     "accept_invitation" 142
                     "verify_email" 120
-                    "view_section" 128
+                    "view_section" 184
                     ;; default "read_post"
                     94)]
     [:a {:href url
@@ -355,7 +356,7 @@
         last-name (-> notice :inviter :last-name)
         from (s/join " " [first-name last-name])
         fixed-from (if-not (s/blank? from) "Someone" from)
-        invite-message (format board-invite-message from)
+        invite-message (format board-invite-message from board-name board-url)
         from-avatar (-> notice :inviter :avatar-url)
         from-avatar? (not (s/blank? from-avatar))
         note (:note notice)
@@ -368,10 +369,10 @@
                              :org-logo-width logo-width
                              :org-logo-height logo-height}))
       (when logo? (spacer 32))
-      (h1 invite-message)
+      (paragraph invite-message)
       (spacer 24)
-      (paragraph (format board-invite-explainer board-name board-url))
-      (spacer 16)
+      (paragraph board-invite-message-2)
+      (spacer 24)
       (when show-note? (spacer 8 "note-paragraph top-note-paragraph" "note-paragraph top-note-paragraph"))
       (when show-note? (note-author from))
       (when show-note? (spacer 16 "note-paragraph" "note-paragraph"))
