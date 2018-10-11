@@ -195,7 +195,7 @@
                     94)]
     [:a {:href url}
       [:img {:class "green-button"
-             :src (str config/email-images-prefix "/images/email_bt_" cta-text "@2x.png")
+             :src (str config/email-images-prefix "/email_images/email_bt_" cta-text "@2x.png")
              :width (str image-width)
              :style (str "max-width: " image-width "px;")
              :alt cta-text}]]))
@@ -225,8 +225,8 @@
             [:th {:class "small-2 large-2 columns header-icon"}
               [:a
                 {:href config/web-url}
-                [:img {:src (str config/email-images-prefix "/images/carrot_logo_with_copy_colors.png")
-                       :srcSet (str config/email-images-prefix "/images/carrot_logo_with_copy_colors@2x.png 2x")
+                [:img {:src (str config/email-images-prefix "/email_images/carrot_logo_with_copy_colors.png")
+                       :srcSet (str config/email-images-prefix "/email_images/carrot_logo_with_copy_colors@2x.png 2x")
                        :width "74"
                        :height "18"
                        :alt "Carrot"}]]]
@@ -256,8 +256,8 @@
             [:th {:class "small-2 large-2 columns footer-icon"}
               [:a
                 {:href config/web-url}
-                [:img {:src (str config/email-images-prefix "/images/carrot_logo_grey_email.png")
-                       :srcSet (str config/email-images-prefix "/images/carrot_logo_grey_email@2x.png 2x")
+                [:img {:src (str config/email-images-prefix "/email_images/carrot_logo_grey_email.png")
+                       :srcSet (str config/email-images-prefix "/email_images/carrot_logo_grey_email@2x.png 2x")
                        :width "13"
                        :height "24"
                        :alt "Carrot"}]]]]]
