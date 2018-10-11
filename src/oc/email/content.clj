@@ -33,11 +33,11 @@
 (def invite-button "accept_invitation")
 
 (def share-message "%s shared a post with you")
-(def share-cta "read_post")
+(def share-cta "view_post")
 
+(def board-invite-title "You’ve been invited to a private section on Carrot")
 (def board-invite-message "%s has invited you to join a private section on Carrot called “")
-(def board-invite-message-2 "”.")
-(def board-invite-message-3 "Carrot is a leadership communication platform that keeps everyone focused on what matters.")
+(def board-invite-message-2 "”. Carrot is a leadership communication platform that keeps everyone focused on what matters.")
 ; "%s invited you to join a private section")
 (def board-invite-button "view_section")
 
@@ -194,29 +194,23 @@
   As suggested here:
   https://litmus.com/blog/understanding-retina-images-in-html-email"
   [cta-text url & [css-class]]
-  (let [image-width (case cta-text
-                    "go_to_digest" 136
-                    "reset_password" 159
-                    "accept_invitation" 142
-                    "verify_email" 120
-                    "view_section" 184
-                    ;; default "read_post"
-                    112)]
-    [:a {:href url
-         :class (str "green-button " css-class)}
-      (case (keyword cta-text)
-        :go_to_digest
-        "Go to digest"
-        :reset_password
-        "Reset password"
-        :accept_invitation
-        "Accept invite"
-        :verify_email
-        "Verify email"
-        :view_section
-        "View private section"
-        ;; default "read_post"
-        "View post")]))
+  [:a {:href url
+       :class (str "green-button " css-class)}
+    (case (keyword cta-text)
+      :go_to_digest
+      "Go to digest"
+      :reset_password
+      "Reset password"
+      :accept_invitation
+      "Accept invite"
+      :verify_email
+      "Verify email"
+      :view_section
+      "View private section"
+      :view_comment
+      "View comment"
+      ;; default "view_post"
+      "View post")])
 
 ;; Comments not shown in digests at the moment
 ; (defn- comment-attribution [comment-count comment-authors]
@@ -240,16 +234,13 @@
         (vspacer 24 "header-table" "header-table")
         [:table {:class "row header-table"}
           [:tr
-            [:th {:class "small-2 large-2 columns header-icon"}
+            [:th {:class "small-12 large-12 columns header-icon"}
               [:a
                 {:href config/web-url}
                 [:img {:src (str config/email-images-prefix "/email_images/carrot_logo_with_copy_colors@2x.png")
-                       :width "74"
-                       :height "18"
-                       :alt "Carrot"}]]]
-            [:th {:class "small-10 large-10 columns"}
-              [:p {:class "header-paragraph top-header"}
-                "Leadership communication"]]]]
+                       :width "90"
+                       :height "22"
+                       :alt "Carrot"}]]]]]
         (vspacer 24 "header-table header-bottom-border" "header-table")
         (vspacer 40 "header-table" "header-table")]
       [:td {:class "small-1 hide-for-large columns" :valign "middle" :align "right"}]]])
@@ -386,12 +377,9 @@
         note? (not (s/blank? note))
         show-note? (and from-avatar? note?)]
     [:td {:class "small-10 large-12 columns" :valign "middle" :align "center"}
-      (spacer 40)
-      (when logo? (org-logo {:org-name org-name
-                             :org-logo-url logo-url
-                             :org-logo-width logo-width
-                             :org-logo-height logo-height}))
-      (when logo? (spacer 32))
+      (spacer 64)
+      (h1 board-invite-title)
+      (spacer 16)
       [:table {:class "row"}
         [:tr
           [:th {:class "small-12 large-12 columns"}
@@ -400,15 +388,13 @@
               [:a {:href board-url}
                 board-name]
               board-invite-message-2]]]]
-      (spacer 24)
-      (paragraph board-invite-message-3)
-      (spacer 24)
-      (when show-note? (spacer 8 "note-paragraph top-note-paragraph" "note-paragraph top-note-paragraph"))
-      (when show-note? (note-author from))
-      (when show-note? (spacer 16 "note-paragraph" "note-paragraph"))
-      (when show-note? (paragraph note "note-paragraph"))
-      (when show-note? (spacer 16 "note-paragraph bottom-note-paragraph" "note-paragraph bottom-note-paragraph"))
       (when show-note? (spacer 16))
+      (when show-note? (spacer 24 "note-paragraph top-note-paragraph" "note-paragraph top-note-paragraph"))
+      (when show-note? (note-author from))
+      (when show-note? (spacer 8 "note-paragraph" "note-paragraph"))
+      (when show-note? (paragraph note "note-paragraph"))
+      (when show-note? (spacer 24 "note-paragraph bottom-note-paragraph" "note-paragraph bottom-note-paragraph"))
+      (spacer 24)
       (left-button board-invite-button board-url)
       (spacer 56)]))
 
@@ -437,11 +423,11 @@
       (spacer 24)
       (paragraph (format invite-instructions from))
       (spacer 16)
-      (when note? (spacer 8 "note-paragraph top-note-paragraph" "note-paragraph"))
+      (when note? (spacer 24 "note-paragraph top-note-paragraph" "note-paragraph"))
       (when note? (note-author from))
-      (when note? (spacer 16 "note-paragraph" "note-paragraph"))
+      (when note? (spacer 8 "note-paragraph" "note-paragraph"))
       (when note? (paragraph note "note-paragraph"))
-      (when note? (spacer 16 "note-paragraph bottom-note-paragraph" "note-paragraph"))
+      (when note? (spacer 24 "note-paragraph bottom-note-paragraph" "note-paragraph"))
       (when note? (spacer 16))
       [:a
         {:class "token-link"
@@ -475,11 +461,11 @@
       (spacer 24)
       (post-block entry entry-url)
       (spacer 24)
-      (when show-note? (spacer 8 "note-paragraph top-note-paragraph" "note-paragraph top-note-paragraph"))
+      (when show-note? (spacer 24 "note-paragraph top-note-paragraph" "note-paragraph top-note-paragraph"))
       (when show-note? (note-author from))
-      (when show-note? (spacer 16 "note-paragraph" "note-paragraph"))
+      (when show-note? (spacer 8 "note-paragraph" "note-paragraph"))
       (when show-note? (paragraph note "note-paragraph"))
-      (when show-note? (spacer 16 "note-paragraph bottom-note-paragraph" "note-paragraph bottom-note-paragraph"))
+      (when show-note? (spacer 24 "note-paragraph bottom-note-paragraph" "note-paragraph bottom-note-paragraph"))
       (when show-note? (spacer 24))
       (left-button share-cta entry-url)
       (spacer 56)]))
@@ -507,26 +493,21 @@
         secure-uuid (:secure-uuid notification)
         origin-url config/web-url
         entry-url (s/join "/" [origin-url org-slug "post" secure-uuid])
-        ; attribution (if mention?
-        ;              [:a {:href entry-url} (str notification-author-name " mentioned you")]
-        ;              [:a {:href entry-url} (str notification-author-name " commented")])
+        button-cta (if (or (not mention?) comment?)
+                    "view_comment"
+                    "view_post")
         notification-html-content (-> (hickory/parse content) hickory/as-hiccup first (nth 3) rest rest)]
     [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
-      (spacer 40)
-      (when logo? (org-logo (clojure.set/rename-keys org {:logo-url :org-logo-url
-                                                          :name :org-name
-                                                          :logo-height :org-logo-height
-                                                          :logo-width :org-logo-width})))
-      (when logo? (spacer 32))
+      (spacer 64)
       (h1 intro)
       (spacer 24)
-      (spacer 8 "note-paragraph top-note-paragraph" "note-paragraph top-note-paragraph")
+      (spacer 24 "note-paragraph top-note-paragraph" "note-paragraph top-note-paragraph")
       (note-author notification-author-name notification-author-url)
-      (spacer 16 "note-paragraph" "note-paragraph")
+      (spacer 8 "note-paragraph" "note-paragraph")
       (paragraph notification-html-content "note-paragraph note-left-padding" "text-left" "note-x-margin")
-      (spacer 16 "note-paragraph bottom-note-paragraph" "note-paragraph bottom-note-paragraph")
+      (spacer 24 "note-paragraph bottom-note-paragraph" "note-paragraph bottom-note-paragraph")
       (spacer 24)
-      (left-button "read_post" entry-url)
+      (left-button button-cta entry-url)
       (spacer 56)]))
 
 (defn- token-prep [token-type msg]

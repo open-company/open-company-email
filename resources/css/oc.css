@@ -58,7 +58,7 @@ p {
 p.attribution {
   font-size: 12px;
   line-height: 18px;
-  color: #898D93;
+  color: #34414F;
 }
 
 span.note-body {
@@ -220,10 +220,6 @@ p.digest-help a{
   text-decoration: underline;
 }
 
-th.header-icon {
-  min-width: 74px;;
-}
-
 th.footer-icon img {
   float: right;
 }
@@ -291,7 +287,7 @@ p.notification-link a {
 }
 
 span.notification-content, span.notification-content p, span.notification-content div {
-  color: #898D93;
+  color: #34414F;
 }
 
 span.oc-mention {
@@ -349,6 +345,10 @@ div.post-block img.post-avatar {
   font-size: 16px;
   text-align: left;
   cursor: pointer;
+}
+
+.green-button:hover {
+  color: white;
 }
 
 .green-button {
