@@ -343,3 +343,23 @@ div.post-block img.post-avatar {
 .post-right-side {
   width: calc(100% - 48px) !important;
 }
+
+.token-link {
+  color: #3FBD7C;
+  font-size: 16px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.green-button {
+  display: block;
+  float: left;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  min-width: 220px;
+  background-color: #52C489;
+  border-radius: 100px;
+  text-align: center;
+  padding: 11px 0px;
+}

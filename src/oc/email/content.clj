@@ -203,12 +203,20 @@
                     ;; default "read_post"
                     112)]
     [:a {:href url
-         :class css-class}
-      [:img {:class "green-button"
-             :src (str config/email-images-prefix "/email_images/email_bt_" cta-text "@2x.png")
-             :width (str image-width)
-             :style (str "max-width: " image-width "px;")
-             :alt cta-text}]]))
+         :class (str "green-button " css-class)}
+      (case (keyword cta-text)
+        :go_to_digest
+        "Go to digest"
+        :reset_password
+        "Reset password"
+        :accept_invitation
+        "Accept invite"
+        :verify_email
+        "Verify email"
+        :view_section
+        "View private section"
+        ;; default "read_post"
+        "View post")]))
 
 ;; Comments not shown in digests at the moment
 ; (defn- comment-attribution [comment-count comment-authors]
@@ -431,23 +439,16 @@
       (spacer 24)
       (paragraph (format invite-instructions from))
       (spacer 16)
-      ; (when note? (spacer 8))
-      ; (when note? (note-author from))
-      ; (when note? (spacer 16))
-      ; (when note? (paragraph note))
-
       (when note? (spacer 8 "note-paragraph top-note-paragraph" "note-paragraph"))
       (when note? (note-author from))
       (when note? (spacer 16 "note-paragraph" "note-paragraph"))
       (when note? (paragraph note "note-paragraph"))
       (when note? (spacer 16 "note-paragraph bottom-note-paragraph" "note-paragraph"))
-
-
       (when note? (spacer 16))
-      (left-button invite-button (:token-link invite) "left-align")
-      [:a.learn-more
-        {:href config/web-url}
-        "Learn More"]
+      [:a
+        {:class "token-link"
+         :href (:token-link invite)}
+        (:token-link invite)]
       (spacer 56)]))
 
 (defn- share-content [entry]
@@ -475,7 +476,7 @@
       (h1 (format share-message from))
       (spacer 24)
       (post-block entry entry-url)
-      (spacer 12)
+      (spacer 24)
       (when show-note? (spacer 8 "note-paragraph top-note-paragraph" "note-paragraph top-note-paragraph"))
       (when show-note? (note-author from))
       (when show-note? (spacer 16 "note-paragraph" "note-paragraph"))
@@ -561,7 +562,10 @@
       (when (:instructions-2 message)
         (paragraph (:instructions-2 message)))
       (spacer 16)
-      (left-button (:button-text message) (:token-link msg))
+      [:a
+        {:class "token-link"
+         :href (:token-link msg)}
+        (:token-link msg)]
       (spacer 56)]))
 
 ;; ----- General HTML, common to all emails -----
