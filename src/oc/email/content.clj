@@ -539,7 +539,8 @@
                     :reset reset-instructions
                     :verify verify-instructions)
     :instructions-2 (case token-type
-                     :verify verify-instructions-2)
+                     :verify verify-instructions-2
+                     :reset "")
     :button-text (case token-type
                     :reset reset-button-text
                     :verify verify-button-text)
