@@ -518,8 +518,7 @@
                                                           :logo-height :org-logo-height
                                                           :logo-width :org-logo-width})))
       (when logo? (spacer 32))
-      [:a {:href entry-url}
-        (h1 intro)]
+      (h1 intro)
       (spacer 24)
       (spacer 8 "note-paragraph top-note-paragraph" "note-paragraph top-note-paragraph")
       (note-author notification-author-name notification-author-url)
