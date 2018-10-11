@@ -243,8 +243,7 @@
             [:th {:class "small-2 large-2 columns header-icon"}
               [:a
                 {:href config/web-url}
-                [:img {:src (str config/email-images-prefix "/email_images/carrot_logo_with_copy_colors.png")
-                       :srcSet (str config/email-images-prefix "/email_images/carrot_logo_with_copy_colors@2x.png 2x")
+                [:img {:src (str config/email-images-prefix "/email_images/carrot_logo_with_copy_colors@2x.png")
                        :width "74"
                        :height "18"
                        :alt "Carrot"}]]]
@@ -274,8 +273,7 @@
             [:th {:class "small-2 large-2 columns footer-icon"}
               [:a
                 {:href config/web-url}
-                [:img {:src (str config/email-images-prefix "/email_images/carrot_logo_grey_email.png")
-                       :srcSet (str config/email-images-prefix "/email_images/carrot_logo_grey_email@2x.png 2x")
+                [:img {:src (str config/email-images-prefix "/email_images/carrot_logo_grey_email@2x.png")
                        :width "13"
                        :height "24"
                        :alt "Carrot"}]]]]]
