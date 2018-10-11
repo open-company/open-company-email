@@ -202,6 +202,10 @@ p.digest-help a{
   text-decoration: underline;
 }
 
+th.header-icon {
+  min-width: 74px;;
+}
+
 th.footer-icon img {
   float: right;
 }
