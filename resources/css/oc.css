@@ -318,3 +318,16 @@ a.learn-more {
 .left-align {
   float: left;
 }
+
+div.post-block img.post-avatar {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  border-radius: 50%;
+  float: left;
+  margin-right: 16px;
+}
+
+.post-right-side {
+  width: calc(100% - 48px) !important;
+}

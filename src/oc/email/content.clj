@@ -32,11 +32,12 @@
 (def invite-instructions "%s has invited you to Carrot - a leadership communication platform that keeps teams focused on what matters.")
 (def invite-button "accept_invitation")
 
-(def share-message "%s sent you a post on Carrot")
+(def share-message "%s shared a post with you")
 (def share-cta "read_post")
 
-(def board-invite-message "%s has invited you to join a private section on Carrot called “%s” (%s).")
-(def board-invite-message-2 "Carrot is a leadership communication platform that keeps everyone focused on what matters.")
+(def board-invite-message "%s has invited you to join a private section on Carrot called “")
+(def board-invite-message-2 "”.")
+(def board-invite-message-3 "Carrot is a leadership communication platform that keeps everyone focused on what matters.")
 ; "%s invited you to join a private section")
 (def board-invite-button "view_section")
 
@@ -194,7 +195,7 @@
                     "verify_email" 120
                     "view_section" 184
                     ;; default "read_post"
-                    94)]
+                    112)]
     [:a {:href url
          :class css-class}
       [:img {:class "green-button"
@@ -273,7 +274,7 @@
   (let [d (time-format/parse iso-format timestamp)]
     (time-format/unparse date-format d)))
 
-(defn- post-attribution [entry show-board?]
+(defn- post-attribution [entry show-board? & [css-class]]
   (paragraph
     (str (-> entry :publisher :name)
          (when show-board?
@@ -281,7 +282,18 @@
          (when show-board?
           (:board-name entry))
          " • " (post-date (:published-at entry)))
-   "" "text-left attribution"))
+   css-class "text-left attribution"))
+
+(defn- post-block [entry entry-url]
+  (let [publisher (:publisher entry)
+        avatar-url (fix-avatar-url (:avatar-url publisher))]
+    [:div.post-block
+      (when avatar-url
+        [:img.post-avatar
+          {:src avatar-url}])
+      (h2 (:headline entry) entry-url "post-right-side")
+      (spacer 4 "post-right-side")
+      (post-attribution entry true "post-right-side")]))
 
 ;; ----- Digest -----
 
@@ -356,7 +368,6 @@
         last-name (-> notice :inviter :last-name)
         from (s/join " " [first-name last-name])
         fixed-from (if-not (s/blank? from) "Someone" from)
-        invite-message (format board-invite-message from board-name board-url)
         from-avatar (-> notice :inviter :avatar-url)
         from-avatar? (not (s/blank? from-avatar))
         note (:note notice)
@@ -369,9 +380,16 @@
                              :org-logo-width logo-width
                              :org-logo-height logo-height}))
       (when logo? (spacer 32))
-      (paragraph invite-message)
+      [:table {:class "row"}
+        [:tr
+          [:th {:class "small-12 large-12 columns"}
+            [:p {:class "text-left"}
+              (format board-invite-message from)
+              [:a {:href board-url}
+                board-name]
+              board-invite-message-2]]]]
       (spacer 24)
-      (paragraph board-invite-message-2)
+      (paragraph board-invite-message-3)
       (spacer 24)
       (when show-note? (spacer 8 "note-paragraph top-note-paragraph" "note-paragraph top-note-paragraph"))
       (when show-note? (note-author from))
@@ -450,16 +468,14 @@
       (when logo? (spacer 32))
       (h1 (format share-message from))
       (spacer 24)
-      (when show-note? (note-author from false))
-      (when show-note? (spacer 16))
-      (when show-note? (paragraph note))
-      (when show-note? (spacer 40))
-      horizontal-line
-      (spacer 24)
-      (h2 headline entry-url)
-      (spacer 4)
-      (post-attribution entry false)
+      (post-block entry entry-url)
       (spacer 12)
+      (when show-note? (spacer 8 "note-paragraph top-note-paragraph" "note-paragraph top-note-paragraph"))
+      (when show-note? (note-author from))
+      (when show-note? (spacer 16 "note-paragraph" "note-paragraph"))
+      (when show-note? (paragraph note "note-paragraph"))
+      (when show-note? (spacer 16 "note-paragraph bottom-note-paragraph" "note-paragraph bottom-note-paragraph"))
+      (when show-note? (spacer 24))
       (left-button share-cta entry-url)
       (spacer 56)]))
 
