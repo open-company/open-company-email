@@ -161,7 +161,7 @@ lein test!
 
 ## Images
 
-Some images are kept in [this folder](dev-resources/images/) only as backup since they are already on our CDN. They belong at the top level of the production assets bucket.
+Images are kept in [this folder](resources/images/) and synced to the email_images folder of the predefined S3 bucket. Bucket changes based on the environment.
 
 
 ## Participation
