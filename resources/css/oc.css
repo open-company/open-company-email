@@ -158,6 +158,12 @@ p.header-paragraph.top-header, p.footer-paragraph.top-header a {
   color: #C4C6C7;
 }
 
+@media screen and (max-width: 678px) {
+  p.header-paragraph.top-header {
+    display: none;
+  }
+}
+
 p.footer-paragraph a {
   color: #898D93;
   text-decoration: underline;
@@ -297,4 +303,18 @@ span.oc-mention {
 
 .note-paragraph .text-left {
   margin-left: 24px;
+  margin-right: 24px;
+}
+
+a.learn-more {
+  float: left;
+  margin-left: 16px;
+  color: #3FBD7C;
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.left-align {
+  float: left;
 }

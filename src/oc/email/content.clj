@@ -28,8 +28,8 @@
 (def carrot-explainer "Carrot is the company digest that keeps everyone aligned around what matters most.")
 
 (def invite-message "Join your team on Carrot")
-(def invite-message-with-company "Join %s on Carrot")
-(def invite-instructions "%s has invited you to join the %s digest.")
+(def invite-message-with-company "Join the %s team on Carrot")
+(def invite-instructions "%s has invited you to Carrot - a leadership communication platform that keeps teams focused on what matters.")
 (def invite-button "accept_invitation")
 
 (def share-message "%s sent you a post on Carrot")
@@ -44,7 +44,8 @@
 (def reset-button-text "reset_password")
 
 (def verify-message "Please verify your email")
-(def verify-instructions "Welcome to Carrot! Carrot helps leaders rise above noisy chat and email to keep teams aligned. Please click the link below to verify your account.")
+(def verify-instructions "Welcome to Carrot! Carrot helps leaders rise above noisy chat and email to keep teams aligned.")
+(def verify-instructions-2 "Please click the link below to verify your account.")
 (def verify-button-text "verify_email")
 
 (def digest-weekly-title "Your weekly brief")
@@ -184,16 +185,17 @@
        border=\"0\">
   As suggested here:
   https://litmus.com/blog/understanding-retina-images-in-html-email"
-  [cta-text url]
+  [cta-text url & [css-class]]
   (let [image-width (case cta-text
                     "go_to_digest" 136
                     "reset_password" 159
-                    "accept_invitation" 160
+                    "accept_invitation" 142
                     "verify_email" 120
                     "view_section" 128
                     ;; default "read_post"
                     94)]
-    [:a {:href url}
+    [:a {:href url
+         :class css-class}
       [:img {:class "green-button"
              :src (str config/email-images-prefix "/email_images/email_bt_" cta-text "@2x.png")
              :width (str image-width)
@@ -232,7 +234,7 @@
                        :alt "Carrot"}]]]
             [:th {:class "small-10 large-10 columns"}
               [:p {:class "header-paragraph top-header"}
-                "Leadership communication for teams"]]]]
+                "Leadership communication"]]]]
         (vspacer 24 "header-table header-bottom-border" "header-table")
         (vspacer 40 "header-table" "header-table")]
       [:td {:class "small-1 hide-for-large columns" :valign "middle" :align "right"}]]])
@@ -402,16 +404,7 @@
       (when logo? (spacer 32))
       (h1 invite-message)
       (spacer 24)
-      (paragraph (format invite-instructions from org-name))
-      (spacer 16)
-      [:table {:class "row "}
-        [:tr
-          [:th {:class "small-12 large-12 columns"}
-            [:p {:class "invite-carrot-disclaimer"}
-              "Carrot is a company digest that keeps everyone aligned around what matters most. "
-              [:a {:href config/web-url}
-                "Learn More"]
-              "."]]]]
+      (paragraph (format invite-instructions from))
       (spacer 16)
       ; (when note? (spacer 8))
       ; (when note? (note-author from))
@@ -426,7 +419,10 @@
 
 
       (when note? (spacer 16))
-      (left-button invite-button (:token-link invite))
+      (left-button invite-button (:token-link invite) "left-align")
+      [:a.learn-more
+        {:href config/web-url}
+        "Learn More"]
       (spacer 56)]))
 
 (defn- share-content [entry]
@@ -520,6 +516,8 @@
     :instructions (case token-type
                     :reset reset-instructions
                     :verify verify-instructions)
+    :instructions-2 (case token-type
+                     :verify verify-instructions-2)
     :button-text (case token-type
                     :reset reset-button-text
                     :verify verify-button-text)
@@ -537,6 +535,10 @@
       (h1 (:message message))
       (spacer 24)
       (paragraph (:instructions message))
+      (when (:instructions-2 message)
+        (spacer 24))
+      (when (:instructions-2 message)
+        (paragraph (:instructions-2 message)))
       (spacer 16)
       (left-button (:button-text message) (:token-link msg))
       (spacer 56)]))
