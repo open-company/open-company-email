@@ -260,7 +260,7 @@
   (mailer/send-private-board-notification (assoc board-invite :user {:email "change@me.com"}))
 
   (def token-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/token/apple.json"))))
-  (mailer/send-token :reset (assoc reset :to "change@me.com"))
-  (mailer/send-token :verify (assoc reset :to "change@me.com"))
+  (mailer/send-token :reset (assoc token-request :to "change@me.com"))
+  (mailer/send-token :verify (assoc token-request :to "change@me.com"))
 
 )
