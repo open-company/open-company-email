@@ -113,10 +113,10 @@
 (defn- paragraph
   ([content] (paragraph content ""))
   ([content css-class] (paragraph content css-class "text-left"))
-  ([content css-class content-css-class]
+  ([content css-class content-css-class & [inner-th-class]]
   [:table {:class (str "row " css-class)}
     [:tr
-      [:th {:class "small-12 large-12 columns"}
+      [:th {:class (str "small-12 large-12 columns " inner-th-class)}
         [:p {:class content-css-class} content]]]]))
 
 (defn- h1 [content]
@@ -165,11 +165,17 @@
       (str (subs absolute-avatar-url 0 (- (count absolute-avatar-url) 3)) "png")
       (circle-image absolute-avatar-url 32))))
 
-(defn- note-author [author]
+(defn- note-author [author & [avatar-url]]
   [:table {:class "row note-paragraph"}
     [:tr
       [:th {:class "small-12 large-12"}
-        [:span {:class "note-author-name"} author]]]])
+        (when avatar-url
+          [:img
+            {:class "note-author-avatar note-left-padding"
+             :src avatar-url}])
+        [:span
+          {:class (str "note-author-name " (when-not avatar-url "note-left-padding"))}
+          author]]]])
 
 (defn- left-button
   "Image of the green button or read post button.
@@ -493,7 +499,6 @@
         first-name (:first-name msg)
         first-name? (not (s/blank? first-name))
         author (:author notification)
-        greeting (if first-name? (str "Hello " first-name ",") "Hello,")
         intro (if mention?
                 (str "You were mentioned in a " (if comment? "comment" "post") ":")
                 (str "There is a new comment on your post:"))
@@ -503,9 +508,10 @@
         secure-uuid (:secure-uuid notification)
         origin-url config/web-url
         entry-url (s/join "/" [origin-url org-slug "post" secure-uuid])
-                attribution (if mention?
-                    [:a {:href entry-url} (str notification-author-name " mentioned you")]
-                    [:a {:href entry-url} (str notification-author-name " commented")])]
+        ; attribution (if mention?
+        ;              [:a {:href entry-url} (str notification-author-name " mentioned you")]
+        ;              [:a {:href entry-url} (str notification-author-name " commented")])
+        notification-html-content (-> (hickory/parse content) hickory/as-hiccup first (nth 3) rest rest)]
     [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
       (spacer 40)
       (when logo? (org-logo (clojure.set/rename-keys org {:logo-url :org-logo-url
@@ -513,16 +519,14 @@
                                                           :logo-height :org-logo-height
                                                           :logo-width :org-logo-width})))
       (when logo? (spacer 32))
-      (h1 greeting)
-      (spacer 10)
-      (paragraph intro)
+      [:a {:href entry-url}
+        (h1 intro)]
       (spacer 24)
-      horizontal-line
-      (spacer 25)
-      (paragraph attribution "notification-attribution" "notification-link")
-      (spacer 8)
-      [:span {:class "notification-content"}
-        (-> (hickory/parse content) hickory/as-hiccup first (nth 3) rest rest)]
+      (spacer 8 "note-paragraph top-note-paragraph" "note-paragraph top-note-paragraph")
+      (note-author notification-author-name notification-author-url)
+      (spacer 16 "note-paragraph" "note-paragraph")
+      (paragraph notification-html-content "note-paragraph note-left-padding" "text-left" "note-x-margin")
+      (spacer 16 "note-paragraph bottom-note-paragraph" "note-paragraph bottom-note-paragraph")
       (spacer 56)]))
 
 (defn- token-prep [token-type msg]

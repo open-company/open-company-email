@@ -182,16 +182,28 @@ table.footer-table a.footer-link {
   text-decoration: underline;
 }
 
+.note-left-padding {
+  padding-left: 24px !important;
+}
+
+.note-x-margin > * {
+  margin-left: 24px !important;
+  margin-right: 24px !important;
+}
+
 .note-author-avatar {
   float: left;
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+  border-radius: 50%;
 }
 
 span.note-author-name {
   float: left;
-  padding-top: 10px;
+  padding-top: 4px;
   font-weight: bold;
   font-size: 14px;
-  margin-left: 24px;
 }
 
 table.horizontal-line {
