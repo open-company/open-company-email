@@ -526,6 +526,8 @@
       (spacer 16 "note-paragraph" "note-paragraph")
       (paragraph notification-html-content "note-paragraph note-left-padding" "text-left" "note-x-margin")
       (spacer 16 "note-paragraph bottom-note-paragraph" "note-paragraph bottom-note-paragraph")
+      (spacer 24)
+      (left-button "read_post" entry-url)
       (spacer 56)]))
 
 (defn- token-prep [token-type msg]
