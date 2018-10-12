@@ -50,7 +50,8 @@
 (def verify-instructions-2 "Please click the link below to verify your account.")
 (def verify-button-text "verify_email")
 
-(def digest-title "The latest from Carrot")
+(def digest-weekly-title "Your weekly brief")
+(def digest-daily-title "Your daily brief")
 (def digest-message "Hi %s, here are the latest posts from your team.")
 (def digest-message-no-name "Hi, here are the latest posts from your team.")
 
@@ -319,6 +320,9 @@
         posts (mapcat :posts boards)
         digest-url (s/join "/" [config/web-url (:org-slug digest) "all-posts"])
         first-name (:first-name digest)
+        title (if weekly?
+               digest-weekly-title
+               digest-daily-title)
         subtitle (if (s/blank? first-name)
                     digest-message-no-name
                     (format digest-message first-name))]
@@ -331,7 +335,7 @@
                                :org-logo-height (:logo-height digest)
                                :align "center"}))
         (when logo? (spacer 32))
-        (h1 digest-title "center-align")
+        (h1 title "center-align")
         (spacer 16)
         (paragraph subtitle "" "center-align")
         (spacer 16)
