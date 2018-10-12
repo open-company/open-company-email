@@ -50,15 +50,15 @@
 (def verify-instructions-2 "Please click the link below to verify your account.")
 (def verify-button-text "verify_email")
 
-(def digest-weekly-title "Your weekly brief")
-(def digest-daily-title "Your daily brief")
-(def digest-message "Hi %s, here are the new posts from your team.")
-(def digest-message-no-name "Here are the new posts from your team.")
+(def digest-title "The latest from Carrot")
+(def digest-message "Hi %s, here are the latest posts from your team.")
+(def digest-message-no-name "Hi, here are the latest posts from your team.")
 
 ;; ----- HTML Fragments -----
 
 (defn- org-logo
-  [{org-name :org-name logo-url :org-logo-url logo-height :org-logo-height logo-width :org-logo-width}]
+  [{org-name :org-name logo-url :org-logo-url logo-height :org-logo-height logo-width :org-logo-width
+    align :align}]
   (let [logo? (and logo-url logo-height logo-width)
         dimension (when logo? (if (> logo-height logo-width) :height :width))
         size (when logo?
@@ -72,8 +72,10 @@
             [:table 
               [:tr 
                 [:th
-                  [:img {:class "float-left logo"
-                         :align "left"
+                  [:img {:class (str "logo " (if (= align "center")
+                                              "auto-x-margin"
+                                              "left-float"))
+                         :align (or align "left")
                          :style (str "background-color: #fff; max-height: " max-logo "px; max-width: " max-logo "px;")
                          dimension size
                          :src logo-url
@@ -119,11 +121,11 @@
       [:th {:class (str "small-12 large-12 columns " inner-th-class)}
         [:p {:class content-css-class} content]]]]))
 
-(defn- h1 [content]
+(defn- h1 [content & [h1-class]]
   [:table {:class "row"}
     [:tr
       [:th {:class "small-12 large-12 columns"}
-        [:h1 {:class "text-left"} content]]]])
+        [:h1 {:class (or h1-class "text-left")} content]]]])
 
 (defn- h2
   ([content entry-url] (h2 content entry-url "" ""))
@@ -287,7 +289,9 @@
          " • " (post-date (:published-at entry)))
    css-class "text-left attribution"))
 
-(defn- post-block [entry entry-url]
+(defn- post-block
+  ([entry] (post-block entry (:url entry)))
+  ([entry entry-url]
   (let [publisher (:publisher entry)
         avatar-url (fix-avatar-url (:avatar-url publisher))]
     [:div.post-block
@@ -296,17 +300,7 @@
           {:src avatar-url}])
       (h2 (:headline entry) entry-url "post-right-side")
       (spacer 4 "post-right-side")
-      (post-attribution entry true "post-right-side")]))
-
-;; ----- Digest -----
-
-(defn- post [entry]
-  [horizontal-line
-   (spacer 24)
-   (h2 (:headline entry) (:url entry))
-   (spacer 4)
-   (post-attribution entry true)
-   (spacer 24)])
+      (post-attribution entry true "post-right-side")])))
 
 (defn- posts-with-board-name [board]
   (let [board-name (:name board)]
@@ -321,7 +315,6 @@
         logo? (not (s/blank? logo-url))
         weekly? (weekly-digest? digest)
         org-name (:org-name digest)
-        title (if weekly? digest-weekly-title digest-daily-title)
         boards (map posts-with-board-name (:boards digest))
         posts (mapcat :posts boards)
         digest-url (s/join "/" [config/web-url (:org-slug digest) "all-posts"])
@@ -330,31 +323,59 @@
                     digest-message-no-name
                     (format digest-message first-name))]
     [:td {:class "small-10 large-12 columns" :valign "middle" :align "center"}
-      (spacer 40)
-      (when logo? (org-logo {:org-name (:org-name digest)
-                             :org-logo-url logo-url
-                             :org-logo-width (:logo-width digest)
-                             :org-logo-height (:logo-height digest)}))
-      (when logo? (spacer 32))
-      (h1 title)
-      (spacer 24)
-      (paragraph subtitle)
-      (spacer 40)
-      (mapcat post posts)
-      (spacer 56)
-      [:table {:class "row"}
-        [:tr
-          [:th {:class "small-12 large-12 columns"}
-            [:p {:class "digest-footer-paragraph"}
-              "You're receiving this brief "
-              (if weekly? "weekly" "daily")
-              ". "
-              [:a {:href profile-url}
-                (str "Switch to " (if weekly? "daily" "weekly"))]
-              "? You may also "
-              [:a {:href profile-url}
-                "unsubscribe"]
-              "."]]]]]))
+      [:center
+        (spacer 40)
+        (when logo? (org-logo {:org-name (:org-name digest)
+                               :org-logo-url logo-url
+                               :org-logo-width (:logo-width digest)
+                               :org-logo-height (:logo-height digest)
+                               :align "center"}))
+        (when logo? (spacer 32))
+        (h1 digest-title "center-align")
+        (spacer 16)
+        (paragraph subtitle "" "center-align")
+        (spacer 16)
+        [:table {:class "row"}
+          [:tr
+            [:th {:class "small-12 large-12 columns"}
+              [:a.go-to-posts
+                {:href digest-url}
+                "Go to posts"]]]]
+        (spacer 48)
+        [:div.digest-posts
+          ; (map post-block posts)
+          (for [p posts]
+            [:div.digest-post.row
+              horizontal-line
+              (spacer 24)
+              (post-block p)
+              (spacer 20)])]
+        (spacer 16)
+        (spacer 16 "note-paragraph top-note-paragraph" "note-paragraph top-note-paragraph")
+        [:table {:class "row note-paragraph"}
+          [:tr
+            [:th {:class "small-12 large-12 columns center-align"}
+              [:span.something-important
+                "Have something important to share? "
+                [:a.create-new-post
+                  {:href (str digest-url "?new")}
+                  "Create a new post ✍️"]]]]]
+        (spacer 16 "note-paragraph bottom-note-paragraph" "note-paragraph bottom-note-paragraph")
+
+        (spacer 40)
+        [:table {:class "row"}
+          [:tr
+            [:th {:class "small-12 large-12 columns"}
+              [:p {:class "digest-footer-paragraph"}
+                "You're receiving this brief "
+                (if weekly? "weekly" "daily")
+                ". "
+                [:a {:href profile-url}
+                  (str "Switch to " (if weekly? "daily" "weekly"))]
+                "? You may also "
+                [:a {:href profile-url}
+                  "unsubscribe"]
+                "."]]]]]]))
 
 ;; ----- Transactional Emails -----
 
