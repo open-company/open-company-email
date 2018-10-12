@@ -246,6 +246,9 @@
                                  :html (slurp inline-html-file)})))
   (send-email-from-file email-setup "./hiccup.html")
 
+  (def digest-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/digests/apple.json"))))
+  (mailer/send-digest (assoc digest-request :email "change@me.com"))
+
   (def notification-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/notifications/post-mention.json"))))
   (mailer/send-notification (assoc notification-request :to "change@me.com"))
 

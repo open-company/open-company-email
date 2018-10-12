@@ -248,7 +248,7 @@ p.digest-bottom-footer-paragraph {
 }
 
 p.digest-footer-paragraph, p.digest-footer-paragraph a {
-  color: #C4C6C7;
+  color: #99A0A7;
   font-size: 14px;
   font-weight: 400;
 }
@@ -362,4 +362,45 @@ div.post-block img.post-avatar {
   border-radius: 100px;
   text-align: center;
   padding: 11px 0px;
+}
+
+.auto-x-margin {
+  margin: auto;
+}
+
+.center-align {
+  text-align: center;
+}
+
+.go-to-posts {
+  display: block;
+  margin: 0 auto;
+  font-size: 16px;
+  font-weight: bold;
+  color: #FB5E48;
+  width: 152px;
+  background-color: #FFDFDB;
+  border-radius: 100px;
+  text-align: center;
+  padding: 11px 0px;
+}
+
+.go-to-posts:visited, .go-to-posts:hover {
+  color: #FB5E48;
+}
+
+.something-important {
+  margin: auto;
+  padding-left: 16px;
+  padding-right: 16px;
+  text-align: center;
+  font-size: 14px;
+  color: #34414F;
+}
+
+.create-new-post {
+  display: inline;
+  color: #3FBD7C;
+  font-weight: bold;
+  line-height: 22px;
 }

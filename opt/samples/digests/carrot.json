@@ -2,9 +2,9 @@
   "digest-frequency": "daily",
   "org-slug": "carrot",
   "org-name": "Carrot",
-  "org-logo-url": "https://slack-files2.s3-us-west-2.amazonaws.com/avatars/2017-09-16/243287999207_9e662352c5c6175b971a_230.png",
-  "org-logo-height": 230,
-  "org-logo-width": 230,
+  "logo-url": "https://slack-files2.s3-us-west-2.amazonaws.com/avatars/2017-09-16/243287999207_9e662352c5c6175b971a_230.png",
+  "logo-height": 230,
+  "logo-width": 230,
   "boards": [
     {
       "name": "All-hands 🙌",
