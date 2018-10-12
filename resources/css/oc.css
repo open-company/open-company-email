@@ -58,7 +58,7 @@ p {
 p.attribution {
   font-size: 12px;
   line-height: 18px;
-  color: #898D93;
+  color: #34414F;
 }
 
 span.note-body {
@@ -92,6 +92,13 @@ table.footer a {
   color: #3FBD7C;
 }
 
+.header-table {
+  background-color: white !important;
+  max-width: 600px;
+  text-align: center;
+  vertical-align: middle;
+}
+
 .footer-table {
   background-color: white !important;
   max-width: 600px;
@@ -104,6 +111,10 @@ table.footer a {
   background-color: white !important;
   text-align: center;
   vertical-align: middle;
+}
+
+.header-bottom-border {
+  border-bottom: 1px solid #F0F0F1;
 }
 
 .footer-top-border {
@@ -133,11 +144,33 @@ p.footer-paragraph {
   font-weight: 400;
 }
 
+p.header-paragraph {
+  color: #898D93;
+  font-size: 14px;
+  font-weight: 400;
+}
+
 p.footer-paragraph.bottom-footer, p.footer-paragraph.bottom-footer a {
   color: #C4C6C7;
 }
 
+p.header-paragraph.top-header, p.footer-paragraph.top-header a {
+  color: #C4C6C7;
+}
+
+@media screen and (max-width: 678px) {
+  p.header-paragraph.top-header {
+    display: none;
+  }
+}
+
 p.footer-paragraph a {
+  color: #898D93;
+  text-decoration: underline;
+  font-weight: 400;
+}
+
+p.header-paragraph a {
   color: #898D93;
   text-decoration: underline;
   font-weight: 400;
@@ -149,14 +182,26 @@ table.footer-table a.footer-link {
   text-decoration: underline;
 }
 
+.note-left-padding {
+  padding-left: 24px !important;
+}
+
+.note-x-margin > * {
+  margin-left: 24px !important;
+  margin-right: 24px !important;
+}
+
 .note-author-avatar {
   float: left;
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+  border-radius: 50%;
 }
 
 span.note-author-name {
   float: left;
-  padding-top: 10px;
-  margin-left: 8px;
+  padding-top: 4px;
   font-weight: bold;
   font-size: 14px;
 }
@@ -177,6 +222,10 @@ p.digest-help a{
 
 th.footer-icon img {
   float: right;
+}
+
+th.header-icon img {
+  float: left;
 }
 
 img.read-post-image {
@@ -238,9 +287,79 @@ p.notification-link a {
 }
 
 span.notification-content, span.notification-content p, span.notification-content div {
-  color: #898D93;
+  color: #34414F;
 }
 
 span.oc-mention {
   font-weight: bold;
+}
+
+
+.note-paragraph {
+  background-color: #FDF6E4 !important;
+}
+
+.note-paragraph.top-note-paragraph, .note-paragraph.top-note-paragraph tr, .note-paragraph.top-note-paragraph tr th {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.note-paragraph.bottom-note-paragraph, .note-paragraph.bottom-note-paragraph tr, .note-paragraph.bottom-note-paragraph tr th {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.note-paragraph .text-left {
+  margin-left: 24px;
+  margin-right: 24px;
+}
+
+a.learn-more {
+  float: left;
+  margin-left: 16px;
+  color: #3FBD7C;
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.left-align {
+  float: left;
+}
+
+div.post-block img.post-avatar {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  border-radius: 50%;
+  float: left;
+  margin-right: 16px;
+}
+
+.post-right-side {
+  width: calc(100% - 48px) !important;
+}
+
+.token-link {
+  color: #3FBD7C;
+  font-size: 16px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.green-button:hover {
+  color: white;
+}
+
+.green-button {
+  display: block;
+  float: left;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  min-width: 220px;
+  background-color: #52C489;
+  border-radius: 100px;
+  text-align: center;
+  padding: 11px 0px;
 }
