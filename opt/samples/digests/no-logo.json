@@ -2,9 +2,9 @@
   "digest-frequency": "weekly",
   "org-slug": "apple",
   "org-name": "Apple",
-  "org-logo-url": null,
-  "org-logo-height": null,
-  "org-logo-width": null,
+  "logo-url": null,
+  "logo-height": null,
+  "logo-width": null,
   "boards": [
     {
       "name": "General",
