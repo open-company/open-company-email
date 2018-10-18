@@ -405,9 +405,10 @@ div.post-block img.post-avatar {
   line-height: 22px;
 }
 
-.post-right-size h2.text-left, .post-right-size p.text-left {
+.post-right-side h2.text-left, .post-right-side p.text-left {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  max-width: 100%;
+  max-width: 66vw;
+  width: 100%;
 }
