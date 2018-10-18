@@ -52,7 +52,7 @@
   (shell/sh "juice" 
             "--web-resources-images" "false"
             "--remove-style-tags" "true"
-            "--preserve-media-queries" "false"
+            "--preserve-media-queries" "true"
             "--preserve-font-faces" "false"
             html-file inline-file))
 
