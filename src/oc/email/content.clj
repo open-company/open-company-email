@@ -50,10 +50,8 @@
 (def verify-instructions-2 "Please click the link below to verify your account.")
 (def verify-button-text "verify_email")
 
-(def digest-weekly-title "Your weekly brief")
-(def digest-daily-title "Your daily brief")
-(def digest-message "Hi %s, here are the latest posts from your team.")
-(def digest-message-no-name "Hi, here are the latest posts from your team.")
+(def digest-title "Hi %s, here’s the latest from your team.")
+(def digest-title-no-name "Here’s the latest from your team.")
 
 ;; ----- HTML Fragments -----
 
@@ -320,12 +318,9 @@
         posts (mapcat :posts boards)
         digest-url (s/join "/" [config/web-url (:org-slug digest) "all-posts"])
         first-name (:first-name digest)
-        title (if weekly?
-               digest-weekly-title
-               digest-daily-title)
-        subtitle (if (s/blank? first-name)
-                    digest-message-no-name
-                    (format digest-message first-name))]
+        title (if first-name
+                (format digest-title first-name)
+                digest-title-no-name)]
     [:td {:class "small-10 large-12 columns" :valign "middle" :align "center"}
       [:center
         (spacer 40)
@@ -337,15 +332,13 @@
         (when logo? (spacer 32))
         (h1 title "center-align")
         (spacer 16)
-        (paragraph subtitle "" "center-align")
-        (spacer 16)
         [:table {:class "row"}
           [:tr
             [:th {:class "small-12 large-12 columns"}
               [:a.go-to-posts
                 {:href digest-url}
                 "Go to posts"]]]]
-        (spacer 48)
+        (spacer 40)
         [:div.digest-posts
           ; (map post-block posts)
           (for [p posts]
