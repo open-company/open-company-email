@@ -409,6 +409,6 @@ div.post-block img.post-avatar {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  max-width: 66vw;
+  max-width: calc(74vw - 48px);
   width: 100%;
 }
