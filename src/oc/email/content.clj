@@ -30,6 +30,7 @@
 (def invite-message "Join your team on Carrot")
 (def invite-message-with-company "Join the %s team on Carrot")
 (def invite-instructions "%s has invited you to Carrot - a leadership communication platform that keeps teams focused on what matters.")
+(def invite-link-instructions "Click here to join your team:")
 (def invite-button "accept_invitation")
 
 (def share-message "%s shared a post with you")
@@ -42,12 +43,13 @@
 (def board-invite-button "view_section")
 
 (def reset-message "Password reset")
-(def reset-instructions "Click the button below to reset your password. If you didn't request a password reset, you can ignore this email.")
+(def reset-instructions "If you didn't request a password reset, you can ignore this email.")
+(def reset-instructions-2 "Please click the link below to reset your password:")
 (def reset-button-text "reset_password")
 
 (def verify-message "Please verify your email")
 (def verify-instructions "Welcome to Carrot! Carrot helps leaders rise above noisy chat and email to keep teams aligned.")
-(def verify-instructions-2 "Please click the link below to verify your account.")
+(def verify-instructions-2 "Please click the link below to verify your account:")
 (def verify-button-text "verify_email")
 
 (def digest-title "Hi %s, here’s the latest from your team.")
@@ -447,7 +449,7 @@
       (when note? (paragraph note "note-paragraph"))
       (when note? (spacer 24 "note-paragraph bottom-note-paragraph" "note-paragraph"))
       (when note? (spacer 16))
-      (paragraph "Click here to join your team:")
+      (paragraph invite-link-instructions)
       [:a
         {:class "token-link"
          :href (:token-link invite)}
@@ -539,7 +541,7 @@
                     :verify verify-instructions)
     :instructions-2 (case token-type
                      :verify verify-instructions-2
-                     :reset "")
+                     :reset reset-instructions-2)
     :button-text (case token-type
                     :reset reset-button-text
                     :verify verify-button-text)
@@ -561,7 +563,6 @@
         (spacer 24))
       (when (:instructions-2 message)
         (paragraph (:instructions-2 message)))
-      (spacer 16)
       [:a
         {:class "token-link"
          :href (:token-link msg)}
