@@ -447,6 +447,7 @@
       (when note? (paragraph note "note-paragraph"))
       (when note? (spacer 24 "note-paragraph bottom-note-paragraph" "note-paragraph"))
       (when note? (spacer 16))
+      [:p "Click here to join your team:"]
       [:a
         {:class "token-link"
          :href (:token-link invite)}
