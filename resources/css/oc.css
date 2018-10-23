@@ -9,7 +9,6 @@ html,
 
 .inner-body {
   background-color: white;
-  max-width: 600px;
 }
 
 * {
@@ -95,6 +94,7 @@ table.footer a {
 .header-table {
   background-color: white !important;
   max-width: 600px;
+  width: 100%;
   text-align: center;
   vertical-align: middle;
 }
@@ -102,12 +102,14 @@ table.footer a {
 .footer-table {
   background-color: white !important;
   max-width: 600px;
+  width: 100%;
   text-align: center;
   vertical-align: middle;
 }
 
 .email-content {
   max-width: 600px;
+  width: 100%;
   background-color: white !important;
   text-align: center;
   vertical-align: middle;
