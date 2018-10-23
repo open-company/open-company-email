@@ -158,12 +158,6 @@ p.header-paragraph.top-header, p.footer-paragraph.top-header a {
   color: #C4C6C7;
 }
 
-@media screen and (max-width: 678px) {
-  p.header-paragraph.top-header {
-    display: none;
-  }
-}
-
 p.footer-paragraph a {
   color: #898D93;
   text-decoration: underline;
@@ -327,7 +321,7 @@ a.learn-more {
   float: left;
 }
 
-div.post-block img.post-avatar {
+img.post-avatar {
   width: 32px;
   height: 32px;
   object-fit: contain;
@@ -405,6 +399,10 @@ div.post-block img.post-avatar {
   line-height: 22px;
 }
 
+.create-new-post:visited {
+  color: #3FBD7C;
+}
+
 .post-right-side h2.text-left, .post-right-side p.text-left {
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -412,3 +410,11 @@ div.post-block img.post-avatar {
   max-width: calc(74vw - 48px);
   width: 100%;
 }
+
+/*
+  Gmail doesn't linke multiple media queries, if you need to use
+  @media only screen and (max-width:596px)
+  use the one in foundation.
+  Also make sure the syntax is correct. They say it's very picky:
+  Check https://stackoverflow.com/a/46871671/561744
+*/
