@@ -7,10 +7,6 @@ html,
   height: 100%;
 }
 
-.inner-body {
-  background-color: white;
-}
-
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
