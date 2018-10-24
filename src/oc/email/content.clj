@@ -295,13 +295,18 @@
   ([entry entry-url]
   (let [publisher (:publisher entry)
         avatar-url (fix-avatar-url (:avatar-url publisher))]
-    [:div.post-block
-      (when avatar-url
-        [:img.post-avatar
-          {:src avatar-url}])
-      (h2 (:headline entry) entry-url "post-right-side")
-      (spacer 4 "post-right-side")
-      (post-attribution entry true "post-right-side")])))
+    [:table
+      {:cellpadding "0"
+       :cellspacing "0"
+       :border "0"}
+      [:tr
+        [:td
+          (when avatar-url
+            [:img.post-avatar
+              {:src avatar-url}])
+          (h2 (:headline entry) entry-url "post-right-side")
+          (spacer 4 "post-right-side")
+          (post-attribution entry true "post-right-side")]]])))
 
 (defn- posts-with-board-name [board]
   (let [board-name (:name board)]
@@ -341,14 +346,24 @@
                 {:href digest-url}
                 "Go to posts"]]]]
         (spacer 40)
-        [:div.digest-posts
-          ; (map post-block posts)
-          (for [p posts]
-            [:div.digest-post.row
-              horizontal-line
-              (spacer 24)
-              (post-block p)
-              (spacer 20)])]
+        [:table
+          {:cellpadding "0"
+           :cellspacing "0"
+           :border "0"}
+          [:tr
+            [:td
+              (for [p posts]
+                [:table
+                  {:cellpadding "0"
+                   :cellspacing "0"
+                   :border "0"
+                   :class "row"}
+                  [:tr
+                    [:td {:class "small-12 large-12"}
+                      horizontal-line
+                      (spacer 24)
+                      (post-block p)
+                      (spacer 20)]]])]]]
         (spacer 16)
         (spacer 16 "note-paragraph top-note-paragraph" "note-paragraph top-note-paragraph")
         [:table {:class "row note-paragraph"}
