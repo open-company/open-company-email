@@ -290,9 +290,6 @@
          " • " (post-date (:published-at entry)))
    css-class "text-left attribution"))
 
-(defn- css-background-image [image-url]
-  (str "background-image: url(\"" image-url "\");"))
-
 (defn- post-headline [entry]
   (let [ms (:must-see entry)
         vid (:video-id entry)]
