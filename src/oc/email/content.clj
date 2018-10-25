@@ -290,23 +290,59 @@
          " • " (post-date (:published-at entry)))
    css-class "text-left attribution"))
 
+(defn- post-headline [entry]
+  (let [ms (:must-see entry)
+        vid (:video-id entry)]
+   [:span
+     (:headline entry)
+     (when ms
+       [:img
+        {:class "must-see-icon"
+         :width "10"
+         :height "12"
+         :style (str
+                 "margin-left: 8px; "
+                 "width: 10px; "
+                 "height: 12px; "
+                 "display: inline-block;")
+         :src (str config/email-images-prefix "/email_images/must_see@2x.png")}])
+     (when ms
+       [:span.must-see
+         "Must See"])
+     (when vid
+       [:img
+        {:class "video-icon"
+         :width "16"
+         :height "10"
+         :style (str
+                 "margin-left: 8px; "
+                 "width: 16px; "
+                 "height: 10px;"
+                 "display: inline-block;")
+         :src (str config/email-images-prefix "/email_images/video@2x.png")}])]))
+
 (defn- post-block
   ([entry] (post-block entry (:url entry)))
   ([entry entry-url]
   (let [publisher (:publisher entry)
-        avatar-url (fix-avatar-url (:avatar-url publisher))]
+        avatar-url (fix-avatar-url (:avatar-url publisher))
+        headline (post-headline entry)]
     [:table
       {:cellpadding "0"
        :cellspacing "0"
-       :border "0"}
+       :border "0"
+       :class "row"}
       [:tr
-        [:td
-          (when avatar-url
+        (when avatar-url
+          [:td
+            {:class "post-block-avatar"}
             [:img.post-avatar
-              {:src avatar-url}])
-          (h2 (:headline entry) entry-url "post-right-side")
-          (spacer 4 "post-right-side")
-          (post-attribution entry true "post-right-side")]]])))
+              {:src avatar-url}]])
+        [:td
+          {:class (if avatar-url "post-block-avatar-right" "post-block-right")}
+          (h2 headline entry-url "")
+          (spacer 4 "")
+          (post-attribution entry true "")]]])))
 
 (defn- posts-with-board-name [board]
   (let [board-name (:name board)]

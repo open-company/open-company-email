@@ -19,6 +19,7 @@
           },
           "published-at": "2017-11-5T17:00:48.729Z",
           "comment-count": 0,
+          "must-see": true,
           "comment-authors": []
         }, {
           "headline": "We've hit 2,000 paid subscribers!",
@@ -30,6 +31,8 @@
           },
           "published-at": "2017-11-5T17:00:48.729Z",
           "comment-count": 0,
+          "must-see": false,
+          "video-id": "12345678901234",
           "comment-authors": []
         }
       ]
@@ -48,6 +51,8 @@
           },
           "published-at": "2017-11-5T17:00:48.729Z",
           "comment-count": 0,
+          "must-see": true,
+          "video-id": "12345678901234",
           "comment-authors": []
         }, {
           "headline": "Versioning, Licensing and Sketch 4.0",

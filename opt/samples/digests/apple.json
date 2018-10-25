@@ -19,6 +19,8 @@
           },
           "published-at": "2017-11-5T17:00:48.729Z",
           "comment-count": 0,
+          "must-see": true,
+          "video-id": "12345678901234",
           "comment-authors": []
         }, {
           "headline": "We've hit 2,000 paid subscribers!",
@@ -30,6 +32,7 @@
           },
           "published-at": "2017-11-5T17:00:48.729Z",
           "comment-count": 2,
+          "must-see": false,
           "comment-authors": [
             {
               "avatar-url" : "https://secure.gravatar.com/avatar/866a6350e399e67e749c6f2aef0b96c0.jpg?s=512&d=https%3A%2F%2Fa.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0020-512.png",
@@ -59,6 +62,8 @@
           },
           "published-at": "2017-11-5T17:00:48.729Z",
           "comment-count": 0,
+          "must-see": false,
+          "video-id": "12345678901234",
           "comment-authors": []
         }, {
           "headline": "Versioning, Licensing and Sketch 4.0",
@@ -70,6 +75,8 @@
           },
           "published-at": "2017-11-5T17:00:48.729Z",
           "comment-count": 0,
+          "must-see": false,
+          "video-id": null,
           "comment-authors": []
         }
       ]
