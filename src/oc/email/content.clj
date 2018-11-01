@@ -232,8 +232,7 @@
            :valign "middle"
            :align "center"}
     [:tr
-      [:td {:class "small-1 hide-for-large columns" :valign "middle" :align "left"}]
-      [:td {:class "small-10 large-12 columns" :valign "middle" :align "center"}
+      [:td {:class "small-12 large-12 columns main-wrapper" :valign "middle" :align "center"}
         (vspacer 24 "header-table" "header-table")
         [:table {:class "row header-table"}
           [:tr
@@ -245,16 +244,14 @@
                        :height "22"
                        :alt "Carrot"}]]]]]
         (vspacer 24 "header-table header-bottom-border" "header-table")
-        (vspacer 40 "header-table" "header-table")]
-      [:td {:class "small-1 hide-for-large columns" :valign "middle" :align "right"}]]])
+        (vspacer 40 "header-table" "header-table")]]])
 
 (defn- email-footer []
   [:table {:class "row footer-table"
            :valign "middle"
            :align "center"}
     [:tr
-      [:td {:class "small-1 hide-for-large columns" :valign "middle" :align "left"}]
-      [:td {:class "small-10 large-12 columns" :valign "middle" :align "center"}
+      [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
         (vspacer 24 "footer-table" "footer-table")
         (vspacer 24 "footer-table footer-top-border" "footer-table")
         [:table {:class "row footer-table"}
@@ -271,8 +268,7 @@
                        :width "13"
                        :height "24"
                        :alt "Carrot"}]]]]]
-        (vspacer 40 "footer-table" "footer-table")]
-      [:td {:class "small-1 hide-for-large columns" :valign "middle" :align "right"}]]])
+        (vspacer 40 "footer-table" "footer-table")]]])
 
 ;; ----- Posts common ----
 
@@ -364,9 +360,8 @@
         title (if first-name
                 (format digest-title first-name)
                 digest-title-no-name)]
-    [:td {:class "small-10 large-12 columns" :valign "middle" :align "center"}
+    [:td {:class "small-12 large-12 columns main-wrapper" :valign "middle" :align "center"}
       [:center
-        (spacer 40)
         (when logo? (org-logo {:org-name (:org-name digest)
                                :org-logo-url logo-url
                                :org-logo-width (:logo-width digest)
@@ -406,10 +401,10 @@
           [:tr
             [:th {:class "small-12 large-12 columns center-align"}
               [:span.something-important
-                "Have something important to share? "
-                [:a.create-new-post
-                  {:href (str digest-url "?new")}
-                  "Create a new post ✍️"]]]]]
+                "Have something to share? "]
+              [:a.create-new-post
+                {:href (str digest-url "?new")}
+                "Create a new post ✍️"]]]]
         (spacer 16 "note-paragraph bottom-note-paragraph" "note-paragraph bottom-note-paragraph")
 
         (spacer 40)
@@ -447,7 +442,7 @@
         note (:note notice)
         note? (not (s/blank? note))
         show-note? (and from-avatar? note?)]
-    [:td {:class "small-10 large-12 columns" :valign "middle" :align "center"}
+    [:td {:class "small-12 large-12 columns main-wrapper" :valign "middle" :align "center"}
       (spacer 64)
       (h1 board-invite-title)
       (spacer 16)
@@ -484,7 +479,6 @@
                          invite-message
                          (format invite-message-with-company org-name))]
     [:td {:class td-classes :valign "middle" :align "center"}
-      (spacer 40)
       (when logo? (org-logo {:org-name org-name
                              :org-logo-url logo-url
                              :org-logo-width logo-width
@@ -526,7 +520,6 @@
         secure-uuid (:secure-uuid entry)
         entry-url (s/join "/" [config/web-url org-slug "post" secure-uuid])]
     [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
-      (spacer 40)
       (when logo? (org-logo entry))
       (when logo? (spacer 32))
       (h1 (format share-message from))
@@ -604,7 +597,6 @@
         logo? (not (s/blank? logo-url))
         org-name (:org-name msg)]
     [:td {:class td-classes :valign "middle" :align "center"}
-      (spacer 40)
       (when logo? (org-logo msg))
       (when logo? (spacer 32))
       (h1 (:message message))
@@ -636,20 +628,14 @@
                        :valign "middle"
                        :align "center"}
                 [:tr
-                  [:td {:class "small-1 hide-for-large columns"
-                        :valign "middle"
-                        :align "left"}]
                   (case type
-                    :reset (token-content "small-10 large-12 columns" type data)
-                    :verify (token-content "small-10 large-12 columns" type data)
-                    :invite (invite-content "small-10 large-12 columns" data)
+                    :reset (token-content "small-12 large-12 columns main-wrapper" type data)
+                    :verify (token-content "small-12 large-12 columns main-wrapper" type data)
+                    :invite (invite-content "small-12 large-12 columns main-wrapper" data)
                     :board-notification (board-notification-content data)
                     :share-link (share-content data)
                     :digest (digest-content data)
-                    :notify (notify-content data))
-                  [:td {:class "small-1 hide-for-large columns"
-                        :valign "middle"
-                        :align "right"}]]]
+                    :notify (notify-content data))]]
               (email-footer)]]]]]))
 
 (defn- head [data]
