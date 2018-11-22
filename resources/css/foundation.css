@@ -1214,4 +1214,6 @@ table.button.small-expand center, table.button.small-expanded center {min-width:
 @media only screen and (min-width:769px) {
   td.large-12 center,
   th.large-12 center {
-    min-width: 532px; }}
+    min-width: 532px; }
+  span.post-title:hover {
+    color: #3FBD7C;}}
