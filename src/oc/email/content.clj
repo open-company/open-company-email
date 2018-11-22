@@ -258,7 +258,7 @@
               [:p {:class "footer-paragraph bottom-footer"}
                 "Sent with "
                 [:span.heart
-                  {:background-image (str "url(" config/email-images-prefix "/email_images/footer_heart@2x.png" ")")}]
+                  {:style (str "background-image: url(" config/email-images-prefix "/email_images/footer_heart@2x.png);")}]
                 " via "
                 [:a {:href config/web-url}
                   "Carrot"]]]]]

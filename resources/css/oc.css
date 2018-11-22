@@ -137,9 +137,13 @@ table.header-bottom {
 }
 
 span.heart {
-  width: 20px;
-  height: 23px;
+  width: 18px;
+  height: 20px;
+  background-size: 18px 20px;
+  background-repeat: no-repeat;
+  background-position: center;
   display: inline-block;
+  vertical-align: sub;
 }
 
 p.footer-paragraph {
