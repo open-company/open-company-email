@@ -442,22 +442,30 @@ span.must-see {
   color: #5789FA;
 }
 
-div.video-cover {
+table.video-cover-table tr td {
+  height: 103px;
+}
+
+a.video-cover {
+  display: block;
   width: 137px;
   height: 103px;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  position: relative;
 }
 
 img.video-play {
   display: block;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-left: -20px;
-  margin-top: -20px;
+  padding-left: 48.5px;
+  padding-top: 31px;
+  opacity: 0.8;
+}
+
+div.video-duration-container {
+  padding-right: 8px;
+  padding-top: 10px;
+  float: right;
 }
 
 span.video-duration {
@@ -467,9 +475,7 @@ span.video-duration {
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 11px;
   padding: 2px 3px;
-  position: absolute;
-  bottom: 8px;
-  right: 8px;
+
 }
 
 td.post-block-avatar {

@@ -282,18 +282,18 @@
 
 (defn- post-headline [entry]
   (let [ms (:must-see entry)]
-   [:div
-    [:span.post-title
-      (:headline entry)]
-    (when ms
-      [:span.must-see-container
-        [:img
-          {:class "must-see-icon"
-           :width "8"
-           :height "10"
-           :src (str config/email-images-prefix "/email_images/must_see@2x.png")}]
-        [:span.must-see
-          "Must See"]])]))
+    [:div
+      [:span.post-title
+        (:headline entry)]
+      (when ms
+        [:span.must-see-container
+          [:img
+            {:class "must-see-icon"
+             :width "8"
+             :height "10"
+             :src (str config/email-images-prefix "/email_images/must_see@2x.png")}]
+          [:span.must-see
+            "Must See"]])]))
 
 (defn- post-block
   ([entry] (post-block entry (:url entry)))
@@ -321,17 +321,24 @@
           (when vid
             (spacer 16 ""))
           (when vid
-            [:div
-              {:class "video-cover"
-               :style (str "background-image: url(https://" (:video-image entry) ");")}
-              [:img
-                {:class "video-play"
-                 :src (str config/email-images-prefix "/email_images/video_play@2x.png")
-                 :width 40
-                 :height 40}]
-              [:span
-                {:class "video-duration"}
-                (:video-duration entry)]])]]])))
+            [:table
+              {:class "row video-cover-table"}
+              [:tr
+                [:td
+                  [:a
+                    {:class "video-cover"
+                     :href entry-url
+                     :style (str "background-image: url(https://" (:video-image entry) ");")}
+                    [:img
+                      {:class "video-play"
+                       :src (str config/email-images-prefix "/email_images/video_play@2x.png")
+                       :width 40
+                       :height 40}]
+                    [:div
+                      {:class "video-duration-container"}
+                      [:span
+                        {:class "video-duration"}
+                        (:video-duration entry)]]]]]])]]])))
 
 (defn- posts-with-board-name [board]
   (let [board-name (:name board)]
