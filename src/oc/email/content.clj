@@ -350,9 +350,6 @@
         posts (mapcat :posts boards)
         digest-url (s/join "/" [config/web-url (:org-slug digest) "all-posts"])
         first-name (:first-name digest)
-        title (if first-name
-                (format digest-title first-name)
-                digest-title-no-name)
         title (if org-name
                 (if weekly?
                   (format digest-title-daily "at" org-name)
