@@ -258,7 +258,7 @@
               [:p {:class "footer-paragraph bottom-footer"}
                 "Sent with "
                 [:span.heart
-                  {:style (str "background-image: url(" config/email-images-prefix "/email_images/footer_heart@2x.png);")}]
+                  {:style (str "background: url(" config/email-images-prefix "/email_images/footer_heart@2x.png) no-repeat center / 18px 20px;")}]
                 " via "
                 [:a {:href config/web-url}
                   "Carrot"]]]]]
@@ -406,6 +406,7 @@
             [:th {:class "small-12 large-12 columns center-align"}
               [:span.something-important
                 "Have something to share? "]
+              [:br.something-important-line-break]
               [:a.create-new-post
                 {:href (str digest-url "?new")}
                 "Create a new post ✍️"]]]]
