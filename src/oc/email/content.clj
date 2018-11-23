@@ -293,7 +293,7 @@
              :height "10"
              :src (str config/email-images-prefix "/email_images/must_see@2x.png")}]
           [:span.must-see
-            "Must See"]])]))
+            "MUST SEE"]])]))
 
 (defn- post-block
   ([entry] (post-block entry (:url entry)))
@@ -396,23 +396,10 @@
                   [:tr
                     [:td {:class "small-12 large-12"}
                       horizontal-line
-                      (spacer 24)
+                      (spacer 20)
                       (post-block p)
-                      (spacer 20)]]])]]]
-        (spacer 16)
-        (spacer 16 "note-paragraph top-note-paragraph" "note-paragraph top-note-paragraph")
-        [:table {:class "row note-paragraph"}
-          [:tr
-            [:th {:class "small-12 large-12 columns center-align"}
-              [:span.something-important
-                "Have something to share? "]
-              [:br.something-important-line-break]
-              [:a.create-new-post
-                {:href (str digest-url "?new")}
-                "Create a new post ✍️"]]]]
-        (spacer 16 "note-paragraph bottom-note-paragraph" "note-paragraph bottom-note-paragraph")
-
-        (spacer 40)
+                      (spacer 28)]]])]]]
+        (spacer 80)
         [:table {:class "row"}
           [:tr
             [:th {:class "small-12 large-12 columns"}

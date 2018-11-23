@@ -53,7 +53,7 @@ p {
 p.attribution {
   font-size: 12px;
   line-height: 18px;
-  color: #99A0A7;
+  color: #888d94;
 }
 
 span.note-body {
@@ -395,31 +395,13 @@ img.post-avatar {
   color: #FB5E48;
 }
 
-.something-important {
-  margin: auto;
-  text-align: center;
-  font-size: 14px;
-  color: #34414F;
-}
-
-.create-new-post {
-  display: inline;
-  color: #3FBD7C;
-  font-weight: bold;
-  line-height: 22px;
-}
-
-.create-new-post:visited {
-  color: #3FBD7C;
-}
-
 span.post-title {
   color: #34414F;
 }
 
 span.must-see-container {
   background-color: rgba(97, 135, 248, .2);
-  padding: 0px 8px;
+  padding: 0px 4px;
   margin-left: 8px;
   border-radius: 4px;
   white-space:nowrap;

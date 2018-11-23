@@ -1206,8 +1206,6 @@ table.button.small-expand, table.button.small-expanded {width:100% !important;}
 table.button.small-expand table, table.button.small-expanded table {width:100%;}
 table.button.small-expand table a, table.button.small-expanded table a {text-align:center !important;width:100% !important;padding-left:0 !important;padding-right:0 !important;}
 table.button.small-expand center, table.button.small-expanded center {min-width:0;}
-.something-important {display:block !important;text-align:center;margin: 0 auto;}
-.create-new-post {display:block !important;text-align:center;margin: 0 auto;}
 .inner-body{max-width:100vw;}
 .main-wrapper{padding: 0 24px;}}
 
@@ -1219,6 +1217,4 @@ table.button.small-expand center, table.button.small-expanded center {min-width:
   span.post-title:hover {
     color: #3FBD7C !important;}
   a.video-cover:hover img.video-play {
-    opacity: 1 !important;}
-  br.something-important-line-break {
-    display: none !important;}}
+    opacity: 1 !important;}}
