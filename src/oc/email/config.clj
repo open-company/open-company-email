@@ -11,6 +11,17 @@
 
 (defonce intro? (bool (or (env :intro ) false)))
 
+;; ----- Auth -----
+
+(defonce passphrase (env :open-company-auth-passphrase))
+
+;; ----- URLS ------
+
+(defonce auth-server-port (Integer/parseInt (or (env :auth-server-port) "3003")))
+(defonce auth-server-url (or (env :auth-server-url) (str "http://localhost:" auth-server-port)))
+(defonce storage-server-port (Integer/parseInt (or (env :storage-server-port) "3001")))
+(defonce storage-server-url (or (env :storage-server-url) (str "http://localhost:" storage-server-port)))
+
 ;; ----- Logging -----
 
 (defonce log-level (or (env :log-level) :info))

@@ -35,6 +35,8 @@
     ;; clj-time - Date and time lib https://github.com/clj-time/clj-time
     ;; Environ - Get environment settings from different sources https://github.com/weavejester/environ
     ;; soup - Clojure wrapper for jsoup HTML parser https://github.com/mfornos/clojure-soup
+    ;; Clojure HTTP client https://github.com/dakrone/clj-http
+    [clj-http "3.9.1"]
   ]
 
   ;; All profile plugins

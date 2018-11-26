@@ -7,7 +7,9 @@
             [amazonica.aws.simpleemail :as ses]
             [cheshire.core :as json]
             [oc.email.config :as c]
-            [oc.email.content :as content]))
+            [oc.email.content :as content]
+            [oc.email.auth :as auth]
+            [oc.email.storage :as storage]))
 
 (def size-limit 100000) ; 100KB size limit of HTML content in GMail
 
@@ -182,11 +184,15 @@
         org-name? (not (s/blank? org-name))
         mention? (:mention notification)
         comment? (:interaction-id notification)
+        title (if comment?
+                (:headline (storage/get-post-data msg))
+                (:entry-title notification))
+        msg-title (assoc-in msg [:notification :entry-title] title)
         subject (if mention?
                   (str "You were mentioned in a " (if comment? "comment" "post"))
                   (str "There is a new comment on your post"))]
     (try
-      (spit html-file (content/notify-html msg)) ; create the email in a tmp file
+      (spit html-file (content/notify-html msg-title)) ; create the email in a tmp file
       (inline-css html-file inline-file) ; inline the CSS
        ;; Email it to the recipient
       (email {:to (-> msg :to)
