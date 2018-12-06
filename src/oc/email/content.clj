@@ -6,14 +6,14 @@
             [hickory.core :as hickory]
             [oc.email.config :as config]))
 
-(def max-logo 32)
+(def max-logo 40)
 (def author-logo 32)
 
 (def iso-format (time-format/formatters :date-time))
 (def date-format (time-format/formatter "MMMM d"))
 (def date-format-year (time-format/formatter "MMMM d YYYY"))
 
-(def profile-url (str config/web-url "/profile"))
+(def profile-url (str config/web-url "/profile/notifications"))
 
 (def doc-type "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
 
@@ -52,20 +52,15 @@
 (def verify-instructions-2 "Please click the link below to verify your account:")
 (def verify-button-text "verify_email")
 
-(def digest-title "Hi %s, here’s the latest from your team.")
-(def digest-title-no-name "Here’s the latest from your team.")
+(def digest-title-daily "Yesterday %s %s")
+(def digest-title-weekly "Last week %s %s")
 
 ;; ----- HTML Fragments -----
 
 (defn- org-logo
   [{org-name :org-name logo-url :org-logo-url logo-height :org-logo-height logo-width :org-logo-width
     align :align}]
-  (let [logo? (and logo-url logo-height logo-width)
-        dimension (when logo? (if (> logo-height logo-width) :height :width))
-        size (when logo?
-                (if (= dimension :height)
-                  (if (> logo-height max-logo) max-logo logo-height)
-                  (if (> logo-width max-logo) max-logo logo-width)))]
+  (let [logo? (and logo-url logo-height logo-width)]
     (when logo?
       [:table {:class "row logo"}
         [:tr 
@@ -73,14 +68,14 @@
             [:table 
               [:tr 
                 [:th
-                  [:img {:class (str "logo " (if (= align "center")
-                                              "auto-x-margin"
-                                              "left-float"))
-                         :align (or align "left")
-                         :style (str "background-color: #fff; max-height: " max-logo "px; max-width: " max-logo "px;")
-                         dimension size
-                         :src logo-url
-                         :alt (str org-name " logo")}]]]]]]])))
+                  [:div
+                    {:class "logo-container"}
+                    [:img {:class (str "logo " (if (= align "center")
+                                                "auto-x-margin"
+                                                "left-float"))
+                           :align (or align "left")
+                           :src logo-url
+                           :alt (str org-name " logo")}]]]]]]]])))
 
 (defn- spacer-table [pixels css-class]
   [:table {:class "spacer"}
@@ -236,13 +231,16 @@
         (vspacer 24 "header-table" "header-table")
         [:table {:class "row header-table"}
           [:tr
-            [:th {:class "small-12 large-12 columns header-icon"}
+            [:th {:class "small-6 large-6 columns header-icon"}
               [:a
                 {:href config/web-url}
                 [:img {:src (str config/email-images-prefix "/email_images/carrot_logo_with_copy_colors@2x.png")
                        :width "90"
                        :height "22"
-                       :alt "Carrot"}]]]]]
+                       :alt "Carrot"}]]]
+            [:th {:class "small-6 large-6 columns header-right"}
+              [:span.header-right-span
+                "Lead with clarity"]]]]
         (vspacer 24 "header-table header-bottom-border" "header-table")
         (vspacer 40 "header-table" "header-table")]]])
 
@@ -256,18 +254,14 @@
         (vspacer 24 "footer-table footer-top-border" "footer-table")
         [:table {:class "row footer-table"}
           [:tr
-            [:th {:class "small-10 large-10 columns"}
+            [:th {:class "small-12 large-12"}
               [:p {:class "footer-paragraph bottom-footer"}
-                "Sent via "
+                "Sent with "
+                [:span.heart
+                  {:style (str "background: url(" config/email-images-prefix "/email_images/footer_heart@2x.png) no-repeat center / 18px 20px;")}]
+                " via "
                 [:a {:href config/web-url}
-                  "Carrot"]]]
-            [:th {:class "small-2 large-2 columns footer-icon"}
-              [:a
-                {:href config/web-url}
-                [:img {:src (str config/email-images-prefix "/email_images/carrot_logo_grey_email@2x.png")
-                       :width "13"
-                       :height "24"
-                       :alt "Carrot"}]]]]]
+                  "Carrot"]]]]]
         (vspacer 40 "footer-table" "footer-table")]]])
 
 ;; ----- Posts common ----
@@ -287,42 +281,27 @@
    css-class "text-left attribution"))
 
 (defn- post-headline [entry]
-  (let [ms (:must-see entry)
-        vid (:video-id entry)]
-   [:span
-     (:headline entry)
-     (when ms
-       [:img
-        {:class "must-see-icon"
-         :width "10"
-         :height "12"
-         :style (str
-                 "margin-left: 8px; "
-                 "width: 10px; "
-                 "height: 12px; "
-                 "display: inline-block;")
-         :src (str config/email-images-prefix "/email_images/must_see@2x.png")}])
-     (when ms
-       [:span.must-see
-         "Must See"])
-     (when vid
-       [:img
-        {:class "video-icon"
-         :width "16"
-         :height "10"
-         :style (str
-                 "margin-left: 8px; "
-                 "width: 16px; "
-                 "height: 10px;"
-                 "display: inline-block;")
-         :src (str config/email-images-prefix "/email_images/video@2x.png")}])]))
+  (let [ms (:must-see entry)]
+    [:div
+      [:span.post-title
+        (:headline entry)]
+      (when ms
+        [:span.must-see-container
+          [:img
+            {:class "must-see-icon"
+             :width "8"
+             :height "10"
+             :src (str config/email-images-prefix "/email_images/must_see@2x.png")}]
+          [:span.must-see
+            "MUST SEE"]])]))
 
 (defn- post-block
   ([entry] (post-block entry (:url entry)))
   ([entry entry-url]
   (let [publisher (:publisher entry)
         avatar-url (fix-avatar-url (:avatar-url publisher))
-        headline (post-headline entry)]
+        headline (post-headline entry)
+        vid (:video-id entry)]
     [:table
       {:cellpadding "0"
        :cellspacing "0"
@@ -338,7 +317,28 @@
           {:class (if avatar-url "post-block-avatar-right" "post-block-right")}
           (h2 headline entry-url "")
           (spacer 4 "")
-          (post-attribution entry true "")]]])))
+          (post-attribution entry true "")
+          (when vid
+            (spacer 16 ""))
+          (when vid
+            [:table
+              {:class "row video-cover-table"}
+              [:tr
+                [:td
+                  [:a
+                    {:class "video-cover"
+                     :href entry-url
+                     :style (str "background-image: url(https://" (:video-image entry) ");")}
+                    [:img
+                      {:class "video-play"
+                       :src (str config/email-images-prefix "/email_images/video_play@2x.png")
+                       :width 40
+                       :height 40}]
+                    [:div
+                      {:class "video-duration-container"}
+                      [:span
+                        {:class "video-duration"}
+                        (:video-duration entry)]]]]]])]]])))
 
 (defn- posts-with-board-name [board]
   (let [board-name (:name board)]
@@ -357,9 +357,13 @@
         posts (mapcat :posts boards)
         digest-url (s/join "/" [config/web-url (:org-slug digest) "all-posts"])
         first-name (:first-name digest)
-        title (if first-name
-                (format digest-title first-name)
-                digest-title-no-name)]
+        title (if org-name
+                (if weekly?
+                  (format digest-title-daily "at" org-name)
+                  (format digest-title-weekly "at" org-name))
+                (if weekly?
+                  (format digest-title-daily "in" "Carrot")
+                  (format digest-title-weekly "in" "Carrot")))]
     [:td {:class "small-12 large-12 columns main-wrapper" :valign "middle" :align "center"}
       [:center
         (when logo? (org-logo {:org-name (:org-name digest)
@@ -392,34 +396,19 @@
                   [:tr
                     [:td {:class "small-12 large-12"}
                       horizontal-line
-                      (spacer 24)
+                      (spacer 20)
                       (post-block p)
-                      (spacer 20)]]])]]]
-        (spacer 16)
-        (spacer 16 "note-paragraph top-note-paragraph" "note-paragraph top-note-paragraph")
-        [:table {:class "row note-paragraph"}
-          [:tr
-            [:th {:class "small-12 large-12 columns center-align"}
-              [:span.something-important
-                "Have something to share? "]
-              [:a.create-new-post
-                {:href (str digest-url "?new")}
-                "Create a new post ✍️"]]]]
-        (spacer 16 "note-paragraph bottom-note-paragraph" "note-paragraph bottom-note-paragraph")
-
-        (spacer 40)
+                      (spacer 28)]]])]]]
+        (spacer 80)
         [:table {:class "row"}
           [:tr
             [:th {:class "small-12 large-12 columns"}
               [:p {:class "digest-footer-paragraph"}
                 "You're receiving this brief "
                 (if weekly? "weekly" "daily")
-                ". "
+                ". Switch to " (if weekly? "daily" "weekly") ", or turn it off in "
                 [:a {:href profile-url}
-                  (str "Switch to " (if weekly? "daily" "weekly"))]
-                "? You may also "
-                [:a {:href profile-url}
-                  "unsubscribe"]
+                  "notification settings"]
                 "."]]]]]]))
 
 ;; ----- Transactional Emails -----

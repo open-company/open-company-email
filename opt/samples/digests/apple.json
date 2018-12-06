@@ -20,7 +20,12 @@
           "published-at": "2017-11-5T17:00:48.729Z",
           "comment-count": 0,
           "must-see": true,
-          "video-id": "12345678901234",
+          "video-id": "a6c1f209a86dff38d3934c137af33ac9",
+          "video-duration": "3.04",
+          "video-image": "embed.ziggeo.com/v1/applications/c9b611b2b996ee5a1f318d3bacc36b27/videos/a6c1f209a86dff38d3934c137af33ac9/image",
+          "video-processed": true,
+          "video-transcript": false,
+          "video-error": false,
           "comment-authors": []
         }, {
           "headline": "We've hit 2,000 paid subscribers!",
@@ -63,7 +68,12 @@
           "published-at": "2017-11-5T17:00:48.729Z",
           "comment-count": 0,
           "must-see": false,
-          "video-id": "12345678901234",
+          "video-id": "06cc07aab22ff30bf417fe135518e32a",
+          "video-duration": "6.36",
+          "video-image": "embed.ziggeo.com/v1/applications/b7841cd396ab9793d1a072c36760dfb5/videos/06cc07aab22ff30bf417fe135518e32a/image",
+          "video-processed": true,
+          "video-transcript": null,
+          "video-error": false,
           "comment-authors": []
         }, {
           "headline": "Versioning, Licensing and Sketch 4.0",
@@ -77,6 +87,11 @@
           "comment-count": 0,
           "must-see": false,
           "video-id": null,
+          "video-duration": null,
+          "video-image": null,
+          "video-processed": null,
+          "video-transcript": null,
+          "video-error": null,
           "comment-authors": []
         }
       ]
