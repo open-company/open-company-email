@@ -540,8 +540,8 @@
         author (:author notification)
         intro (if mention?
                 (if comment?
-                  (str "You were mentioned in a comment on the post: ")
-                  (str "You were mentioned in the post: "))
+                  (str "You were mentioned in a comment: ")
+                  (str "You were mentioned in a post: "))
                 (str "There is a new comment on your post:"))
         notification-author (:author notification)
         notification-author-name (:name notification-author)

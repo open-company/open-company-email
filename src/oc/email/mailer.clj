@@ -202,7 +202,7 @@
         msg-title (assoc-in msg [:notification :entry-data] updated-post-data)
         pre-subject (if mention?
                       (if comment?
-                        (str "You were mentioned in a comment on the post: ")
+                        (str "You were mentioned in a comment: ")
                         (str "You were mentioned in a post: "))
                       (str "There is a new comment on your post: "))
         subject-length 65
