@@ -177,9 +177,8 @@
                 :auth-server-url c/auth-server-url
                 :passphrase c/passphrase
                 :service-name "Email"}
-        user-data {:user-id (:user-id msg)}
-        teams (set [(:team-id (:org msg))])]
-    (storage/post-data-for config user-data teams (:board-id notification) (:entry-id notification))))
+        user-data {:user-id (:user-id msg)}]
+    (storage/post-data-for config user-data (:slug (:org msg)) (:board-id notification) (:entry-id notification))))
 
 (defn send-notification
   "Creates an HTML email notifying user of being mentioned or replied to and sends it to the recipient."
