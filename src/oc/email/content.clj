@@ -368,21 +368,23 @@
 
 (defn- go-to-posts-script [data]
   [:script {:type "application/ld+json"}
-"{
+"
+{
   \"@context\": \"http://schema.org\",
   \"@type\": \"EmailMessage\",
   \"description\": \"" (digest-title (:org-name data) (weekly-digest? data)) "\",
   \"potentialAction\": {
-  \"@type\": \"ViewAction\",
-    \"target\": \"" (get-digest-url data) "\",
+    \"@type\": \"ViewAction\",
+    \"url\": \"" (get-digest-url data) "\",
     \"name\": \"Go to posts\"
   },
   \"publisher\": {
     \"@type\": \"Organization\",
     \"name\": \"Carrot\",
-    \"url\": \"" config/web-url "\",
+    \"url\": \"" config/web-url "\"
   }
-}"])
+}
+"])
 
 (defn- digest-content [digest]
   (let [logo-url (:logo-url digest)
