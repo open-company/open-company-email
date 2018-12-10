@@ -348,6 +348,42 @@
   (or (= "weekly" (:digest-frequency digest-data))
       (= :weekly (:digest-frequency digest-data))))
 
+(defn digest-title [org-name weekly?]
+  (if weekly?
+    (if org-name
+      (format digest-title-weekly "at" org-name)
+      (format digest-title-weekly "in" "Carrot"))
+    (if org-name
+      (format digest-title-daily "at" org-name)
+      (format digest-title-daily "in" "Carrot"))))
+
+(defn- hidden-digest-headline [digest-data]
+  (let [org-name (:org-name digest-data)
+        weekly? (weekly-digest? digest-data)]
+    [:span.hidden
+      (str (digest-title org-name weekly?) ". See the latest updates from your team." (s/join (repeat 65 "🥕")))]))
+
+(defn- get-digest-url [digest-data]
+  (s/join "/" [config/web-url (:org-slug digest-data) "all-posts"]))
+
+(defn- go-to-posts-script [data]
+  [:script {:type "application/ld+json"}
+    "{"
+      "\"@context\": \"http://schema.org\","
+      "\"@type\": \"EmailMessage\","
+      "\"description\": \"" (digest-title (:org-name data) (weekly-digest? data)) "\","
+      "\"potentialAction\": {"
+        "\"@type\": \"ViewAction\","
+        "\"target\": \"" (get-digest-url data) "\","
+        "\"name\": \"Go to posts\""
+      "},"
+      "\"publisher\": {"
+        "\"@type\": \"Organization\","
+        "\"name\": \"Carrot\","
+        "\"url\": \"https://carrot.io/\","
+      "}"
+    "}"])
+
 (defn- digest-content [digest]
   (let [logo-url (:logo-url digest)
         logo? (not (s/blank? logo-url))
@@ -355,15 +391,9 @@
         org-name (:org-name digest)
         boards (map posts-with-board-name (:boards digest))
         posts (mapcat :posts boards)
-        digest-url (s/join "/" [config/web-url (:org-slug digest) "all-posts"])
+        digest-url (get-digest-url digest)
         first-name (:first-name digest)
-        title (if org-name
-                (if weekly?
-                  (format digest-title-daily "at" org-name)
-                  (format digest-title-weekly "at" org-name))
-                (if weekly?
-                  (format digest-title-daily "in" "Carrot")
-                  (format digest-title-weekly "in" "Carrot")))]
+        digest-headline (digest-title org-name weekly?)]
     [:td {:class "small-12 large-12 columns main-wrapper" :valign "middle" :align "center"}
       [:center
         (when logo? (org-logo {:org-name (:org-name digest)
@@ -372,7 +402,7 @@
                                :org-logo-height (:logo-height digest)
                                :align "center"}))
         (when logo? (spacer 32))
-        (h1 title "center-align")
+        (h1 digest-headline "center-align")
         (spacer 16)
         [:table {:class "row"}
           [:tr
@@ -606,6 +636,8 @@
 (defn- body [data]
   (let [type (:type data)]
     [:body
+      (when (= type :digest)
+        (hidden-digest-headline data))
       [:table {:class "body"
                :with "100%"}
         [:tr
@@ -634,7 +666,9 @@
       [:meta {:name "viewport", :content "width=device-width"}]
       [:link {:rel "stylesheet", :href "resources/css/foundation.css"}]
       [:link {:rel "stylesheet", :href (str "resources/css/oc.css")}]
-      [:title]]
+      [:title]
+      (when (= (:type data) :digest)
+        (go-to-posts-script data))]
     (body data)])
 
 (defn- html [data type]
