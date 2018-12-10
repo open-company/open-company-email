@@ -361,7 +361,7 @@
   (let [org-name (:org-name digest-data)
         weekly? (weekly-digest? digest-data)]
     [:span.hidden
-      (str (digest-title org-name weekly?) ". See the latest updates from your team." (s/join (repeat 65 "🥕")))]))
+      (str (digest-title org-name weekly?) ". See the latest updates from your team." (s/join (repeat 100 "&nbsp;&zwnj;")))]))
 
 (defn- get-digest-url [digest-data]
   (s/join "/" [config/web-url (:org-slug digest-data) "all-posts"]))
@@ -375,13 +375,8 @@
   \"description\": \"" (digest-title (:org-name data) (weekly-digest? data)) "\",
   \"potentialAction\": {
     \"@type\": \"ViewAction\",
-    \"url\": \"" (get-digest-url data) "\",
+    \"target\": \"" (get-digest-url data) "\",
     \"name\": \"Go to posts\"
-  },
-  \"publisher\": {
-    \"@type\": \"Organization\",
-    \"name\": \"Carrot\",
-    \"url\": \"" config/web-url "\"
   }
 }
 "])
@@ -638,6 +633,8 @@
 (defn- body [data]
   (let [type (:type data)]
     [:body
+      (when (= (:type data) :digest)
+        (go-to-posts-script data))
       (when (= type :digest)
         (hidden-digest-headline data))
       [:table {:class "body"
@@ -668,9 +665,7 @@
       [:meta {:name "viewport", :content "width=device-width"}]
       [:link {:rel "stylesheet", :href "resources/css/foundation.css"}]
       [:link {:rel "stylesheet", :href (str "resources/css/oc.css")}]
-      [:title]
-      (when (= (:type data) :digest)
-        (go-to-posts-script data))]
+      [:title]]
     (body data)])
 
 (defn- html [data type]
