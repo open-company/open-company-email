@@ -404,11 +404,13 @@
           [:tr
             [:th {:class "small-12 large-12 columns"}
               [:p {:class "digest-footer-paragraph"}
-                "You're receiving this brief "
-                (if weekly? "weekly" "daily")
-                ". Switch to " (if weekly? "daily" "weekly") ", or turn it off in "
+                "You receive the digest each "
+                (if weekly?
+                  "week"
+                  "day")
+                ". You can easily change delivery preferences in your "
                 [:a {:href profile-url}
-                  "notification settings"]
+                  "personal profile"]
                 "."]]]]]]))
 
 ;; ----- Transactional Emails -----
