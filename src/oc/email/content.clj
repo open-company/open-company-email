@@ -380,7 +380,7 @@
       "\"publisher\": {"
         "\"@type\": \"Organization\","
         "\"name\": \"Carrot\","
-        "\"url\": \"https://carrot.io/\","
+        "\"url\": \"" config/web-url "\","
       "}"
     "}"])
 
