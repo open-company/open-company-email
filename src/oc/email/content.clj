@@ -568,7 +568,9 @@
         first-name? (not (s/blank? first-name))
         author (:author notification)
         intro (if mention?
-                (str "You were mentioned in a " (if comment? "comment" "post") ":")
+                (if comment?
+                  (str "You were mentioned in a comment: ")
+                  (str "You were mentioned in a post: "))
                 (str "There is a new comment on your post:"))
         notification-author (:author notification)
         notification-author-name (:name notification-author)
@@ -583,6 +585,8 @@
     [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
       (spacer 64)
       (h1 intro)
+      (spacer 24)
+      (post-block (:entry-data notification) entry-url)
       (spacer 24)
       (spacer 24 "note-paragraph top-note-paragraph" "note-paragraph top-note-paragraph")
       (note-author notification-author-name notification-author-url)

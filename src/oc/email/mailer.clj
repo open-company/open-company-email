@@ -6,8 +6,10 @@
             [taoensso.timbre :as timbre]
             [amazonica.aws.simpleemail :as ses]
             [cheshire.core :as json]
+            [jsoup.soup :as soup]
             [oc.email.config :as c]
-            [oc.email.content :as content]))
+            [oc.email.content :as content]
+            [oc.lib.storage :as storage]))
 
 (def size-limit 100000) ; 100KB size limit of HTML content in GMail
 
@@ -169,6 +171,15 @@
        (io/delete-file html-file true)
        (io/delete-file inline-file true)))))
 
+(defn post-data-from-msg [msg]
+  (let [notification (:notification msg)
+        config {:storage-server-url c/storage-server-url
+                :auth-server-url c/auth-server-url
+                :passphrase c/passphrase
+                :service-name "Email"}
+        user-data {:user-id (:user-id msg)}]
+    (storage/post-data-for config user-data (:slug (:org msg)) (:board-id notification) (:entry-id notification))))
+
 (defn send-notification
   "Creates an HTML email notifying user of being mentioned or replied to and sends it to the recipient."
   [msg]
@@ -182,18 +193,32 @@
         org-name? (not (s/blank? org-name))
         mention? (:mention notification)
         comment? (:interaction-id notification)
-        subject (if mention?
-                  (str "You were mentioned in a " (if comment? "comment" "post"))
-                  (str "There is a new comment on your post"))]
+        post-data (post-data-from-msg msg)
+        title (if comment?
+                (:headline post-data)
+                (:entry-title notification))
+        parsed-title (.text (soup/parse title))
+        updated-post-data (assoc post-data :parsed-headline parsed-title)
+        msg-title (assoc-in msg [:notification :entry-data] updated-post-data)
+        pre-subject (if mention?
+                      (if comment?
+                        (str "You were mentioned in a comment: ")
+                        (str "You were mentioned in a post: "))
+                      (str "There is a new comment on your post: "))
+        subject-length 65
+        subject (str pre-subject (subs parsed-title 0 (min (count parsed-title) (- subject-length (count pre-subject)))))
+        final-subject (if (= (count subject) subject-length)
+                        (str (subs subject 0 (- (count subject) 3)) "...")
+                        subject)]
     (try
-      (spit html-file (content/notify-html msg)) ; create the email in a tmp file
+      (spit html-file (content/notify-html msg-title)) ; create the email in a tmp file
       (inline-css html-file inline-file) ; inline the CSS
        ;; Email it to the recipient
-      (email {:to (-> msg :to)
+      (email {:to (:to msg)
               :source default-source
               :from default-from
               :reply-to default-reply-to
-              :subject subject}
+              :subject final-subject}
              {:html (slurp inline-file)})
       (finally
        ;; remove the tmp files
