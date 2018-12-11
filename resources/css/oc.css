@@ -504,6 +504,10 @@ img.logo {
   object-fit: contain;
 }
 
+.hidden {
+  display: none;
+}
+
 /*
   Gmail doesn't linke multiple media queries, if you need to use
   @media only screen and (max-width:596px)

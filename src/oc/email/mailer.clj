@@ -130,7 +130,7 @@
         org-name (:org-name msg)
         daily? (= (keyword (:digest-frequency msg)) :daily)
         frequency (if daily? "Daily" "Weekly")
-        digest-email-subject (if daily? "Your daily brief" "Your weekly brief")]
+        digest-email-subject (content/digest-title org-name (not daily?))]
     (try
       (spit html-file (content/digest-html msg)) ; create the email in a tmp file
       (inline-css html-file inline-file) ; inline the CSS
