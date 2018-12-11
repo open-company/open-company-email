@@ -357,11 +357,11 @@
       (format digest-title-daily "at" org-name)
       (format digest-title-daily "in" "Carrot"))))
 
-(defn- hidden-digest-headline [digest-data]
+(defn- digest-preheader [digest-data]
   (let [org-name (:org-name digest-data)
         weekly? (weekly-digest? digest-data)]
     [:span.hidden
-      (str (digest-title org-name weekly?) ". See the latest updates from your team." (s/join (repeat 100 "&nbsp;&zwnj;")))]))
+      (str "See the latest updates from your team." (s/join (repeat 120 "&nbsp;&zwnj;")))]))
 
 (defn- get-digest-url [digest-data]
   (s/join "/" [config/web-url (:org-slug digest-data) "all-posts"]))
@@ -636,7 +636,7 @@
       (when (= (:type data) :digest)
         (go-to-posts-script data))
       (when (= type :digest)
-        (hidden-digest-headline data))
+        (digest-preheader data))
       [:table {:class "body"
                :with "100%"}
         [:tr
