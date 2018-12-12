@@ -194,9 +194,7 @@
         mention? (:mention notification)
         comment? (:interaction-id notification)
         post-data (post-data-from-msg msg)
-        title (if comment?
-                (:headline post-data)
-                (:entry-title notification))
+        title (:headline post-data)
         parsed-title (.text (soup/parse title))
         updated-post-data (assoc post-data :parsed-headline parsed-title)
         msg-title (assoc-in msg [:notification :entry-data] updated-post-data)
