@@ -197,7 +197,7 @@
         title (if comment?
                 (:headline post-data)
                 (:entry-title notification))
-        parsed-title (.text (soup/parse title))
+        parsed-title (.text (soup/parse (or title "")))
         updated-post-data (assoc post-data :parsed-headline parsed-title)
         msg-title (assoc-in msg [:notification :entry-data] updated-post-data)
         pre-subject (if mention?
