@@ -4,6 +4,7 @@
             [clj-time.format :as time-format]
             [hiccup.core :as h]
             [hickory.core :as hickory]
+            [oc.lib.jwt :as jwt]
             [oc.email.config :as config]))
 
 (def max-logo 40)
@@ -577,7 +578,20 @@
         notification-author-url (fix-avatar-url (:avatar-url notification-author))
         secure-uuid (:secure-uuid notification)
         origin-url config/web-url
-        entry-url (s/join "/" [origin-url org-slug "post" secure-uuid])
+        token-claims {:org-id (:org-id notification)
+                      :secure-uuid secure-uuid
+                      :name (str first-name " " (:last-name msg))
+                      :first-name first-name
+                      :last-name (:last-name msg)
+                      :user-id (:user-id msg)
+                      :avatar-url (:avatar-url msg)
+                      :team-id (first (:teams msg))}
+        id-token (jwt/generate-id-token token-claims config/passphrase)
+        entry-url (s/join "/" [origin-url
+                               org-slug
+                               "post"
+                               secure-uuid
+                               (str "?id=" id-token)])
         button-cta (if (or (not mention?) comment?)
                     "view_comment"
                     "view_post")
