@@ -426,20 +426,7 @@
                       horizontal-line
                       (spacer 20)
                       (post-block p)
-                      (spacer 28)]]])]]]
-        (spacer 80)
-        [:table {:class "row"}
-          [:tr
-            [:th {:class "small-12 large-12 columns"}
-              [:p {:class "digest-footer-paragraph"}
-                "You receive the digest each "
-                (if weekly?
-                  "week"
-                  "day")
-                ". You can easily change delivery preferences in your "
-                [:a {:href profile-url}
-                  "personal profile"]
-                "."]]]]]]))
+                      (spacer 28)]]])]]]]]))
 
 ;; ----- Transactional Emails -----
 
