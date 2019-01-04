@@ -558,6 +558,8 @@
   (let [notification (:notification msg)
         content (:content notification)
         org (:org msg)
+        board (:board notification)
+        board-slug (:slug board)
         logo-url (:logo-url org)
         logo? (not (s/blank? logo-url))
         org-name (:name org)
@@ -576,7 +578,7 @@
         notification-author (:author notification)
         notification-author-name (:name notification-author)
         notification-author-url (fix-avatar-url (:avatar-url notification-author))
-        secure-uuid (:secure-uuid notification)
+        uuid (:uuid content)
         origin-url config/web-url
         token-claims {:org-id (:org-id notification)
                       :secure-uuid secure-uuid
@@ -589,8 +591,9 @@
         id-token (jwt/generate-id-token token-claims config/passphrase)
         entry-url (s/join "/" [origin-url
                                org-slug
+                               board-slug
                                "post"
-                               secure-uuid
+                               uuid
                                (str "?id=" id-token)])
         button-cta (if (or (not mention?) comment?)
                     "view_comment"
