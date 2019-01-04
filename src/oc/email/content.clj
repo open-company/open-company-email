@@ -578,14 +578,14 @@
         notification-author-url (fix-avatar-url (:avatar-url notification-author))
         secure-uuid (:secure-uuid notification)
         origin-url config/web-url
-        token-claims {:org-id (:org-id notification)
+        token-claims {:org-uuid (:org-id notification)
                       :secure-uuid secure-uuid
                       :name (str first-name " " (:last-name msg))
                       :first-name first-name
                       :last-name (:last-name msg)
                       :user-id (:user-id msg)
                       :avatar-url (:avatar-url msg)
-                      :teams [(:team-id org)]} ;; Let's read the team-id from the org to avoid problems on multiple org users
+                      :team-id (:team-id org)} ;; Let's read the team-id from the org to avoid problems on multiple org users
         id-token (jwt/generate-id-token token-claims config/passphrase)
         entry-url (s/join "/" [origin-url
                                org-slug
