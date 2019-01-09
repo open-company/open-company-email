@@ -54,7 +54,6 @@
 (def verify-button-text "verify_email")
 
 (def digest-title-daily "Yesterday %s %s")
-(def digest-title-weekly "Last week %s %s")
 
 ;; ----- HTML Fragments -----
 
@@ -345,22 +344,13 @@
   (let [board-name (:name board)]
     (assoc board :posts (map #(assoc % :board-name board-name) (:posts board)))))
 
-(defn- weekly-digest? [digest-data]
-  (or (= "weekly" (:digest-frequency digest-data))
-      (= :weekly (:digest-frequency digest-data))))
-
-(defn digest-title [org-name weekly?]
-  (if weekly?
-    (if org-name
-      (format digest-title-weekly "at" org-name)
-      (format digest-title-weekly "in" "Carrot"))
-    (if org-name
-      (format digest-title-daily "at" org-name)
-      (format digest-title-daily "in" "Carrot"))))
+(defn digest-title [org-name]
+  (if org-name
+    (format digest-title-daily "at" org-name)
+    (format digest-title-daily "in" "Carrot")))
 
 (defn- digest-preheader [digest-data]
-  (let [org-name (:org-name digest-data)
-        weekly? (weekly-digest? digest-data)]
+  (let [org-name (:org-name digest-data)]
     [:span.hidden
       (str "See the latest updates from your team." (s/join (repeat 120 "&nbsp;&zwnj;")))]))
 
@@ -373,7 +363,7 @@
 {
   \"@context\": \"http://schema.org\",
   \"@type\": \"EmailMessage\",
-  \"description\": \"" (digest-title (:org-name data) (weekly-digest? data)) "\",
+  \"description\": \"" (digest-title (:org-name data)) "\",
   \"potentialAction\": {
     \"@type\": \"ViewAction\",
     \"target\": \"" (get-digest-url data) "\",
@@ -385,13 +375,12 @@
 (defn- digest-content [digest]
   (let [logo-url (:logo-url digest)
         logo? (not (s/blank? logo-url))
-        weekly? (weekly-digest? digest)
         org-name (:org-name digest)
         boards (map posts-with-board-name (:boards digest))
         posts (mapcat :posts boards)
         digest-url (get-digest-url digest)
         first-name (:first-name digest)
-        digest-headline (digest-title org-name weekly?)]
+        digest-headline (digest-title org-name)]
     [:td {:class "small-12 large-12 columns main-wrapper" :valign "middle" :align "center"}
       [:center
         (when logo? (org-logo {:org-name (:org-name digest)
@@ -426,20 +415,7 @@
                       horizontal-line
                       (spacer 20)
                       (post-block p)
-                      (spacer 28)]]])]]]
-        (spacer 80)
-        [:table {:class "row"}
-          [:tr
-            [:th {:class "small-12 large-12 columns"}
-              [:p {:class "digest-footer-paragraph"}
-                "You receive the digest each "
-                (if weekly?
-                  "week"
-                  "day")
-                ". You can easily change delivery preferences in your "
-                [:a {:href profile-url}
-                  "personal profile"]
-                "."]]]]]]))
+                      (spacer 28)]]])]]]]]))
 
 ;; ----- Transactional Emails -----
 
