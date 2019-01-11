@@ -534,6 +534,8 @@
   (let [notification (:notification msg)
         content (:content notification)
         org (:org msg)
+        entry-data (:entry-data notification)
+        board-slug (:board-slug entry-data)
         logo-url (:logo-url org)
         logo? (not (s/blank? logo-url))
         org-name (:name org)
@@ -552,6 +554,7 @@
         notification-author (:author notification)
         notification-author-name (:name notification-author)
         notification-author-url (fix-avatar-url (:avatar-url notification-author))
+        uuid (:entry-id notification)
         secure-uuid (:secure-uuid notification)
         origin-url config/web-url
         token-claims {:org-uuid (:org-id notification)
@@ -565,8 +568,9 @@
         id-token (jwt/generate-id-token token-claims config/passphrase)
         entry-url (s/join "/" [origin-url
                                org-slug
+                               board-slug
                                "post"
-                               secure-uuid
+                               uuid
                                (str "?id=" id-token)])
         button-cta (if (or (not mention?) comment?)
                     "view_comment"
@@ -576,7 +580,7 @@
       (spacer 64)
       (h1 intro)
       (spacer 24)
-      (post-block (:entry-data notification) entry-url)
+      (post-block entry-data entry-url)
       (spacer 24)
       (spacer 24 "note-paragraph top-note-paragraph" "note-paragraph top-note-paragraph")
       (note-author notification-author-name notification-author-url)
