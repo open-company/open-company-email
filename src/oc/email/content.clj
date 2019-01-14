@@ -133,6 +133,13 @@
         [:a {:href entry-url}
           [:h2 {:class h2-class} content]]]]]))
 
+(defn- h2-no-link
+  ([content css-class h2-class]
+  [:table {:class (str "row " css-class)}
+    [:tr
+      [:th {:class "small-12 large-12 columns"}
+        [:h2 {:class h2-class} content]]]]))
+
 (defn- circle-image
   "Return an on the fly url of the image circle and resized."
   [image-url size]
@@ -241,8 +248,7 @@
             [:th {:class "small-6 large-6 columns header-right"}
               [:span.header-right-span
                 "Lead with clarity"]]]]
-        (vspacer 24 "header-table header-bottom-border" "header-table")
-        (vspacer 40 "header-table" "header-table")]]])
+        (vspacer 24 "header-table" "header-table")]]])
 
 (defn- email-footer []
   [:table {:class "row footer-table"
@@ -251,7 +257,6 @@
     [:tr
       [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
         (vspacer 24 "footer-table" "footer-table")
-        (vspacer 24 "footer-table footer-top-border" "footer-table")
         [:table {:class "row footer-table"}
           [:tr
             [:th {:class "small-12 large-12"}
@@ -417,7 +422,68 @@
                       (post-block p)
                       (spacer 28)]]])]]]]]))
 
+;; Reminders
+
+(defn reminder-headline [reminder-data]
+  (str (:first-name (:author reminder-data)) " created a new reminder for you"))
+
+(defn reminder-subline [reminder-data]
+  (str (:frequency reminder-data) " starting " (post-date (:start-date reminder-data))))
+
+(def reminder-settings-footer
+  [:table {:class "row reminders-footer"
+         :valign "middle"
+         :align "center"}
+  [:tr
+    [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
+      (vspacer 32 "" "reminders-footer")
+      [:table {:class "row reminders-footer center-align"}
+        [:tr
+          [:th {:class "small-12 large-12"}
+            [:p {:class "reminders-footer reminders-footer-paragraph"}
+              "You can always adjust or turn off reminders in "
+              [:a {:href profile-url}
+                "Carrot"]]]]]
+      (vspacer 32 "footer-table reminders-bottom-footer" "reminders-footer")]]])
+
 ;; ----- Transactional Emails -----
+
+(defn- reminder-notification-content [reminder]
+  (let [org (:org reminder)
+        org-name (:name org)
+        org-slug (:slug org)
+        logo-url (:logo-url org)
+        logo-width (:logo-width org)
+        logo-height (:logo-height org)
+        logo? (not (s/blank? logo-url))
+        reminder-data (:reminder reminder)
+        author (:author reminder-data)
+        title (:headline reminder-data)
+        headline (reminder-headline reminder-data)
+        subline (reminder-subline reminder-data)
+        reminders-url (str (s/join "/" [config/web-url org-slug "all-posts"]) "?reminders")]
+    [:td {:class "small-12 large-12 columns main-wrapper" :valign "middle" :align "center"}
+      [:center
+        (when logo? (org-logo {:org-name org-name
+                               :org-logo-url logo-url
+                               :org-logo-width logo-width
+                               :org-logo-height logo-height
+                               :align "center"}))
+        (when logo? (spacer 32))
+        (h1 headline "center-align")
+        (spacer 65)
+        (h2-no-link subline "center-align" "reminder-headline")
+        (spacer 8)
+        (paragraph (:headline reminder-data) "center-align" "center-align")
+        (spacer 16)
+        [:table {:class "row"}
+          [:tr
+            [:th {:class "small-12 large-12 columns"}
+              [:a.view-reminders
+                {:href reminders-url}
+                "View reminder"]]]]
+        (spacer 40)
+        reminder-settings-footer]]))
 
 (defn- board-notification-content [notice]
   (let [org (:org notice)
@@ -647,6 +713,7 @@
               [:table {:class "row email-content"
                        :valign "middle"
                        :align "center"}
+                [:tr [:td (spacer 40 "top-email-content")]]
                 [:tr
                   (case type
                     :reset (token-content "small-12 large-12 columns main-wrapper" type data)
@@ -655,7 +722,8 @@
                     :board-notification (board-notification-content data)
                     :share-link (share-content data)
                     :digest (digest-content data)
-                    :notify (notify-content data))]]
+                    :notify (notify-content data)
+                    :reminder-notification (reminder-notification-content data))]]
               (email-footer)]]]]]))
 
 (defn- head [data]
@@ -700,6 +768,9 @@
     (str (when note? (str note "\n\n"))
          "Check out the latest" (when org-name? (str " from " org-name)) ":"
          "\n\n" (when headline? (str headline "- ")) update-url)))
+
+(defn reminder-notification-html [reminder]
+  (html reminder :reminder-notification))
 
 (defn invite-html [invite]
   (html (-> invite
@@ -850,5 +921,10 @@
 
   (def comment-mention-notification (json/decode (slurp "./opt/samples/notifications/comment-mention.json")))
   (spit "./hiccup.html" (content/notify-html comment-mention-notification))
+
+  ;; Reminders
+
+  (def reminder-notification (json/decode (slurp "./opt/samples/reminder-notifications/carrot.json")))
+  (spit "./hiccup.html" (content/reminder-notification-html reminder-notification))
 
   )

@@ -1,0 +1,20 @@
+{
+  "org": {"name": "Carrot",
+          "slug": "carrot",
+          "logo-url": "https://open-company-assets.s3.amazonaws.com/bago.png",
+          "logo-width": 300,
+          "logo-height": 96},
+  "reminder": {"frequency": "Weekly",
+               "start-date": "2018-12-21T02:12:21.123Z",
+               "headline": "Design weekly",
+               "assignee": {"first-name": "Iacopo",
+                            "last-name": "Carraro",
+                            "name": "Iacopo Carraro",
+                            "avatar-url": "https://avatars.slack-edge.com/2017-02-02/136114833346_3758034af26a3b4998f4_512.jpg",
+                            "user-id": "b7f2-41f2-be42"},
+               "author": {"first-name": "Iacopo",
+                          "last-name": "Carraro",
+                          "name": "Iacopo Carraro",
+                          "avatar-url": "https://avatars.slack-edge.com/2017-02-02/136114833346_3758034af26a3b4998f4_512.jpg",
+                          "user-id": "b7f2-41f2-4321"}}
+}
