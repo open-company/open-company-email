@@ -1,8 +1,7 @@
 body,
 html,
 .body {
-  /*background-color: #FBFAF7; */
-  background-color: white;
+  background-color: #FBFAF7;
   color: #34414F;
   width: 100%;
   height: 100%;
@@ -14,8 +13,7 @@ html,
 }
 
 table {
-  /*background-color: #FBFAF7 !important;*/
-  background-color: white !important;
+  background-color: #FBFAF7 !important;
 }
 
 table th, 
@@ -90,8 +88,7 @@ table.footer a {
 }
 
 .header-table {
-  /*background-color: #FBFAF7 !important;*/
-  background-color: white !important;
+  background-color: #FBFAF7 !important;
   max-width: 600px;
   width: 100%;
   text-align: center;
@@ -99,8 +96,7 @@ table.footer a {
 }
 
 .footer-table {
-  /*background-color: #FBFAF7 !important;*/
-  background-color: white !important;
+  background-color: #FBFAF7 !important;
   max-width: 600px;
   width: 100%;
   text-align: center;
@@ -114,6 +110,10 @@ table.footer a {
   text-align: center;
   vertical-align: middle;
   border-radius: 6px;
+}
+
+table.email-content.row tr td.columns {
+  padding: 0 24px !important;
 }
 
 .email-content tr:first-child, .email-content tr:first-child td:first-child, .email-content tr:first-child th:first-child {
