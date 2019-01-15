@@ -385,7 +385,7 @@ img.post-avatar {
   color: white;
   min-width: 220px;
   background-color: #52C489;
-  border-radius: 100px;
+  border-radius: 6px;
   text-align: center;
   padding: 11px 0px;
 }

@@ -87,7 +87,7 @@
                   (assoc :source default-source)
                   (assoc :from default-from)
                   (assoc :reply-to default-reply-to)
-                  (assoc :subject (str "Carrot, 🔔 " (content/reminder-headline (:reminder message)))))]
+                  (assoc :subject (str "Carrot, 🔔 " (content/reminder-notification-headline (:reminder message)))))]
     (try
       (spit html-file (content/reminder-notification-html reminder)) ; create the email in a tmp file
       (inline-css html-file inline-file) ; inline the CSS
@@ -109,7 +109,7 @@
                   (assoc :source default-source)
                   (assoc :from default-from)
                   (assoc :reply-to default-reply-to)
-                  (assoc :subject (str "Carrot 🔔 Reminder about your " (:name (:org reminder)) " post")))]
+                  (assoc :subject (str "Carrot 🔔 Reminder about your " (:name (:org message)) " post")))]
     (try
       (spit html-file (content/reminder-alert-html reminder)) ; create the email in a tmp file
       (inline-css html-file inline-file) ; inline the CSS

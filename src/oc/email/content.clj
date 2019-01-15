@@ -250,17 +250,16 @@
                 "Lead with clarity"]]]]
         (vspacer 24 "header-table" "header-table")]]])
 
+(declare reminder-notification-settings-footer)
+
 (defn- email-footer [type]
   [:table {:class "row footer-table"
            :valign "middle"
            :align "center"}
     [:tr
       [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
-        (case type
-          :reminder-notification
-          reminder-notification-settings-footer
-          ; else nothing
-          [:div])
+        (when (= type :reminder-notification)
+          reminder-notification-settings-footer)
         (vspacer 24 "footer-table" "footer-table")
         [:table {:class "row footer-table"}
           [:tr
@@ -432,7 +431,7 @@
 (defn reminder-alert-headline [reminder-data]
   (str "Hi " (:first-name (:author reminder-data)) ", it's time to share your post"))
 
-(def reminder-alert-settings-footer
+(defn reminder-alert-settings-footer [frequency]
   [:table {:class "row reminders-footer"
          :valign "middle"
          :align "center"}
@@ -443,8 +442,15 @@
         [:tr
           [:th {:class "small-12 large-12"}
             [:p {:class "settings-footer"}
+              (str
               "You can always adjust or turn off reminders in "
-              "This is a weekly reminder. You can always adjust or turn off reminders in "
+              "This is a "
+              (case (s/lower-case frequency)
+                "quarter" "quarterly"
+                "month" "monthly"
+                ;:else
+                "weekly")
+              " reminder. You can always adjust or turn off reminders in ")
               [:a {:href profile-url}
                 "Carrot"]
               "."]]]]
@@ -483,7 +489,7 @@
                 {:href create-post-url}
                 "Ok, let's do it"]]]]
         (spacer 80)
-        reminder-alert-settings-footer]]))
+        (reminder-alert-settings-footer (:frequency reminder-data))]]))
 
 ;; Reminder notification
 
