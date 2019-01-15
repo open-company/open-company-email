@@ -429,7 +429,7 @@
 ;; Reminder alert
 
 (defn reminder-alert-headline [reminder-data]
-  (str "Hi " (:first-name (:author reminder-data)) ", it's time to share your post"))
+  (str "Hi " (:first-name (:author reminder-data)) ", it's time to update your team"))
 
 (defn reminder-alert-settings-footer [frequency]
   [:table {:class "row reminders-footer"
@@ -443,14 +443,13 @@
           [:th {:class "small-12 large-12"}
             [:p {:class "settings-footer"}
               (str
-              "You can always adjust or turn off reminders in "
               "This is a "
               (case (s/lower-case frequency)
                 "quarter" "quarterly"
                 "month" "monthly"
                 ;:else
                 "weekly")
-              " reminder. You can always adjust or turn off reminders in ")
+              " reminder. You can adjust or turn off reminders in ")
               [:a {:href profile-url}
                 "Carrot"]
               "."]]]]
