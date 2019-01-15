@@ -29,7 +29,7 @@ table th.body-spacer {
 h1 {
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 24px;
-  font-weight: bold;  
+  font-weight: bold;
   color: #34414F;
   margin: 0px;
 }
@@ -37,7 +37,7 @@ h1 {
 h2 {
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 16px;
-  font-weight: bold;  
+  font-weight: bold;
   color: #3FBD7C;
   margin: 0px;
 }
@@ -112,7 +112,7 @@ table.footer a {
   border-radius: 6px;
 }
 
-table.email-content.row tr td.columns {
+table.email-content tr td.vertical-padding, table.email-content tr td.columns.vertical-padding {
   padding: 0 24px !important;
 }
 
@@ -559,6 +559,23 @@ img.logo {
   text-align: center;
 }
 
+.settings-footer {
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-size: 14px;
+  font-weight: 400;
+  color: #888D94;
+  text-align: left;
+}
+
+.settings-footer a, .settings-footer a:visited {
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-size: 14px;
+  font-weight: 400;
+  color: #888D94;
+  text-decoration: underline;
+  text-align: left;
+}
+
 .reminders-footer-paragraph a, .reminders-footer-paragraph a:visited {
   color: #888D94;
   text-decoration: underline;
@@ -574,7 +591,7 @@ h2.reminder-headline {
   text-align: center;
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 16px;
-  font-weight: bold;  
+  font-weight: bold;
   color: #34414F;
   margin: 0px;
 }
