@@ -447,6 +447,7 @@
               (case (s/lower-case frequency)
                 "quarter" "quarterly"
                 "month" "monthly"
+                "other week" "bi-weekly"
                 ;:else
                 "weekly")
               " reminder. You can adjust or turn off reminders in ")
