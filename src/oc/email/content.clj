@@ -500,7 +500,7 @@
   (str (first-name (:author reminder-data)) " created a new reminder for you"))
 
 (defn reminder-notification-subline [reminder-data]
-  (str (:frequency reminder-data) " starting " (post-date (:start-date reminder-data))))
+  (str (:frequency reminder-data) " starting " (post-date (:next-send reminder-data))))
 
 (def reminder-notification-settings-footer
   [:table {:class "row reminders-footer"
