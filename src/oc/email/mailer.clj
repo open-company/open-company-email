@@ -344,6 +344,6 @@
   (mailer/send-reminder-notification (assoc reminder-notification-request :to "change@me.com"))
 
   (def reminder-alert-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/reminders/alert.json"))))
-  (mailer/send-alert-notification (assoc reminder-alert-request :to "change@me.com"))
+  (mailer/send-reminder-alert (assoc reminder-alert-request :to "change@me.com"))
 
 )

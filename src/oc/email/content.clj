@@ -432,7 +432,7 @@
   (or (:first-name user-map) (first (s/split (:name user-map) #"\s"))))
 
 (defn reminder-alert-headline [reminder-data]
-  (str "Hi " (first-name (:author reminder-data)) ", it's time to update your team"))
+  (str "Hi " (first-name (:assignee reminder-data)) ", it's time to update your team"))
 
 (defn reminder-alert-settings-footer [frequency]
   [:table {:class "row reminders-footer"
