@@ -428,8 +428,11 @@
 
 ;; Reminder alert
 
+(defn- first-name [user-map]
+  (or (:first-name user-map) (first (s/split (:name user-map) #"\s"))))
+
 (defn reminder-alert-headline [reminder-data]
-  (str "Hi " (:first-name (:author reminder-data)) ", it's time to update your team"))
+  (str "Hi " (first-name (:author reminder-data)) ", it's time to update your team"))
 
 (defn reminder-alert-settings-footer [frequency]
   [:table {:class "row reminders-footer"
@@ -494,7 +497,7 @@
 ;; Reminder notification
 
 (defn reminder-notification-headline [reminder-data]
-  (str (:first-name (:author reminder-data)) " created a new reminder for you"))
+  (str (first-name (:author reminder-data)) " created a new reminder for you"))
 
 (defn reminder-notification-subline [reminder-data]
   (str (:frequency reminder-data) " starting " (post-date (:start-date reminder-data))))
