@@ -82,12 +82,13 @@
   (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
         html-file (str uuid-fragment ".html")
         inline-file (str uuid-fragment ".inline.html")
+        reminder-data (:reminder (:notification message))
         reminder (-> message 
                   (keywordize-keys)
                   (assoc :source default-source)
                   (assoc :from default-from)
                   (assoc :reply-to default-reply-to)
-                  (assoc :subject (str "Carrot, 🔔 " (content/reminder-notification-headline (:reminder message)))))]
+                  (assoc :subject (str "Carrot, 🔔 " (content/reminder-notification-headline reminder-data))))]
     (try
       (spit html-file (content/reminder-notification-html reminder)) ; create the email in a tmp file
       (inline-css html-file inline-file) ; inline the CSS
