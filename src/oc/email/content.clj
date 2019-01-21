@@ -2,6 +2,7 @@
   (:require [clojure.string :as s]
             [clojure.walk :refer (keywordize-keys)]
             [clj-time.format :as time-format]
+            [clj-time.core :as t]
             [hiccup.core :as h]
             [hickory.core :as hickory]
             [oc.lib.jwt :as jwt]
@@ -13,6 +14,7 @@
 (def iso-format (time-format/formatters :date-time))
 (def date-format (time-format/formatter "MMMM d"))
 (def date-format-year (time-format/formatter "MMMM d YYYY"))
+(def day-month-date-year (time-format/formatter "EEEE, MMM. dd, YYYY"))
 
 (def profile-url (str config/web-url "/profile/notifications"))
 
@@ -53,7 +55,7 @@
 (def verify-instructions-2 "Please click the link below to verify your account:")
 (def verify-button-text "verify_email")
 
-(def digest-title-daily "Yesterday %s %s")
+(def digest-title-daily "☕ Your %s morning digest")
 
 ;; ----- HTML Fragments -----
 
@@ -345,9 +347,7 @@
     (assoc board :posts (map #(assoc % :board-name board-name) (:posts board)))))
 
 (defn digest-title [org-name]
-  (if org-name
-    (format digest-title-daily "at" org-name)
-    (format digest-title-daily "in" "Carrot")))
+  (format digest-title-daily (or org-name "Carrot")))
 
 (defn- digest-preheader [digest-data]
   (let [org-name (:org-name digest-data)]
@@ -372,15 +372,18 @@
 }
 "])
 
+(defn- digest-content-date []
+  (time-format/unparse day-month-date-year (t/now)))
+
 (defn- digest-content [digest]
   (let [logo-url (:logo-url digest)
         logo? (not (s/blank? logo-url))
-        org-name (:org-name digest)
+        org-name (or (:org-name digest) "Carrot")
         boards (map posts-with-board-name (:boards digest))
         posts (mapcat :posts boards)
         digest-url (get-digest-url digest)
         first-name (:first-name digest)
-        digest-headline (digest-title org-name)]
+        digest-headline "Your morning digest"]
     [:td {:class "small-12 large-12 columns main-wrapper" :valign "middle" :align "center"}
       [:center
         (when logo? (org-logo {:org-name (:org-name digest)
@@ -390,13 +393,11 @@
                                :align "center"}))
         (when logo? (spacer 32))
         (h1 digest-headline "center-align")
+        (paragraph
+          (clojure.string/upper-case
+            (str org-name " &#9679; " (digest-content-date)))
+          nil "attribution center-align")
         (spacer 16)
-        [:table {:class "row"}
-          [:tr
-            [:th {:class "small-12 large-12 columns"}
-              [:a.go-to-posts
-                {:href digest-url}
-                "Go to posts"]]]]
         (spacer 40)
         [:table
           {:cellpadding "0"
