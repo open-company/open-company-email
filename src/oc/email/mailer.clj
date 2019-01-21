@@ -88,7 +88,7 @@
                   (assoc :source default-source)
                   (assoc :from default-from)
                   (assoc :reply-to default-reply-to)
-                  (assoc :subject (str "Carrot, 🔔 " (content/reminder-notification-headline reminder-data))))]
+                  (assoc :subject (str "🔔 " (content/reminder-notification-headline reminder-data))))]
     (try
       (spit html-file (content/reminder-notification-html reminder)) ; create the email in a tmp file
       (inline-css html-file inline-file) ; inline the CSS
