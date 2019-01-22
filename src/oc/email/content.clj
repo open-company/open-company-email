@@ -5,6 +5,7 @@
             [clj-time.core :as t]
             [hiccup.core :as h]
             [hickory.core :as hickory]
+            [taoensso.timbre :as timbre]
             [oc.lib.jwt :as jwt]
             [oc.email.config :as config]))
 
@@ -70,7 +71,7 @@
                                      " logo"))}
         [:tr 
           [:th {:class "small-12 large-12 first last columns"}
-            [:table 
+            [:table {:class css-class}
               [:tr 
                 [:th
                   [:div
@@ -227,27 +228,30 @@
 ;               [:p {:class "attribution"} attribution]]]]]
 ;       [:th {:class "small-1 large-1 last columns"}]]))
 
-(defn- email-header [& [right-copy]]
-  [:table {:class "row header-table"
-           :valign "middle"
-           :align "center"}
-    [:tr
-      [:td {:class "small-12 large-12 columns main-wrapper" :valign "middle" :align "center"}
-        (vspacer 24 "header-table" "header-table")
-        [:table {:class "row header-table"}
-          [:tr
-            [:th {:class "small-6 large-6 columns header-icon"}
-              [:a
-                {:href config/web-url}
-                [:img {:src (str config/email-images-prefix "/email_images/carrot_logo_with_copy_colors@2x.png")
-                       :width "90"
-                       :height "22"
-                       :alt "Carrot"}]]]
-            [:th {:class "small-6 large-6 columns header-right"}
-              [:span.header-right-span
-                "Lead with clarity"]]]]
-        (vspacer 24 "header-table header-bottom-border" "header-table")
-        (vspacer 40 "header-table" "header-table")]]])
+(defn- email-header [digest]
+  (let [header-table-class (if digest
+                             "digest-header"
+                             "header-table")]
+    [:table {:class "row header-table"
+             :valign "middle"
+             :align "center"}
+      [:tr
+        [:td {:class "small-12 large-12 columns main-wrapper" :valign "middle" :align "center"}
+         (vspacer 24 "header-table" "header-table")
+         [:table {:class "row header-table"}
+           [:tr
+             [:th {:class "small-6 large-6 columns header-icon"}
+               [:a
+                 {:href config/web-url}
+                 [:img {:src (str config/email-images-prefix "/email_images/carrot_logo_with_copy_colors@2x.png")
+                        :width "90"
+                        :height "22"
+                        :alt "Carrot"}]]]
+             [:th {:class "small-6 large-6 columns header-right"}
+               [:span.header-right-span
+                 "Lead with clarity"]]]]
+         (vspacer 24 "header-table header-bottom-border" "header-table")
+         (vspacer 40 header-table-class header-table-class)]]]))
 
 (defn- email-footer []
   [:table {:class "row footer-table"
@@ -307,6 +311,7 @@
         avatar-url (fix-avatar-url (:avatar-url publisher))
         headline (post-headline entry)
         vid (:video-id entry)]
+    (timbre/debug avatar-url)
     [:table
       {:cellpadding "0"
        :cellspacing "0"
@@ -395,14 +400,14 @@
                                :org-logo-height (:logo-height digest)
                                :align "center"
                                :class "digest-header"}))
-        (when logo? (spacer 32))
-        (h1 digest-headline "center-align")
+        (when logo? (spacer 32 "digest-header" "digest-header"))
+        (h1 digest-headline "center-align digest-header")
         (paragraph
           (clojure.string/upper-case
             (str org-name " &#9679; " (digest-content-date)))
-          nil "attribution center-align")
-        (spacer 16)
-        (spacer 40)
+          "digest-header" "attribution center-align digest-header")
+        (spacer 16 "digest-header" "digest-header")
+        (spacer 40 "digest-header" "digest-header")
         [:table
           {:cellpadding "0"
            :cellspacing "0"
@@ -648,7 +653,7 @@
           [:td {:valign "middle"
                 :align "center"}
             [:center
-              (email-header)
+              (email-header (= type :digest))
               [:table {:class "row email-content"
                        :valign "middle"
                        :align "center"}

@@ -395,9 +395,9 @@ img.post-avatar {
   color: #FB5E48;
 }
 
-span.post-title {
-  color: #34414F;
-}
+//span.post-title {
+//  color: #34414F;
+//}
 
 span.must-see-container {
   background-color: rgba(97, 135, 248, .2);
@@ -491,7 +491,7 @@ div.logo-container {
   width: 40px;
   height: 40px;
   padding: 7px;
-  background-color: transparent;
+  background-color: #fff;
   border: 1px solid #ECECEC;
   border-radius: 4px;
   margin: 0 auto;
