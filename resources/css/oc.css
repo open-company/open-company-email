@@ -504,6 +504,10 @@ img.logo {
   object-fit: contain;
 }
 
+.digest-header {
+  background-color: #FFECE9 !important;
+}
+
 .hidden {
   display: none;
 }

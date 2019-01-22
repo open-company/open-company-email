@@ -61,10 +61,13 @@
 
 (defn- org-logo
   [{org-name :org-name logo-url :org-logo-url logo-height :org-logo-height logo-width :org-logo-width
-    align :align}]
+    align :align
+    css-class :class}]
   (let [logo? (and logo-url logo-height logo-width)]
     (when logo?
-      [:table {:class "row logo"}
+      [:table {:class (str "row  " (if css-class
+                                     css-class
+                                     " logo"))}
         [:tr 
           [:th {:class "small-12 large-12 first last columns"}
             [:table 
@@ -390,7 +393,8 @@
                                :org-logo-url logo-url
                                :org-logo-width (:logo-width digest)
                                :org-logo-height (:logo-height digest)
-                               :align "center"}))
+                               :align "center"
+                               :class "digest-header"}))
         (when logo? (spacer 32))
         (h1 digest-headline "center-align")
         (paragraph
