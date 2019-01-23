@@ -72,11 +72,11 @@
       [:table {:class (str "row  " (if css-class
                                      css-class
                                      " logo"))}
-        [:tr 
-          [:th {:class "small-12 large-12 first last columns"}
+        [:tr {:class css-class}
+          [:th {:class (str "small-12 large-12 first last columns" (when css-class css-class))}
             [:table {:class css-class}
-              [:tr 
-                [:th
+              [:tr {:class css-class}
+                [:th {:class css-class}
                   [:div
                     {:class "logo-container"}
                     [:img {:class (str "logo " (if (= align "center")
@@ -799,11 +799,12 @@
 ;; ----- General HTML, common to all emails -----
 
 (defn- body [data]
-  (let [type (:type data)]
+  (let [type (:type data)
+        digest? (= type :digest)]
     [:body
-      (when (= (:type data) :digest)
+      (when digest?
         (go-to-posts-script data))
-      (when (= type :digest)
+      (when digest?
         (digest-preheader data))
       [:table {:class "body"
                :with "100%"}
@@ -811,14 +812,16 @@
           [:td {:valign "middle"
                 :align "center"}
             [:center
-              (email-header (= type :digest))
+              (email-header digest?)
               [:table {:class "row email-content"
                        :valign "middle"
                        :align "center"}
                 [:tr
                   [:td
                     {:class "vertical-padding"}
-                    (spacer 40 "top-email-content")]]
+                   (spacer 40 (if digest?
+                                "digest-header"
+                                "top-email-content"))]]
                 [:tr
                   (case type
                     :reset (token-content "small-12 large-12 columns main-wrapper vertical-padding" type data)
