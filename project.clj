@@ -16,7 +16,7 @@
     ;; Lisp on the JVM http://clojure.org/documentation
     [org.clojure/clojure "1.10.0"]
     ;; HTML rendering https://github.com/weavejester/hiccup
-    [hiccup "2.0.0-alpha1"]
+    [hiccup "2.0.0-alpha2"]
     ;; Async programming tools https://github.com/ztellman/manifold
     [manifold "0.1.9-alpha3"]
     ;; Namespace management https://github.com/clojure/tools.namespace

@@ -26,11 +26,12 @@
 
 ;; ----- Copy -----
 
-(def carrot-explainer "Carrot is the company digest that keeps everyone aligned around what matters most.")
+(def carrot-explainer-fragment "the company digest that keeps fast-growing and remote teams up to date with the information that matters.")
+(def carrot-explainer (str "Carrot is " carrot-explainer-fragment))
 
 (def invite-message "Join your team on Carrot")
 (def invite-message-with-company "Join the %s team on Carrot")
-(def invite-instructions "%s has invited you to Carrot - a leadership communication platform that keeps teams focused on what matters.")
+(def invite-instructions (str "%s has invited you to Carrot - " carrot-explainer-fragment))
 (def invite-link-instructions "Click here to join your team:")
 (def invite-button "accept_invitation")
 
@@ -39,8 +40,7 @@
 
 (def board-invite-title "You’ve been invited to a private section on Carrot")
 (def board-invite-message "%s has invited you to join a private section on Carrot called “")
-(def board-invite-message-2 "”. Carrot is a leadership communication platform that keeps everyone focused on what matters.")
-; "%s invited you to join a private section")
+(def board-invite-message-2 (str "”. " carrot-explainer))
 (def board-invite-button "view_section")
 
 (def reset-message "Password reset")
@@ -49,7 +49,7 @@
 (def reset-button-text "reset_password")
 
 (def verify-message "Please verify your email")
-(def verify-instructions "Welcome to Carrot! Carrot keeps fast-growing and remote teams on the same page.")
+(def verify-instructions (str "Welcome to Carrot! " carrot-explainer))
 (def verify-instructions-2 "Please click the link below to verify your account:")
 (def verify-button-text "verify_email")
 
