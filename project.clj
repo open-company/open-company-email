@@ -16,7 +16,7 @@
     ;; Lisp on the JVM http://clojure.org/documentation
     [org.clojure/clojure "1.10.0"]
     ;; HTML rendering https://github.com/weavejester/hiccup
-    [hiccup "2.0.0-alpha1"]
+    [hiccup "2.0.0-alpha2"]
     ;; Async programming tools https://github.com/ztellman/manifold
     [manifold "0.1.9-alpha3"]
     ;; Namespace management https://github.com/clojure/tools.namespace
@@ -25,7 +25,6 @@
 
     ;; Library for OC projects https://github.com/open-company/open-company-lib
     [open-company/lib "0.16.33"]
-                  
     ;; In addition to common functions, brings in the following common dependencies used by this project:
     ;; Component - Component Lifecycle https://github.com/stuartsierra/component
     ;; Schema - Data validation https://github.com/Prismatic/schema

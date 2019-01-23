@@ -76,6 +76,51 @@
         (io/delete-file html-file true)
         (io/delete-file inline-file true)))))
 
+(defn send-reminder-notification
+  "Create an HTML notification of a created reminder and email it to the specified recipient."
+  [message]
+  (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
+        html-file (str uuid-fragment ".html")
+        inline-file (str uuid-fragment ".inline.html")
+        reminder-data (:reminder (:notification message))
+        reminder (-> message 
+                  (keywordize-keys)
+                  (assoc :source default-source)
+                  (assoc :from default-from)
+                  (assoc :reply-to default-reply-to)
+                  (assoc :subject (str "🔔 " (content/reminder-notification-headline reminder-data))))]
+    (try
+      (spit html-file (content/reminder-notification-html reminder)) ; create the email in a tmp file
+      (inline-css html-file inline-file) ; inline the CSS
+      ;; Email it to the recipient
+      (email reminder {:html (slurp inline-file)})
+      (finally
+        ;; remove the tmp files
+        (io/delete-file html-file true)
+        (io/delete-file inline-file true)))))
+
+(defn send-reminder-alert
+  "Create an HTML email to alert of an upcoming reminder and send it to the specified recipient"
+  [message]
+  (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
+        html-file (str uuid-fragment ".html")
+        inline-file (str uuid-fragment ".inline.html")
+        reminder (-> message 
+                  (keywordize-keys)
+                  (assoc :source default-source)
+                  (assoc :from default-from)
+                  (assoc :reply-to default-reply-to)
+                  (assoc :subject (str "Carrot 🔔 Reminder about your " (:name (:org message)) " post")))]
+    (try
+      (spit html-file (content/reminder-alert-html reminder)) ; create the email in a tmp file
+      (inline-css html-file inline-file) ; inline the CSS
+      ;; Email it to the recipient
+      (email reminder {:html (slurp inline-file)})
+      (finally
+        ;; remove the tmp files
+        (io/delete-file html-file true)
+        (io/delete-file inline-file true)))))
+
 (defn send-invite
   "Create an HTML and text invite and email it to the specified recipient."
   [message]
@@ -295,5 +340,11 @@
   (def token-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/token/apple.json"))))
   (mailer/send-token :reset (assoc token-request :to "change@me.com"))
   (mailer/send-token :verify (assoc token-request :to "change@me.com"))
+
+  (def reminder-notification-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/reminders/notification.json"))))
+  (mailer/send-reminder-notification (assoc reminder-notification-request :to "change@me.com"))
+
+  (def reminder-alert-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/reminders/alert.json"))))
+  (mailer/send-reminder-alert (assoc reminder-alert-request :to "change@me.com"))
 
 )
