@@ -258,7 +258,7 @@
              [:th {:class "small-6 large-6 columns header-right"}
                [:span.header-right-span
                  "Lead with clarity"]]]]
-         (vspacer 24 "header-table" "header-table")]]])
+         (vspacer 24 "header-table" "header-table")]]]))
 
 (declare reminder-notification-settings-footer)
 
