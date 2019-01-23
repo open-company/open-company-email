@@ -7,7 +7,7 @@
   "notification": {
     "reminder": {
       "frequency": "Weekly",
-      "start-date": "2018-12-21T02:12:21.123Z",
+      "next-send": "2019-12-21T02:12:21.123Z",
       "headline": "Design weekly",
       "assignee": {
         "first-name": "Iacopo",
