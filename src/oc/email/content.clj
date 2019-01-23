@@ -1,6 +1,7 @@
 (ns oc.email.content
   (:require [clojure.string :as s]
             [clojure.walk :refer (keywordize-keys)]
+            [clj-time.core :as time]
             [clj-time.format :as time-format]
             [hiccup.core :as h]
             [hickory.core :as hickory]
@@ -13,6 +14,8 @@
 (def iso-format (time-format/formatters :date-time))
 (def date-format (time-format/formatter "MMMM d"))
 (def date-format-year (time-format/formatter "MMMM d YYYY"))
+(def reminder-date-format (time-format/formatter "MMMM d"))
+(def reminder-date-format-year (time-format/formatter "MMMM d YYYY"))
 
 (def profile-url (str config/web-url "/profile/notifications"))
 
@@ -276,8 +279,11 @@
 ;; ----- Posts common ----
 
 (defn- post-date [timestamp]
-  (let [d (time-format/parse iso-format timestamp)]
-    (time-format/unparse date-format d)))
+  (let [d (time-format/parse iso-format timestamp)
+        n (time/now)
+        same-year? (= (time/year n) (time/year d))
+        output-format (if same-year? date-format date-format-year)]
+    (time-format/unparse output-format d)))
 
 (defn- post-attribution [entry show-board? & [css-class]]
   (paragraph
@@ -474,12 +480,12 @@
         create-post-url (str (s/join "/" [config/web-url org-slug "all-posts"]) "?new")]
     [:td {:class "small-12 large-12 columns main-wrapper vertical-padding" :valign "middle" :align "center"}
       [:center
-        ; (when logo? (org-logo {:org-name org-name
-        ;                        :org-logo-url logo-url
-        ;                        :org-logo-width logo-width
-        ;                        :org-logo-height logo-height
-        ;                        :align "center"}))
-        ; (when logo? (spacer 32))
+        (when logo? (org-logo {:org-name org-name
+                               :org-logo-url logo-url
+                               :org-logo-width logo-width
+                               :org-logo-height logo-height
+                               :align "center"}))
+        (when logo? (spacer 32))
         (spacer 80)
         (h1 headline "center-align")
         (spacer 8)
@@ -496,11 +502,28 @@
 
 ;; Reminder notification
 
+(defn- day-string [d]
+ (case d
+  1 "Monday"
+  2 "Tuesday"
+  3 "Wednesday"
+  4 "Thursday"
+  5 "Friday"
+  6 "Saturday"
+  "Sunday"))
+
+(defn- reminder-due-date [timestamp]
+  (let [d (time-format/parse iso-format timestamp)
+        n (time/now)
+        same-year? (= (time/year n) (time/year d))
+        output-format (if same-year? reminder-date-format reminder-date-format-year)]
+    (str (day-string (time/day-of-week d)) ", " (time-format/unparse output-format d))))
+
 (defn reminder-notification-headline [reminder-data]
   (str (first-name (:author reminder-data)) " created a new reminder for you"))
 
 (defn reminder-notification-subline [reminder-data]
-  (str (:frequency reminder-data) " starting " (post-date (:next-send reminder-data))))
+  (str (:frequency reminder-data) " starting " (reminder-due-date (:next-send reminder-data))))
 
 (def reminder-notification-settings-footer
   [:table {:class "row reminders-footer"
@@ -542,9 +565,9 @@
         (when logo? (spacer 32))
         (h1 headline "center-align")
         (spacer 65)
-        (h2-no-link subline "center-align" "reminder-headline")
+        (h2-no-link title "center-align" "reminder-headline")
         (spacer 8)
-        (paragraph title "center-align" "center-align")
+        (paragraph subline "center-align" "center-align")
         (spacer 16)
         [:table {:class "row"}
           [:tr
