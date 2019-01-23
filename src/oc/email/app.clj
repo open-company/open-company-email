@@ -21,6 +21,8 @@
         :digest (mailer/send-digest msg-body)
         :sns (mailer/handle-data-change msg-body)
         :notify (mailer/send-notification msg-body)
+        :reminder-alert (mailer/send-reminder-alert msg-body)
+        :reminder-notification (mailer/send-reminder-notification msg-body)
         (timbre/error "Unrecognized message type" msg-type))))
   (sqs/ack done-channel msg))
 

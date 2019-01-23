@@ -1,7 +1,7 @@
 body,
 html,
 .body {
-  background-color: white;
+  background-color: #FBFAF7;
   color: #34414F;
   width: 100%;
   height: 100%;
@@ -13,7 +13,7 @@ html,
 }
 
 table {
-  background-color: white !important;
+  background-color: #FBFAF7 !important;
 }
 
 table th, 
@@ -29,7 +29,7 @@ table th.body-spacer {
 h1 {
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 24px;
-  font-weight: bold;  
+  font-weight: bold;
   color: #34414F;
   margin: 0px;
 }
@@ -37,7 +37,7 @@ h1 {
 h2 {
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 16px;
-  font-weight: bold;  
+  font-weight: bold;
   color: #3FBD7C;
   margin: 0px;
 }
@@ -88,7 +88,7 @@ table.footer a {
 }
 
 .header-table {
-  background-color: white !important;
+  background-color: #FBFAF7 !important;
   max-width: 600px;
   width: 100%;
   text-align: center;
@@ -96,7 +96,7 @@ table.footer a {
 }
 
 .footer-table {
-  background-color: white !important;
+  background-color: #FBFAF7 !important;
   max-width: 600px;
   width: 100%;
   text-align: center;
@@ -109,6 +109,25 @@ table.footer a {
   background-color: white !important;
   text-align: center;
   vertical-align: middle;
+  border-radius: 6px;
+}
+
+table.email-content tr td.vertical-padding, table.email-content tr td.columns.vertical-padding {
+  padding: 0 24px !important;
+}
+
+.email-content tr:first-child, .email-content tr:first-child td:first-child, .email-content tr:first-child th:first-child {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.email-content tr:last-child, .email-content tr:last-child td:last-child, .email-content tr:last-child th:last-child {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.email-content tr, .email-content tr td {
+  background-color: white !important;
 }
 
 .header-bottom-border {
@@ -157,6 +176,7 @@ p.header-paragraph {
 
 p.footer-paragraph.bottom-footer, p.footer-paragraph.bottom-footer a {
   color: #888D94;
+  text-align: center;
 }
 
 p.header-paragraph.top-header, p.footer-paragraph.top-header a {
@@ -306,7 +326,7 @@ span.oc-mention {
 }
 
 
-.note-paragraph {
+.note-paragraph, .note-paragraph tr, .note-paragraph tr th {
   background-color: #FDF6E4 !important;
 }
 
@@ -365,7 +385,7 @@ img.post-avatar {
   color: white;
   min-width: 220px;
   background-color: #52C489;
-  border-radius: 100px;
+  border-radius: 6px;
   text-align: center;
   padding: 11px 0px;
 }
@@ -376,6 +396,19 @@ img.post-avatar {
 
 .center-align {
   text-align: center;
+}
+
+.view-reminders {
+  display: block;
+  margin: 0 auto;
+  font-size: 16px;
+  font-weight: bold;
+  color: white !important;
+  width: 128px;
+  background-color: #FA6654;
+  border-radius: 6px;
+  text-align: center;
+  padding: 11px 0px;
 }
 
 .go-to-posts {
@@ -510,6 +543,61 @@ img.logo {
 
 .hidden {
   display: none;
+}
+
+.reminders-footer {
+  background-color: #ECECEC;
+}
+
+.reminders-bottom-footer, .reminders-bottom-footer tr, .reminders-bottom-footer tr th,
+.reminders-bottom-footer .spacer, .reminders-bottom-footer .spacer tr, .reminders-bottom-footer .spacer tr th {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.reminders-footer-paragraph {
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-size: 14px;
+  font-weight: 400;
+  color: #888D94;
+  text-align: center;
+}
+
+.settings-footer {
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-size: 14px;
+  font-weight: 400;
+  color: #888D94;
+  text-align: left;
+}
+
+.settings-footer a, .settings-footer a:visited {
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-size: 14px;
+  font-weight: 400;
+  color: #888D94;
+  text-decoration: underline;
+  text-align: left;
+}
+
+.reminders-footer-paragraph a, .reminders-footer-paragraph a:visited {
+  color: #888D94;
+  text-decoration: underline;
+}
+
+.top-email-content, .top-email-content tr, .top-email-content tr th,
+.top-email-content .spacer, .top-email-content .spacer tr, .top-email-content .spacer tr th {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+h2.reminder-headline {
+  text-align: center;
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-size: 16px;
+  font-weight: bold;
+  color: #34414F;
+  margin: 0px;
 }
 
 /*
