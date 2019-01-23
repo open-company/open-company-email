@@ -14,8 +14,8 @@
 (def iso-format (time-format/formatters :date-time))
 (def date-format (time-format/formatter "MMMM d"))
 (def date-format-year (time-format/formatter "MMMM d YYYY"))
-(def reminder-date-format (time-format/formatter "MMMM d"))
-(def reminder-date-format-year (time-format/formatter "MMMM d YYYY"))
+(def reminder-date-format (time-format/formatter "EEEE, MMMM d"))
+(def reminder-date-format-year (time-format/formatter "EEEE, MMMM d YYYY"))
 
 (def profile-url (str config/web-url "/profile/notifications"))
 
@@ -502,22 +502,12 @@
 
 ;; Reminder notification
 
-(defn- day-string [d]
- (case d
-  1 "Monday"
-  2 "Tuesday"
-  3 "Wednesday"
-  4 "Thursday"
-  5 "Friday"
-  6 "Saturday"
-  "Sunday"))
-
 (defn- reminder-due-date [timestamp]
   (let [d (time-format/parse iso-format timestamp)
         n (time/now)
         same-year? (= (time/year n) (time/year d))
         output-format (if same-year? reminder-date-format reminder-date-format-year)]
-    (str (day-string (time/day-of-week d)) ", " (time-format/unparse output-format d))))
+    (time-format/unparse output-format d)))
 
 (defn reminder-notification-headline [reminder-data]
   (str (first-name (:author reminder-data)) " created a new reminder for you"))
