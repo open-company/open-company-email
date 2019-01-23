@@ -522,8 +522,15 @@
 (defn reminder-notification-headline [reminder-data]
   (str (first-name (:author reminder-data)) " created a new reminder for you"))
 
+(defn- frequency-string [f]
+  (case (s/lower-case f)
+    "weekly" "Weekly"
+    "biweekly" "Every other week"
+    "monthly" "Monthly"
+    "Quarterly"))
+
 (defn reminder-notification-subline [reminder-data]
-  (str (:frequency reminder-data) " starting " (reminder-due-date (:next-send reminder-data))))
+  (str (frequency-string (:frequency reminder-data)) " starting " (reminder-due-date (:next-send reminder-data))))
 
 (def reminder-notification-settings-footer
   [:table {:class "row reminders-footer"
