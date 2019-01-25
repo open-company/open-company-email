@@ -240,28 +240,25 @@
 
 
 (defn- email-header [digest]
-  (let [header-table-class (if digest
-                             "digest-header"
-                             "header-table")]
-    [:table {:class "row header-table"
-             :valign "middle"
-             :align "center"}
-      [:tr
-        [:td {:class "small-12 large-12 columns main-wrapper" :valign "middle" :align "center"}
-         (vspacer 24 "header-table" "header-table")
-         [:table {:class "row header-table"}
-           [:tr
-             [:th {:class "small-6 large-6 columns header-icon"}
-               [:a
-                 {:href config/web-url}
-                 [:img {:src (str config/email-images-prefix "/email_images/carrot_logo_with_copy_colors@2x.png")
-                        :width "90"
-                        :height "22"
-                        :alt "Carrot"}]]]
-             [:th {:class "small-6 large-6 columns header-right"}
-               [:span.header-right-span
-                 "Lead with clarity"]]]]
-         (vspacer 24 "header-table" "header-table")]]]))
+  [:table {:class "row header-table"
+           :valign "middle"
+           :align "center"}
+    [:tr
+      [:td {:class "small-12 large-12 columns main-wrapper" :valign "middle" :align "center"}
+        (vspacer 24 "header-table " "header-table")
+        [:table {:class "row header-table"}
+          [:tr
+            [:th {:class "small-6 large-6 columns header-icon"}
+              [:a
+                {:href config/web-url}
+                [:img {:src (str config/email-images-prefix "/email_images/carrot_logo_with_copy_colors@2x.png")
+                       :width "90"
+                       :height "22"
+                       :alt "Carrot"}]]]
+            [:th {:class "small-6 large-6 columns header-right"}
+              [:span.header-right-span
+               "Lead with clarity"]]]]
+       (vspacer 24 "header-table" "header-table")]]])
 
 (declare reminder-notification-settings-footer)
 
@@ -408,22 +405,22 @@
         digest-url (get-digest-url digest)
         first-name (:first-name digest)
         digest-headline "Your morning digest"]
-    [:td {:class "small-12 large-12 columns main-wrapper vertical-padding" :valign "middle" :align "center"}
+    [:td {:class "small-12 large-12 columns main-wrapper" :valign "middle" :align "center"}
       [:center
         (when logo? (org-logo {:org-name (:org-name digest)
                                :org-logo-url logo-url
                                :org-logo-width (:logo-width digest)
                                :org-logo-height (:logo-height digest)
                                :align "center"
-                               :class "digest-header"}))
-        (when logo? (spacer 32 "digest-header" "digest-header"))
-        (h1 digest-headline "center-align digest-header")
+                               :class "digest-header-bg"}))
+        (when logo? (spacer 32 "digest-header-bg" "digest-header-bg"))
+        (h1 digest-headline "center-align digest-header-bg")
         (paragraph
           (clojure.string/upper-case
             (str org-name " &#9679; " (digest-content-date)))
-          "digest-header" "attribution center-align digest-header")
-        (spacer 16 "digest-header" "digest-header")
-        (spacer 40 "digest-header" "digest-header")
+          "digest-header-bg" "attribution center-align digest-header-bg")
+        (spacer 16 "digest-header-bg" "digest-header-bg")
+        (spacer 40 "digest-header-bg" "digest-header-bg")
         [:table
           {:cellpadding "0"
            :cellspacing "0"
@@ -818,9 +815,13 @@
                        :align "center"}
                 [:tr
                   [:td
-                    {:class "vertical-padding"}
-                   (spacer 40 (if digest?
-                                "digest-header"
+                    {:class (when-not digest? "vertical-padding")}
+                   (spacer 40
+                           (str (when digest?
+                                  "digest-header-bg ")
+                                "top-email-content")
+                           (str (when digest?
+                                  "digest-header-bg ")
                                 "top-email-content"))]]
                 [:tr
                   (case type

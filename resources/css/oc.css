@@ -537,7 +537,7 @@ img.logo {
   object-fit: contain;
 }
 
-.digest-header {
+.digest-header-bg {
   background-color: #FFECE9 !important;
 }
 
@@ -601,7 +601,7 @@ h2.reminder-headline {
 }
 
 /*
-  Gmail doesn't linke multiple media queries, if you need to use
+  Gmail doesn't like multiple media queries, if you need to use
   @media only screen and (max-width:596px)
   use the one in foundation.
   Also make sure the syntax is correct. They say it's very picky:
