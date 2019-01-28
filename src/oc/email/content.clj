@@ -111,11 +111,14 @@
       [:th {:class "small-12 large-12 columns"}
         (spacer-table pixels inner-css-class)]]]))
 
-(def horizontal-line
-  [:table {:class "row horizontal-line"}
-    [:tr
+(defn- horizontal-line
+  ([] (horizontal-line nil))
+  ([css-class]
+    [:table {:class (str (when css-class (str css-class " "))
+                         "row horizontal-line")}
+     [:tr
       [:td {:class "small-12 large-12"}
-        (spacer 8)]]])
+       (spacer 8)]]]))
 
 (defn- paragraph
   ([content] (paragraph content ""))
@@ -324,7 +327,6 @@
         avatar-url (fix-avatar-url (:avatar-url publisher))
         headline (post-headline entry)
         vid (:video-id entry)]
-    (timbre/debug avatar-url)
     [:table
       {:cellpadding "0"
        :cellspacing "0"
@@ -367,6 +369,11 @@
   (let [board-name (:name board)]
     (assoc board :posts (map #(assoc % :board-name board-name) (:posts board)))))
 
+(defn- posts-for-board [board]
+  (let [pretext (:name board)
+        posts (:posts board)]
+    (concat [{:type :board :name pretext}] posts)))
+
 (defn digest-title [org-name]
   (format digest-title-daily (or org-name "Carrot")))
 
@@ -401,7 +408,7 @@
         logo? (not (s/blank? logo-url))
         org-name (or (:org-name digest) "Carrot")
         boards (map posts-with-board-name (:boards digest))
-        posts (mapcat :posts boards)
+        posts (mapcat posts-for-board boards)
         digest-url (get-digest-url digest)
         first-name (:first-name digest)
         digest-headline "Your morning digest"]
@@ -417,7 +424,7 @@
         (h1 digest-headline "center-align digest-header-bg")
         (paragraph
           (clojure.string/upper-case
-            (str org-name " &#9679; " (digest-content-date)))
+            (str org-name " - " (digest-content-date)))
           "digest-header-bg" "attribution center-align digest-header-bg")
         (spacer 16 "digest-header-bg" "digest-header-bg")
         (spacer 40 "digest-header-bg" "digest-header-bg")
@@ -435,9 +442,11 @@
                    :class "row"}
                   [:tr
                     [:td {:class "small-12 large-12"}
-                      horizontal-line
                       (spacer 20)
-                      (post-block p)
+                      (if (= (:type p) :board)
+                        (paragraph (:name p))
+                        (post-block p))
+                      (horizontal-line "vertical-padding")
                       (spacer 28)]]])]]]]]))
 
 ;; Reminder alert
