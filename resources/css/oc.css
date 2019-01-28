@@ -50,6 +50,14 @@ p {
   margin: 0px;
 }
 
+p.board-name {
+  color: #888D94;
+  font-size: 18px;
+  font-family: Helvetica, Arial, sans-serif !important;
+  letter-spacing: 0;
+  line-height: 22px;
+}
+
 p.attribution {
   font-size: 12px;
   line-height: 18px;

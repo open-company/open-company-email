@@ -411,7 +411,7 @@
         posts (mapcat posts-for-board boards)
         digest-url (get-digest-url digest)
         first-name (:first-name digest)
-        digest-headline "Your morning digest"]
+        digest-headline  "☕ Your morning digest"]
     [:td {:class "small-12 large-12 columns main-wrapper" :valign "middle" :align "center"}
       [:center
         (when logo? (org-logo {:org-name (:org-name digest)
@@ -444,10 +444,13 @@
                     [:td {:class "small-12 large-12"}
                       (spacer 20)
                       (if (= (:type p) :board)
-                        (paragraph (:name p))
+                        (paragraph (:name p) "board-name" "board-name")
                         (post-block p))
-                      (horizontal-line "vertical-padding")
-                      (spacer 28)]]])]]]]]))
+                      (when (= (:type p) :board)
+                        (horizontal-line "vertical-padding"))
+                      (if-not (= (:type p) :board)
+                        (spacer 28)
+                        (spacer 8))]]])]]]]]))
 
 ;; Reminder alert
 
