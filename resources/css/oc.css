@@ -60,8 +60,8 @@ p.board-name {
 
 p.attribution {
   font-size: 12px;
-  line-height: 18px;
-  color: #888d94;
+  line-height: 14px;
+  color: #888D94;
 }
 
 span.note-body {
@@ -120,6 +120,12 @@ table.footer a {
   border-radius: 6px;
 }
 
+table.email-content tr td.digest-header {
+  background-color: #FFECE9;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
 table.email-content tr td.vertical-padding, table.email-content tr td.columns.vertical-padding {
   padding: 0 24px !important;
 }
@@ -127,6 +133,23 @@ table.email-content tr td.vertical-padding, table.email-content tr td.columns.ve
 .email-content tr:first-child, .email-content tr:first-child td:first-child, .email-content tr:first-child th:first-child {
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
+}
+
+.digest-header-subline {
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 12px;
+  line-height: 16px;
+  color: rgba(52, 66, 80, 0.4);
+  text-align: center;
+  background-color: #FFECE9;
+}
+
+.digest-content {
+  border: 1px solid #F3F3F4;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
 }
 
 .email-content tr:last-child, .email-content tr:last-child td:last-child, .email-content tr:last-child th:last-child {
@@ -436,10 +459,6 @@ img.post-avatar {
   color: #FB5E48;
 }
 
-//span.post-title {
-//  color: #34414F;
-//}
-
 span.must-see-container {
   background-color: rgba(97, 135, 248, .2);
   padding: 0px 4px;
@@ -512,6 +531,10 @@ td.post-block-avatar {
   vertical-align: top;
 }
 
+td.board-block-bottom-line {
+  border-bottom: 1px solid #F3F3F4;
+}
+
 td.post-block-avatar-right {
   display: inline-block;
   min-height: 32px;
@@ -547,6 +570,11 @@ img.logo {
 
 .digest-header-bg {
   background-color: #FFECE9 !important;
+}
+
+.digest-header-top {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
 }
 
 .hidden {
@@ -606,6 +634,10 @@ h2.reminder-headline {
   font-weight: bold;
   color: #34414F;
   margin: 0px;
+}
+
+span.post-title {
+  color: #2BA767;
 }
 
 /*
