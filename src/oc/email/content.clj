@@ -61,7 +61,13 @@
 
 (def digest-title-daily "☕ Your %s morning digest")
 
+(defn- preheader-spacer []
+  (s/join (repeat 120 "&nbsp;&zwnj;")))
+
 ;; ----- HTML Fragments -----
+
+(defn- preheader [text]
+  [:span.hidden (str text (preheader-spacer))])
 
 (defn- org-logo
   [{org-name :org-name logo-url :org-logo-url logo-height :org-logo-height logo-width :org-logo-width
@@ -377,11 +383,6 @@
 (defn digest-title [org-name]
   (format digest-title-daily (or org-name "Carrot")))
 
-(defn- digest-preheader [digest-data]
-  (let [org-name (:org-name digest-data)]
-    [:span.hidden
-      (str "See the latest updates from your team." (s/join (repeat 120 "&nbsp;&zwnj;")))]))
-
 (defn- get-digest-url [digest-data]
   (s/join "/" [config/web-url (:org-slug digest-data) "all-posts"]))
 
@@ -457,8 +458,8 @@
 (defn- first-name [user-map]
   (or (:first-name user-map) (first (s/split (:name user-map) #"\s"))))
 
-(defn reminder-alert-headline [reminder-data]
-  (str "Hi " (first-name (:assignee reminder-data)) ", it's time to update your team"))
+(defn reminder-alert-headline [data]
+  (str "Hi " (first-name (:assignee (:reminder (:notification data)))) ", it's time to update your team"))
 
 (defn reminder-alert-settings-footer [frequency]
   [:table {:class "row reminders-footer"
@@ -496,7 +497,7 @@
         reminder-data (:reminder (:notification reminder))
         author (:author reminder-data)
         title (:headline reminder-data)
-        headline (reminder-alert-headline reminder-data)
+        headline (reminder-alert-headline reminder)
         create-post-url (str (s/join "/" [config/web-url org-slug "all-posts"]) "?new")]
     [:td {:class "small-12 large-12 columns main-wrapper vertical-padding" :valign "middle" :align "center"}
       [:center
@@ -529,8 +530,8 @@
         output-format (if same-year? reminder-date-format reminder-date-format-year)]
     (time-format/unparse output-format d)))
 
-(defn reminder-notification-headline [reminder-data]
-  (str (first-name (:author reminder-data)) " created a new reminder for you"))
+(defn reminder-notification-headline [data]
+  (str (first-name (:author (:reminder (:notification data)))) " created a new reminder for you"))
 
 (defn- frequency-string [f]
   (case (s/lower-case f)
@@ -569,7 +570,7 @@
         reminder-data (:reminder (:notification reminder))
         author (:author reminder-data)
         title (:headline reminder-data)
-        headline (reminder-notification-headline reminder-data)
+        headline (reminder-notification-headline reminder)
         subline (reminder-notification-subline reminder-data)
         reminders-url (str (s/join "/" [config/web-url org-slug "all-posts"]) "?reminders")]
     [:td {:class "small-12 large-12 columns main-wrapper vertical-padding" :valign "middle" :align "center"}
@@ -673,6 +674,11 @@
         (:token-link invite)]
       (spacer 56)]))
 
+(defn- share-title [data]
+  (let [sharer (:sharer-name data)
+        from (if (s/blank? sharer) "Someone" sharer)]
+    (format share-message from)))
+
 (defn- share-content [entry]
   (let [logo-url (:org-logo-url entry)
         logo? (not (s/blank? logo-url))
@@ -694,7 +700,7 @@
     [:td {:class "small-12 large-12 columns vertical-padding" :valign "middle" :align "center"}
       (when logo? (org-logo entry))
       (when logo? (spacer 32))
-      (h1 (format share-message from))
+      (h1 (share-title entry))
       (spacer 24)
       (post-block entry entry-url)
       (spacer 24)
@@ -706,6 +712,16 @@
       (when show-note? (spacer 24))
       (left-button share-cta entry-url)
       (spacer 56)]))
+
+(defn- notify-intro [msg]
+  (let [notification (:notification msg)
+        mention? (:mention notification)
+        comment? (:interaction-id notification)]
+    (if mention?
+      (if comment?
+        (str "You were mentioned in a comment: ")
+        (str "You were mentioned in a post: "))
+      (str "There is a new comment on your post:"))))
 
 (defn- notify-content [msg]
   (let [notification (:notification msg)
@@ -723,11 +739,7 @@
         first-name (:first-name msg)
         first-name? (not (s/blank? first-name))
         author (:author notification)
-        intro (if mention?
-                (if comment?
-                  (str "You were mentioned in a comment: ")
-                  (str "You were mentioned in a post: "))
-                (str "There is a new comment on your post:"))
+        intro (notify-intro msg)
         notification-author (:author notification)
         notification-author-name (:name notification-author)
         notification-author-url (fix-avatar-url (:avatar-url notification-author))
@@ -813,8 +825,16 @@
     [:body
       (when digest?
         (go-to-posts-script data))
-      (when digest?
-        (digest-preheader data))
+      (case type
+        :reset (preheader reset-message)
+        :verify (preheader "Welcome to Carrot!")
+        :invite (preheader invite-message)
+        :board-notification (preheader board-invite-title)
+        :share-link (preheader (share-title data))
+        :digest (preheader "See the latest updates from your team.")
+        :notify (preheader (notify-intro data))
+        :reminder-notification (preheader (reminder-notification-headline data))
+        :reminder-alert (preheader (reminder-alert-headline data)))
       [:table {:class "body"
                :with "100%"}
         [:tr
@@ -837,8 +857,7 @@
                                 "top-email-content"))]]
                 [:tr
                   (case type
-                    :reset (token-content "small-12 large-12 columns main-wrapper vertical-padding" type data)
-                    :verify (token-content "small-12 large-12 columns main-wrapper vertical-padding" type data)
+                    (:reset :verify) (token-content "small-12 large-12 columns main-wrapper vertical-padding" type data)
                     :invite (invite-content "small-12 large-12 columns main-wrapper vertical-padding" data)
                     :board-notification (board-notification-content data)
                     :share-link (share-content data)
