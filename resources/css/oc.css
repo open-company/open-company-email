@@ -130,7 +130,7 @@ table.email-content tr td.vertical-padding, table.email-content tr td.columns.ve
   padding: 0 24px !important;
 }
 
-.email-content tr:first-child, .email-content tr:first-child td:first-child, .email-content tr:first-child th:first-child {
+.email-content > tr:first-child, .email-content > tr:first-child > td:first-child, .email-content > tr:first-child > th:first-child {
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
 }
@@ -152,7 +152,7 @@ table.email-content tr td.vertical-padding, table.email-content tr td.columns.ve
   border-bottom-right-radius: 6px;
 }
 
-.email-content tr:last-child, .email-content tr:last-child td:last-child, .email-content tr:last-child th:last-child {
+.email-content > tr:last-child, .email-content > tr:last-child > td:last-child, .email-content > tr:last-child > th:last-child {
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
 }
@@ -638,6 +638,14 @@ h2.reminder-headline {
 
 span.post-title {
   color: #2BA767;
+}
+
+p.post-body {
+  color: #2C2D30;
+  font-size: 14px;
+  line-height: 17px;
+  letter-spacing: 0;
+  text-align: left;
 }
 
 /*

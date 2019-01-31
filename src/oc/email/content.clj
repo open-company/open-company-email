@@ -9,7 +9,8 @@
             [hickory.core :as hickory]
             [taoensso.timbre :as timbre]
             [oc.lib.jwt :as jwt]
-            [oc.email.config :as config]))
+            [oc.email.config :as config]
+            [jsoup.soup :as soup]))
 
 (def max-logo 40)
 (def author-logo 32)
@@ -323,7 +324,7 @@
   (let [ms (:must-see entry)]
     [:div
       [:span.post-title
-        (:headline entry)]
+        (.text (soup/parse (:headline entry)))]
       (when ms
         [:span.must-see-container
           [:img
@@ -334,13 +335,20 @@
           [:span.must-see
             "MUST SEE"]])]))
 
+(defn- post-body [cleaned-body]
+  [:div
+    [:p.post-body
+      cleaned-body]])
+
 (defn- post-block
   ([entry] (post-block entry (:url entry)))
   ([entry entry-url]
   (let [publisher (:publisher entry)
         avatar-url (fix-avatar-url (:avatar-url publisher))
         headline (post-headline entry)
-        vid (:video-id entry)]
+        vid (:video-id entry)
+        cleaned-body (text/truncated-body (:body entry))
+        has-body (seq cleaned-body)]
     [:table
       {:cellpadding "0"
        :cellspacing "0"
@@ -355,6 +363,10 @@
         [:td
           {:class (if avatar-url "post-block-avatar-right" "post-block-right")}
           (h2 headline entry-url "")
+          (when has-body
+            (spacer 4 ""))
+          (when has-body
+            (post-body cleaned-body))
           (spacer 8 "")
           (when vid
             [:table
@@ -684,7 +696,7 @@
         logo? (not (s/blank? logo-url))
         org-name (:org-name entry)
         org-name? (not (s/blank? org-name))
-        headline (:headline entry)
+        headline (.text (soup/parse (:headline entry)))
         org-slug (:org-slug entry)
         sharer (:sharer-name entry)
         publisher (:publisher entry)
@@ -917,7 +929,7 @@
         note? (not (s/blank? note))
         org-name (:org-name entry)
         org-name? (not (s/blank? org-name))
-        headline (:headline entry)
+        headline (.text (soup/parse (:headline entry)))
         headline? (not (s/blank? headline))
         org-slug (:org-slug entry)
         secure-uuid (:secure-uuid entry)
