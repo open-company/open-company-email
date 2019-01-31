@@ -7,7 +7,6 @@
             [oc.lib.text :as text]
             [hiccup.core :as h]
             [hickory.core :as hickory]
-            [taoensso.timbre :as timbre]
             [oc.lib.jwt :as jwt]
             [oc.email.config :as config]
             [jsoup.soup :as soup]))
@@ -117,21 +116,6 @@
     [:tr
       [:th {:class "small-12 large-12 columns"}
         (spacer-table pixels inner-css-class)]]]))
-
-(defn- horizontal-line
-  ([] (horizontal-line nil))
-  ([css-class]
-    [:table {:class (str (when css-class (str css-class " "))
-                         "row horizontal-line")}
-     [:tr
-      [:td {:class "small-12 large-12"}
-       (spacer 8)]]]))
-
-(def horizontal-line
-  [:table {:class "row horizontal-line"}
-    [:tr
-      [:td {:class "small-12 large-12"}
-        (spacer 8)]]])
 
 (defn- paragraph
   ([content] (paragraph content ""))
