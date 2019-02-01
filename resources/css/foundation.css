@@ -1213,8 +1213,5 @@ table.button.small-expand center, table.button.small-expanded center {min-width:
   td.large-12 center,
   th.large-12 center {
     min-width: 532px; }
-  td.post-block-avatar-right h2 a:hover,
-  span.post-title:hover {
-    color: #3FBD7C !important;}
   a.video-cover:hover img.video-play {
     opacity: 1 !important;}}

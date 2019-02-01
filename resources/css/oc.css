@@ -50,10 +50,18 @@ p {
   margin: 0px;
 }
 
+p.board-name {
+  color: #888D94;
+  font-size: 18px;
+  font-family: Helvetica, Arial, sans-serif !important;
+  letter-spacing: 0;
+  line-height: 22px;
+}
+
 p.attribution {
   font-size: 12px;
-  line-height: 18px;
-  color: #888d94;
+  line-height: 14px;
+  color: #888D94;
 }
 
 span.note-body {
@@ -112,16 +120,39 @@ table.footer a {
   border-radius: 6px;
 }
 
-table.email-content tr td.vertical-padding, table.email-content tr td.columns.vertical-padding {
-  padding: 0 24px !important;
-}
-
-.email-content tr:first-child, .email-content tr:first-child td:first-child, .email-content tr:first-child th:first-child {
+table.email-content tr td.digest-header {
+  background-color: #FFECE9;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
 }
 
-.email-content tr:last-child, .email-content tr:last-child td:last-child, .email-content tr:last-child th:last-child {
+table.email-content tr td.vertical-padding, table.email-content tr td.columns.vertical-padding {
+  padding: 0 24px !important;
+}
+
+.email-content > tr:first-child, .email-content > tr:first-child > td:first-child, .email-content > tr:first-child > th:first-child {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.digest-header-subline {
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 12px;
+  line-height: 16px;
+  color: rgba(52, 66, 80, 0.4);
+  text-align: center;
+  background-color: #FFECE9;
+}
+
+.digest-content {
+  border: 1px solid #F3F3F4;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.email-content > tr:last-child, .email-content > tr:last-child > td:last-child, .email-content > tr:last-child > th:last-child {
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
 }
@@ -428,10 +459,6 @@ img.post-avatar {
   color: #FB5E48;
 }
 
-span.post-title {
-  color: #34414F;
-}
-
 span.must-see-container {
   background-color: rgba(97, 135, 248, .2);
   padding: 0px 4px;
@@ -504,6 +531,10 @@ td.post-block-avatar {
   vertical-align: top;
 }
 
+td.board-block-bottom-line {
+  border-bottom: 1px solid #F3F3F4;
+}
+
 td.post-block-avatar-right {
   display: inline-block;
   min-height: 32px;
@@ -524,7 +555,7 @@ div.logo-container {
   width: 40px;
   height: 40px;
   padding: 7px;
-  background-color: transparent;
+  background-color: #fff;
   border: 1px solid #ECECEC;
   border-radius: 4px;
   margin: 0 auto;
@@ -535,6 +566,15 @@ img.logo {
   width: 40px;
   height: 40px;
   object-fit: contain;
+}
+
+.digest-header-bg {
+  background-color: #FFECE9 !important;
+}
+
+.digest-header-top {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
 }
 
 .hidden {
@@ -596,8 +636,20 @@ h2.reminder-headline {
   margin: 0px;
 }
 
+span.post-title {
+  color: #2BA767;
+}
+
+p.post-body {
+  color: #2C2D30;
+  font-size: 14px;
+  line-height: 17px;
+  letter-spacing: 0;
+  text-align: left;
+}
+
 /*
-  Gmail doesn't linke multiple media queries, if you need to use
+  Gmail doesn't like multiple media queries, if you need to use
   @media only screen and (max-width:596px)
   use the one in foundation.
   Also make sure the syntax is correct. They say it's very picky:

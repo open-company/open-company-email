@@ -3,17 +3,21 @@
             [clojure.walk :refer (keywordize-keys)]
             [clj-time.core :as time]
             [clj-time.format :as time-format]
+            [clj-time.core :as t]
+            [oc.lib.text :as text]
             [hiccup.core :as h]
             [hickory.core :as hickory]
             [oc.lib.jwt :as jwt]
-            [oc.email.config :as config]))
+            [oc.email.config :as config]
+            [jsoup.soup :as soup]))
 
 (def max-logo 40)
 (def author-logo 32)
 
 (def iso-format (time-format/formatters :date-time))
-(def date-format (time-format/formatter "MMMM d"))
-(def date-format-year (time-format/formatter "MMMM d YYYY"))
+(def date-format (time-format/formatter "MMM. d"))
+(def date-format-year (time-format/formatter "MMM. d YYYY"))
+(def day-month-date-year (time-format/formatter "EEEE, MMM. dd, YYYY"))
 (def reminder-date-format (time-format/formatter "EEEE, MMMM d"))
 (def reminder-date-format-year (time-format/formatter "EEEE, MMMM d YYYY"))
 
@@ -56,7 +60,7 @@
 (def verify-instructions-2 "Please click the link below to verify your account:")
 (def verify-button-text "verify_email")
 
-(def digest-title-daily "Yesterday %s %s")
+(def digest-title-daily "☕ Your %s morning digest")
 
 (defn- preheader-spacer []
   (s/join (repeat 120 "&nbsp;&zwnj;")))
@@ -68,15 +72,17 @@
 
 (defn- org-logo
   [{org-name :org-name logo-url :org-logo-url logo-height :org-logo-height logo-width :org-logo-width
-    align :align}]
+    align :align css-class :class}]
   (let [logo? (and logo-url logo-height logo-width)]
     (when logo?
-      [:table {:class "row logo"}
-        [:tr 
-          [:th {:class "small-12 large-12 first last columns"}
-            [:table 
-              [:tr 
-                [:th
+      [:table {:class (str "row  " (if css-class
+                                     css-class
+                                     " logo"))}
+        [:tr {:class css-class}
+          [:th {:class (str "small-12 large-12 first last columns " (when css-class css-class))}
+            [:table {:class css-class}
+              [:tr {:class css-class}
+                [:th {:class css-class}
                   [:div
                     {:class "logo-container"}
                     [:img {:class (str "logo " (if (= align "center")
@@ -110,12 +116,6 @@
     [:tr
       [:th {:class "small-12 large-12 columns"}
         (spacer-table pixels inner-css-class)]]]))
-
-(def horizontal-line
-  [:table {:class "row horizontal-line"}
-    [:tr
-      [:td {:class "small-12 large-12"}
-        (spacer 8)]]])
 
 (defn- paragraph
   ([content] (paragraph content ""))
@@ -238,13 +238,14 @@
 ;               [:p {:class "attribution"} attribution]]]]]
 ;       [:th {:class "small-1 large-1 last columns"}]]))
 
-(defn- email-header [& [right-copy]]
+
+(defn- email-header []
   [:table {:class "row header-table"
            :valign "middle"
            :align "center"}
     [:tr
-      [:td {:class "small-12 large-12 columns main-wrapper" :valign "middle" :align "center"}
-        (vspacer 24 "header-table" "header-table")
+      [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
+        (vspacer 24 "header-table " "header-table")
         [:table {:class "row header-table"}
           [:tr
             [:th {:class "small-6 large-6 columns header-icon"}
@@ -275,9 +276,10 @@
             [:th {:class "small-12 large-12"}
               [:p {:class "footer-paragraph bottom-footer"}
                 "Sent with "
-                [:span.heart
-                  {:style (str "background: url(" config/email-images-prefix "/email_images/footer_heart@2x.png) no-repeat center / 18px 20px;")}]
-                " via "
+                ;; Heart in footer, comment out for now
+                ; [:span.heart
+                ;   {:style (str "background: url(" config/email-images-prefix "/email_images/footer_heart@2x.png) no-repeat center / 18px 20px;")}]
+                ; " via "
                 [:a {:href config/web-url}
                   "Carrot"]]]]]
         (vspacer 40 "footer-table" "footer-table")]]])
@@ -291,21 +293,22 @@
         output-format (if same-year? date-format date-format-year)]
     (time-format/unparse output-format d)))
 
-(defn- post-attribution [entry show-board? & [css-class]]
-  (paragraph
-    (str (-> entry :publisher :name)
-         (when show-board?
-          " in ")
-         (when show-board?
-          (:board-name entry))
-         " • " (post-date (:published-at entry)))
-   css-class "text-left attribution"))
+(defn- post-attribution [entry]
+  (let [publisher-name (-> entry :publisher :name)
+        post-date (post-date (:published-at entry))
+        attribution (when (pos? (:comment-count entry))
+                      (text/attribution 2 (:comment-count entry) "comment" (:comment-authors entry)))
+        paragraph-text (str publisher-name " on " post-date
+                         (when-not (s/blank? attribution)
+                            " • ")
+                         attribution)]
+    (paragraph paragraph-text "" "text-left attribution")))
 
 (defn- post-headline [entry]
   (let [ms (:must-see entry)]
     [:div
       [:span.post-title
-        (:headline entry)]
+        (.text (soup/parse (:headline entry)))]
       (when ms
         [:span.must-see-container
           [:img
@@ -316,13 +319,20 @@
           [:span.must-see
             "MUST SEE"]])]))
 
+(defn- post-body [cleaned-body]
+  [:div
+    [:p.post-body
+      cleaned-body]])
+
 (defn- post-block
   ([entry] (post-block entry (:url entry)))
   ([entry entry-url]
   (let [publisher (:publisher entry)
         avatar-url (fix-avatar-url (:avatar-url publisher))
         headline (post-headline entry)
-        vid (:video-id entry)]
+        vid (:video-id entry)
+        cleaned-body (text/truncated-body (:body entry))
+        has-body (seq cleaned-body)]
     [:table
       {:cellpadding "0"
        :cellspacing "0"
@@ -337,10 +347,11 @@
         [:td
           {:class (if avatar-url "post-block-avatar-right" "post-block-right")}
           (h2 headline entry-url "")
-          (spacer 4 "")
-          (post-attribution entry true "")
-          (when vid
-            (spacer 16 ""))
+          (when has-body
+            (spacer 4 ""))
+          (when has-body
+            (post-body cleaned-body))
+          (spacer 8 "")
           (when vid
             [:table
               {:class "row video-cover-table"}
@@ -359,16 +370,22 @@
                       {:class "video-duration-container"}
                       [:span
                         {:class "video-duration"}
-                        (:video-duration entry)]]]]]])]]])))
+                        (:video-duration entry)]]]]]])
+          (when vid
+            (spacer 16 ""))
+          (post-attribution entry)]]])))
 
 (defn- posts-with-board-name [board]
   (let [board-name (:name board)]
     (assoc board :posts (map #(assoc % :board-name board-name) (:posts board)))))
 
+(defn- posts-for-board [board]
+  (let [pretext (:name board)
+        posts (:posts board)]
+    (concat [{:type :board :name pretext}] posts)))
+
 (defn digest-title [org-name]
-  (if org-name
-    (format digest-title-daily "at" org-name)
-    (format digest-title-daily "in" "Carrot")))
+  (format digest-title-daily (or org-name "Carrot")))
 
 (defn- get-digest-url [digest-data]
   (s/join "/" [config/web-url (:org-slug digest-data) "all-posts"]))
@@ -388,32 +405,30 @@
 }
 "])
 
+(defn- digest-content-date []
+  (time-format/unparse day-month-date-year (t/now)))
+
+(defn- board-block [board-name]
+  [:table
+    {:cellpadding "0"
+     :cellspacing "0"
+     :border "0"
+     :class "row"}
+    [:tr
+      [:td
+        {:class "post-block-avatar"}]
+      [:td
+        {:class "post-block-avatar-right board-block-bottom-line"}
+        (paragraph board-name "" "board-name")]]])
+
 (defn- digest-content [digest]
-  (let [logo-url (:logo-url digest)
-        logo? (not (s/blank? logo-url))
-        org-name (:org-name digest)
-        boards (map posts-with-board-name (:boards digest))
-        posts (mapcat :posts boards)
+  (let [boards (map posts-with-board-name (:boards digest))
+        posts (mapcat posts-for-board boards)
         digest-url (get-digest-url digest)
-        first-name (:first-name digest)
-        digest-headline (digest-title org-name)]
-    [:td {:class "small-12 large-12 columns main-wrapper vertical-padding" :valign "middle" :align "center"}
+        first-name (:first-name digest)]
+    [:td {:class "small-12 large-12 columns digest-content main-wrapper vertical-padding" :valign "middle" :align "center"}
       [:center
-        (when logo? (org-logo {:org-name (:org-name digest)
-                               :org-logo-url logo-url
-                               :org-logo-width (:logo-width digest)
-                               :org-logo-height (:logo-height digest)
-                               :align "center"}))
-        (when logo? (spacer 32))
-        (h1 digest-headline "center-align")
-        (spacer 16)
-        [:table {:class "row"}
-          [:tr
-            [:th {:class "small-12 large-12 columns"}
-              [:a.go-to-posts
-                {:href digest-url}
-                "Go to posts"]]]]
-        (spacer 40)
+        (spacer 8)
         [:table
           {:cellpadding "0"
            :cellspacing "0"
@@ -428,10 +443,11 @@
                    :class "row"}
                   [:tr
                     [:td {:class "small-12 large-12"}
-                      horizontal-line
-                      (spacer 20)
-                      (post-block p)
-                      (spacer 28)]]])]]]]]))
+                      (spacer 24)
+                      (if (= (:type p) :board)
+                        (board-block (:name p))
+                        (post-block p))]]])]]]
+          (spacer 40)]]))
 
 ;; Reminder alert
 
@@ -664,7 +680,7 @@
         logo? (not (s/blank? logo-url))
         org-name (:org-name entry)
         org-name? (not (s/blank? org-name))
-        headline (:headline entry)
+        headline (.text (soup/parse (:headline entry)))
         org-slug (:org-slug entry)
         sharer (:sharer-name entry)
         publisher (:publisher entry)
@@ -799,10 +815,31 @@
 
 ;; ----- General HTML, common to all emails -----
 
+(defn digest-header [digest]
+  (let [logo-url (:logo-url digest)
+        logo? (not (s/blank? logo-url))
+        org-name (or (:org-name digest) "Carrot")]
+    [:td {:class "digest-header"}
+      [:center
+        (spacer 40 "digest-header-bg digest-header-top" "digest-header-bg digest-header-top")
+        (when logo? (org-logo {:org-name org-name
+                               :org-logo-url logo-url
+                               :org-logo-width (:logo-width digest)
+                               :org-logo-height (:logo-height digest)
+                               :align "center"
+                               :class "digest-header-bg"}))
+        (when logo?
+          (spacer 17 "digest-header-bg" "digest-header-bg"))
+        (h1 "Your morning digest" "center-align digest-header-bg" "digest-header-bg")
+        (spacer 8 "digest-header-bg" "digest-header-bg")
+        (paragraph (str org-name " - " (digest-content-date)) "center-align digest-header-bg" "digest-header-bg digest-header-subline")
+        (spacer 40 "digest-header-bg" "digest-header-bg")]]))
+
 (defn- body [data]
-  (let [type (:type data)]
+  (let [type (:type data)
+        digest? (= type :digest)]
     [:body
-      (when (= (:type data) :digest)
+      (when digest?
         (go-to-posts-script data))
       (case type
         :reset (preheader reset-message)
@@ -825,9 +862,11 @@
                        :valign "middle"
                        :align "center"}
                 [:tr
-                  [:td
-                    {:class "vertical-padding"}
-                    (spacer 40 "top-email-content")]]
+                  (if digest?
+                    (digest-header data)
+                    [:td
+                      {:class "vertical-padding"}
+                      (spacer 40 "top-email-content")])]
                 [:tr
                   (case type
                     (:reset :verify) (token-content "small-12 large-12 columns main-wrapper vertical-padding" type data)
@@ -874,7 +913,7 @@
         note? (not (s/blank? note))
         org-name (:org-name entry)
         org-name? (not (s/blank? org-name))
-        headline (:headline entry)
+        headline (.text (soup/parse (:headline entry)))
         headline? (not (s/blank? headline))
         org-slug (:org-slug entry)
         secure-uuid (:secure-uuid entry)
