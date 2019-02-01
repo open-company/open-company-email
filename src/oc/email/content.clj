@@ -296,7 +296,7 @@
 (defn- post-attribution [entry]
   (let [publisher-name (-> entry :publisher :name)
         post-date (post-date (:published-at entry))
-        attribution (when (pos? (:comment-count entry))
+        attribution (when (pos? (or (:comment-count entry) 0))
                       (text/attribution 2 (:comment-count entry) "comment" (:comment-authors entry)))
         paragraph-text (str publisher-name " on " post-date
                          (when-not (s/blank? attribution)
