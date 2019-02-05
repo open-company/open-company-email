@@ -117,12 +117,24 @@ table.footer a {
   background-color: white !important;
   text-align: center;
   vertical-align: middle;
-  border-radius: 6px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+table.digest-header-table {
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  vertical-align: middle;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  background-color: #FFECE9;
 }
 
 table.digest-header-table tr td.digest-header {
   background-color: #FFECE9;
-  border-radius: 6px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
   width: 100%;
   padding: 0 !important;
 }
@@ -136,8 +148,8 @@ table.email-content tr td.vertical-padding, table.email-content tr td.columns.ve
 }
 
 .email-content > tr:first-child, .email-content > tr:first-child > td:first-child, .email-content > tr:first-child > th:first-child {
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
 }
 
 .digest-header-subline {
@@ -152,13 +164,13 @@ table.email-content tr td.vertical-padding, table.email-content tr td.columns.ve
 
 .digest-content {
   border: 1px solid #F3F3F4;
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
 }
 
 .email-content > tr:last-child, .email-content > tr:last-child > td:last-child, .email-content > tr:last-child > th:last-child {
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
 }
 
 .email-content tr, .email-content tr td {
