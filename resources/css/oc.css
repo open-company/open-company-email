@@ -120,10 +120,15 @@ table.footer a {
   border-radius: 6px;
 }
 
-table.email-content tr td.digest-header {
+table.digest-header-table tr td.digest-header {
   background-color: #FFECE9;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
+  border-radius: 6px;
+  width: 100%;
+  padding: 0 !important;
+}
+
+table.digest-header-table tr td.digest-header center {
+  padding: 0 !important;
 }
 
 table.email-content tr td.vertical-padding, table.email-content tr td.columns.vertical-padding {
@@ -140,7 +145,6 @@ table.email-content tr td.vertical-padding, table.email-content tr td.columns.ve
   text-transform: uppercase;
   letter-spacing: 1px;
   font-size: 12px;
-  line-height: 16px;
   color: rgba(52, 66, 80, 0.4);
   text-align: center;
   background-color: #FFECE9;
@@ -570,11 +574,17 @@ img.logo {
 
 .digest-header-bg {
   background-color: #FFECE9 !important;
+  width: 100%;
 }
 
 .digest-header-top {
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
+}
+
+.digest-header-bottom {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
 }
 
 .hidden {

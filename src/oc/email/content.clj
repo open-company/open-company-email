@@ -79,7 +79,7 @@
                                      css-class
                                      " logo"))}
         [:tr {:class css-class}
-          [:th {:class (str "small-12 large-12 first last columns " (when css-class css-class))}
+          [:th {:class css-class}
             [:table {:class css-class}
               [:tr {:class css-class}
                 [:th {:class css-class}
@@ -501,7 +501,8 @@
                                :org-logo-url logo-url
                                :org-logo-width logo-width
                                :org-logo-height logo-height
-                               :align "center"}))
+                               :align "center"
+                               :class "small-12 large-12 first last columns"}))
         (when logo? (spacer 32))
         (spacer 80)
         (h1 headline "center-align")
@@ -575,7 +576,8 @@
                                :org-logo-url logo-url
                                :org-logo-width logo-width
                                :org-logo-height logo-height
-                               :align "center"}))
+                               :align "center"
+                               :class "small-12 large-12 first last columns"}))
         (when logo? (spacer 32))
         (h1 headline "center-align")
         (spacer 65)
@@ -651,7 +653,8 @@
       (when logo? (org-logo {:org-name org-name
                              :org-logo-url logo-url
                              :org-logo-width logo-width
-                             :org-logo-height logo-height}))
+                             :org-logo-height logo-height
+                             :class "small-12 large-12 first last columns"}))
       (when logo? (spacer 32))
       (h1 invite-message)
       (spacer 24)
@@ -694,7 +697,7 @@
         secure-uuid (:secure-uuid entry)
         entry-url (s/join "/" [config/web-url org-slug "post" secure-uuid])]
     [:td {:class "small-12 large-12 columns vertical-padding" :valign "middle" :align "center"}
-      (when logo? (org-logo entry))
+      (when logo? (org-logo (assoc entry :class "small-12 large-12 first last columns")))
       (when logo? (spacer 32))
       (h1 (share-title entry))
       (spacer 24)
@@ -798,7 +801,7 @@
         logo? (not (s/blank? logo-url))
         org-name (:org-name msg)]
     [:td {:class td-classes :valign "middle" :align "center"}
-      (when logo? (org-logo msg))
+      (when logo? (org-logo (assoc msg :class "small-12 large-12 first last columns")))
       (when logo? (spacer 32))
       (h1 (:message message))
       (spacer 24)
@@ -819,21 +822,26 @@
   (let [logo-url (:logo-url digest)
         logo? (not (s/blank? logo-url))
         org-name (or (:org-name digest) "Carrot")]
-    [:td {:class "digest-header"}
-      [:center
-        (spacer 40 "digest-header-bg digest-header-top" "digest-header-bg digest-header-top")
-        (when logo? (org-logo {:org-name org-name
-                               :org-logo-url logo-url
-                               :org-logo-width (:logo-width digest)
-                               :org-logo-height (:logo-height digest)
-                               :align "center"
-                               :class "digest-header-bg"}))
-        (when logo?
-          (spacer 17 "digest-header-bg" "digest-header-bg"))
-        (h1 "Your morning digest" "center-align digest-header-bg" "digest-header-bg")
-        (spacer 8 "digest-header-bg" "digest-header-bg")
-        (paragraph (str org-name " - " (digest-content-date)) "center-align digest-header-bg" "digest-header-bg digest-header-subline")
-        (spacer 40 "digest-header-bg" "digest-header-bg")]]))
+    [:table {:class "row digest-header-table"
+             :valign "middle"
+             :align "center"
+             :width "100%"}
+      [:tr
+        [:td {:class "small-12 large-12 columns digest-header"}
+          [:center
+            (spacer 40 "digest-header-bg digest-header-top" "digest-header-bg digest-header-top")
+            (when logo? (org-logo {:org-name org-name
+                                   :org-logo-url logo-url
+                                   :org-logo-width (:logo-width digest)
+                                   :org-logo-height (:logo-height digest)
+                                   :align "center"
+                                   :class "row digest-header-bg"}))
+            (when logo?
+              (spacer 17 "digest-header-bg" "digest-header-bg"))
+            (h1 "Your morning digest" "center-align digest-header-bg" "digest-header-bg")
+            (spacer 8 "digest-header-bg" "digest-header-bg")
+            (paragraph (str org-name " - " (digest-content-date)) "center-align digest-header-bg" "digest-header-bg digest-header-subline")
+            (spacer 40 "digest-header-bg digest-header-bottom" "digest-header-bg digest-header-bottom")]]]]))
 
 (defn- body [data]
   (let [type (:type data)
@@ -858,15 +866,16 @@
                 :align "center"}
             [:center
               (email-header)
+              (when digest?
+                (digest-header data))
               [:table {:class "row email-content"
                        :valign "middle"
                        :align "center"}
-                [:tr
-                  (if digest?
-                    (digest-header data)
+                (when-not digest?
+                  [:tr
                     [:td
                       {:class "vertical-padding"}
-                      (spacer 40 "top-email-content")])]
+                      (spacer 40 "top-email-content")]])
                 [:tr
                   (case type
                     (:reset :verify) (token-content "small-12 large-12 columns main-wrapper vertical-padding" type data)
