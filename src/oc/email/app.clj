@@ -34,7 +34,12 @@
 (defn echo-config []
   (println (str "\n"
     "AWS SQS queue: " c/aws-sqs-email-queue "\n"
+    "Storage URL: " c/storage-server-url "\n"
+    "Auth URL: " c/auth-server-url "\n"
     "Web URL: " c/web-url "\n"    
+    "Email from: " c/email-from-domain "\n"
+    "Email digest-prefix: " c/email-digest-prefix "\n"
+    "Email images prefix: " c/email-images-prefix "\n"
     "Sentry: " c/dsn "\n\n"
     (when c/intro? "Ready to serve...\n"))))
 

@@ -21,6 +21,7 @@
 (defonce auth-server-url (or (env :auth-server-url) (str "http://localhost:" auth-server-port)))
 (defonce storage-server-port (Integer/parseInt (or (env :storage-server-port) "3001")))
 (defonce storage-server-url (or (env :storage-server-url) (str "http://localhost:" storage-server-port)))
+(defonce web-url (or (env :oc-web-url) "http://localhost:3559"))
 
 ;; ----- Logging -----
 
@@ -29,10 +30,6 @@
 ;; ----- Sentry -----
 
 (defonce dsn (or (env :sentry-dsn) false))
-
-;; ------ OC Web -----
-
-(defonce web-url (or (env :oc-web-url) "http://localhost:3559"))
 
 ;; ----- AWS -----
 
