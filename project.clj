@@ -48,6 +48,7 @@
     ;; QA environment and dependencies
     :qa {
       :env {
+        :open-company-auth-passphrase "this_is_a_qa_secret" ; JWT secret
       }
       :plugins [
         ;; Linter https://github.com/jonase/eastwood
@@ -60,7 +61,7 @@
     ;; Dev environment and dependencies
     :dev [:qa {
       :env ^:replace {
-        :open-company-auth-passphrase "this_is_a_qa_secret" ; JWT secret
+        :open-company-auth-passphrase "this_is_a_dev_secret" ; JWT secret
         :aws-access-key-id "CHANGE-ME"
         :aws-secret-access-key "CHANGE-ME"
         :aws-endpoint "us-east-1"

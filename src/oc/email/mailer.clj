@@ -214,13 +214,13 @@
        (io/delete-file html-file true)
        (io/delete-file inline-file true)))))
 
-(defn post-data-from-msg [msg]
+(defn- post-data-from-msg [msg]
   (let [notification (:notification msg)
         config {:storage-server-url c/storage-server-url
                 :auth-server-url c/auth-server-url
                 :passphrase c/passphrase
                 :service-name "Email"}
-        user-data {:user-id (:user-id msg)}]
+        user-data {:user-id (:user-id notification)}]
     (storage/post-data-for config user-data (:slug (:org msg)) (:board-id notification) (:entry-id notification))))
 
 (defn send-notification
@@ -234,7 +234,7 @@
         org (:org msg)
         org-name (:name org)
         org-name? (not (s/blank? org-name))
-        mention? (:mention notification)
+        mention? (:mention? notification)
         comment? (:interaction-id notification)
         post-data (post-data-from-msg msg)
         title (:headline post-data)
