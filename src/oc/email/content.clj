@@ -714,7 +714,7 @@
 
 (defn- notify-intro [msg]
   (let [notification (:notification msg)
-        mention? (:mention notification)
+        mention? (:mention? notification)
         comment? (:interaction-id notification)]
     (if mention?
       (if comment?
