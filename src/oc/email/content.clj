@@ -419,7 +419,7 @@
             {:src avatar-url}]
           [:p.digest-post-author
             (str (:name (:publisher entry)) " in " (:board-name entry))]
-          [:p.digest-post-data
+          [:p.digest-post-date
             (str " • " published-date)]
           (when (:must-see entry)
             [:span.must-see-container

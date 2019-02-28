@@ -471,12 +471,13 @@ p.digest-post-author {
   margin-left: 8px;
 }
 
-p.digest-post-data {
+p.digest-post-date {
   float: left;
   color: #888D94;
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 12px;
   line-height: 18px;
+  margin-left: 4px;
 }
 
 p.digest-post-footer {
