@@ -1,6 +1,7 @@
 body,
 html,
-.body {
+.body,
+table.body {
   background-color: #FBFAF7;
   color: #34414F;
   width: 100%;
@@ -12,9 +13,9 @@ html,
   -moz-osx-font-smoothing: grayscale;
 }
 
-table {
+/*table {
   background-color: #FBFAF7 !important;
-}
+}*/
 
 table th, 
 table.body .columns,
@@ -40,6 +41,14 @@ h2 {
   font-weight: bold;
   color: #3FBD7C;
   margin: 0px;
+}
+
+h2.digest-post-title {
+  font-size: 18px;
+}
+
+h2.must-see-title {
+  color: #6187F8;
 }
 
 p {
@@ -128,11 +137,11 @@ table.digest-header-table {
   vertical-align: middle;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
-  background-color: #FFECE9;
+  background-color: transparent;
 }
 
 table.digest-header-table tr td.digest-header {
-  background-color: #FFECE9;
+  background-color: transparent;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   width: 100%;
@@ -154,21 +163,37 @@ table.email-content tr td.vertical-padding, table.email-content tr td.columns.ve
 
 .digest-header-subline {
   font-weight: 900;
-  text-transform: uppercase;
   letter-spacing: 1px;
   font-size: 12px;
-  color: rgba(52, 66, 80, 0.4);
+  color: #888D94;
   text-align: center;
-  background-color: #FFECE9;
+  background-color: transparent;
 }
 
 .digest-content {
-  border: 1px solid #F3F3F4;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
+  background-color: white !important;
+  border-radius: 8px;
+  border-left: 4px solid #E5E4E4;
+  border-top: 1px solid #E5E4E4;
+  border-right: 1px solid #E5E4E4;
+  border-bottom: 1px solid #E5E4E4;
 }
 
-.email-content > tr:last-child, .email-content > tr:last-child > td:last-child, .email-content > tr:last-child > th:last-child {
+.digest-content > tbody > tr > td {
+  padding: 0 24px;
+}
+
+.digest-content table, .digest-content table tr {
+  background-color: white !important;
+}
+
+.digest-content.must-see {
+  border-left: 4px solid #6187F8;
+}
+
+.email-content > tr:last-child,
+.email-content > tr:last-child > td:last-child,
+.email-content > tr:last-child > th:last-child {
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
 }
@@ -203,15 +228,16 @@ table.header-bottom {
 }
 
 span.heart {
-  width: 18px;
-  height: 20px;
+  width: 10px;
+  height: 18px;
   display: inline-block;
   vertical-align: sub;
+  margin-right: 8px;
 }
 
 p.footer-paragraph {
   color: #888D94;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 400;
 }
 
@@ -232,7 +258,7 @@ p.header-paragraph.top-header, p.footer-paragraph.top-header a {
 
 p.footer-paragraph a {
   color: #898D93;
-  text-decoration: underline;
+  text-decoration: none;
   font-weight: 400;
 }
 
@@ -413,6 +439,43 @@ img.post-avatar {
   float: left;
 }
 
+img.digest-post-avatar {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  border-radius: 50%;
+  float: left;
+}
+
+table.digest-posts-container:not(:last-child) {
+  border-bottom: 1px solid #F3F3F4;
+}
+
+p.digest-post-author {
+  float: left;
+  color: #34414F;
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: bold;
+  margin-left: 8px;
+}
+
+p.digest-post-data {
+  float: left;
+  color: #888D94;
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+p.digest-post-footer {
+  color: #888D94;
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-size: 12px;
+  line-height: 18px; 
+}
+
 .token-link {
   color: #3FBD7C;
   font-size: 16px;
@@ -585,7 +648,7 @@ img.logo {
 }
 
 .digest-header-bg {
-  background-color: #FFECE9 !important;
+  background-color: transparent;
   width: 100%;
 }
 
