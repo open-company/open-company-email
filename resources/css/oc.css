@@ -130,6 +130,13 @@ table.footer a {
   border-bottom-right-radius: 8px;
 }
 
+.digest-email-content {
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  vertical-align: middle;
+}
+
 table.digest-header-table {
   max-width: 600px;
   width: 100%;
@@ -179,8 +186,11 @@ table.email-content tr td.vertical-padding, table.email-content tr td.columns.ve
   border-bottom: 1px solid #E5E4E4;
 }
 
-.digest-content > tbody > tr > td {
-  padding: 0 24px;
+.digest-content > tbody > tr > th,
+.digest-content > tr > th,
+.digest-content > tbody > tr > td,
+.digest-content > tr > td {
+  padding: 0 24px !important;
 }
 
 .digest-content table, .digest-content table tr {

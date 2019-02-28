@@ -292,7 +292,7 @@
                 [:a {:href config/web-url}
                   ;; Heart in footer, comment out for now
                   [:span.heart
-                    {:style (str "background: url(" config/email-images-prefix "/email_images/carrot_grey@2x.png) no-repeat center / 18px 20px;")}]
+                    {:style (str "background: url(" config/email-images-prefix "/email_images/carrot_grey@2x.png) no-repeat center / 10px 18px;")}]
 
                   "Sent by Carrot"]]]]]
         (vspacer 40 "footer-table" "footer-table")]]])
@@ -537,40 +537,44 @@
     [:td {:class "small-12 large-12" :valign "middle" :align "center"}
       [:center
         (spacer 8)
-        [:table
-          {:cellpadding "0"
-           :cellspacing "0"
-           :border "0"
-           :class "digest-content must-see"}
-          [:tr
-            [:td
-              (for [p must-see]
-                [:table
-                  {:cellpadding "0"
-                   :cellspacing "0"
-                   :border "0"
-                   :class "row digest-posts-container"}
-                  [:tr
-                    [:td {:class "small-12 large-12 columns"}
-                      (digest-post-block (:user-id digest) p)]]])]]]
-        (spacer 40)
-        [:table
-          {:cellpadding "0"
-           :cellspacing "0"
-           :border "0"
-           :class "digest-content"}
-          [:tr
-            [:td
-              (for [p non-must-see]
-                [:table
-                  {:cellpadding "0"
-                   :cellspacing "0"
-                   :border "0"
-                   :class "row digest-posts-container"}
-                  [:tr
-                    [:td {:class "small-12 large-12 columns"}
-                      (digest-post-block (:user-id digest) p)]]])]]]
-          (spacer 40)]]))
+        (when must-see
+          [:table
+            {:cellpadding "0"
+             :cellspacing "0"
+             :border "0"
+             :class "digest-content must-see"}
+            [:tr
+              [:td
+                (for [p must-see]
+                  [:table
+                    {:cellpadding "0"
+                     :cellspacing "0"
+                     :border "0"
+                     :class "row digest-posts-container"}
+                    [:tr
+                      [:td {:class "small-12 large-12 columns"}
+                        (digest-post-block (:user-id digest) p)]]])]]])
+        (when must-see
+          (spacer 40))
+        (when non-must-see
+          [:table
+            {:cellpadding "0"
+             :cellspacing "0"
+             :border "0"
+             :class "digest-content"}
+            [:tr
+              [:td
+                (for [p non-must-see]
+                  [:table
+                    {:cellpadding "0"
+                     :cellspacing "0"
+                     :border "0"
+                     :class "row digest-posts-container"}
+                    [:tr
+                      [:td {:class "small-12 large-12 columns"}
+                        (digest-post-block (:user-id digest) p)]]])]]])
+          (when non-must-see
+            (spacer 40))]]))
 
 ;; Reminder alert
 
