@@ -20,6 +20,7 @@
 (def date-format (time-format/formatter "MMM. d"))
 (def date-format-no-dot (time-format/formatter "MMM d"))
 (def date-format-year (time-format/formatter "MMM. d YYYY"))
+(def date-format-year-comma (time-format/formatter "MMM. d, YYYY"))
 (def day-month-date-year (time-format/formatter "EEEE, MMM. dd, YYYY"))
 (def reminder-date-format (time-format/formatter "EEEE, MMMM d"))
 (def reminder-date-format-year (time-format/formatter "EEEE, MMMM d YYYY"))
@@ -500,7 +501,7 @@
 "])
 
 (defn- digest-content-date []
-  (time-format/unparse date-format-year (t/now)))
+  (time-format/unparse date-format-year-comma (t/now)))
 
 (defn- board-block [board-name]
   [:table
