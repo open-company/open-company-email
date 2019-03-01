@@ -389,7 +389,7 @@
             (spacer 16 ""))
           (post-attribution entry)]]])))
 
-(defn- digest-post-interaction [superuser-token user-id entry-uuid]
+(defn- digest-post-seen [superuser-token user-id entry-uuid]
   (let [seen-data (get-seen-data superuser-token entry-uuid)
         seen-this (some #(= user-id (:user-id %))
                         (get-in seen-data [:post :read]))]
@@ -398,14 +398,14 @@
       "")))
 
 (defn- digest-post-block
-  [user-id entry]
+  [user entry]
   (let [publisher (:publisher entry)
         avatar-url (fix-avatar-url (:avatar-url publisher))
         vid (:video-id entry)
         cleaned-body (text/truncated-body (:body entry))
         has-body (seq cleaned-body)
         published-date (time-format/unparse date-format-no-dot (time-format/parse iso-format (:published-at entry)))
-        superuser-token (auth/user-token {:user-id user-id} config/auth-server-url config/passphrase "Email")]
+        superuser-token (auth/user-token {:user-id (:user-id user)} config/auth-server-url config/passphrase "Email")]
     [:table
       {:cellpadding "0"
        :cellspacing "0"
@@ -430,7 +430,9 @@
                  :height "10"
                  :src (str config/email-images-prefix "/email_images/must_see@2x.png")}]
               [:span.must-see
-                "MUST SEE"]])]]
+                "MUST SEE"]])
+          [:p.digest-post-seen
+            (digest-post-seen superuser-token (:user-id user) (:uuid entry))]]]
       [:tr [:td (spacer 10)]]
       [:tr [:td
         (h2 (:headline entry) (:url entry) "" (str "digest-post-title " (if (:must-see entry) "must-see-title" "")))]]
@@ -464,9 +466,15 @@
         (when vid
           [:tr [:td
             (spacer 16 "")]])
-        [:tr [:td
-          [:p.digest-post-footer
-            (digest-post-interaction superuser-token user-id (:uuid entry))]]]
+        (when (or (pos? (:comment-count entry))
+                  (pos? (count (:reactions entry))))
+          [:tr [:td
+            [:p.digest-post-footer
+              (text/comments-reactions-attribution
+                                           (:comment-authors entry)
+                                           (:comment-count entry)
+                                           (:reactions entry)
+                                           user)]]])
         [:tr [:td
           (spacer 24)]]]))
 
@@ -503,19 +511,6 @@
 (defn- digest-content-date []
   (time-format/unparse date-format-year-comma (t/now)))
 
-(defn- board-block [board-name]
-  [:table
-    {:cellpadding "0"
-     :cellspacing "0"
-     :border "0"
-     :class "row"}
-    [:tr
-      [:td
-        {:class "post-block-avatar"}]
-      [:td
-        {:class "post-block-avatar-right board-block-bottom-line"}
-        (paragraph board-name "" "board-name")]]])
-
 (defn sort-must-see-board-name [a b]
   (let [must-see (compare (:must-see a) (:must-see b))]
     (if (zero? must-see)
@@ -534,11 +529,14 @@
         boards (map posts-with-board-name (:boards digest))
         all-posts (mapcat :posts boards)
         sorted-posts (sort sort-must-see-board-name all-posts)
-        [non-must-see must-see] (partition-by :must-see sorted-posts)]
+        must-see (filter :must-see sorted-posts)
+        non-must-see (filter (comp not :must-see) sorted-posts)
+        user {:user-id (:user-id digest)
+              :name (str (:first-name digest) " " (:last-name digest))}]
     [:td {:class "small-12 large-12" :valign "middle" :align "center"}
       [:center
         (spacer 8)
-        (when must-see
+        (when-not (empty? must-see)
           [:table
             {:cellpadding "0"
              :cellspacing "0"
@@ -554,10 +552,10 @@
                      :class "row digest-posts-container"}
                     [:tr
                       [:td {:class "small-12 large-12 columns"}
-                        (digest-post-block (:user-id digest) p)]]])]]])
-        (when non-must-see
+                        (digest-post-block user p)]]])]]])
+        (when-not (empty? must-see)
           (spacer 16))
-        (when non-must-see
+        (when-not (empty? non-must-see)
           [:table
             {:cellpadding "0"
              :cellspacing "0"
@@ -573,7 +571,7 @@
                      :class "row digest-posts-container"}
                     [:tr
                       [:td {:class "small-12 large-12 columns"}
-                        (digest-post-block (:user-id digest) p)]]])]]])
+                        (digest-post-block user p)]]])]]])
         (spacer 24)]]))
 
 ;; Reminder alert
