@@ -982,7 +982,7 @@
         :invite (preheader invite-message)
         :board-notification (preheader board-invite-title)
         :share-link (preheader (share-title data))
-        :digest (preheader "See the latest updates from your team.")
+        :digest (preheader "See the latest updates and news from your team.")
         :notify (preheader (notify-intro data))
         :reminder-notification (preheader (reminder-notification-headline data))
         :reminder-alert (preheader (reminder-alert-headline data)))
