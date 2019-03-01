@@ -71,7 +71,7 @@
 
 ;; Seen data
 
-(def seen-text "✓ You've viewed this post.")
+(def seen-text "✓ You've viewed this post")
 
 (defn get-seen-data [superuser-token entry-id]
   (let [c {:change-server-url config/change-server-url
