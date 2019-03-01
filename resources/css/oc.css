@@ -180,7 +180,8 @@ table.email-content tr td.vertical-padding, table.email-content tr td.columns.ve
 .digest-content {
   background-color: white !important;
   border-radius: 8px;
-  border-left: 4px solid #E5E4E4;
+  border-left: 1px solid #E5E4E4;
+  padding-left: 3px;
   border-top: 1px solid #E5E4E4;
   border-right: 1px solid #E5E4E4;
   border-bottom: 1px solid #E5E4E4;
@@ -199,6 +200,7 @@ table.email-content tr td.vertical-padding, table.email-content tr td.columns.ve
 
 .digest-content.must-see {
   border-left: 4px solid #6187F8;
+  padding-left: 0px;
 }
 
 .email-content > tr:last-child,

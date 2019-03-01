@@ -554,8 +554,8 @@
                     [:tr
                       [:td {:class "small-12 large-12 columns"}
                         (digest-post-block (:user-id digest) p)]]])]]])
-        (when must-see
-          (spacer 40))
+        (when non-must-see
+          (spacer 16))
         (when non-must-see
           [:table
             {:cellpadding "0"
@@ -573,8 +573,7 @@
                     [:tr
                       [:td {:class "small-12 large-12 columns"}
                         (digest-post-block (:user-id digest) p)]]])]]])
-          (when non-must-see
-            (spacer 40))]]))
+        (spacer 24)]]))
 
 ;; Reminder alert
 
