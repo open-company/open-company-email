@@ -955,19 +955,19 @@
       [:tr
         [:td {:class "small-12 large-12 columns digest-header"}
           [:center
-            (spacer 24 "digest-header-bg digest-header-top" "digest-header-bg digest-header-top")
+            (spacer 24 "" "")
             (when logo? (org-logo {:org-name org-name
                                    :org-logo-url logo-url
                                    :org-logo-width (:logo-width digest)
                                    :org-logo-height (:logo-height digest)
                                    :align "center"
-                                   :class "row digest-header-bg"}))
+                                   :class "row"}))
             (when logo?
-              (spacer 8 "digest-header-bg" "digest-header-bg"))
-            (h1 "Your morning digest" "center-align digest-header-bg" "digest-header-bg")
-            (spacer 5 "digest-header-bg" "digest-header-bg")
-            (paragraph (str org-name " — " (digest-content-date)) "center-align digest-header-bg" "digest-header-bg digest-header-subline")
-            (spacer 24 "digest-header-bg digest-header-bottom" "digest-header-bg digest-header-bottom")]]]]))
+              (spacer 8 "" ""))
+            (h1 "Your morning digest" "center-align" "")
+            (spacer 5 "" "")
+            (paragraph (str org-name " — " (digest-content-date)) "center-align" "digest-header-subline")
+            (spacer 24 "" "")]]]]))
 
 (defn- body [data]
   (let [type (:type data)

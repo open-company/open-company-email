@@ -149,8 +149,6 @@ table.digest-header-table {
 
 table.digest-header-table tr td.digest-header {
   background-color: transparent;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
   width: 100%;
   padding: 0 !important;
 }
@@ -170,7 +168,6 @@ table.email-content tr td.vertical-padding, table.email-content tr td.columns.ve
 
 .digest-header-subline {
   font-weight: 900;
-  letter-spacing: 1px;
   font-size: 12px;
   color: #888D94;
   text-align: center;
@@ -181,7 +178,7 @@ table.email-content tr td.vertical-padding, table.email-content tr td.columns.ve
   background-color: white !important;
   border-radius: 8px;
   border-left: 1px solid #E5E4E4;
-  padding-left: 3px;
+  padding-left: 4px;
   border-top: 1px solid #E5E4E4;
   border-right: 1px solid #E5E4E4;
   border-bottom: 1px solid #E5E4E4;
@@ -200,7 +197,7 @@ table.email-content tr td.vertical-padding, table.email-content tr td.columns.ve
 
 .digest-content.must-see {
   border-left: 4px solid #6187F8;
-  padding-left: 1px;
+  padding-left: 0px;
 }
 
 .email-content > tr:last-child,
@@ -658,21 +655,6 @@ img.logo {
   width: 40px;
   height: 40px;
   object-fit: contain;
-}
-
-.digest-header-bg {
-  background-color: transparent;
-  width: 100%;
-}
-
-.digest-header-top {
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
-}
-
-.digest-header-bottom {
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
 }
 
 .hidden {
