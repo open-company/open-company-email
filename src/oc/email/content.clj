@@ -536,7 +536,7 @@
     [:td {:class "small-12 large-12" :valign "middle" :align "center"}
       [:center
         (spacer 8)
-        (when-not (empty? must-see)
+        (when (seq must-see)
           [:table
             {:cellpadding "0"
              :cellspacing "0"
@@ -553,9 +553,9 @@
                     [:tr
                       [:td {:class "small-12 large-12 columns"}
                         (digest-post-block user p)]]])]]])
-        (when-not (empty? must-see)
+        (when (seq must-see)
           (spacer 16))
-        (when-not (empty? non-must-see)
+        (when (seq non-must-see)
           [:table
             {:cellpadding "0"
              :cellspacing "0"
