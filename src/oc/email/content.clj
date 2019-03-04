@@ -469,12 +469,7 @@
         (when (or (pos? (:comment-count entry))
                   (pos? (count (:reactions entry))))
           [:tr [:td
-            [:p.digest-post-footer
-              (text/comments-reactions-attribution
-                                           (:comment-authors entry)
-                                           (:comment-count entry)
-                                           (:reactions entry)
-                                           user)]]])
+            [:p.digest-post-footer (:interaction-attribution entry)]]])
         [:tr [:td
           (spacer 24)]]]))
 
