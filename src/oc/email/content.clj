@@ -37,7 +37,7 @@
 
 ;; ----- Copy -----
 
-(def carrot-explainer-fragment "a company digest for the team news and updates no one should miss.")
+(def carrot-explainer-fragment "your company digest for the team news and updates no one should miss.")
 (def carrot-explainer (str "Carrot is " carrot-explainer-fragment))
 
 (def invite-message "Join your team on Carrot")
