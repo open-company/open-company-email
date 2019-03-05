@@ -1,0 +1,121 @@
+(def x
+ {:email "iacopo@opencompany.com"
+  :last-name "Carraro"
+  :team-id "860b-491e-af26"
+  :type :digest
+  :first-name "Iacopo"
+  :org-name "Carrot"
+  :user-id "988c-47d0-9cb9"
+  :org-slug "carrot"
+  :logo-url "https://avatars.slack-edge.com/2017-09-16/243287999207_9e662352c5c6175b971a_230.png"
+  :org-uuid "52e6-49e4-bc96"
+  :logo-width 230
+  :logo-height 230
+  :boards [
+   {:name "Decisions"
+    :posts [
+     {:headline "Salema"
+      :publisher {
+        :avatar-url "https://avatars.slack-edge.com/2017-02-02/136114833346_3758034af26a3b4998f4_512.jpg"
+        :name "Iacopo Carraro"
+        :user-id "988c-47d0-9cb9"}
+      :video-id nil
+      :comment-authors []
+      :comment-count 0
+      :video-image ""
+      :published-at "2019-02-28T10:30:46.138Z"
+      :url "http://localhost:3559/carrot/decisions/post/5baf-401a-a675?id=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsYXN0LW5hbWUiOiJDYXJyYXJvIiwic2VjdXJlLXV1aWQiOiIzMDY4LTQ4NzUtODc1YyIsIm5hbWUiOiJJYWNvcG8gQ2FycmFybyIsImF2YXRhci11cmwiOiJodHRwczpcL1wvYXZhdGFycy5zbGFjay1lZGdlLmNvbVwvMjAxNy0wMi0wMlwvMTM2MTE0ODMzMzQ2XzM3NTgwMzRhZjI2YTNiNDk5OGY0XzUxMi5qcGciLCJvcmctaWQiOiI1MmU2LTQ5ZTQtYmM5NiIsInVzZXItaWQiOiI5ODhjLTQ3ZDAtOWNiOSIsImZpcnN0LW5hbWUiOiJJYWNvcG8iLCJ0ZWFtcyI6WyI4NjBiLTQ5MWUtYWYyNiJdLCJpZC10b2tlbiI6dHJ1ZX0.uxtrwNvoMOCu9BvkU1GnXkIgMxHTGQNpRUvlZV-DrUA"
+      :must-see true
+      :uuid "5baf-401a-a675"
+      :body "<p> okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok<br></p>"
+      :video-duration ""
+      :reactions []
+     }
+     {:headline "Canota"
+      :publisher {
+        :avatar-url "https://avatars.slack-edge.com/2017-02-02/136114833346_3758034af26a3b4998f4_512.jpg"
+        :name "Iacopo Carraro"
+        :user-id "988c-47d0-9cb9"}
+      :video-id nil
+      :comment-authors []
+      :comment-count 0
+      :video-image ""
+      :published-at "2019-02-28T10:30:29.522Z"
+      :url "http://localhost:3559/carrot/decisions/post/4d08-4304-a633?id=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsYXN0LW5hbWUiOiJDYXJyYXJvIiwic2VjdXJlLXV1aWQiOiJlMmUxLTQ0NTYtYTliNiIsIm5hbWUiOiJJYWNvcG8gQ2FycmFybyIsImF2YXRhci11cmwiOiJodHRwczpcL1wvYXZhdGFycy5zbGFjay1lZGdlLmNvbVwvMjAxNy0wMi0wMlwvMTM2MTE0ODMzMzQ2XzM3NTgwMzRhZjI2YTNiNDk5OGY0XzUxMi5qcGciLCJvcmctaWQiOiI1MmU2LTQ5ZTQtYmM5NiIsInVzZXItaWQiOiI5ODhjLTQ3ZDAtOWNiOSIsImZpcnN0LW5hbWUiOiJJYWNvcG8iLCJ0ZWFtcyI6WyI4NjBiLTQ5MWUtYWYyNiJdLCJpZC10b2tlbiI6dHJ1ZX0.SLoMqDnQb3nE24sujULB5-mHZDaTUAE0unrUIYobiQ0"
+      :must-see false
+      :uuid "4d08-4304-a633"
+      :body "<p> okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok<br></p>"
+      :video-duration ""
+      :reactions []
+     }
+     {:headline "Anola"
+      :publisher {
+        :avatar-url "https://avatars.slack-edge.com/2017-02-02/136114833346_3758034af26a3b4998f4_512.jpg"
+        :name "Iacopo Carraro"
+        :user-id "988c-47d0-9cb9"}
+      :video-id nil
+      :comment-authors []
+      :comment-count 0
+      :video-image ""
+      :published-at "2019-02-28T10:30:13.425Z"
+      :url "http://localhost:3559/carrot/decisions/post/a0c9-4597-af81?id=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsYXN0LW5hbWUiOiJDYXJyYXJvIiwic2VjdXJlLXV1aWQiOiJmNWYzLTQzOTgtODNmZiIsIm5hbWUiOiJJYWNvcG8gQ2FycmFybyIsImF2YXRhci11cmwiOiJodHRwczpcL1wvYXZhdGFycy5zbGFjay1lZGdlLmNvbVwvMjAxNy0wMi0wMlwvMTM2MTE0ODMzMzQ2XzM3NTgwMzRhZjI2YTNiNDk5OGY0XzUxMi5qcGciLCJvcmctaWQiOiI1MmU2LTQ5ZTQtYmM5NiIsInVzZXItaWQiOiI5ODhjLTQ3ZDAtOWNiOSIsImZpcnN0LW5hbWUiOiJJYWNvcG8iLCJ0ZWFtcyI6WyI4NjBiLTQ5MWUtYWYyNiJdLCJpZC10b2tlbiI6dHJ1ZX0.M_lPlDrPdVcRrCdO-_gS3DfujSr_Z5C3fTfrF-oBpf4"
+      :must-see false
+      :uuid "a0c9-4597-af81"
+      :body "<p> okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok<br></p>"
+      :video-duration ""
+      :reactions []
+     }
+     {:headline "Anot"
+      :publisher {
+        :avatar-url "https://avatars.slack-edge.com/2017-02-02/136114833346_3758034af26a3b4998f4_512.jpg"
+        :name "Iacopo Carraro"
+        :user-id "988c-47d0-9cb9"}
+      :video-id nil
+      :comment-authors []
+      :comment-count 0
+      :video-image ""
+      :published-at "2019-02-28T10:29:44.908Z"
+      :url "http://localhost:3559/carrot/decisions/post/2b39-44b7-b0d2?id=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsYXN0LW5hbWUiOiJDYXJyYXJvIiwic2VjdXJlLXV1aWQiOiI4YWJkLTQ5NWItOTNlYiIsIm5hbWUiOiJJYWNvcG8gQ2FycmFybyIsImF2YXRhci11cmwiOiJodHRwczpcL1wvYXZhdGFycy5zbGFjay1lZGdlLmNvbVwvMjAxNy0wMi0wMlwvMTM2MTE0ODMzMzQ2XzM3NTgwMzRhZjI2YTNiNDk5OGY0XzUxMi5qcGciLCJvcmctaWQiOiI1MmU2LTQ5ZTQtYmM5NiIsInVzZXItaWQiOiI5ODhjLTQ3ZDAtOWNiOSIsImZpcnN0LW5hbWUiOiJJYWNvcG8iLCJ0ZWFtcyI6WyI4NjBiLTQ5MWUtYWYyNiJdLCJpZC10b2tlbiI6dHJ1ZX0.wJ9PvqvpSrk_aYx6AE80ZbXaMfQ2NqzFeQ8gzcjx2Hk"
+      :must-see false
+      :uuid "2b39-44b7-b0d2"
+      :body "<p> okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok<br></p>"
+      :video-duration ""
+      :reactions []
+     }
+     {:headline "Test"
+      :publisher {
+        :avatar-url "https://avatars.slack-edge.com/2017-02-02/136114833346_3758034af26a3b4998f4_512.jpg"
+        :name "Iacopo Carraro"
+        :user-id "988c-47d0-9cb9"}
+      :video-id nil
+      :comment-authors [
+        {:avatar-url "https://avatars.slack-edge.com/2017-02-02/136114833346_3758034af26a3b4998f4_512.jpg",
+         :name "Iacopo Carraro",
+         :user-id "988c-47d0-9cb9"}]
+      :comment-count 1
+      :video-image ""
+      :published-at "2019-02-28T10:29:26.966Z"
+      :url "http://localhost:3559/carrot/decisions/post/9c24-46f3-a761?id=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsYXN0LW5hbWUiOiJDYXJyYXJvIiwic2VjdXJlLXV1aWQiOiI0MjM3LTQ1ZTMtOTQ2MyIsIm5hbWUiOiJJYWNvcG8gQ2FycmFybyIsImF2YXRhci11cmwiOiJodHRwczpcL1wvYXZhdGFycy5zbGFjay1lZGdlLmNvbVwvMjAxNy0wMi0wMlwvMTM2MTE0ODMzMzQ2XzM3NTgwMzRhZjI2YTNiNDk5OGY0XzUxMi5qcGciLCJvcmctaWQiOiI1MmU2LTQ5ZTQtYmM5NiIsInVzZXItaWQiOiI5ODhjLTQ3ZDAtOWNiOSIsImZpcnN0LW5hbWUiOiJJYWNvcG8iLCJ0ZWFtcyI6WyI4NjBiLTQ5MWUtYWYyNiJdLCJpZC10b2tlbiI6dHJ1ZX0.hEQI19i2mCONRPYLa7uaISveGmDfxTUONt5RrDBq7Ig"
+      :must-see true
+      :uuid "9c24-46f3-a761"
+      :body "<p>Aksmd am okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok</p><p> okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok okao akp oka koakpok<br></p>"
+      :video-duration ""
+      :reactions []
+     }
+     {:headline "Hello"
+      :publisher {
+        :avatar-url "https://avatars.slack-edge.com/2017-02-02/136114833346_3758034af26a3b4998f4_512.jpg"
+        :name "Iacopo Carraro"
+        :user-id "988c-47d0-9cb9"}
+      :video-id nil
+      :comment-authors []
+      :comment-count 0
+      :video-image ""
+      :published-at "2019-02-28T10:27:11.597Z"
+      :url "http://localhost:3559/carrot/decisions/post/f05d-4784-8a8f?id=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsYXN0LW5hbWUiOiJDYXJyYXJvIiwic2VjdXJlLXV1aWQiOiJhNDU5LTQwNjItOGYxNiIsIm5hbWUiOiJJYWNvcG8gQ2FycmFybyIsImF2YXRhci11cmwiOiJodHRwczpcL1wvYXZhdGFycy5zbGFjay1lZGdlLmNvbVwvMjAxNy0wMi0wMlwvMTM2MTE0ODMzMzQ2XzM3NTgwMzRhZjI2YTNiNDk5OGY0XzUxMi5qcGciLCJvcmctaWQiOiI1MmU2LTQ5ZTQtYmM5NiIsInVzZXItaWQiOiI5ODhjLTQ3ZDAtOWNiOSIsImZpcnN0LW5hbWUiOiJJYWNvcG8iLCJ0ZWFtcyI6WyI4NjBiLTQ5MWUtYWYyNiJdLCJpZC10b2tlbiI6dHJ1ZX0.tPp2YoqJDqO9wNj-DlOh9pjLlYxHpOMxC9Z46LADZAQ"
+      :must-see false
+      :uuid "f05d-4784-8a8f"
+      :body "<p>Hsandj nanals kldmkammsa lmdk mdkm amdakml kdmal mdkam slkdm alkmdklam dlkmalsk dmlas kmalkm kams kml m</p><p>ansdjanskjnnasj knsan jdn san djas kd als kmaskl dmaksm dlkams lkdmalsdkmasl dmkamdlk maskmd laksmda ka lmakdmalsm dak las mskl malskmdalskm daklm lmdlkasmdlkmaskl mlksal kdml msa mdlakldklsmdlkmsa ksma sad maslkm lkam lkms</p>"
+      :video-duration ""
+      :reactions []
+     }]}]})

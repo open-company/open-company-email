@@ -7,6 +7,8 @@
             [oc.lib.text :as text]
             [hiccup.core :as h]
             [hickory.core :as hickory]
+            [oc.lib.change :as change]
+            [oc.lib.auth :as auth]
             [oc.lib.jwt :as jwt]
             [oc.email.config :as config]
             [jsoup.soup :as soup]))
@@ -16,7 +18,9 @@
 
 (def iso-format (time-format/formatters :date-time))
 (def date-format (time-format/formatter "MMM. d"))
+(def date-format-no-dot (time-format/formatter "MMM d"))
 (def date-format-year (time-format/formatter "MMM. d YYYY"))
+(def date-format-year-comma (time-format/formatter "MMM. d, YYYY"))
 (def day-month-date-year (time-format/formatter "EEEE, MMM. dd, YYYY"))
 (def reminder-date-format (time-format/formatter "EEEE, MMMM d"))
 (def reminder-date-format-year (time-format/formatter "EEEE, MMMM d YYYY"))
@@ -64,6 +68,17 @@
 
 (defn- preheader-spacer []
   (s/join (repeat 120 "&nbsp;&zwnj;")))
+
+;; Seen data
+
+(def seen-text "✓ You've viewed this post")
+
+(defn get-seen-data [superuser-token entry-id]
+  (let [c {:change-server-url config/change-server-url
+           :auth-server-url config/auth-server-url
+           :passphrase config/passphrase
+           :service-name "Email"}]
+    (change/seen-data-for c superuser-token entry-id)))
 
 ;; ----- HTML Fragments -----
 
@@ -275,13 +290,12 @@
           [:tr
             [:th {:class "small-12 large-12"}
               [:p {:class "footer-paragraph bottom-footer"}
-                "Sent with "
-                ;; Heart in footer, comment out for now
-                ; [:span.heart
-                ;   {:style (str "background: url(" config/email-images-prefix "/email_images/footer_heart@2x.png) no-repeat center / 18px 20px;")}]
-                ; " via "
                 [:a {:href config/web-url}
-                  "Carrot"]]]]]
+                  ;; Heart in footer, comment out for now
+                  [:span.heart
+                    {:style (str "background: url(" config/email-images-prefix "/email_images/carrot_grey@2x.png) no-repeat center / 10px 18px;")}]
+
+                  "Sent by Carrot"]]]]]
         (vspacer 40 "footer-table" "footer-table")]]])
 
 ;; ----- Posts common ----
@@ -375,6 +389,90 @@
             (spacer 16 ""))
           (post-attribution entry)]]])))
 
+(defn- digest-post-seen [superuser-token user-id entry-uuid]
+  (let [seen-data (get-seen-data superuser-token entry-uuid)
+        seen-this (some #(= user-id (:user-id %))
+                        (get-in seen-data [:post :read]))]
+    (if seen-this
+      seen-text
+      "")))
+
+(defn- digest-post-block
+  [user entry]
+  (let [publisher (:publisher entry)
+        avatar-url (fix-avatar-url (:avatar-url publisher))
+        vid (:video-id entry)
+        cleaned-body (text/truncated-body (:body entry))
+        has-body (seq cleaned-body)
+        published-date (time-format/unparse date-format-no-dot (time-format/parse iso-format (:published-at entry)))
+        superuser-token (auth/user-token {:user-id (:user-id user)} config/auth-server-url config/passphrase "Email")]
+    [:table
+      {:cellpadding "0"
+       :cellspacing "0"
+       :border "0"
+       :class "row digest-post-block"}
+      [:tr
+        [:td
+          (spacer 24)]]
+      [:tr
+        [:td
+          [:img.digest-post-avatar
+            {:src avatar-url}]
+          [:p.digest-post-author
+            (str (:name (:publisher entry)) " in " (:board-name entry))]
+          [:p.digest-post-date
+            (str " • " published-date)]
+          (when (:must-see entry)
+            [:span.must-see-container
+              [:img
+                {:class "must-see-icon"
+                 :width "8"
+                 :height "10"
+                 :src (str config/email-images-prefix "/email_images/must_see@2x.png")}]
+              [:span.must-see
+                "MUST SEE"]])
+          [:p.digest-post-seen
+            (digest-post-seen superuser-token (:user-id user) (:uuid entry))]]]
+      [:tr [:td (spacer 10)]]
+      [:tr [:td
+        (h2 (:headline entry) (:url entry) "" (str "digest-post-title " (if (:must-see entry) "must-see-title" "")))]]
+      (when has-body
+        [:tr [:td (spacer 4)]])
+      (when has-body
+        [:tr [:td
+          (post-body cleaned-body)]])
+      [:tr [:td 
+          (spacer 8 "")]]
+      (when vid
+        [:tr [:td
+          [:table
+            {:class "row video-cover-table"}
+            [:tr
+              [:td
+                [:a
+                  {:class "video-cover"
+                   :href (:url entry)
+                   :style (str "background-image: url(https://" (:video-image entry) ");")}
+                  [:img
+                    {:class "video-play"
+                     :src (str config/email-images-prefix "/email_images/video_play@2x.png")
+                     :width 40
+                     :height 40}]
+                  [:div
+                    {:class "video-duration-container"}
+                    [:span
+                      {:class "video-duration"}
+                      (:video-duration entry)]]]]]]]])
+        (when vid
+          [:tr [:td
+            (spacer 16 "")]])
+        (when (or (pos? (:comment-count entry))
+                  (pos? (count (:reactions entry))))
+          [:tr [:td
+            [:p.digest-post-footer (:interaction-attribution entry)]]])
+        [:tr [:td
+          (spacer 24)]]]))
+
 (defn- posts-with-board-name [board]
   (let [board-name (:name board)]
     (assoc board :posts (map #(assoc % :board-name board-name) (:posts board)))))
@@ -406,48 +504,70 @@
 "])
 
 (defn- digest-content-date []
-  (time-format/unparse day-month-date-year (t/now)))
+  (time-format/unparse date-format-year-comma (t/now)))
 
-(defn- board-block [board-name]
-  [:table
-    {:cellpadding "0"
-     :cellspacing "0"
-     :border "0"
-     :class "row"}
-    [:tr
-      [:td
-        {:class "post-block-avatar"}]
-      [:td
-        {:class "post-block-avatar-right board-block-bottom-line"}
-        (paragraph board-name "" "board-name")]]])
+(defn sort-must-see-board-name [a b]
+  (let [must-see (compare (:must-see a) (:must-see b))]
+    (if (zero? must-see)
+      (let [board-name (compare (:board-name a) (:board-name b))]
+        (if (zero? board-name)
+          (compare (:published-at a) (:published-at b))
+          board-name))
+      must-see)))
 
 (defn- digest-content [digest]
   (let [boards (map posts-with-board-name (:boards digest))
         posts (mapcat posts-for-board boards)
         digest-url (get-digest-url digest)
-        first-name (:first-name digest)]
-    [:td {:class "small-12 large-12 columns digest-content main-wrapper vertical-padding" :valign "middle" :align "center"}
+        first-name (:first-name digest)
+
+        boards (map posts-with-board-name (:boards digest))
+        all-posts (mapcat :posts boards)
+        sorted-posts (sort sort-must-see-board-name all-posts)
+        must-see (filter :must-see sorted-posts)
+        non-must-see (filter (comp not :must-see) sorted-posts)
+        user {:user-id (:user-id digest)
+              :name (str (:first-name digest) " " (:last-name digest))}]
+    [:td {:class "small-12 large-12" :valign "middle" :align "center"}
       [:center
         (spacer 8)
-        [:table
-          {:cellpadding "0"
-           :cellspacing "0"
-           :border "0"}
-          [:tr
-            [:td
-              (for [p posts]
-                [:table
-                  {:cellpadding "0"
-                   :cellspacing "0"
-                   :border "0"
-                   :class "row"}
-                  [:tr
-                    [:td {:class "small-12 large-12"}
-                      (spacer 24)
-                      (if (= (:type p) :board)
-                        (board-block (:name p))
-                        (post-block p))]]])]]]
-          (spacer 40)]]))
+        (when (seq must-see)
+          [:table
+            {:cellpadding "0"
+             :cellspacing "0"
+             :border "0"
+             :class "digest-content must-see"}
+            [:tr
+              [:td
+                (for [p must-see]
+                  [:table
+                    {:cellpadding "0"
+                     :cellspacing "0"
+                     :border "0"
+                     :class "row digest-posts-container"}
+                    [:tr
+                      [:td {:class "small-12 large-12 columns"}
+                        (digest-post-block user p)]]])]]])
+        (when (seq must-see)
+          (spacer 16))
+        (when (seq non-must-see)
+          [:table
+            {:cellpadding "0"
+             :cellspacing "0"
+             :border "0"
+             :class "digest-content"}
+            [:tr
+              [:td
+                (for [p non-must-see]
+                  [:table
+                    {:cellpadding "0"
+                     :cellspacing "0"
+                     :border "0"
+                     :class "row digest-posts-container"}
+                    [:tr
+                      [:td {:class "small-12 large-12 columns"}
+                        (digest-post-block user p)]]])]]])
+        (spacer 24)]]))
 
 ;; Reminder alert
 
@@ -829,19 +949,19 @@
       [:tr
         [:td {:class "small-12 large-12 columns digest-header"}
           [:center
-            (spacer 40 "digest-header-bg digest-header-top" "digest-header-bg digest-header-top")
+            (spacer 24 "" "")
             (when logo? (org-logo {:org-name org-name
                                    :org-logo-url logo-url
                                    :org-logo-width (:logo-width digest)
                                    :org-logo-height (:logo-height digest)
                                    :align "center"
-                                   :class "row digest-header-bg"}))
+                                   :class "row"}))
             (when logo?
-              (spacer 17 "digest-header-bg" "digest-header-bg"))
-            (h1 "Your morning digest" "center-align digest-header-bg" "digest-header-bg")
-            (spacer 8 "digest-header-bg" "digest-header-bg")
-            (paragraph (str org-name " - " (digest-content-date)) "center-align digest-header-bg" "digest-header-bg digest-header-subline")
-            (spacer 40 "digest-header-bg digest-header-bottom" "digest-header-bg digest-header-bottom")]]]]))
+              (spacer 8 "" ""))
+            (h1 "Your morning digest" "center-align" "")
+            (spacer 5 "" "")
+            (paragraph (str org-name " — " (digest-content-date)) "center-align" "digest-header-subline")
+            (spacer 24 "" "")]]]]))
 
 (defn- body [data]
   (let [type (:type data)
@@ -855,7 +975,7 @@
         :invite (preheader invite-message)
         :board-notification (preheader board-invite-title)
         :share-link (preheader (share-title data))
-        :digest (preheader "See the latest updates from your team.")
+        :digest (preheader "See the latest updates and news from your team.")
         :notify (preheader (notify-intro data))
         :reminder-notification (preheader (reminder-notification-headline data))
         :reminder-alert (preheader (reminder-alert-headline data)))
@@ -865,10 +985,10 @@
           [:td {:valign "middle"
                 :align "center"}
             [:center
-              (email-header)
-              (when digest?
-                (digest-header data))
-              [:table {:class "row email-content"
+              (if digest?
+                (digest-header data)
+                (email-header))
+              [:table {:class (str "row " (if digest? "digest-email-content" "email-content"))
                        :valign "middle"
                        :align "center"}
                 (when-not digest?
