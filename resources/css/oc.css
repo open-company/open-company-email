@@ -241,7 +241,7 @@ table.header-bottom {
   border-bottom: 1px solid #F0F0F1;
 }
 
-span.heart {
+span.footer-link {
   width: 10px;
   height: 18px;
   display: inline-block;

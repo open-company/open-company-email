@@ -291,10 +291,8 @@
             [:th {:class "small-12 large-12"}
               [:p {:class "footer-paragraph bottom-footer"}
                 [:a {:href config/web-url}
-                  ;; Heart in footer, comment out for now
-                  [:span.heart
+                  [:span.footer-link
                     {:style (str "background: url(" config/email-images-prefix "/email_images/carrot_grey@2x.png) no-repeat center / 10px 18px;")}]
-
                   "Sent by Carrot"]]]]]
         (vspacer 40 "footer-table" "footer-table")]]])
 
