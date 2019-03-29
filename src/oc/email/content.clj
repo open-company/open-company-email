@@ -368,7 +368,7 @@
 (defn- digest-post-block
   [user entry]
   (let [publisher (:publisher entry)
-        avatar-url (user-avatar/fix-avatar-url c/filestack-api-key (:avatar-url publisher))
+        avatar-url (user-avatar/fix-avatar-url config/filestack-api-key (:avatar-url publisher))
         vid (:video-id entry)
         cleaned-body (text/truncated-body (:body entry))
         has-body (seq cleaned-body)
@@ -829,7 +829,7 @@
         intro (notify-intro msg)
         notification-author (:author notification)
         notification-author-name (:name notification-author)
-        notification-author-url (user-avatar/fix-avatar-url c/filestack-api-key (:avatar-url notification-author))
+        notification-author-url (user-avatar/fix-avatar-url config/filestack-api-key (:avatar-url notification-author))
         uuid (:entry-id notification)
         secure-uuid (:secure-uuid notification)
         origin-url config/web-url
