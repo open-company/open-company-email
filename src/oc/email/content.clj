@@ -10,11 +10,11 @@
             [oc.lib.change :as change]
             [oc.lib.auth :as auth]
             [oc.lib.jwt :as jwt]
+            [oc.lib.user-avatar :as user-avatar]
             [oc.email.config :as config]
             [jsoup.soup :as soup]))
 
 (def max-logo 40)
-(def author-logo 32)
 
 (def iso-format (time-format/formatters :date-time))
 (def date-format (time-format/formatter "MMM. d"))
@@ -164,36 +164,6 @@
       [:th {:class "small-12 large-12 columns"}
         [:h2 {:class h2-class} content]]]]))
 
-(defn- circle-image
-  "Return an on the fly url of the image circle and resized."
-  [image-url size]
-  ;; Filestack URL https://cdn.filestackcontent.com/qemc9YslR9yabfqL4GTe
-  (let [filestack-static-url "https://cdn.filestackcontent.com/"
-        is-filestack-resource? (clojure.string/starts-with? image-url filestack-static-url)
-        filestack-resource (if is-filestack-resource?
-                             (subs image-url (count filestack-static-url))
-                             image-url)]
-    (str "https://process.filestackapi.com/"
-         (when-not is-filestack-resource?
-           (str config/filestack-api-key "/"))
-         "resize=w:" author-logo ",h:" author-logo ",fit:crop,align:faces/"
-         "circle/"
-         filestack-resource)))
-
-(defn- fix-avatar-url
-  "
-  First it fixes relative URLs, it prepends our production CDN domain to it if it's relative.
-  Then if the url is pointing to one of our happy faces, it replaces the SVG extension with PNG
-  to have it resizable. If it's not one of our happy faces, it uses the on-the-fly resize url."
-  [avatar-url]
-  (let [absolute-avatar-url (if (s/starts-with? avatar-url "/img")
-                              (str "https://d1wc0stj82keig.cloudfront.net" avatar-url)
-                              avatar-url)
-        r (re-seq #"happy_face_(red|green|blue|purple|yellow).svg$" absolute-avatar-url)]
-    (if r
-      (str (subs absolute-avatar-url 0 (- (count absolute-avatar-url) 3)) "png")
-      (circle-image absolute-avatar-url 32))))
-
 (defn- note-author [author & [avatar-url]]
   [:table {:class "row note-paragraph"}
     [:tr
@@ -340,7 +310,7 @@
   ([entry] (post-block entry (:url entry)))
   ([entry entry-url]
   (let [publisher (:publisher entry)
-        avatar-url (fix-avatar-url (:avatar-url publisher))
+        avatar-url (user-avatar/fix-avatar-url c/filestack-api-key (:avatar-url publisher))
         headline (post-headline entry)
         vid (:video-id entry)
         cleaned-body (text/truncated-body (:body entry))
@@ -398,7 +368,7 @@
 (defn- digest-post-block
   [user entry]
   (let [publisher (:publisher entry)
-        avatar-url (fix-avatar-url (:avatar-url publisher))
+        avatar-url (user-avatar/fix-avatar-url c/filestack-api-key (:avatar-url publisher))
         vid (:video-id entry)
         cleaned-body (text/truncated-body (:body entry))
         has-body (seq cleaned-body)
@@ -859,7 +829,7 @@
         intro (notify-intro msg)
         notification-author (:author notification)
         notification-author-name (:name notification-author)
-        notification-author-url (fix-avatar-url (:avatar-url notification-author))
+        notification-author-url (user-avatar/fix-avatar-url c/filestack-api-key (:avatar-url notification-author))
         uuid (:entry-id notification)
         secure-uuid (:secure-uuid notification)
         origin-url config/web-url
