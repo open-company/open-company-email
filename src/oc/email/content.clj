@@ -310,7 +310,7 @@
   ([entry] (post-block entry (:url entry)))
   ([entry entry-url]
   (let [publisher (:publisher entry)
-        avatar-url (user-avatar/fix-avatar-url c/filestack-api-key (:avatar-url publisher))
+        avatar-url (user-avatar/fix-avatar-url config/filestack-api-key (:avatar-url publisher))
         headline (post-headline entry)
         vid (:video-id entry)
         cleaned-body (text/truncated-body (:body entry))
