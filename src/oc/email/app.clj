@@ -40,6 +40,7 @@
     "Email from: " c/email-from-domain "\n"
     "Email digest-prefix: " c/email-digest-prefix "\n"
     "Email images prefix: " c/email-images-prefix "\n"
+    "FileStack: " (or c/filestack-api-key "false") "\n"
     "Sentry: " c/dsn "\n\n"
     (when c/intro? "Ready to serve...\n"))))
 

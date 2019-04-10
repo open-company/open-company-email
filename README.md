@@ -96,16 +96,24 @@ juice --version
 
 An [AWS SQS queue](https://aws.amazon.com/sqs/) is used to pass messages from other OpenCompany services to the email service. Setup an SQS Queue and key/secret/endpoint access to the queue using the AWS Web Console or API.
 
+An API key is needed for [Filestack](https://www.filestack.com/) to build URL's that do image processing.
+
 Make sure you update the section in `project.clj` that looks like this to contain your actual JWT and AWS SQS secrets, and your email domain configuration:
 
 ```clojure
 :dev [:qa {
   :env ^:replace {
-    :aws-access-key-id "CHANGE-ME"
-    :aws-secret-access-key "CHANGE-ME"
-    :endpoint "us-east-1"
-    :aws-sqs-email-queue "https://sqs.REGION.amazonaws.com/CHANGE/ME"
-    :email-from-domain "change-me.com"
+        :open-company-auth-passphrase "this_is_a_dev_secret" ; JWT secret
+        :aws-access-key-id "CHANGE-ME"
+        :aws-secret-access-key "CHANGE-ME"
+        :aws-endpoint "us-east-1"
+        :aws-sqs-email-queue "https://sqs.REGION.amazonaws.com/CHANGE/ME"
+        :email-from-domain "change.me"
+        :email-digest-prefix "[Localhost] "
+        :email-images-prefix "https://CHANGE-ME.s3.amazonaws.com"
+        :filestack-api-key "CHANGE-ME"
+        :intro "true"
+        :log-level "debug"
   }
 ```
 
