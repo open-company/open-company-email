@@ -266,6 +266,15 @@
 
 ;; ----- Posts common ----
 
+(defn- board-access [entry]
+  (cond
+    (= (:board-access entry) "private")
+    " (private)"
+    (= (:board-access entry) "public")
+    " (public)"
+    :else
+    ""))
+
 (defn- post-date [timestamp]
   (let [d (time-format/parse iso-format timestamp)
         n (time/now)
@@ -279,6 +288,8 @@
         attribution (when (pos? (or (:comment-count entry) 0))
                       (text/attribution 2 (:comment-count entry) "comment" (:comment-authors entry)))
         paragraph-text (str publisher-name " on " post-date
+                         " in " (:board-name entry)
+                         (board-access entry)
                          (when-not (s/blank? attribution)
                             " • ")
                          attribution)]
@@ -362,15 +373,6 @@
     (if seen-this
       seen-text
       "")))
-
-(defn- board-access [entry]
-  (cond
-    (= (:board-access entry) "private")
-    " (private)"
-    (= (:board-access entry) "public")
-    " (public)"
-    :else
-    ""))
 
 (defn- digest-post-block
   [user entry]
