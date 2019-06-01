@@ -313,8 +313,8 @@
         avatar-url (user-avatar/fix-avatar-url config/filestack-api-key (:avatar-url publisher))
         headline (post-headline entry)
         vid (:video-id entry)
-        cleaned-body (or (:abstract entry)
-                         (text/truncated-body (:body entry)))
+        abstract (:abstract entry)
+        cleaned-body (if (clojure.string/blank? abstract) (text/truncated-body (:body entry)) abstract)
         has-body (seq cleaned-body)]
     [:table
       {:cellpadding "0"
@@ -371,8 +371,8 @@
   (let [publisher (:publisher entry)
         avatar-url (user-avatar/fix-avatar-url config/filestack-api-key (:avatar-url publisher))
         vid (:video-id entry)
-        cleaned-body (or (:abstract entry)
-                         (text/truncated-body (:body entry)))
+        abstract (:abstract entry)
+        cleaned-body (if (clojure.string/blank? abstract) (text/truncated-body (:body entry)) abstract)
         has-body (seq cleaned-body)
         published-date (time-format/unparse date-format-no-dot (time-format/parse iso-format (:published-at entry)))
         superuser-token (auth/user-token {:user-id (:user-id user)} config/auth-server-url config/passphrase "Email")]
