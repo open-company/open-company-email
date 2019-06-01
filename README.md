@@ -33,10 +33,10 @@ Prospective users of [Carrot](https://carrot.io/) should get started by going to
 
 Most of the dependencies are internal, meaning [Leiningen](https://github.com/technomancy/leiningen) will handle getting them for you. There are a few exceptions:
 
-* [Java 12+](http://www.oracle.com/technetwork/java/javase/downloads/index.html) - a Java 12+ JRE is needed to run Clojure
-* [Leiningen](https://github.com/technomancy/leiningen) 2.9.1+ - Clojure's build and dependency management tool
-* [Node.js](https://nodejs.org/en/) v8.9.1+ - JavaScript runtime
-* [Juice](https://github.com/Automattic/juice) 4.2.2+ - Inlines CSS into HTML
+* [Java](https://openjdk.java.net/) - a Java 12+ JRE is needed to run Clojure
+* [Leiningen](https://github.com/technomancy/leiningen) - Leiningen  2.9.1+ is a Clojure build and dependency management tool
+* [Node.js](https://nodejs.org/en/) - v8.9.1+ of the JavaScript runtime
+* [Juice](https://github.com/Automattic/juice) - Juice 4.2.2+ inlines CSS into HTML
 
 #### Java
 
