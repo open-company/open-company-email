@@ -33,25 +33,25 @@ Prospective users of [Carrot](https://carrot.io/) should get started by going to
 
 Most of the dependencies are internal, meaning [Leiningen](https://github.com/technomancy/leiningen) will handle getting them for you. There are a few exceptions:
 
-* [Java](https://openjdk.java.net/) - a Java 12+ JRE is needed to run Clojure
+* [Java](https://openjdk.java.net/) - a Java 8+ JRE is needed to run Clojure
 * [Leiningen](https://github.com/technomancy/leiningen) - Leiningen  2.9.1+ is a Clojure build and dependency management tool
 * [Node.js](https://nodejs.org/en/) - v8.9.1+ of the JavaScript runtime
 * [Juice](https://github.com/Automattic/juice) - Juice 4.2.2+ inlines CSS into HTML
 
 #### Java
 
-Your system may already have Java 12+ installed. You can verify this with:
+Your system may already have Java 8+ installed. You can verify this with:
 
 ```console
 java -version
 ```
 
-If you do not have Java 12+ [download it](http://www.oracle.com/technetwork/java/javase/downloads/index.html) and follow the installation instructions.
+If you do not have Java 8+ [download it](http://www.oracle.com/technetwork/java/javase/downloads/index.html) and follow the installation instructions.
 
 An option we recommend is [OpenJDK](https://openjdk.java.net/). There are [instructions for Linux](https://openjdk.java.net/install/index.html) and [Homebrew](https://brew.sh/) can be used to install OpenJDK on a Mac with:
 
 ```
-brew update && brew cask install adoptopenjdk
+brew update && brew cask install adoptopenjdk8
 ```
 
 #### Leiningen
@@ -187,7 +187,7 @@ Please note that this project is released with a [Contributor Code of Conduct](h
 
 Distributed under the [GNU Affero General Public License Version 3](https://www.gnu.org/licenses/agpl-3.0.en.html).
 
-Copyright © 2016-2018 OpenCompany, LLC.
+Copyright © 2016-2019 OpenCompany, LLC.
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
