@@ -240,9 +240,7 @@
                        :width "90"
                        :height "22"
                        :alt "Carrot"}]]]
-            [:th {:class "small-6 large-6 columns header-right"}
-              [:span.header-right-span
-                "Lead with clarity"]]]]
+            [:th {:class "small-6 large-6 columns header-right"}]]]
         (vspacer 24 "header-table" "header-table")]]])
 
 (declare reminder-notification-settings-footer)
@@ -268,6 +266,15 @@
 
 ;; ----- Posts common ----
 
+(defn- board-access [entry]
+  (cond
+    (= (:board-access entry) "private")
+    " (private)"
+    (= (:board-access entry) "public")
+    " (public)"
+    :else
+    ""))
+
 (defn- post-date [timestamp]
   (let [d (time-format/parse iso-format timestamp)
         n (time/now)
@@ -281,6 +288,8 @@
         attribution (when (pos? (or (:comment-count entry) 0))
                       (text/attribution 2 (:comment-count entry) "comment" (:comment-authors entry)))
         paragraph-text (str publisher-name " on " post-date
+                         " in " (:board-name entry)
+                         (board-access entry)
                          (when-not (s/blank? attribution)
                             " • ")
                          attribution)]
@@ -389,7 +398,8 @@
           [:img.digest-post-avatar
             {:src avatar-url}]
           [:p.digest-post-author
-            (str (:name (:publisher entry)) " in " (:board-name entry))]
+            (str (:name (:publisher entry)) " in " (:board-name entry)
+            (board-access entry))]
           [:p.digest-post-date
             (str " • " published-date)]
           (when (:must-see entry)
@@ -777,7 +787,7 @@
         org-slug (:org-slug entry)
         sharer (:sharer-name entry)
         publisher (:publisher entry)
-        attribution (str (:name publisher) " posted to " (:board-name entry))
+        attribution (str (:name publisher) " posted to " (:board-name entry) (board-access entry))
         note (:note entry)
         note? (not (s/blank? note))
         from (if (s/blank? sharer) "Someone" sharer)

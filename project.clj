@@ -14,14 +14,14 @@
   ;; All profile dependencies
   :dependencies [
     ;; Lisp on the JVM http://clojure.org/documentation
-    [org.clojure/clojure "1.10.1-RC1"]
+    [org.clojure/clojure "1.10.1"]
     ;; HTML rendering https://github.com/weavejester/hiccup
     [hiccup "2.0.0-alpha2"]
     ;; Async programming tools https://github.com/ztellman/manifold
     [manifold "0.1.9-alpha3"]
     ;; Namespace management https://github.com/clojure/tools.namespace
     ;; NB: org.clojure/tools.reader is pulled in by oc.lib
-    [org.clojure/tools.namespace "0.3.0-alpha4" :exclusions [org.clojure/tools.reader]] 
+    [org.clojure/tools.namespace "0.3.0" :exclusions [org.clojure/tools.reader]] 
 
     ;; Library for OC projects https://github.com/open-company/open-company-lib
     [open-company/lib "0.17.11"]
