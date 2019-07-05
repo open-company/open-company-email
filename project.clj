@@ -24,7 +24,7 @@
     [org.clojure/tools.namespace "0.3.0" :exclusions [org.clojure/tools.reader]] 
 
     ;; Library for OC projects https://github.com/open-company/open-company-lib
-    [open-company/lib "0.17.11"]
+    [open-company/lib "0.17.12"]
     ;; In addition to common functions, brings in the following common dependencies used by this project:
     ;; Component - Component Lifecycle https://github.com/stuartsierra/component
     ;; Schema - Data validation https://github.com/Prismatic/schema
@@ -52,7 +52,7 @@
       }
       :plugins [
         ;; Linter https://github.com/jonase/eastwood
-        [jonase/eastwood "0.3.5"]
+        [jonase/eastwood "0.3.6"]
         ;; Static code search for non-idiomatic code https://github.com/jonase/kibit
         [lein-kibit "0.1.6" :exclusions [org.clojure/clojure]]
       ]
