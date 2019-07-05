@@ -25,7 +25,8 @@
 (def reminder-date-format (time-format/formatter "EEEE, MMMM d"))
 (def reminder-date-format-year (time-format/formatter "EEEE, MMMM d YYYY"))
 
-(def profile-url (str config/web-url "/profile/notifications"))
+(defn- profile-url [org-slug]
+  (str (s/join "/" [config/web-url org-slug "all-posts"]) "?user-settings=notifications"))
 
 (def doc-type "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
 
@@ -245,14 +246,14 @@
 
 (declare reminder-notification-settings-footer)
 
-(defn- email-footer [type]
+(defn- email-footer [data type]
   [:table {:class "row footer-table"
            :valign "middle"
            :align "center"}
     [:tr
       [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
         (when (= type :reminder-notification)
-          reminder-notification-settings-footer)
+          (reminder-notification-settings-footer data))
         (vspacer 24 "footer-table" "footer-table")
         [:table {:class "row footer-table"}
           [:tr
@@ -557,7 +558,7 @@
 (defn reminder-alert-headline [data]
   (str "Hi " (first-name (:assignee (:reminder (:notification data)))) ", it's time to update your team"))
 
-(defn reminder-alert-settings-footer [frequency]
+(defn reminder-alert-settings-footer [org-slug frequency]
   [:table {:class "row reminders-footer"
          :valign "middle"
          :align "center"}
@@ -577,7 +578,7 @@
                 ;:else
                 "weekly")
               " reminder. You can adjust or turn off reminders in ")
-              [:a {:href profile-url}
+              [:a {:href (profile-url org-slug)}
                 "Carrot"]
               "."]]]]
       (vspacer 16 "" "settings-footer")]]])
@@ -616,7 +617,7 @@
                 {:href create-post-url}
                 "Ok, let's do it"]]]]
         (spacer 80)
-        (reminder-alert-settings-footer (:frequency reminder-data))]]))
+        (reminder-alert-settings-footer org-slug (:frequency reminder-data))]]))
 
 ;; Reminder notification
 
@@ -640,21 +641,22 @@
 (defn reminder-notification-subline [reminder-data]
   (str (frequency-string (:frequency reminder-data)) " starting " (reminder-due-date (:next-send reminder-data))))
 
-(def reminder-notification-settings-footer
-  [:table {:class "row reminders-footer"
-         :valign "middle"
-         :align "center"}
-  [:tr
-    [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
-      (vspacer 32 "" "reminders-footer")
-      [:table {:class "row reminders-footer center-align"}
-        [:tr
-          [:th {:class "small-12 large-12"}
-            [:p {:class "reminders-footer reminders-footer-paragraph"}
-              "You can always adjust or turn off reminders in "
-              [:a {:href profile-url}
-                "Carrot"]]]]]
-      (vspacer 32 "footer-table reminders-bottom-footer" "reminders-footer")]]])
+(defn reminder-notification-settings-footer [data]
+  (let [org (:org data)]
+    [:table {:class "row reminders-footer"
+           :valign "middle"
+           :align "center"}
+    [:tr
+      [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
+        (vspacer 32 "" "reminders-footer")
+        [:table {:class "row reminders-footer center-align"}
+          [:tr
+            [:th {:class "small-12 large-12"}
+              [:p {:class "reminders-footer reminders-footer-paragraph"}
+                "You can always adjust or turn off reminders in "
+                [:a {:href (profile-url (:slug org))}
+                  "Carrot"]]]]]
+        (vspacer 32 "footer-table reminders-bottom-footer" "reminders-footer")]]]))
 
 (defn- reminder-notification-content [reminder]
   (let [org (:org reminder)
@@ -986,7 +988,7 @@
                     :notify (notify-content data)
                     :reminder-notification (reminder-notification-content data)
                     :reminder-alert (reminder-alert-content data))]]
-              (email-footer type)]]]]]))
+              (email-footer data type)]]]]]))
 
 (defn- head [data]
   [:html {:xmlns "http://www.w3.org/1999/xhtml"} 
