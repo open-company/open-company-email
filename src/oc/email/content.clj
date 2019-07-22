@@ -72,14 +72,14 @@
 
 ;; Seen data
 
-(def seen-text "✓ You've viewed this post")
+; (def seen-text "✓ You've viewed this post")
 
-(defn get-seen-data [superuser-token entry-id]
-  (let [c {:change-server-url config/change-server-url
-           :auth-server-url config/auth-server-url
-           :passphrase config/passphrase
-           :service-name "Email"}]
-    (change/seen-data-for c superuser-token entry-id)))
+; (defn get-seen-data [superuser-token entry-id]
+;   (let [c {:change-server-url config/change-server-url
+;            :auth-server-url config/auth-server-url
+;            :passphrase config/passphrase
+;            :service-name "Email"}]
+;     (change/seen-data-for c superuser-token entry-id)))
 
 ;; ----- HTML Fragments -----
 
@@ -225,7 +225,7 @@
 ;       [:th {:class "small-1 large-1 last columns"}]]))
 
 
-(defn- email-header []
+(defn- email-header [is-digest?]
   [:table {:class "row header-table"
            :valign "middle"
            :align "center"}
@@ -238,11 +238,14 @@
               [:a
                 {:href config/web-url}
                 [:img {:src (str config/email-images-prefix "/email_images/carrot_logo_with_copy_colors@2x.png")
-                       :width "90"
-                       :height "22"
+                       :width "95"
+                       :height "32"
                        :alt "Carrot"}]]]
-            [:th {:class "small-6 large-6 columns header-right"}]]]
-        (vspacer 24 "header-table" "header-table")]]])
+            [:th {:class "small-6 large-6 columns header-right"}
+              (when is-digest?
+                [:div.digest-date
+                  (time-format/unparse date-format-year-comma (time/now))])]]]
+        (vspacer (if is-digest? 16 24) "header-table" "header-table")]]])
 
 (declare reminder-notification-settings-footer)
 
@@ -286,13 +289,15 @@
 (defn- post-attribution [entry]
   (let [publisher-name (-> entry :publisher :name)
         post-date (post-date (:published-at entry))
-        attribution (when (pos? (or (:comment-count entry) 0))
-                      (text/attribution 2 (:comment-count entry) "comment" (:comment-authors entry)))
+        attribution (when (seq (:comment-count-label entry))
+                      [:div
+                        (:comment-count-label entry)
+                        (when (seq (:new-comment-label entry))
+                          [:label.new-comments
+                            (str "(" (:new-comment-label entry) ")")])])
         paragraph-text (str publisher-name " on " post-date
                          " in " (:board-name entry)
                          (board-access entry)
-                         (when-not (s/blank? attribution)
-                            " • ")
                          attribution)]
     (paragraph paragraph-text "" "text-left attribution")))
 
@@ -368,13 +373,13 @@
             (spacer 16 ""))
           (post-attribution entry)]]])))
 
-(defn- digest-post-seen [superuser-token user-id entry-uuid]
-  (let [seen-data (get-seen-data superuser-token entry-uuid)
-        seen-this (some #(= user-id (:user-id %))
-                        (get-in seen-data [:post :read]))]
-    (if seen-this
-      seen-text
-      "")))
+; (defn- digest-post-seen [superuser-token user-id entry-uuid]
+;   (let [seen-data (get-seen-data superuser-token entry-uuid)
+;         seen-this (some #(= user-id (:user-id %))
+;                         (get-in seen-data [:post :read]))]
+;     (if seen-this
+;       seen-text
+;       "")))
 
 (defn- digest-post-block
   [user entry]
@@ -397,62 +402,34 @@
       [:tr
         [:td
           [:img.digest-post-avatar
-            {:src avatar-url}]
-          [:p.digest-post-author
-            (str (:name (:publisher entry)) " in " (:board-name entry)
-            (board-access entry))]
-          [:p.digest-post-date
-            (str " • " published-date)]
-          (when (:must-see entry)
-            [:span.must-see-container
-              [:img
-                {:class "must-see-icon"
-                 :width "8"
-                 :height "10"
-                 :src (str config/email-images-prefix "/email_images/must_see@2x.png")}]
-              [:span.must-see
-                "MUST SEE"]])
-          [:p.digest-post-seen
-            (digest-post-seen superuser-token (:user-id user) (:uuid entry))]]]
-      [:tr [:td (spacer 10)]]
-      [:tr [:td
-        (h2 (:headline entry) (:url entry) "" (str "digest-post-title " (if (:must-see entry) "must-see-title" "")))]]
-      (when has-body
-        [:tr [:td (spacer 4)]])
-      (when has-body
-        [:tr [:td
-          (post-body cleaned-body)]])
-      [:tr [:td 
-          (spacer 8 "")]]
-      (when vid
-        [:tr [:td
+            {:src avatar-url}]]
+        [:td
           [:table
-            {:class "row video-cover-table"}
-            [:tr
-              [:td
-                [:a
-                  {:class "video-cover"
-                   :href (:url entry)
-                   :style (str "background-image: url(https://" (:video-image entry) ");")}
-                  [:img
-                    {:class "video-play"
-                     :src (str config/email-images-prefix "/email_images/video_play@2x.png")
-                     :width 40
-                     :height 40}]
-                  [:div
-                    {:class "video-duration-container"}
-                    [:span
-                      {:class "video-duration"}
-                      (:video-duration entry)]]]]]]]])
-        (when vid
-          [:tr [:td
-            (spacer 16 "")]])
-        (when (or (pos? (:comment-count entry))
-                  (pos? (count (:reactions entry))))
-          [:tr [:td
-            [:p.digest-post-footer (:interaction-attribution entry)]]])
-        [:tr [:td
-          (spacer 24)]]]))
+            {:cellpadding "0"
+             :cellspacing "0"
+             :border "0"
+             :class "row digest-post-block"}
+            [:tr [:td
+              (h2 (str (:headline entry) " →") (:url entry) "" "digest-post-title")]]
+            (when has-body
+              [:tr [:td (spacer 8)]])
+            (when has-body
+              [:tr [:td
+                (post-body cleaned-body)]])
+            [:tr [:td 
+                (spacer 8 "")]]
+            [:tr [:td
+              [:p.digest-post-footer 
+                (str
+                 (:name (:publisher entry))
+                 " in "
+                 (:board-name entry)
+                 (board-access entry)
+                 (when (:comment-count-label entry)
+                   (str " " (:comment-count-label entry))))
+                (when (:new-comment-label entry)
+                  [:span.new-comments
+                    (str "(" (:new-comment-label entry) ")")])]]]]]]]))
 
 (defn- posts-with-board-name [board]
   (let [board-name (:name board)]
@@ -511,13 +488,17 @@
               :name (str (:first-name digest) " " (:last-name digest))}]
     [:td {:class "small-12 large-12" :valign "middle" :align "center"}
       [:center
-        (spacer 8)
+        (spacer 40)
         (when (seq must-see)
           [:table
             {:cellpadding "0"
              :cellspacing "0"
              :border "0"
              :class "digest-content must-see"}
+            [:tr
+              [:td
+                [:label.digest-group-title
+                  "MUST SEE"]]]
             [:tr
               [:td
                 (for [p must-see]
@@ -530,13 +511,17 @@
                       [:td {:class "small-12 large-12 columns"}
                         (digest-post-block user p)]]])]]])
         (when (seq must-see)
-          (spacer 16))
+          (spacer 32))
         (when (seq non-must-see)
           [:table
             {:cellpadding "0"
              :cellspacing "0"
              :border "0"
              :class "digest-content"}
+            [:tr
+              [:td
+                [:label.digest-group-title
+                  "NEW ACTIVITY"]]]
             [:tr
               [:td
                 (for [p non-must-see]
@@ -920,30 +905,30 @@
 
 ;; ----- General HTML, common to all emails -----
 
-(defn digest-header [digest]
-  (let [logo-url (:logo-url digest)
-        logo? (not (s/blank? logo-url))
-        org-name (or (:org-name digest) "Carrot")]
-    [:table {:class "row digest-header-table"
-             :valign "middle"
-             :align "center"
-             :width "100%"}
-      [:tr
-        [:td {:class "small-12 large-12 columns digest-header"}
-          [:center
-            (spacer 24 "" "")
-            (when logo? (org-logo {:org-name org-name
-                                   :org-logo-url logo-url
-                                   :org-logo-width (:logo-width digest)
-                                   :org-logo-height (:logo-height digest)
-                                   :align "center"
-                                   :class "row"}))
-            (when logo?
-              (spacer 8 "" ""))
-            (h1 "Your morning digest" "center-align" "")
-            (spacer 5 "" "")
-            (paragraph (str org-name " — " (digest-content-date)) "center-align" "digest-header-subline")
-            (spacer 24 "" "")]]]]))
+; (defn digest-header [digest]
+;   (let [logo-url (:logo-url digest)
+;         logo? (not (s/blank? logo-url))
+;         org-name (or (:org-name digest) "Carrot")]
+;     [:table {:class "row digest-header-table"
+;              :valign "middle"
+;              :align "center"
+;              :width "100%"}
+;       [:tr
+;         [:td {:class "small-12 large-12 columns digest-header"}
+;           [:center
+;             (spacer 24 "" "")
+;             (when logo? (org-logo {:org-name org-name
+;                                    :org-logo-url logo-url
+;                                    :org-logo-width (:logo-width digest)
+;                                    :org-logo-height (:logo-height digest)
+;                                    :align "center"
+;                                    :class "row"}))
+;             (when logo?
+;               (spacer 8 "" ""))
+;             (h1 "Your morning digest" "center-align" "")
+;             (spacer 5 "" "")
+;             (paragraph (str org-name " — " (digest-content-date)) "center-align" "digest-header-subline")
+;             (spacer 24 "" "")]]]]))
 
 (defn- body [data]
   (let [type (:type data)
@@ -967,9 +952,7 @@
           [:td {:valign "middle"
                 :align "center"}
             [:center
-              (if digest?
-                (digest-header data)
-                (email-header))
+              (email-header (= type :digest))
               [:table {:class (str "row " (if digest? "digest-email-content" "email-content"))
                        :valign "middle"
                        :align "center"}
