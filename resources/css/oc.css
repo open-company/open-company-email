@@ -425,14 +425,14 @@ img.digest-post-avatar {
   height: 40px;
   object-fit: contain;
   border-radius: 50%;
-  float: left;
+  margin-right: 16px;
 }
 
 table.digest-posts-container:not(:last-child) {
   border-bottom: 1px solid #F3F3F4;
 }
 
-table.digest-post-block > tbody > tr > td:first-child {
+table.digest-post-block td.digest-post-avatar-td {
   width: 56px;
 }
 

@@ -380,7 +380,7 @@
         [:td
           (spacer 24)]]
       [:tr
-        [:td
+        [:td.digest-post-avatar-td
           [:img.digest-post-avatar
             {:src avatar-url}]]
         [:td
