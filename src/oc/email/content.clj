@@ -7,7 +7,6 @@
             [oc.lib.text :as text]
             [hiccup.core :as h]
             [hickory.core :as hickory]
-            [oc.lib.change :as change]
             [oc.lib.auth :as auth]
             [oc.lib.jwt :as jwt]
             [oc.lib.user-avatar :as user-avatar]
@@ -69,17 +68,6 @@
 
 (defn- preheader-spacer []
   (s/join (repeat 120 "&nbsp;&zwnj;")))
-
-;; Seen data
-
-; (def seen-text "✓ You've viewed this post")
-
-; (defn get-seen-data [superuser-token entry-id]
-;   (let [c {:change-server-url config/change-server-url
-;            :auth-server-url config/auth-server-url
-;            :passphrase config/passphrase
-;            :service-name "Email"}]
-;     (change/seen-data-for c superuser-token entry-id)))
 
 ;; ----- HTML Fragments -----
 
@@ -373,14 +361,6 @@
             (spacer 16 ""))
           (post-attribution entry)]]])))
 
-; (defn- digest-post-seen [superuser-token user-id entry-uuid]
-;   (let [seen-data (get-seen-data superuser-token entry-uuid)
-;         seen-this (some #(= user-id (:user-id %))
-;                         (get-in seen-data [:post :read]))]
-;     (if seen-this
-;       seen-text
-;       "")))
-
 (defn- digest-post-block
   [user entry]
   (let [publisher (:publisher entry)
@@ -460,9 +440,6 @@
   }
 }
 "])
-
-(defn- digest-content-date []
-  (time-format/unparse date-format-year-comma (t/now)))
 
 (defn sort-must-see-board-name [a b]
   (let [must-see (compare (:must-see a) (:must-see b))]
@@ -904,31 +881,6 @@
       (spacer 56)]))
 
 ;; ----- General HTML, common to all emails -----
-
-; (defn digest-header [digest]
-;   (let [logo-url (:logo-url digest)
-;         logo? (not (s/blank? logo-url))
-;         org-name (or (:org-name digest) "Carrot")]
-;     [:table {:class "row digest-header-table"
-;              :valign "middle"
-;              :align "center"
-;              :width "100%"}
-;       [:tr
-;         [:td {:class "small-12 large-12 columns digest-header"}
-;           [:center
-;             (spacer 24 "" "")
-;             (when logo? (org-logo {:org-name org-name
-;                                    :org-logo-url logo-url
-;                                    :org-logo-width (:logo-width digest)
-;                                    :org-logo-height (:logo-height digest)
-;                                    :align "center"
-;                                    :class "row"}))
-;             (when logo?
-;               (spacer 8 "" ""))
-;             (h1 "Your morning digest" "center-align" "")
-;             (spacer 5 "" "")
-;             (paragraph (str org-name " — " (digest-content-date)) "center-align" "digest-header-subline")
-;             (spacer 24 "" "")]]]]))
 
 (defn- body [data]
   (let [type (:type data)
