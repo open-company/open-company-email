@@ -238,23 +238,54 @@
 (declare reminder-notification-settings-footer)
 
 (defn- email-footer [data type]
-  [:table {:class "row footer-table"
-           :valign "middle"
-           :align "center"}
-    [:tr
-      [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
-        (when (= type :reminder-notification)
-          (reminder-notification-settings-footer data))
-        (vspacer 24 "footer-table" "footer-table")
-        [:table {:class "row footer-table"}
-          [:tr
-            [:th {:class "small-12 large-12"}
-              [:p {:class "footer-paragraph bottom-footer"}
-                [:a {:href config/web-url}
-                  [:span.footer-link
-                    {:style (str "background: url(" config/email-images-prefix "/email_images/carrot_grey@2x.png) no-repeat center / 10px 18px;")}]
-                  "Sent by Carrot"]]]]]
-        (vspacer 40 "footer-table" "footer-table")]]])
+  (let [digest? (= type :digest)]
+    [:table {:class (str "row footer-table" (when digest? " digest-footer-table"))
+             :valign "middle"
+             :align "center"}
+      [:tr
+        [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
+          (when (= type :reminder-notification)
+            (reminder-notification-settings-footer data))
+          (vspacer 24 "footer-table" "footer-table")
+          [:table {:class "row footer-table"}
+            [:tr
+              [:th {:class "small-12 large-12"}
+                [:p {:class "footer-paragraph bottom-footer"}
+                  [:a {:href config/web-url}
+                    [:span.footer-link
+                      {:style (str "background: url(" config/email-images-prefix "/email_images/carrot_grey@2x.png) no-repeat center / 10px 18px;")}]
+                    "Sent by Carrot"]]]]
+            (when digest?
+              [:tr [:th {:class "small-12 lrge-12"}
+                (vspacer 16 "footer-table" "footer-table")]])
+            (when digest?
+              [:tr [:th {:class "small-12 lrge-12"}
+                [:p {:class "footer-paragraph bottom-footer"}
+                  "You’re setup to receive the daily digest each morning at 7 AM."]]])
+            (when digest?
+              [:tr [:th {:class "small-12 lrge-12"}
+                (vspacer 4 "footer-table" "footer-table")]])
+            (when digest?
+              [:tr [:th {:class "small-12 lrge-12"}
+                [:p {:class "footer-paragraph bottom-footer underline-link"}
+                  [:a {:href (str config/web-url "/" (:org-slug data) "/all-posts?user-settings=notifications")}
+                    "Manage your daily digest settings"]]]])
+            (when digest?
+              [:tr [:th {:class "small-12 lrge-12"}
+                (vspacer 16 "footer-table" "footer-table")]])
+            (when digest?
+              [:tr [:th {:class "small-12 lrge-12"}
+                [:p {:class "footer-paragraph bottom-footer"}
+                  "Have a feature idea or request?"]]])
+            (when digest?
+              [:tr [:th {:class "small-12 lrge-12"}
+                (vspacer 4 "footer-table" "footer-table")]])
+            (when digest?
+              [:tr [:th {:class "small-12 lrge-12"}
+                [:p {:class "footer-paragraph bottom-footer underline-link"}
+                  [:a {:href "mailto:hello@carrot.io"}
+                    "Chat with us"]]]])]
+          (vspacer 40 "footer-table" "footer-table")]]]))
 
 ;; ----- Posts common ----
 
@@ -392,12 +423,12 @@
             [:tr [:td
               (h2 (str (:headline entry) " →") (:url entry) "" "digest-post-title")]]
             (when has-body
-              [:tr [:td (spacer 8)]])
+              [:tr [:td (spacer 4)]])
             (when has-body
               [:tr [:td
                 (post-body cleaned-body)]])
             [:tr [:td 
-                (spacer 8 "")]]
+                (spacer 8)]]
             [:tr [:td
               [:p.digest-post-footer 
                 (str
@@ -510,7 +541,7 @@
                     [:tr
                       [:td {:class "small-12 large-12 columns"}
                         (digest-post-block user p)]]])]]])
-        (spacer 24)]]))
+        (spacer 40)]]))
 
 ;; Reminder alert
 
