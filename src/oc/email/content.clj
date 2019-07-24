@@ -321,19 +321,9 @@
     (paragraph paragraph-text "" "text-left attribution")))
 
 (defn- post-headline [entry]
-  (let [ms (:must-see entry)]
-    [:div
-      [:span.post-title
-        (.text (soup/parse (:headline entry)))]
-      (when ms
-        [:span.must-see-container
-          [:img
-            {:class "must-see-icon"
-             :width "8"
-             :height "10"
-             :src (str config/email-images-prefix "/email_images/must_see@2x.png")}]
-          [:span.must-see
-            "MUST SEE"]])]))
+  [:div
+    [:span.post-title
+      (.text (soup/parse (:headline entry)))]])
 
 (defn- post-body [cleaned-body]
   [:div
@@ -472,44 +462,33 @@
 }
 "])
 
-(defn sort-must-see-board-name [a b]
-  (let [must-see (compare (:must-see a) (:must-see b))]
-    (if (zero? must-see)
-      (let [board-name (compare (:board-name a) (:board-name b))]
-        (if (zero? board-name)
-          (compare (:published-at a) (:published-at b))
-          board-name))
-      must-see)))
-
 (defn- digest-content [digest]
   (let [boards (map posts-with-board-name (:boards digest))
         posts (mapcat posts-for-board boards)
         digest-url (get-digest-url digest)
-        first-name (:first-name digest)
-
         boards (map posts-with-board-name (:boards digest))
         all-posts (mapcat :posts boards)
-        sorted-posts (sort sort-must-see-board-name all-posts)
-        must-see (filter :must-see sorted-posts)
-        non-must-see (filter (comp not :must-see) sorted-posts)
+        sorted-posts (sort-by (juxt :follow-up :board-name :published-at) all-posts)
+        follow-up-posts (filter :follow-up sorted-posts)
+        non-follow-up-posts (filter (comp not :follow-up) sorted-posts)
         user {:user-id (:user-id digest)
               :name (str (:first-name digest) " " (:last-name digest))}]
     [:td {:class "small-12 large-12" :valign "middle" :align "center"}
       [:center
         (spacer 40)
-        (when (seq must-see)
+        (when (seq follow-up-posts)
           [:table
             {:cellpadding "0"
              :cellspacing "0"
              :border "0"
-             :class "digest-content must-see"}
+             :class "digest-content follow-up"}
             [:tr
               [:td
                 [:label.digest-group-title
-                  "MUST SEE"]]]
+                  "FOLLOW-UP"]]]
             [:tr
               [:td
-                (for [p must-see]
+                (for [p follow-up-posts]
                   [:table
                     {:cellpadding "0"
                      :cellspacing "0"
@@ -518,9 +497,9 @@
                     [:tr
                       [:td {:class "small-12 large-12 columns"}
                         (digest-post-block user p)]]])]]])
-        (when (seq must-see)
+        (when (seq follow-up-posts)
           (spacer 32))
-        (when (seq non-must-see)
+        (when (seq non-follow-up-posts)
           [:table
             {:cellpadding "0"
              :cellspacing "0"
@@ -532,7 +511,7 @@
                   "NEW ACTIVITY"]]]
             [:tr
               [:td
-                (for [p non-must-see]
+                (for [p non-follow-up-posts]
                   [:table
                     {:cellpadding "0"
                      :cellspacing "0"
