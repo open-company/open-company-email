@@ -142,6 +142,27 @@
         (io/delete-file html-file true)
         (io/delete-file inline-file true)))))
 
+(defn send-follow-up
+  "Create an HTML and text follow-up notification and email it to the specified recipient."
+  [message]
+  (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
+        html-file (str uuid-fragment ".html")
+        inline-file (str uuid-fragment ".inline.html")
+        follow-up-data (-> message 
+                        (keywordize-keys)
+                        (assoc :source default-source)
+                        (assoc :subject (content/follow-up-subject message)))]
+    (try
+      (spit html-file (content/follow-up-html follow-up-data)) ; create the email in a tmp file
+      (inline-css html-file inline-file) ; inline the CSS
+      ;; Email it to the recipient
+      (email follow-up-data {:text (content/follow-up-text follow-up-data)
+                             :html (slurp inline-file)})
+      (finally
+        ;; remove the tmp files
+        (io/delete-file html-file true)
+        (io/delete-file inline-file true)))))
+
 (defn send-token
   "Create an HTML and text one-time-token email and email it to the specified recipient."
   [token-type message]
@@ -346,5 +367,8 @@
 
   (def reminder-alert-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/reminders/alert.json"))))
   (mailer/send-reminder-alert (assoc reminder-alert-request :to "change@me.com"))
+
+  (def carrot-follow-up (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/follow-up/carrot.json"))))
+  (mailer/send-follow-up (assoc carrot-follow-up :to "change@me.com"))
 
 )
