@@ -168,13 +168,13 @@ div.digest-date {
   background-color: #52C489;
   border-radius: 6px;
   text-align: center;
-  padding: 11px 0px;
+  padding: 11px 0px 11px 0px;
   margin: 0 auto;
 }
 
 .follow-up-post-block {
   background-color: #ececec;
-  padding: 24px;
+  padding: 24px 24px 24px 24px;
   max-width: 440px;
   border-radius: 6px;
   text-align: center;
