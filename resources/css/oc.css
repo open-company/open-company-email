@@ -150,6 +150,69 @@ div.digest-date {
   border-bottom-right-radius: 8px;
 }
 
+.follow-up-email-content {
+  max-width: 564px; 
+  width: 100%;
+  text-align: center;
+  vertical-align: middle;
+  border-top: 1px solid rgba(36, 45, 66, 0.1);
+  border-bottom: 1px solid rgba(36, 45, 66, 0.1);
+}
+
+.follow-up-email-content a.follow-up-button-cta {
+  width: 120px;
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  background-color: #52C489;
+  border-radius: 6px;
+  text-align: center;
+  padding: 11px 0px;
+  margin: 0 auto;
+}
+
+.follow-up-post-block {
+  background-color: #ececec;
+  padding: 24px;
+  max-width: 440px;
+  border-radius: 6px;
+  text-align: center;
+  margin: 0 auto;
+  display: block;
+}
+
+.follow-up-post-block h2 {
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-size: 16px;
+  color: #34414f;
+  font-weight: normal;
+  text-align: left;
+  line-height: 18px;
+}
+
+.follow-up-post-block h2 span.post-title {
+  color: #34414f;
+  text-decoration: underline;
+}
+
+img.follow-up-author {
+  text-align: center;
+  margin: 0 auto;
+  vertical-align: middle;
+  width: 40px;
+  height: 40px;
+}
+
+h1.follow-up-header {
+  text-align: center;
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 24px;
+  color: #34414f;
+}
+
 .digest-email-content {
   max-width: 564px;
   width: 100%;
