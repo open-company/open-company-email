@@ -504,10 +504,6 @@ img.digest-post-avatar {
   margin-right: 16px;
 }
 
-table.digest-posts-container:not(:last-child) {
-  border-bottom: 1px solid #F3F3F4;
-}
-
 table.digest-post-block td.digest-post-avatar-td {
   width: 56px;
 }
@@ -669,10 +665,6 @@ td.post-block-avatar {
   min-height: 32px;
   height: 100%;
   vertical-align: top;
-}
-
-td.board-block-bottom-line {
-  border-bottom: 1px solid #F3F3F4;
 }
 
 td.post-block-avatar-right {
