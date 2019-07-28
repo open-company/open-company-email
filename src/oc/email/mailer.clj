@@ -32,11 +32,12 @@
   (let [text (:text body)
         text-body (if text {:text text} {})
         html (:html body)
-        html-body (if html (assoc text-body :html html) text-body)]
+        html-body (if html (assoc text-body :html html) text-body)
+        fixed-reply-to (or reply-to default-reply-to)]
     (ses/send-email creds
       :destination {:to-addresses [to]}
       :source source
-      :reply-to-addresses [reply-to]
+      :reply-to-addresses [fixed-reply-to]
       :message {:subject subject
                 :body html-body})))
 
