@@ -9,7 +9,8 @@
             [hickory.core :as hickory]
             [oc.lib.auth :as auth]
             [oc.lib.jwt :as jwt]
-            [oc.lib.user-avatar :as user-avatar]
+            [oc.lib.user :as user]
+            [oc.lib.storage :as storage]
             [oc.email.config :as config]
             [jsoup.soup :as soup]))
 
@@ -71,6 +72,17 @@
 
 (defn- preheader-spacer []
   (s/join (repeat 120 "&nbsp;&zwnj;")))
+
+;; ----- Retrieve post data -----
+
+(defn get-post-data [payload]
+  (let [notification (:notification payload)
+        user-map {:user-id (:user-id payload)}
+        c {:storage-server-url config/storage-server-url
+           :auth-server-url config/auth-server-url
+           :passphrase config/passphrase
+           :service-name "Email"}]
+    (storage/post-data-for c user-map (:slug (:org payload)) (:board-id notification) (:entry-id notification))))
 
 ;; ----- HTML Fragments -----
 
@@ -342,7 +354,7 @@
   ([entry] (post-block entry (:url entry)))
   ([entry entry-url]
   (let [publisher (:publisher entry)
-        avatar-url (user-avatar/fix-avatar-url config/filestack-api-key (:avatar-url publisher))
+        avatar-url (user/fix-avatar-url config/filestack-api-key (:avatar-url publisher))
         headline (post-headline entry)
         vid (:video-id entry)
         abstract (:abstract entry)
@@ -393,7 +405,7 @@
 (defn- digest-post-block
   [user entry]
   (let [publisher (:publisher entry)
-        avatar-url (user-avatar/fix-avatar-url config/filestack-api-key (:avatar-url publisher))
+        avatar-url (user/fix-avatar-url config/filestack-api-key (:avatar-url publisher))
         vid (:video-id entry)
         abstract (:abstract entry)
         cleaned-body (if (clojure.string/blank? abstract) (text/truncated-body (:body entry)) abstract)
@@ -757,8 +769,8 @@
 
 (defn follow-up-subject [data]
   (let [msg (keywordize-keys data)
-        follow-up-author (-> data :follow-up :author)
-        author-name (or (:name follow-up-author) (str (:first-name follow-up-author) " " (:last-name follow-up-author)))]
+        follow-up-author (-> data :notification :follow-up :author)
+        author-name (user/name-for follow-up-author)]
     (format follow-up-subject-text author-name)))
 
 (defn- follow-up-post-block
@@ -789,18 +801,24 @@
             (spacer 12 "")
             (paragraph paragraph-text "" "text-left attribution")]]]])))
 
-(defn- follow-up-notification-content [entry]
-  (let [logo-url (:org-logo-url entry)
-        logo-width (:org-logo-width entry)
-        logo-height (:org-logo-height entry)
+(defn- follow-up-notification-content [msg]
+  (let [notification (:notification msg)
+        org (:org notification)
+        logo-url (:logo-url org)
+        logo-width (:logo-width org)
+        logo-height (:logo-height org)
         logo? (not (s/blank? logo-url))
-        org-name (:org-name entry)
-        note (:note entry)
-        note? (not (s/blank? note))
-        follow-up-author (:author (:follow-up entry))
-        author-name (or (:name follow-up-author) (str (:first-name follow-up-author) " " (:last-name follow-up-author)))
-        message (follow-up-subject entry)
-        entry-url (:url entry)]
+        org-name (:name org)
+        follow-up (:follow-up notification)
+        follow-up-author (:author follow-up)
+        author-name (user/name-for follow-up-author)
+        post-data (get-post-data msg)
+        message (follow-up-subject msg)
+        entry-url (s/join "/" [config/web-url
+                               (:slug org)
+                               (:board-slug post-data)
+                               "post"
+                               (:uuid post-data)])]
     [:td {:class "small-12 large-12 columns main-wrapper vertical-padding" :valign "middle" :align "center"}
       (when (:avatar-url follow-up-author)
         [:table {:class "row"}
@@ -810,7 +828,7 @@
                 [:tr {:class "small-12 large-12 columns"}
                   [:th {:class "small-12 large-12 columns"}
                     [:img.follow-up-author
-                      {:src (user-avatar/fix-avatar-url config/filestack-api-key (:avatar-url follow-up-author))}]]]]]]])
+                      {:src (user/fix-avatar-url config/filestack-api-key (:avatar-url follow-up-author))}]]]]]]])
 
       (when (:avatar-url follow-up-author)
         (spacer 24))
@@ -819,7 +837,7 @@
           [:th {:class "small-12 large-12 columns"}
             [:h1 {:class "follow-up-header"} message]]]]
       (spacer 16)
-      (follow-up-post-block entry entry-url)
+      (follow-up-post-block post-data entry-url)
       (spacer 24)
       [:table {:class "row"}
         [:tr
@@ -897,7 +915,7 @@
         intro (notify-intro msg)
         notification-author (:author notification)
         notification-author-name (:name notification-author)
-        notification-author-url (user-avatar/fix-avatar-url config/filestack-api-key (:avatar-url notification-author))
+        notification-author-url (user/fix-avatar-url config/filestack-api-key (:avatar-url notification-author))
         uuid (:entry-id notification)
         secure-uuid (:secure-uuid notification)
         origin-url config/web-url
