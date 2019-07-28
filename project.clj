@@ -24,7 +24,7 @@
     [org.clojure/tools.namespace "0.3.0" :exclusions [org.clojure/tools.reader]] 
 
     ;; Library for OC projects https://github.com/open-company/open-company-lib
-    [open-company/lib "0.17.12"]
+    [open-company/lib "0.17.13-alpha2"]
     ;; In addition to common functions, brings in the following common dependencies used by this project:
     ;; Component - Component Lifecycle https://github.com/stuartsierra/component
     ;; Schema - Data validation https://github.com/Prismatic/schema
@@ -68,7 +68,7 @@
         :aws-sqs-email-queue "https://sqs.REGION.amazonaws.com/CHANGE/ME"
         :email-from-domain "change.me"
         :email-digest-prefix "[Localhost] "
-        :email-images-prefix "https://CHANGE-ME.s3.amazonaws.com"
+        :email-images-prefix "https://open-company-assets-non-prod.s3.amazonaws.com"
         :filestack-api-key "CHANGE-ME"
         :intro "true"
         :log-level "debug"
