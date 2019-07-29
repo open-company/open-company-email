@@ -313,13 +313,6 @@
     :else
     ""))
 
-(defn- post-date [timestamp]
-  (let [d (time-format/parse iso-format timestamp)
-        n (time/now)
-        same-year? (= (time/year n) (time/year d))
-        output-format (if same-year? date-format date-format-year)]
-    (time-format/unparse output-format d)))
-
 (defn- post-attribution [entry]
   (let [publisher-name (-> entry :publisher :name)
         attribution (when (seq (:comment-count-label entry))
