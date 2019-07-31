@@ -179,7 +179,7 @@ div.digest-date {
   border-radius: 6px;
   text-align: center;
   margin: 0 auto;
-  display: block;
+  display: grid;
 }
 
 .follow-up-post-block h2 {
