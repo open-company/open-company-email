@@ -817,12 +817,17 @@
 (defn- notify-intro [msg]
   (let [notification (:notification msg)
         mention? (:mention? notification)
-        comment? (:interaction-id notification)]
+        comment? (:interaction-id notification)
+        entry-publisher (:entry-publisher notification)
+        user-id (:user-id notification)
+        author (:author notification)]
     (if mention?
       (if comment?
         (str "You were mentioned in a comment: ")
         (str "You were mentioned in a post: "))
-      (str "There is a new comment on your post:"))))
+      (if (= (:user-id entry-publisher) user-id)
+        (str "There is a new comment on your post:")
+        (str "Also " (:name author) " commented on " (:name entry-publisher) "'s post")))))
 
 (defn- notify-content [msg]
   (let [notification (:notification msg)
