@@ -2,7 +2,7 @@ body,
 html,
 .body,
 table.body {
-  background-color: #FBFAF7;
+  background-color: white;
   color: #34414F;
   width: 100%;
   height: 100%;
@@ -112,7 +112,7 @@ table.footer a {
 }
 
 .header-table {
-  background-color: #FBFAF7 !important;
+  background-color: white !important;
   max-width: 564px;
   width: 100%;
   text-align: center;
@@ -129,7 +129,7 @@ div.digest-date {
 }
 
 .footer-table {
-  background-color: #FBFAF7 !important;
+  background-color: white !important;
   max-width: 564px;
   width: 100%;
   text-align: center;

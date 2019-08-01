@@ -9,7 +9,7 @@
             [hickory.core :as hickory]
             [oc.lib.auth :as auth]
             [oc.lib.jwt :as jwt]
-            [oc.lib.user-avatar :as user-avatar]
+            [oc.lib.user :as user]
             [oc.email.config :as config]
             [jsoup.soup :as soup]))
 
@@ -200,27 +200,14 @@
       ;; default "view_post"
       "View post")])
 
-;; Comments not shown in digests at the moment
-; (defn- comment-attribution [comment-count comment-authors]
-;   (let [attribution (text/attribution 2 comment-count "comment" comment-authors)]
-;     [:tr
-;       [:th {:class "small-1 large-1 first columns"}]
-;       [:th {:class "small-10 large-10 columns"}
-;         [:table
-;           [:tr
-;             [:th
-;               [:p {:class "attribution"} attribution]]]]]
-;       [:th {:class "small-1 large-1 last columns"}]]))
-
-
 (defn- email-header [is-digest?]
-  [:table {:class "row header-table"
+  [:table {:class "header-table"
            :valign "middle"
            :align "center"}
     [:tr
       [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
-        (vspacer 24 "header-table " "header-table")
-        [:table {:class "row header-table"}
+        (vspacer 24 "" "")
+        [:table
           [:tr
             [:th {:class "small-6 large-6 columns header-icon"}
               [:a
@@ -264,9 +251,6 @@
                   "You’re setup to receive the daily digest each morning at 7 AM."]]])
             (when digest?
               [:tr [:th {:class "small-12 lrge-12"}
-                (vspacer 4 "footer-table" "footer-table")]])
-            (when digest?
-              [:tr [:th {:class "small-12 lrge-12"}
                 [:p {:class "footer-paragraph bottom-footer underline-link"}
                   [:a {:href (str config/web-url "/" (:org-slug data) "/all-posts?user-settings=notifications")}
                     "Manage your daily digest settings"]]]])
@@ -277,9 +261,6 @@
               [:tr [:th {:class "small-12 lrge-12"}
                 [:p {:class "footer-paragraph bottom-footer"}
                   "Have a feature idea or request?"]]])
-            (when digest?
-              [:tr [:th {:class "small-12 lrge-12"}
-                (vspacer 4 "footer-table" "footer-table")]])
             (when digest?
               [:tr [:th {:class "small-12 lrge-12"}
                 [:p {:class "footer-paragraph bottom-footer underline-link"}
@@ -344,7 +325,7 @@
   ([entry] (post-block entry (:url entry)))
   ([entry entry-url]
   (let [publisher (:publisher entry)
-        avatar-url (user-avatar/fix-avatar-url config/filestack-api-key (:avatar-url publisher))
+        avatar-url (user/fix-avatar-url config/filestack-api-key (:avatar-url publisher) 128)
         headline (post-headline entry)
         vid (:video-id entry)
         abstract (:abstract entry)
@@ -395,7 +376,7 @@
 (defn- digest-post-block
   [user entry]
   (let [publisher (:publisher entry)
-        avatar-url (user-avatar/fix-avatar-url config/filestack-api-key (:avatar-url publisher))
+        avatar-url (user/fix-avatar-url config/filestack-api-key (:avatar-url publisher) 128)
         vid (:video-id entry)
         abstract (:abstract entry)
         cleaned-body (if (clojure.string/blank? abstract) (text/truncated-body (:body entry)) abstract)
@@ -494,7 +475,7 @@
         non-must-see (filter (comp not :must-see) sorted-posts)
         user {:user-id (:user-id digest)
               :name (str (:first-name digest) " " (:last-name digest))}]
-    [:td {:class "small-12 large-12" :valign "middle" :align "center"}
+    [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
       [:center
         (spacer 40)
         (when (seq must-see)
@@ -836,7 +817,7 @@
         intro (notify-intro msg)
         notification-author (:author notification)
         notification-author-name (:name notification-author)
-        notification-author-url (user-avatar/fix-avatar-url config/filestack-api-key (:avatar-url notification-author))
+        notification-author-url (user/fix-avatar-url config/filestack-api-key (:avatar-url notification-author) 128)
         uuid (:entry-id notification)
         secure-uuid (:secure-uuid notification)
         origin-url config/web-url
