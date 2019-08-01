@@ -3,7 +3,6 @@
             [clojure.walk :refer (keywordize-keys)]
             [clj-time.core :as time]
             [clj-time.format :as time-format]
-            [clj-time.core :as t]
             [oc.lib.text :as text]
             [hiccup.core :as h]
             [hickory.core :as hickory]
