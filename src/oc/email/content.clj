@@ -18,6 +18,7 @@
 (def date-format (time-format/formatter "MMM. d"))
 (def date-format-no-dot (time-format/formatter "MMM d"))
 (def date-format-year (time-format/formatter "MMM. d YYYY"))
+(def digest-subject-format (time-format/formatter "MMMM d, YYYY"))
 (def date-format-year-comma (time-format/formatter "MMM. d, YYYY"))
 (def day-month-date-year (time-format/formatter "EEEE, MMM. dd, YYYY"))
 (def reminder-date-format (time-format/formatter "EEEE, MMMM d"))
@@ -432,7 +433,8 @@
     (concat [{:type :board :name pretext}] posts)))
 
 (defn digest-title [org-name]
-  (format digest-title-daily (or org-name "Carrot")))
+  (let [date-str (time-format/unparse digest-subject-format (time/now))]
+    (str "☕️ Your " (or org-name "Carrot") " daily digest for " date-str)))
 
 (defn- get-digest-url [digest-data]
   (s/join "/" [config/web-url (:org-slug digest-data) "all-posts"]))
