@@ -776,6 +776,14 @@ p.post-body {
   padding: 0 !important;
 }
 
+table.body .columns .column,
+table.body .columns .columns,
+table.body .column .column,
+table.body .column .columns {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
 /*
   Gmail doesn't like multiple media queries, if you need to use
   @media only screen and (max-width:596px)
