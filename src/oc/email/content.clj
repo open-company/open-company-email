@@ -847,6 +847,7 @@
         uuid (:entry-id notification)
         secure-uuid (:secure-uuid notification)
         origin-url config/web-url
+        interaction-id (:interaction-id notification)
         token-claims {:org-uuid (:org-id notification)
                       :secure-uuid secure-uuid
                       :name (str first-name " " (:last-name msg))
@@ -856,12 +857,10 @@
                       :avatar-url (:avatar-url msg)
                       :team-id (:team-id org)} ;; Let's read the team-id from the org to avoid problems on multiple org users
         id-token (jwt/generate-id-token token-claims config/passphrase)
-        entry-url (s/join "/" [origin-url
-                               org-slug
-                               board-slug
-                               "post"
-                               uuid
-                               (str "?id=" id-token)])
+        base-url (if (seq interaction-id)
+                   (s/join "/" [origin-url org-slug board-slug "post" uuid])
+                   (s/join "/" [origin-url org-slug board-slug "post" uuid "comment" interaction-id]))
+        entry-url (str base-url "?id=" id-token)
         button-cta (if (or (not mention?) comment?)
                     "view_comment"
                     "view_post")
