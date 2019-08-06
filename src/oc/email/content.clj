@@ -836,7 +836,7 @@
         org-name? (not (s/blank? org-name))
         org-slug (:slug org)
         mention? (:mention notification)
-        comment? (:interaction-id notification)
+        interaction-id (:interaction-id notification)
         first-name (:first-name msg)
         first-name? (not (s/blank? first-name))
         author (:author notification)
@@ -847,7 +847,6 @@
         uuid (:entry-id notification)
         secure-uuid (:secure-uuid notification)
         origin-url config/web-url
-        interaction-id (:interaction-id notification)
         token-claims {:org-uuid (:org-id notification)
                       :secure-uuid secure-uuid
                       :name (str first-name " " (:last-name msg))
@@ -861,7 +860,7 @@
                    (s/join "/" [origin-url org-slug board-slug "post" uuid])
                    (s/join "/" [origin-url org-slug board-slug "post" uuid "comment" interaction-id]))
         entry-url (str base-url "?id=" id-token)
-        button-cta (if (or (not mention?) comment?)
+        button-cta (if (or (not mention?) interaction-id)
                     "view_comment"
                     "view_post")
         notification-html-content (-> (hickory/parse content) hickory/as-hiccup first (nth 3) rest rest)]
