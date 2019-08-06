@@ -826,8 +826,8 @@
         (str "You were mentioned in a comment: ")
         (str "You were mentioned in a post: "))
       (if (= (:user-id entry-publisher) user-id)
-        (str "There is a new comment on your post:")
-        (str "Also " (:name author) " commented on " (:name entry-publisher) "'s post")))))
+        (str "There is a new comment on your post: ")
+        (str (:name author) " replied to a thread: ")))))
 
 (defn- notify-content [msg]
   (let [notification (:notification msg)
