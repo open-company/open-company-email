@@ -857,8 +857,8 @@
                       :team-id (:team-id org)} ;; Let's read the team-id from the org to avoid problems on multiple org users
         id-token (jwt/generate-id-token token-claims config/passphrase)
         base-url (if (seq interaction-id)
-                   (s/join "/" [origin-url org-slug board-slug "post" uuid])
-                   (s/join "/" [origin-url org-slug board-slug "post" uuid "comment" interaction-id]))
+                   (s/join "/" [origin-url org-slug board-slug "post" uuid "comment" interaction-id])
+                   (s/join "/" [origin-url org-slug board-slug "post" uuid]))
         entry-url (str base-url "?id=" id-token)
         button-cta (if (or (not mention?) interaction-id)
                     "view_comment"
