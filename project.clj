@@ -68,7 +68,7 @@
         :aws-sqs-email-queue "https://sqs.REGION.amazonaws.com/CHANGE/ME"
         :email-from-domain "change.me"
         :email-digest-prefix "[Localhost] "
-        :email-images-prefix "https://open-company-assets-non-prod.s3.amazonaws.com"
+        :email-images-prefix "https://CHANGE-ME.s3.amazonaws.com"
         :filestack-api-key "CHANGE-ME"
         :intro "true"
         :log-level "debug"
