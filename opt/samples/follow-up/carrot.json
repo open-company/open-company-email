@@ -1,0 +1,22 @@
+{
+  "email": "change@me.com",
+  "user-id": "0987-0987-0987",
+  "org": {"slug": "carrot",
+          "name": "Carrot",
+          "logo-url": "https://slack-files2.s3-us-west-2.amazonaws.com/avatars/2017-09-16/243287999207_9e662352c5c6175b971a_230.png",
+          "logo-height": 230,
+          "logo-width": 230},
+  "entry-id": "1234-1234-1234",
+  "board-id": "4321-4321-4321",
+  "entry-title": "How might Carrot deliver better prompts to drive engagement or encourage content creation?",
+  "follow-up": {
+    "author": {"name": "Ryan Le Roux",
+               "user-id": "1234-1234-1234",
+               "avatar-url": "https://secure.gravatar.com/avatar/866a6350e399e67e749c6f2aef0b96c0.jpg?s=512&d=https%3A%2F%2Fa.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0020-512.png"},
+    "assignee": {"name": "Iacopo Carraro",
+                 "user-id": "4321-4321-4321",
+                 "avatar-url": "https://secure.gravatar.com/avatar/866a6350e399e67e749c6f2aef0b96c0.jpg?s=512&d=https%3A%2F%2Fa.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0020-512.png"},
+    "completed?": "false",
+    "completed-at": null
+  }
+}

@@ -9,6 +9,7 @@
             [oc.lib.auth :as auth]
             [oc.lib.jwt :as jwt]
             [oc.lib.user :as user]
+            [oc.lib.storage :as storage]
             [oc.email.config :as config]
             [jsoup.soup :as soup]))
 
@@ -66,8 +67,22 @@
 
 (def digest-title-daily "☕ Your %s morning digest")
 
+;; Follow-up notification
+(def follow-up-subject-text "%s created a follow-up for you")
+
 (defn- preheader-spacer []
   (s/join (repeat 120 "&nbsp;&zwnj;")))
+
+;; ----- Retrieve post data -----
+
+(defn get-post-data [payload]
+  (let [notification (:notification payload)
+        user-map {:user-id (:user-id payload)}
+        c {:storage-server-url config/storage-server-url
+           :auth-server-url config/auth-server-url
+           :passphrase config/passphrase
+           :service-name "Email"}]
+    (storage/post-data-for c user-map (:slug (:org payload)) (:board-id notification) (:entry-id notification))))
 
 ;; ----- HTML Fragments -----
 
@@ -217,10 +232,10 @@
                        :height "32"
                        :alt "Carrot"}]]]
             [:th {:class "small-6 large-6 columns header-right"}
-              (when is-digest?
+              (when (= type :digest)
                 [:div.digest-date
                   (time-format/unparse date-format-year-comma (time/now))])]]]
-        (vspacer (if is-digest? 16 24) "header-table" "header-table")]]])
+        (vspacer (if (= type :digest) 16 24) "header-table" "header-table")]]])
 
 (declare reminder-notification-settings-footer)
 
@@ -279,42 +294,30 @@
     :else
     ""))
 
-(defn- post-date [timestamp]
-  (let [d (time-format/parse iso-format timestamp)
-        n (time/now)
-        same-year? (= (time/year n) (time/year d))
-        output-format (if same-year? date-format date-format-year)]
-    (time-format/unparse output-format d)))
-
 (defn- post-attribution [entry]
   (let [publisher-name (-> entry :publisher :name)
-        post-date (post-date (:published-at entry))
         attribution (when (seq (:comment-count-label entry))
-                      [:div
-                        (:comment-count-label entry)
+                      [:span
+                        (str " " (:comment-count-label entry))
                         (when (seq (:new-comment-label entry))
                           [:label.new-comments
-                            (str "(" (:new-comment-label entry) ")")])])
-        paragraph-text (str publisher-name " on " post-date
-                         " in " (:board-name entry)
+                            (str " (" (:new-comment-label entry) ")")])])
+        paragraph-text [:span
+                         publisher-name " in " (:board-name entry)
                          (board-access entry)
-                         attribution)]
+                         attribution]]
     (paragraph paragraph-text "" "text-left attribution")))
 
-(defn- post-headline [entry]
-  (let [ms (:must-see entry)]
-    [:div
-      [:span.post-title
-        (.text (soup/parse (:headline entry)))]
-      (when ms
-        [:span.must-see-container
-          [:img
-            {:class "must-see-icon"
-             :width "8"
-             :height "10"
-             :src (str config/email-images-prefix "/email_images/must_see@2x.png")}]
-          [:span.must-see
-            "MUST SEE"]])]))
+(defn- post-headline
+  ([entry]
+    (post-headline entry false))
+  ([entry add-arrow?]
+  [:div
+    [:span.post-title
+      (str
+       (.text (soup/parse (:headline entry)))
+       (when add-arrow?
+         " →"))]]))
 
 (defn- post-body [cleaned-body]
   [:div
@@ -454,44 +457,33 @@
 }
 "])
 
-(defn sort-must-see-board-name [a b]
-  (let [must-see (compare (:must-see a) (:must-see b))]
-    (if (zero? must-see)
-      (let [board-name (compare (:board-name a) (:board-name b))]
-        (if (zero? board-name)
-          (compare (:published-at a) (:published-at b))
-          board-name))
-      must-see)))
-
 (defn- digest-content [digest]
   (let [boards (map posts-with-board-name (:boards digest))
         posts (mapcat posts-for-board boards)
         digest-url (get-digest-url digest)
-        first-name (:first-name digest)
-
         boards (map posts-with-board-name (:boards digest))
         all-posts (mapcat :posts boards)
-        sorted-posts (sort sort-must-see-board-name all-posts)
-        must-see (filter :must-see sorted-posts)
-        non-must-see (filter (comp not :must-see) sorted-posts)
+        sorted-posts (sort-by (juxt :follow-up :board-name :published-at) all-posts)
+        follow-up-posts (filter :follow-up sorted-posts)
+        non-follow-up-posts (filter (comp not :follow-up) sorted-posts)
         user {:user-id (:user-id digest)
               :name (str (:first-name digest) " " (:last-name digest))}]
     [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
       [:center
         (spacer 40)
-        (when (seq must-see)
+        (when (seq follow-up-posts)
           [:table
             {:cellpadding "0"
              :cellspacing "0"
              :border "0"
-             :class "digest-content must-see"}
+             :class "digest-content follow-up"}
             [:tr
               [:td
                 [:label.digest-group-title
-                  "MUST SEE"]]]
+                  "FOLLOW-UP"]]]
             [:tr
               [:td
-                (for [p must-see]
+                (for [p follow-up-posts]
                   [:table
                     {:cellpadding "0"
                      :cellspacing "0"
@@ -500,9 +492,9 @@
                     [:tr
                       [:td {:class "small-12 large-12 columns"}
                         (digest-post-block user p)]]])]]])
-        (when (seq must-see)
+        (when (seq follow-up-posts)
           (spacer 32))
-        (when (seq non-must-see)
+        (when (seq non-follow-up-posts)
           [:table
             {:cellpadding "0"
              :cellspacing "0"
@@ -514,7 +506,7 @@
                   "NEW ACTIVITY"]]]
             [:tr
               [:td
-                (for [p non-must-see]
+                (for [p non-follow-up-posts]
                   [:table
                     {:cellpadding "0"
                      :cellspacing "0"
@@ -750,6 +742,86 @@
         (:token-link invite)]
       (spacer 56)]))
 
+(defn follow-up-subject [data]
+  (let [msg (keywordize-keys data)
+        follow-up-author (-> data :notification :follow-up :author)
+        author-name (user/name-for follow-up-author)]
+    (format follow-up-subject-text author-name)))
+
+(defn- follow-up-post-block
+  ([entry entry-url]
+  (let [publisher (:publisher entry)
+        headline (post-headline entry true)
+        abstract (:abstract entry)
+        cleaned-body (if (clojure.string/blank? abstract) (text/truncated-body (:body entry)) abstract)
+        has-body (seq cleaned-body)
+        publisher-name (-> entry :publisher :name)
+        paragraph-text [:span
+                         publisher-name " in " (:board-name entry)
+                         (board-access entry)]]
+    [:table
+      {:cellpadding "0"
+       :cellspacing "0"
+       :border "0"
+       :class "row"}
+      [:tr
+        [:td
+          [:div
+            {:class "follow-up-post-block"}
+            (h2 headline entry-url "")
+            (when has-body
+              (spacer 8 ""))
+            (when has-body
+              (post-body cleaned-body))
+            (spacer 12 "")
+            (paragraph paragraph-text "" "text-left attribution")]]]])))
+
+(defn- follow-up-notification-content [msg]
+  (let [notification (:notification msg)
+        org (:org notification)
+        logo-url (:logo-url org)
+        logo-width (:logo-width org)
+        logo-height (:logo-height org)
+        logo? (not (s/blank? logo-url))
+        org-name (:name org)
+        follow-up (:follow-up notification)
+        follow-up-author (:author follow-up)
+        author-name (user/name-for follow-up-author)
+        post-data (get-post-data msg)
+        message (follow-up-subject msg)
+        entry-url (s/join "/" [config/web-url
+                               (:slug org)
+                               (:board-slug post-data)
+                               "post"
+                               (:uuid post-data)])]
+    [:td {:class "small-12 large-12 columns main-wrapper vertical-padding" :valign "middle" :align "center"}
+      (when (:avatar-url follow-up-author)
+        [:table {:class "row"}
+          [:tr {:class "small-12 large-12 columns"}
+            [:th {:class "small-12 large-12 columns"}
+              [:table {:class "small-12 large-12 columns"}
+                [:tr {:class "small-12 large-12 columns"}
+                  [:th {:class "small-12 large-12 columns"}
+                    [:img.follow-up-author
+                      {:src (user/fix-avatar-url config/filestack-api-key (:avatar-url follow-up-author))}]]]]]]])
+
+      (when (:avatar-url follow-up-author)
+        (spacer 24))
+      [:table {:class "row"}
+        [:tr
+          [:th {:class "small-12 large-12 columns"}
+            [:h1 {:class "follow-up-header"} message]]]]
+      (spacer 16)
+      (follow-up-post-block post-data entry-url)
+      (spacer 24)
+      [:table {:class "row"}
+        [:tr
+          [:th {:class "small-12 large-12 columns"}
+            [:a {:href entry-url
+                 :class "follow-up-button-cta"}
+              "View post"]]]]
+      (spacer 40)]))
+
 (defn- share-title [data]
   (let [sharer (:sharer-name data)
         from (if (s/blank? sharer) "Someone" sharer)]
@@ -910,15 +982,19 @@
         :digest (preheader "See the latest updates and news from your team.")
         :notify (preheader (notify-intro data))
         :reminder-notification (preheader (reminder-notification-headline data))
-        :reminder-alert (preheader (reminder-alert-headline data)))
+        :reminder-alert (preheader (reminder-alert-headline data))
+        :follow-up (preheader "A follow-up was created for you."))
       [:table {:class "body"
                :with "100%"}
         [:tr
           [:td {:valign "middle"
                 :align "center"}
             [:center
-              (email-header (= type :digest))
-              [:table {:class (str "row " (if digest? "digest-email-content" "email-content"))
+              (email-header type)
+              [:table {:class (str "row " (cond
+                                            digest? "digest-email-content"
+                                            (= type :follow-up) "follow-up-email-content"
+                                            :else "email-content"))
                        :valign "middle"
                        :align "center"}
                 (when-not digest?
@@ -935,7 +1011,8 @@
                     :digest (digest-content data)
                     :notify (notify-content data)
                     :reminder-notification (reminder-notification-content data)
-                    :reminder-alert (reminder-alert-content data))]]
+                    :reminder-alert (reminder-alert-content data)
+                    :follow-up (follow-up-notification-content data))]]
               (email-footer data type)]]]]]))
 
 (defn- head [data]
@@ -995,6 +1072,18 @@
 (defn invite-text [invite]
   (let [link (:token-link (keywordize-keys invite))]
     (str (invite-subject invite false) ".\n\n"
+         carrot-explainer "\n\n"
+         "Open the link below to check it out.\n\n"
+         link "\n\n")))
+
+(defn follow-up-html [follow-up-data]
+  (html (-> follow-up-data
+          (assoc :subject (follow-up-subject follow-up-data))
+          (assoc :text (follow-up-subject follow-up-data))) :follow-up))
+
+(defn follow-up-text [follow-up-data]
+  (let [link (:url follow-up-data)]
+    (str (follow-up-subject follow-up-data) ".\n\n"
          carrot-explainer "\n\n"
          "Open the link below to check it out.\n\n"
          link "\n\n")))
@@ -1146,4 +1235,8 @@
 
   (def reminder-alert (json/decode (slurp "./opt/samples/reminders/alert.json")))
   (spit "./hiccup.html" (content/reminder-alert-html reminder-alert))
+
+  ;; Follow-up notification
+  (def follow-up-data (json/decode (slurp "./opt/samples/follow-up/carrot.json")))
+  (spit "./hiccup.html" (content/follow-up-html follow-up-data))
   )
