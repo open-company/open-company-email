@@ -1206,8 +1206,8 @@ table.button.small-expand, table.button.small-expanded {width:100% !important;}
 table.button.small-expand table, table.button.small-expanded table {width:100%;}
 table.button.small-expand table a, table.button.small-expanded table a {text-align:center !important;width:100% !important;padding-left:0 !important;padding-right:0 !important;}
 table.button.small-expand center, table.button.small-expanded center {min-width:0;}
-.inner-body{max-width:100vw;}
-.main-wrapper{padding: 0 24px;}}
+.main-wrapper{padding: 0 24px;}
+table.body>tbody>tr>td{padding-left:16px !important;Padding-left:16px !important;padding-right:16px !important;Padding-right:16px !important;}}
 
 @media only screen and (min-width:769px) {
   td.large-12 center,

@@ -1,4 +1,5 @@
 {
+  "digest-frequency": "daily",
   "org-slug": "carrot",
   "org-name": "Carrot",
   "logo-url": "https://slack-files2.s3-us-west-2.amazonaws.com/avatars/2017-09-16/243287999207_9e662352c5c6175b971a_230.png",
@@ -11,28 +12,29 @@
         {
           "headline": "Introducing some new faces!",
           "url": "http://localhost:3000/carrot/all-hands/post/e921-4f0c-9b9c",
+          "must-see": true,
+          "board-access": "public",
           "publisher" : {
             "avatar-url" : "https://secure.gravatar.com/avatar/866a6350e399e67e749c6f2aef0b96c0.jpg?s=512&d=https%3A%2F%2Fa.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0020-512.png",
             "name" : "Lisa Malo",
             "user-id" : "d6e9-4529-8e7b"
           },
-          "published-at": "2017-11-5T17:00:48.729Z",
-          "comment-count": 0,
-          "must-see": true,
-          "comment-authors": []
+          "body": "<p>This ajsndajnskd jnasj dnaks jbdahbs dkan slkdnal smdamslkdma;sl md;la s,ld, aslkmdklasn dnas ndkajsn lkdnlasi nda nsdlna skdn akls</p>",
+          "comment-count-label": "3 comments",
+          "new-comment-label": "1 NEW",
+          "published-at": "2017-11-5T17:00:48.729Z"
         }, {
           "headline": "We've hit 2,000 paid subscribers!",
           "url": "http://localhost:3000/carrot/all-hands/post/e921-4f0c-9b9c",
+          "board-access": "public",
           "publisher" : {
             "avatar-url" : "https://secure.gravatar.com/avatar/866a6350e399e67e749c6f2aef0b96c0.jpg?s=512&d=https%3A%2F%2Fa.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0020-512.png",
             "name" : "David Smith",
             "user-id" : "d6e9-4529-8e7b"
           },
-          "published-at": "2017-11-5T17:00:48.729Z",
-          "comment-count": 0,
-          "must-see": false,
-          "video-id": "12345678901234",
-          "comment-authors": []
+          "body": "<p>This ajsndajnskd jnasj dnaks jbdahbs dkan</p><p>Slkdnal smdamslkdma;sl md;la s,ld, aslkmdklasn dnas ndkajsn lkdnlasi nda nsdlna skdn akls</p>",
+          "comment-count-label": "1 comment",
+          "published-at": "2017-11-5T17:00:48.729Z"
         }
       ]
     }, {
@@ -43,27 +45,30 @@
         {
           "headline": "Building Design Collaboration into our Workflow",
           "url": "http://localhost:3000/carrot/design/post/e921-4f0c-9b9c",
+          "must-see": true,
+          "board-access": "private",
           "publisher" : {
             "avatar-url" : "https://secure.gravatar.com/avatar/866a6350e399e67e749c6f2aef0b96c0.jpg?s=512&d=https%3A%2F%2Fa.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0020-512.png",
             "name" : "Lisa Malo",
             "user-id" : "d6e9-4529-8e7b"
           },
-          "published-at": "2017-11-5T17:00:48.729Z",
-          "comment-count": 0,
-          "must-see": true,
-          "video-id": "12345678901234",
-          "comment-authors": []
+          "body": "<p>This ajsndajnskdsdk nsakdnad jkna dnajs lksndkas dlkam kdm aldlk amsdlk maskld malks mdlkam  jnasj dnaks jbdahbs dkan</p><p>Slkdnal smdamslkdma;sl md;la s,ld, aslkmdklasn dnas ndkajsn lkdnlasi nda nsdlna skdn akls</p>",
+          "comment-count-label": "2 comments",
+          "new-comment-label": "2 NEW",
+          "published-at": "2017-11-5T17:00:48.729Z"
         }, {
           "headline": "Versioning, Licensing and Sketch 4.0",
           "url": "http://localhost:3000/carrot/design/post/e921-4f0c-9b9c",
+          "board-access": "private",
           "publisher" : {
             "avatar-url" : "https://secure.gravatar.com/avatar/866a6350e399e67e749c6f2aef0b96c0.jpg?s=512&d=https%3A%2F%2Fa.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0020-512.png",
             "name" : "David Smith",
             "user-id" : "d6e9-4529-8e7b"
           },
-          "published-at": "2017-11-5T17:00:48.729Z",
-          "comment-count": 0,
-          "comment-authors": []
+          "body": "<p>This ajsndajnskdsdk nsakdnad jkna dnajs lksndkas dlkam kdm aldlk amsdlk maskld malks mdlkam  jnasj dnaks jbdahbs dkan</p><p>Slkdnal smdamslkdma;sl md;la s,ld, aslkmdklasn dnas ndkajsn lkdnlasi nda nsdlna skdn akls</p><p>Slkdnal smdamslkdma;sl md;la s,ld, aslkmdklasn dnas ndkajsn lkdnlasi nda nsdlna skdn akls</p>",
+          "comment-count-label": "5 comments",
+          "new-comment-label": "3 NEW",
+          "published-at": "2017-11-5T17:00:48.729Z"
         }
       ]
     }
