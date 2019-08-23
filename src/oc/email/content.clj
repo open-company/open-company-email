@@ -68,7 +68,7 @@
 (def digest-title-daily "☕ Your %s morning digest")
 
 ;; Follow-up notification
-(def follow-up-subject-text "%s created a follow-up for you")
+(def follow-up-subject-text "%s requested you to follow up")
 
 (defn- preheader-spacer []
   (s/join (repeat 120 "&nbsp;&zwnj;")))
