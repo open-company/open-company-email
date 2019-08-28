@@ -68,7 +68,7 @@
 (def digest-title-daily "☕ Your %s morning digest")
 
 ;; Follow-up notification
-(def follow-up-subject-text "%s created a follow-up for you")
+(def follow-up-subject-text "%s requested you to follow up")
 
 (defn- preheader-spacer []
   (s/join (repeat 120 "&nbsp;&zwnj;")))
@@ -864,12 +864,17 @@
 (defn- notify-intro [msg]
   (let [notification (:notification msg)
         mention? (:mention? notification)
-        comment? (:interaction-id notification)]
+        comment? (:interaction-id notification)
+        entry-publisher (:entry-publisher notification)
+        user-id (:user-id notification)
+        author (:author notification)]
     (if mention?
       (if comment?
         (str "You were mentioned in a comment: ")
         (str "You were mentioned in a post: "))
-      (str "There is a new comment on your post:"))))
+      (if (= (:user-id entry-publisher) user-id)
+        (str "There is a new comment on your post: ")
+        (str (:name author) " replied to a thread: ")))))
 
 (defn- notify-content [msg]
   (let [notification (:notification msg)
@@ -883,7 +888,7 @@
         org-name? (not (s/blank? org-name))
         org-slug (:slug org)
         mention? (:mention notification)
-        comment? (:interaction-id notification)
+        interaction-id (:interaction-id notification)
         first-name (:first-name msg)
         first-name? (not (s/blank? first-name))
         author (:author notification)
@@ -903,13 +908,11 @@
                       :avatar-url (:avatar-url msg)
                       :team-id (:team-id org)} ;; Let's read the team-id from the org to avoid problems on multiple org users
         id-token (jwt/generate-id-token token-claims config/passphrase)
-        entry-url (s/join "/" [origin-url
-                               org-slug
-                               board-slug
-                               "post"
-                               uuid
-                               (str "?id=" id-token)])
-        button-cta (if (or (not mention?) comment?)
+        base-url (if (seq interaction-id)
+                   (s/join "/" [origin-url org-slug board-slug "post" uuid "comment" interaction-id])
+                   (s/join "/" [origin-url org-slug board-slug "post" uuid]))
+        entry-url (str base-url "?id=" id-token)
+        button-cta (if (or (not mention?) interaction-id)
                     "view_comment"
                     "view_post")
         notification-html-content (-> (hickory/parse content) hickory/as-hiccup first (nth 3) rest rest)]
