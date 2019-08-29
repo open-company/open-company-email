@@ -778,7 +778,7 @@
 
 (defn- follow-up-notification-content [msg]
   (let [notification (:notification msg)
-        org (:org notification)
+        org (:org msg)
         logo-url (:logo-url org)
         logo-width (:logo-width org)
         logo-height (:logo-height org)
