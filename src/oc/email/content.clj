@@ -19,7 +19,7 @@
 (def date-format (time-format/formatter "MMM. d"))
 (def date-format-no-dot (time-format/formatter "MMM d"))
 (def date-format-year (time-format/formatter "MMM. d YYYY"))
-(def digest-subject-format (time-format/formatter "MMMM d, YYYY"))
+(def digest-subject-format (time-format/formatter "MMM d, YYYY"))
 (def date-format-year-comma (time-format/formatter "MMM. d, YYYY"))
 (def day-month-date-year (time-format/formatter "EEEE, MMM. dd, YYYY"))
 (def reminder-date-format (time-format/formatter "EEEE, MMMM d"))
