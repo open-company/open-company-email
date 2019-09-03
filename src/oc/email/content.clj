@@ -263,19 +263,19 @@
             (when digest?
               [:tr [:th {:class "small-12 lrge-12"}
                 [:p {:class "footer-paragraph bottom-footer"}
-                  "You’re setup to receive the daily digest each morning at 7 AM."]]])
+                  (str "You received this digest because you are part f the " (:org-name data) " team.")]]])
             (when digest?
               [:tr [:th {:class "small-12 lrge-12"}
                 [:p {:class "footer-paragraph bottom-footer underline-link"}
                   [:a {:href (str config/web-url "/" (:org-slug data) "/all-posts?user-settings=notifications")}
-                    "Manage your daily digest settings"]]]])
+                    "Manage your digest settings"]]]])
             (when digest?
               [:tr [:th {:class "small-12 lrge-12"}
                 (vspacer 16 "footer-table" "footer-table")]])
             (when digest?
               [:tr [:th {:class "small-12 lrge-12"}
                 [:p {:class "footer-paragraph bottom-footer"}
-                  "Have a feature idea or request?"]]])
+                  "Questions or ideas for Carrot?"]]])
             (when digest?
               [:tr [:th {:class "small-12 lrge-12"}
                 [:p {:class "footer-paragraph bottom-footer underline-link"}
