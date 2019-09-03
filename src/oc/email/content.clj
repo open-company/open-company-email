@@ -437,7 +437,7 @@
 
 (defn digest-title [org-name]
   (let [date-str (time-format/unparse digest-subject-format (time/now))]
-    (str "☕️ Your " (or org-name "Carrot") " daily digest for " date-str)))
+    (str "☕️ Your " (or org-name "Carrot") " digest for " date-str)))
 
 (defn- get-digest-url [digest-data]
   (s/join "/" [config/web-url (:org-slug digest-data) "all-posts"]))
