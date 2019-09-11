@@ -65,8 +65,6 @@
 (def verify-instructions-2 "Please click the link below to verify your account:")
 (def verify-button-text "verify_email")
 
-(def digest-title-daily "☕ Your %s morning digest")
-
 ;; Follow-up notification
 (def follow-up-subject-text "%s requested you to follow up")
 
@@ -437,7 +435,7 @@
 
 (defn digest-title [org-name]
   (let [date-str (time-format/unparse digest-subject-format (time/now))]
-    (str "☕️ Your " (or org-name "Carrot") " digest for " date-str)))
+    (str "Your " (or org-name "Carrot") " digest for " date-str)))
 
 (defn- get-digest-url [digest-data]
   (s/join "/" [config/web-url (:org-slug digest-data) "all-posts"]))
