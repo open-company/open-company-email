@@ -111,6 +111,10 @@ table.footer a {
   color: #3FBD7C;
 }
 
+center > table.header-table {
+  border-bottom: 1px solid rgba(36, 45, 66, 0.1);
+}
+
 .header-table {
   background-color: white !important;
   max-width: 564px;
@@ -126,6 +130,10 @@ div.digest-date {
   text-align: right;
   margin-top: 8px;
   line-height: 17px;
+}
+
+center > table.footer-table {
+  border-top: 1px solid rgba(36, 45, 66, 0.1);
 }
 
 .footer-table {
@@ -211,6 +219,16 @@ h1.follow-up-header {
   font-size: 20px;
   line-height: 24px;
   color: #34414f;
+}
+
+h1.invite-header {
+  text-align: center;
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 24px;
+  color: #34414f;
+  text-align: center;
 }
 
 .digest-email-content {
@@ -533,11 +551,19 @@ p.digest-post-footer span.new-comments {
   margin-left: 4px;
 }
 
+p.invite-link-instructions {
+  text-align: center;
+  color: #34414F;
+  font-size: 16px;
+  text-align: center;
+}
+
 .token-link {
   color: #3FBD7C;
   font-size: 16px;
-  text-align: left;
+  text-align: center;
   cursor: pointer;
+  display: block;
 }
 
 .green-button:hover {

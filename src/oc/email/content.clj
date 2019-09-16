@@ -44,7 +44,7 @@
 (def invite-message "Join your team on Carrot")
 (def invite-message-with-company "Join the %s team on Carrot")
 (def invite-instructions (str "%s has invited you to Carrot - " carrot-explainer-fragment))
-(def invite-link-instructions "Click here to join your team:")
+(def invite-link-instructions "Click here to join:")
 (def invite-button "accept_invitation")
 
 (def share-message "%s shared a post with you")
@@ -708,11 +708,11 @@
         logo-height (:org-logo-height invite)
         logo? (not (s/blank? logo-url))
         org-name (:org-name invite)
-        from (if (s/blank? (:from invite)) "Someone" (:from invite))
-        from-avatar (:from-avatar invite)
-        from-avatar? (not (s/blank? from-avatar))
         note (:note invite)
         note? (not (s/blank? note))
+        from (:from invite)
+        prefix (if (s/blank? from) "You've been invited" (str from " has invited you"))
+        org (if (s/blank? org-name) "" (str org-name " on "))
         invite-message (if (s/blank? org-name)
                          invite-message
                          (format invite-message-with-company org-name))]
@@ -722,23 +722,21 @@
                              :org-logo-width logo-width
                              :org-logo-height logo-height
                              :class "small-12 large-12 first last columns"}))
-      (when logo? (spacer 32))
-      (h1 invite-message)
+      (when logo? (spacer 24))
+      (h1 (str prefix " to join " org "Carrot") "invite-header")
       (spacer 24)
-      (paragraph (format invite-instructions from))
-      (spacer 16)
       (when note? (spacer 24 "note-paragraph top-note-paragraph" "note-paragraph"))
       (when note? (note-author from))
       (when note? (spacer 8 "note-paragraph" "note-paragraph"))
       (when note? (paragraph note "note-paragraph"))
       (when note? (spacer 24 "note-paragraph bottom-note-paragraph" "note-paragraph"))
       (when note? (spacer 16))
-      (paragraph invite-link-instructions)
+      (paragraph invite-link-instructions "" "invite-link-instructions")
       [:a
         {:class "token-link"
          :href (:token-link invite)}
         (:token-link invite)]
-      (spacer 56)]))
+      (spacer 40)]))
 
 (defn follow-up-subject [data]
   (let [msg (keywordize-keys data)
