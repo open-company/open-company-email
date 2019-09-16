@@ -50,8 +50,8 @@
 (def share-message "%s shared a post with you")
 (def share-cta "view_post")
 
-(def board-invite-title "You’ve been invited to a private section on Carrot")
-(def board-invite-message "%s has invited you to join a private section on Carrot called “")
+(def board-invite-title "You’ve been invited to a private section")
+(def board-invite-message "%s invited you to a private section")
 (def board-invite-message-2 (str "”. " carrot-explainer))
 (def board-invite-button "view_section")
 
@@ -136,7 +136,7 @@
 
 (defn- paragraph
   ([content] (paragraph content ""))
-  ([content css-class] (paragraph content css-class "text-left"))
+  ([content css-class] (paragraph content css-class ""))
   ([content css-class content-css-class & [inner-th-class]]
   [:table {:class (str "row " css-class)}
     [:tr
@@ -147,11 +147,11 @@
   [:table {:class "row"}
     [:tr
       [:th {:class "small-12 large-12 columns"}
-        [:h1 {:class (or h1-class "text-left")} content]]]])
+        [:h1 {:class (or h1-class "")} content]]]])
 
 (defn- h2
   ([content entry-url] (h2 content entry-url "" ""))
-  ([content entry-url css-class] (h2 content entry-url css-class "text-left"))
+  ([content entry-url css-class] (h2 content entry-url css-class ""))
   ([content entry-url css-class h2-class]
   [:table {:class (str "row " css-class)}
     [:tr
@@ -207,7 +207,7 @@
       :verify_email
       "Verify email"
       :view_section
-      "View private section"
+      "View section"
       :view_comment
       "View comment"
       ;; default "view_post"
@@ -304,7 +304,7 @@
                          publisher-name " in " (:board-name entry)
                          (board-access entry)
                          attribution]]
-    (paragraph paragraph-text "" "text-left attribution")))
+    (paragraph paragraph-text "" "attribution")))
 
 (defn- post-headline
   ([entry]
@@ -674,7 +674,9 @@
         first-name (-> notice :inviter :first-name)
         last-name (-> notice :inviter :last-name)
         from (s/join " " [first-name last-name])
-        fixed-from (if-not (s/blank? from) "Someone" from)
+        invite-header (if (not (s/blank? (s/trim from)))
+                       (format board-invite-message from)
+                       board-invite-title)
         from-avatar (-> notice :inviter :avatar-url)
         from-avatar? (not (s/blank? from-avatar))
         note (:note notice)
@@ -682,21 +684,16 @@
         show-note? (and from-avatar? note?)]
     [:td {:class "small-12 large-12 columns main-wrapper vertical-padding" :valign "middle" :align "center"}
       (spacer 64)
-      (h1 board-invite-title)
+      (h1 invite-header)
       (spacer 16)
       [:table {:class "row"}
         [:tr
           [:th {:class "small-12 large-12 columns"}
-            [:p {:class "text-left"}
-              (format board-invite-message from)
-              [:a {:href board-url}
-                board-name]
-              board-invite-message-2]]]]
+            [:a {:href board-url}
+              (str board-name " (private)")]]]]
       (when show-note? (spacer 16))
       (when show-note? (spacer 24 "note-paragraph top-note-paragraph" "note-paragraph top-note-paragraph"))
-      (when show-note? (note-author from))
-      (when show-note? (spacer 8 "note-paragraph" "note-paragraph"))
-      (when show-note? (paragraph note "note-paragraph"))
+      (when show-note? (paragraph note "note-paragraph" "text-left" "note-x-margin"))
       (when show-note? (spacer 24 "note-paragraph bottom-note-paragraph" "note-paragraph bottom-note-paragraph"))
       (spacer 24)
       (left-button board-invite-button board-url)
@@ -770,7 +767,7 @@
             (when has-body
               (post-body cleaned-body))
             (spacer 12 "")
-            (paragraph paragraph-text "" "text-left attribution")]]]])))
+            (paragraph paragraph-text "" "attribution")]]]])))
 
 (defn- follow-up-notification-content [msg]
   (let [notification (:notification msg)
