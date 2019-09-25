@@ -503,6 +503,7 @@ span.oc-mention {
 .note-paragraph p {
   margin-left: 24px;
   margin-right: 24px;
+  text-align: left;
 }
 
 a.learn-more {
@@ -823,6 +824,13 @@ table.body .column .column,
 table.body .column .columns {
   padding-left: 0 !important;
   padding-right: 0 !important;
+}
+
+.post-title h2 {
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-size: 12px;
+  font-weight: bold;
+  color: #3fbd7c;
 }
 
 /*
