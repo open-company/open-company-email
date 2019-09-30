@@ -526,6 +526,13 @@
     "monthly" "Monthly"
     "Quarterly"))
 
+(defn- reminder-due-date [timestamp]
+  (let [d (time-format/parse iso-format timestamp)
+        n (time/now)
+        same-year? (= (time/year n) (time/year d))
+        output-format (if same-year? reminder-date-format reminder-date-format-year)]
+    (time-format/unparse output-format d)))
+
 (defn reminder-notification-subline [reminder-data]
   (str (frequency-string (:frequency reminder-data)) " starting " (reminder-due-date (:next-send reminder-data))))
 
@@ -570,13 +577,6 @@
         (spacer 40)]]))
 
 ;; Reminder notification
-
-(defn- reminder-due-date [timestamp]
-  (let [d (time-format/parse iso-format timestamp)
-        n (time/now)
-        same-year? (= (time/year n) (time/year d))
-        output-format (if same-year? reminder-date-format reminder-date-format-year)]
-    (time-format/unparse output-format d)))
 
 (defn reminder-notification-headline [data]
   (str (first-name (:author (:reminder (:notification data)))) " created a new reminder for you"))
