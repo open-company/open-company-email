@@ -61,7 +61,7 @@
 (def reset-button-text "reset_password")
 
 (def verify-message "Please verify your email")
-(def verify-instructions (str "Welcome to Carrot! " carrot-explainer))
+(def verify-instructions "Welcome to Carrot! Carrot helps leaders rise above noisy chat and email to keep teams aligned.")
 (def verify-instructions-2 "Please click the link below to verify your account:")
 (def verify-button-text "verify_email")
 
@@ -868,6 +868,7 @@
         (str (:name author) " replied to a thread: ")))))
 
 (defn- notify-content [msg]
+  (println "DBG notify-content" user/fix-avatar-url config/filestack-api-key (:avatar-url (:author (:notification msg))))
   (let [notification (:notification msg)
         content (:content notification)
         org (:org msg)
@@ -940,13 +941,9 @@
 
 (defn- token-content [td-classes token-type msg]
   (let [message (token-prep token-type msg)
-        logo-url (:org-logo-url msg)
-        logo? (not (s/blank? logo-url))
         org-name (:org-name msg)]
     [:td {:class td-classes :valign "middle" :align "center"}
-      (when logo? (org-logo (assoc msg :class "small-12 large-12 first last columns")))
-      (when logo? (spacer 32))
-      (h1 (:message message))
+      (h1 (:message message) "token-headeer")
       (spacer 24)
       (paragraph (:instructions message))
       (when (:instructions-2 message)
@@ -957,7 +954,7 @@
         {:class "token-link"
          :href (:token-link msg)}
         (:token-link msg)]
-      (spacer 56)]))
+      (spacer 40)]))
 
 ;; ----- General HTML, common to all emails -----
 
