@@ -198,7 +198,7 @@ center > table.footer-table {
   padding: 24px 24px 24px 24px;
   max-width: 440px;
   border-radius: 6px;
-  text-align: center;
+  text-align: left;
   margin: 0 auto;
   display: grid;
 }
@@ -209,11 +209,17 @@ center > table.footer-table {
   color: #34414f;
   font-weight: normal;
   line-height: 18px;
+  text-align: left;
 }
 
 .follow-up-post-block h2 span.post-title {
   color: #34414f;
   text-decoration: underline;
+  text-align: left;
+}
+
+.follow-up-post-block .attribution {
+  text-align: left;
 }
 
 img.follow-up-author {
