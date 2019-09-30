@@ -8,7 +8,7 @@
             [hickory.core :as hickory]
             [oc.lib.auth :as auth]
             [oc.lib.jwt :as jwt]
-            [oc.lib.user :as user]
+            [oc.lib.user :as user-lib]
             [oc.lib.storage :as storage]
             [oc.email.config :as config]
             [jsoup.soup :as soup]))
@@ -326,7 +326,7 @@
   ([entry] (post-block entry (:url entry)))
   ([entry entry-url]
   (let [publisher (:publisher entry)
-        avatar-url (user/fix-avatar-url config/filestack-api-key (:avatar-url publisher) 128)
+        avatar-url (user-lib/fix-avatar-url config/filestack-api-key (:avatar-url publisher) 128)
         headline (post-headline entry)
         vid (:video-id entry)
         abstract (:abstract entry)
@@ -377,7 +377,7 @@
 (defn- digest-post-block
   [user entry]
   (let [publisher (:publisher entry)
-        avatar-url (user/fix-avatar-url config/filestack-api-key (:avatar-url publisher) 128)
+        avatar-url (user-lib/fix-avatar-url config/filestack-api-key (:avatar-url publisher) 128)
         vid (:video-id entry)
         abstract (:abstract entry)
         cleaned-body (if (clojure.string/blank? abstract) (text/truncated-body (:body entry)) abstract)
@@ -738,7 +738,7 @@
 (defn follow-up-subject [data]
   (let [msg (keywordize-keys data)
         follow-up-author (-> data :notification :follow-up :author)
-        author-name (user/name-for follow-up-author)]
+        author-name (user-lib/name-for follow-up-author)]
     (format follow-up-subject-text author-name)))
 
 (defn- follow-up-post-block
@@ -779,7 +779,7 @@
         org-name (:name org)
         follow-up (:follow-up notification)
         follow-up-author (:author follow-up)
-        author-name (user/name-for follow-up-author)
+        author-name (user-lib/name-for follow-up-author)
         post-data (get-post-data msg)
         message (follow-up-subject msg)
         entry-url (s/join "/" [config/web-url
@@ -796,7 +796,7 @@
                 [:tr {:class "small-12 large-12 columns"}
                   [:th {:class "small-12 large-12 columns"}
                     [:img.follow-up-author
-                      {:src (user/fix-avatar-url config/filestack-api-key (:avatar-url follow-up-author))}]]]]]]])
+                      {:src (user-lib/fix-avatar-url config/filestack-api-key (:avatar-url follow-up-author))}]]]]]]])
 
       (when (:avatar-url follow-up-author)
         (spacer 24))
@@ -861,14 +861,15 @@
         author (:author notification)]
     (if mention?
       (if comment?
-        (str "You were mentioned in a comment: ")
-        (str "You were mentioned in a post: "))
+        (str "You were mentioned in a comment")
+        (str "You were mentioned in a post"))
       (if (= (:user-id entry-publisher) user-id)
-        (str "There is a new comment on your post: ")
-        (str (:name author) " replied to a thread: ")))))
+        (if (seq author)
+          (str (:name author) " commented on your post")
+          (str "There is a new comment on your post"))
+        (str (:name author) " replied to a thread")))))
 
 (defn- notify-content [msg]
-  (println "DBG notify-content" user/fix-avatar-url config/filestack-api-key (:avatar-url (:author (:notification msg))))
   (let [notification (:notification msg)
         content (:content notification)
         org (:org msg)
@@ -887,7 +888,8 @@
         intro (notify-intro msg)
         notification-author (:author notification)
         notification-author-name (:name notification-author)
-        notification-author-url (user/fix-avatar-url config/filestack-api-key (:avatar-url notification-author) 128)
+        is-default-avatar? (s/starts-with? (:avatar-url notification-author) "/img")
+        notification-author-url (user-lib/fix-avatar-url config/filestack-api-key (:avatar-url notification-author) 128)
         uuid (:entry-id notification)
         secure-uuid (:secure-uuid notification)
         origin-url config/web-url
@@ -907,21 +909,25 @@
         button-cta (if (or (not mention?) interaction-id)
                     "view_comment"
                     "view_post")
-        notification-html-content (-> (hickory/parse content) hickory/as-hiccup first (nth 3) rest rest)]
+        notification-html-content (-> (hickory/parse content) hickory/as-hiccup first (nth 3) rest rest)
+        post-data (get-post-data msg)]
     [:td {:class "small-12 large-12 columns vertical-padding" :valign "middle" :align "center"}
-      (spacer 64)
+      (spacer 40)
+      (when-not is-default-avatar?
+        [:img.notify-author-avatar
+         {:src notification-author-url}])
+      (when-not is-default-avatar?
+        (spacer 24))
       (h1 intro)
-      (spacer 24)
-      (post-block entry-data entry-url)
+      (spacer 8)
+      (h2 (:headline post-data) entry-url)
       (spacer 24)
       (spacer 24 "note-paragraph top-note-paragraph" "note-paragraph top-note-paragraph")
-      (note-author notification-author-name notification-author-url)
-      (spacer 8 "note-paragraph" "note-paragraph")
       (paragraph notification-html-content "note-paragraph note-left-padding" "text-left" "note-x-margin")
       (spacer 24 "note-paragraph bottom-note-paragraph" "note-paragraph bottom-note-paragraph")
       (spacer 24)
       (left-button button-cta entry-url)
-      (spacer 56)]))
+      (spacer 40)]))
 
 (defn- token-prep [token-type msg]
   {

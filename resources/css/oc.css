@@ -840,6 +840,13 @@ h1.token-headeer {
   color: #34414f;
 }
 
+img.notify-author-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin: 0 auto;
+}
+
 /*
   Gmail doesn't like multiple media queries, if you need to use
   @media only screen and (max-width:596px)
