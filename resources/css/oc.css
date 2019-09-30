@@ -230,6 +230,14 @@ img.follow-up-author {
   height: 40px;
 }
 
+img.reminder-author {
+  text-align: center;
+  margin: 0 auto;
+  vertical-align: middle;
+  width: 80px;
+  height: 80px; 
+}
+
 h1.follow-up-header {
   text-align: center;
   font-family: Helvetica, Arial, sans-serif !important;
@@ -491,6 +499,16 @@ span.oc-mention {
   font-weight: bold;
 }
 
+.note-paragraph.note-paragraph-footer span {
+  color: rgba(52, 65, 79, 0.5);
+  font-size: 12px;
+}
+
+.note-paragraph.note-paragraph-footer a {
+  color: rgba(52, 65, 79, 0.5);
+  text-decoration: underline;
+}
+
 
 .note-paragraph, .note-paragraph tr, .note-paragraph tr th {
   background-color: #ECECEC !important;
@@ -610,8 +628,8 @@ p.digest-post-footer span.new-comments {
   font-size: 16px;
   font-weight: bold;
   color: white !important;
-  width: 128px;
-  background-color: #FA6654;
+  width: 200px;
+  background-color: #3FBD7C;
   border-radius: 6px;
   text-align: center;
   padding: 11px 0px;
@@ -759,6 +777,15 @@ img.logo {
   font-weight: 400;
   color: #888D94;
   text-align: center;
+}
+
+.reminder-headline {
+  font-size: 16px;
+  text-decoration: underline
+}
+
+.reminder-subline {
+  font-size: 14px;
 }
 
 .settings-footer {

@@ -235,8 +235,6 @@
                   (time-format/unparse date-format-year-comma (time/now))])]]]
         (vspacer (if (= type :digest) 16 24) "header-table" "header-table")]]])
 
-(declare reminder-notification-settings-footer)
-
 (defn- email-footer [data type]
   (let [digest? (= type :digest)]
     [:table {:class (str "row footer-table" (when digest? " digest-footer-table"))
@@ -244,8 +242,6 @@
              :align "center"}
       [:tr
         [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
-          (when (= type :reminder-notification)
-            (reminder-notification-settings-footer data))
           (vspacer 24 "footer-table" "footer-table")
           [:table {:class "row footer-table"}
             [:tr
@@ -523,30 +519,15 @@
 (defn reminder-alert-headline [data]
   (str "Hi " (first-name (:assignee (:reminder (:notification data)))) ", it's time to update your team"))
 
-(defn reminder-alert-settings-footer [org-slug frequency]
-  [:table {:class "row reminders-footer"
-         :valign "middle"
-         :align "center"}
-  [:tr
-    [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
-      (vspacer 32 "" "settings-footer")
-      [:table {:class "row reminders-footer center-align"}
-        [:tr
-          [:th {:class "small-12 large-12"}
-            [:p {:class "settings-footer"}
-              (str
-              "This is a "
-              (case (s/lower-case frequency)
-                "quarter" "quarterly"
-                "month" "monthly"
-                "other week" "bi-weekly"
-                ;:else
-                "weekly")
-              " reminder. You can adjust or turn off reminders in ")
-              [:a {:href (profile-url org-slug)}
-                "Carrot"]
-              "."]]]]
-      (vspacer 16 "" "settings-footer")]]])
+(defn- frequency-string [f]
+  (case (s/lower-case f)
+    "weekly" "Weekly"
+    "biweekly" "Every other week"
+    "monthly" "Monthly"
+    "Quarterly"))
+
+(defn reminder-notification-subline [reminder-data]
+  (str (frequency-string (:frequency reminder-data)) " starting " (reminder-due-date (:next-send reminder-data))))
 
 (defn- reminder-alert-content [reminder]
   (let [org (:org reminder)
@@ -558,31 +539,35 @@
         logo? (not (s/blank? logo-url))
         reminder-data (:reminder (:notification reminder))
         author (:author reminder-data)
-        title (:headline reminder-data)
         headline (reminder-alert-headline reminder)
-        create-post-url (str (s/join "/" [config/web-url org-slug "all-posts"]) "?new")]
+        create-post-url (str (s/join "/" [config/web-url org-slug "all-posts"]) "?new")
+        subline (reminder-notification-subline reminder-data)]
     [:td {:class "small-12 large-12 columns main-wrapper vertical-padding" :valign "middle" :align "center"}
       [:center
-        (when logo? (org-logo {:org-name org-name
-                               :org-logo-url logo-url
-                               :org-logo-width logo-width
-                               :org-logo-height logo-height
-                               :align "center"
-                               :class "small-12 large-12 first last columns"}))
-        (when logo? (spacer 32))
-        (spacer 80)
+        (spacer 40)
         (h1 headline "center-align")
-        (spacer 8)
-        (paragraph title "center-align" "center-align")
         (spacer 24)
+        
+        (spacer 24 "note-paragraph top-note-paragraph" "note-paragraph top-note-paragraph")
+        (paragraph (:headline reminder-data) "note-paragraph" "text-left reminder-headline" "note-x-margin")
+        (spacer 8 "note-paragraph" "note-paragraph")
+        (paragraph subline "note-paragraph" "text-left reminder-subline" "note-x-margin")
+        (spacer 16 "note-paragraph" "note-paragraph")
+        (paragraph [:span.note-paragraph
+                     "You can always adjust or turn off recurring updates in "
+                     [:a
+                       {:href (profile-url org-slug)}
+                       "Carrot"]]
+         "note-paragraph note-paragraph-footer" "text-left")
+        (spacer 24 "note-paragraph bottom-note-paragraph" "note-paragraph bottom-note-paragraph")
+        (spacer 16)
         [:table {:class "row"}
           [:tr
             [:th {:class "small-12 large-12 columns"}
               [:a.view-reminders
                 {:href create-post-url}
                 "Ok, let's do it"]]]]
-        (spacer 80)
-        (reminder-alert-settings-footer org-slug (:frequency reminder-data))]]))
+        (spacer 40)]]))
 
 ;; Reminder notification
 
@@ -596,33 +581,6 @@
 (defn reminder-notification-headline [data]
   (str (first-name (:author (:reminder (:notification data)))) " created a new reminder for you"))
 
-(defn- frequency-string [f]
-  (case (s/lower-case f)
-    "weekly" "Weekly"
-    "biweekly" "Every other week"
-    "monthly" "Monthly"
-    "Quarterly"))
-
-(defn reminder-notification-subline [reminder-data]
-  (str (frequency-string (:frequency reminder-data)) " starting " (reminder-due-date (:next-send reminder-data))))
-
-(defn reminder-notification-settings-footer [data]
-  (let [org (:org data)]
-    [:table {:class "row reminders-footer"
-           :valign "middle"
-           :align "center"}
-    [:tr
-      [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
-        (vspacer 32 "" "reminders-footer")
-        [:table {:class "row reminders-footer center-align"}
-          [:tr
-            [:th {:class "small-12 large-12"}
-              [:p {:class "reminders-footer reminders-footer-paragraph"}
-                "You can always adjust or turn off reminders in "
-                [:a {:href (profile-url (:slug org))}
-                  "Carrot"]]]]]
-        (vspacer 32 "footer-table reminders-bottom-footer" "reminders-footer")]]]))
-
 (defn- reminder-notification-content [reminder]
   (let [org (:org reminder)
         org-name (:name org)
@@ -633,31 +591,42 @@
         logo? (not (s/blank? logo-url))
         reminder-data (:reminder (:notification reminder))
         author (:author reminder-data)
+        author-avatar-url (:avatar-url author)
+        is-default-avatar? (s/starts-with? author-avatar-url "/img")
         title (:headline reminder-data)
         headline (reminder-notification-headline reminder)
         subline (reminder-notification-subline reminder-data)
         reminders-url (str (s/join "/" [config/web-url org-slug "all-posts"]) "?reminders")]
     [:td {:class "small-12 large-12 columns main-wrapper vertical-padding" :valign "middle" :align "center"}
       [:center
-        (when logo? (org-logo {:org-name org-name
-                               :org-logo-url logo-url
-                               :org-logo-width logo-width
-                               :org-logo-height logo-height
-                               :align "center"
-                               :class "small-12 large-12 first last columns"}))
-        (when logo? (spacer 32))
+        (when (and (not is-default-avatar?)
+                   (seq author-avatar-url))
+          [:img.reminder-author
+            {:src (user-lib/fix-avatar-url config/filestack-api-key author-avatar-url 80)}])
+        (when (and (not is-default-avatar?)
+                   (seq author-avatar-url))
+          (spacer 24))
         (h1 headline "center-align")
-        (spacer 65)
-        (h2-no-link title "center-align" "reminder-headline")
-        (spacer 8)
-        (paragraph subline "center-align" "center-align")
+        (spacer 24)
+        (spacer 24 "note-paragraph top-note-paragraph" "note-paragraph top-note-paragraph")
+        (paragraph (:headline reminder-data) "note-paragraph" "text-left reminder-headline" "note-x-margin")
+        (spacer 8 "note-paragraph" "note-paragraph")
+        (paragraph subline "note-paragraph" "text-left reminder-subline" "note-x-margin")
+        (spacer 16 "note-paragraph" "note-paragraph")
+        (paragraph [:span.note-paragraph
+                     "You can always adjust or turn off recurring updates in "
+                     [:a
+                       {:href (profile-url org-slug)}
+                       "Carrot"]]
+         "note-paragraph note-paragraph-footer" "text-left")
+        (spacer 24 "note-paragraph bottom-note-paragraph" "note-paragraph bottom-note-paragraph")
         (spacer 16)
         [:table {:class "row"}
           [:tr
             [:th {:class "small-12 large-12 columns"}
               [:a.view-reminders
                 {:href reminders-url}
-                "View reminder"]]]]
+                "View recurring update"]]]]
         (spacer 40)]]))
 
 ;; ----- Transactional Emails -----
