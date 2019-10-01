@@ -315,7 +315,7 @@
 
 (defn- post-body [cleaned-body]
   [:div
-    [:p.post-body
+    [:p.post-body.text-left
       cleaned-body]])
 
 (defn- post-block
@@ -384,7 +384,7 @@
       {:cellpadding "0"
        :cellspacing "0"
        :border "0"
-       :class "row digest-post-block"}
+       :class "row digest-post-block text-left"}
       [:tr
         [:td
           (spacer 24)]]

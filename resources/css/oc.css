@@ -61,6 +61,7 @@ h2.digest-post-title {
   text-decoration: underline;
   font-family: Helvetica, Arial, sans-serif !important;
   font-weight: normal;
+  text-align: left;
 }
 
 p {
@@ -84,6 +85,7 @@ p.attribution {
   font-size: 12px;
   line-height: 14px;
   color: #888D94;
+  text-align: left;
 }
 
 p.attribution label.new-comments {
