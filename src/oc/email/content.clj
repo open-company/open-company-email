@@ -159,13 +159,6 @@
         [:a {:href entry-url}
           [:h2 {:class h2-class} content]]]]]))
 
-(defn- h2-no-link
-  ([content css-class h2-class]
-  [:table {:class (str "row " css-class)}
-    [:tr
-      [:th {:class "small-12 large-12 columns"}
-        [:h2 {:class h2-class} content]]]]))
-
 (defn- note-author [author & [avatar-url]]
   [:table {:class "row note-paragraph"}
     [:tr
@@ -643,7 +636,7 @@
         first-name (-> notice :inviter :first-name)
         last-name (-> notice :inviter :last-name)
         from (s/join " " [first-name last-name])
-        invite-header (if (not (s/blank? (s/trim from)))
+        invite-header (if-not (s/blank? (s/trim from))
                        (format board-invite-message from)
                        board-invite-title)
         from-avatar (-> notice :inviter :avatar-url)
