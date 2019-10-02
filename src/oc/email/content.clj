@@ -408,7 +408,7 @@
             [:tr [:td 
                 (spacer 8)]]
             [:tr [:td
-              [:p.digest-post-footer 
+              [:p.digest-post-footer
                 (str
                  (:name (:publisher entry))
                  " in "

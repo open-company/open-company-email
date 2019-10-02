@@ -579,6 +579,7 @@ p.digest-post-footer {
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 12px;
   line-height: 18px;
+  text-align: left;
 }
 
 p.digest-post-footer span.new-comments {
@@ -588,6 +589,7 @@ p.digest-post-footer span.new-comments {
   line-height: 18px;
   font-weight: bold;
   margin-left: 4px;
+  text-align: left;
 }
 
 .token-link {
