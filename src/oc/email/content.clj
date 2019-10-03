@@ -281,20 +281,6 @@
     :else
     ""))
 
-(defn- post-attribution [entry]
-  (let [publisher-name (-> entry :publisher :name)
-        attribution (when (seq (:comment-count-label entry))
-                      [:span
-                        (str " " (:comment-count-label entry))
-                        (when (seq (:new-comment-label entry))
-                          [:label.new-comments
-                            (str " (" (:new-comment-label entry) ")")])])
-        paragraph-text [:span
-                         publisher-name " in " (:board-name entry)
-                         (board-access entry)
-                         attribution]]
-    (paragraph paragraph-text "" "attribution")))
-
 (defn- post-headline
   ([entry]
     (post-headline entry false))
