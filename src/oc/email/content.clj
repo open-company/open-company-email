@@ -307,61 +307,8 @@
          " →"))]]))
 
 (defn- post-body [cleaned-body]
-  [:div
-    [:p.post-body.text-left
-      cleaned-body]])
-
-(defn- post-block
-  ([entry] (post-block entry (:url entry)))
-  ([entry entry-url]
-  (let [publisher (:publisher entry)
-        avatar-url (user-lib/fix-avatar-url config/filestack-api-key (:avatar-url publisher) 128)
-        headline (post-headline entry)
-        vid (:video-id entry)
-        abstract (:abstract entry)
-        cleaned-body (if (clojure.string/blank? abstract) (text/truncated-body (:body entry)) abstract)
-        has-body (seq cleaned-body)]
-    [:table
-      {:cellpadding "0"
-       :cellspacing "0"
-       :border "0"
-       :class "row"}
-      [:tr
-        (when avatar-url
-          [:td
-            {:class "post-block-avatar"}
-            [:img.post-avatar
-              {:src avatar-url}]])
-        [:td
-          {:class (if avatar-url "post-block-avatar-right" "post-block-right")}
-          (h2 headline entry-url "")
-          (when has-body
-            (spacer 4 ""))
-          (when has-body
-            (post-body cleaned-body))
-          (spacer 8 "")
-          (when vid
-            [:table
-              {:class "row video-cover-table"}
-              [:tr
-                [:td
-                  [:a
-                    {:class "video-cover"
-                     :href entry-url
-                     :style (str "background-image: url(https://" (:video-image entry) ");")}
-                    [:img
-                      {:class "video-play"
-                       :src (str config/email-images-prefix "/email_images/video_play@2x.png")
-                       :width 40
-                       :height 40}]
-                    [:div
-                      {:class "video-duration-container"}
-                      [:span
-                        {:class "video-duration"}
-                        (:video-duration entry)]]]]]])
-          (when vid
-            (spacer 16 ""))
-          (post-attribution entry)]]])))
+  [:div.post-body
+    cleaned-body])
 
 (defn- digest-post-block
   [user entry]

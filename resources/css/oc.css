@@ -833,7 +833,7 @@ span.post-title {
   color: #2BA767;
 }
 
-p.post-body {
+div.post-body, div.post-body p {
   color: #34414f;
   font-size: 14px;
   line-height: 17px;
