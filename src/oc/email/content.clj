@@ -210,6 +210,8 @@
       "View private section"
       :view_comment
       "View comment"
+      :integrations_settings
+      "Integrations settings"
       ;; default "view_post"
       "View post")])
 
@@ -966,6 +968,27 @@
         (:token-link msg)]
       (spacer 56)]))
 
+;; ----- Bot removed
+
+ (defn bot-removed-subject [msg]
+  (str "Bot removed for org " (:org-name msg)))
+
+ (defn- bot-removed-content [msg]
+  (let [add-bot-url (str config/web-url "/" (:org-slug msg) "?org-settings=integrations")
+        par (str "The Slack bot was removed for the org named " (:org-name msg) ". To add it back visit " add-bot-url ".")
+        logo? (not (s/blank? (:org-logo-url msg)))]
+    [:td {:class "small-12 large-12 columns vertical-padding" :valign "middle" :align "center"}
+      [:center
+        (when logo? (org-logo (merge msg {:align "center"
+                                          :class "small-12 large-12 first last columns"})))
+        (when logo? (spacer 32))
+        (h1 (bot-removed-subject msg))
+        (spacer 24)
+        (paragraph )
+        (spacer 24)
+        (left-button :integrations_settings add-bot-url)
+        (spacer 56)]]))
+
 ;; ----- General HTML, common to all emails -----
 
 (defn- body [data]
@@ -984,7 +1007,8 @@
         :notify (preheader (notify-intro data))
         :reminder-notification (preheader (reminder-notification-headline data))
         :reminder-alert (preheader (reminder-alert-headline data))
-        :follow-up (preheader "A follow-up was created for you."))
+        :follow-up (preheader "A follow-up was created for you.")
+        :bot-removed (preheader (bot-removed-subject data)))
       [:table {:class "body"
                :with "100%"}
         [:tr
@@ -1013,7 +1037,8 @@
                     :notify (notify-content data)
                     :reminder-notification (reminder-notification-content data)
                     :reminder-alert (reminder-alert-content data)
-                    :follow-up (follow-up-notification-content data))]]
+                    :follow-up (follow-up-notification-content data)
+                    :bot-removed (bot-removed-content data))]]
               (email-footer data type)]]]]]))
 
 (defn- head [data]
@@ -1041,6 +1066,9 @@
 
 (defn notify-html [msg]
   (html msg :notify))
+
+(defn bot-removed-html [msg]
+  (html msg :bot-removed))
 
 (defn share-link-html [entry]
   (html entry :share-link))
@@ -1238,6 +1266,12 @@
   (spit "./hiccup.html" (content/reminder-alert-html reminder-alert))
 
   ;; Follow-up notification
+
   (def follow-up-data (json/decode (slurp "./opt/samples/follow-up/carrot.json")))
   (spit "./hiccup.html" (content/follow-up-html follow-up-data))
+
+  ;; Bot removed email
+
+  (def bot-removed-data (json/decode (slurp "./opt/samples/bot-removed/carrot.json")))
+  (spit "./hiccup.html" (content/bot-removed-html bot-removed-data))
   )
