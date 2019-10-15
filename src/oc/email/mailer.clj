@@ -33,9 +33,10 @@
         text-body (if text {:text text} {})
         html (:html body)
         html-body (if html (assoc text-body :html html) text-body)
-        fixed-reply-to (or reply-to default-reply-to)]
+        fixed-reply-to (or reply-to default-reply-to)
+        fixed-to (if (sequential? to) to [to])]
     (ses/send-email creds
-      :destination {:to-addresses [to]}
+      :destination {:to-addresses fixed-to}
       :source source
       :reply-to-addresses [fixed-reply-to]
       :message {:subject subject

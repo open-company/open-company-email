@@ -974,7 +974,7 @@
   (str "Bot removed for org " (:org-name msg)))
 
  (defn- bot-removed-content [msg]
-  (let [add-bot-url (str config/web-url "/" (:org-slug msg) "?org-settings=integrations")
+  (let [add-bot-url (str config/web-url "/" (:org-slug msg) "/all-posts" "?org-settings=integrations")
         par (str "The Slack bot was removed for the org named " (:org-name msg) ". To add it back visit " add-bot-url ".")
         logo? (not (s/blank? (:org-logo-url msg)))]
     [:td {:class "small-12 large-12 columns vertical-padding" :valign "middle" :align "center"}
@@ -984,7 +984,7 @@
         (when logo? (spacer 32))
         (h1 (bot-removed-subject msg))
         (spacer 24)
-        (paragraph )
+        (paragraph par)
         (spacer 24)
         (left-button :integrations_settings add-bot-url)
         (spacer 56)]]))
