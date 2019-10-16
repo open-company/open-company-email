@@ -74,19 +74,29 @@
   [:div.bot-removed-instructions
     "Hi,"
     [:br] [:br]
-    "You’re receiving this note because you are an Admin "
-    (when (seq org-name) (str "for \"" org-name "\" "))
-    "in the Carrot app for team communication."
+    "You’re receiving this note because you’re an Admin "
+    (when (seq org-name) 
+     "for ")
+    (when (seq org-name)
+      [:b (str org-name " ")])
+    "in the Carrot communication app."
     [:br][:br]
-    "Your Carrot bot for Slack has just been removed. If it was turned off on purpose, please ignore this email. If not, you’ll want to "
+    "We just noticed that your Carrot bot for Slack was removed. If it was turned off on purpose, please ignore this email. If not, you’ll want to "
     [:a
      {:href integration-settings-url}
      "re-enable your bot"]
     "."
     [:br] [:br]
-    "The Carrot bot for Slack allows your Carrot posts, comments, and notifications"
+    "The Carrot bot for Slack allows your Carrot posts, comments and notifications"
     " to flow into Slack where it’s easy to see them."])
 (def bot-removed-button "integration_settings")
+
+(def bot-removed-footer
+  [:div.bot-removed-instructions
+    "If you have any questions or want help turning it back on, just reply to this email."
+    [:br][:br]
+    "Thanks,"[:br]
+    "Team Carrot"])
 
 (defn- preheader-spacer []
   (s/join (repeat 120 "&nbsp;&zwnj;")))
@@ -1001,9 +1011,11 @@
         (when logo? (spacer 32))
         (h1 bot-removed-subject "center-align")
         (spacer 24)
-        (paragraph subline "center-align" "center-align")
+        (paragraph subline)
         (spacer 24)
         (left-button bot-removed-button add-bot-url "integration-settings-button")
+        (spacer 24)
+        (paragraph bot-removed-footer)
         (spacer 56)]]))
 
 ;; ----- General HTML, common to all emails -----
