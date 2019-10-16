@@ -4,5 +4,5 @@
   "org-logo-url": "https://www.apple.com/ac/structured-data/images/knowledge_graph_logo.png",
   "org-logo-width": 302,
   "org-logo-height": 302,
-  "to": ["example@me.com" "example2@me.com"]
+  "to": ["example@me.com", "example2@me.com"]
 }
