@@ -68,6 +68,12 @@
 ;; Follow-up notification
 (def follow-up-subject-text "%s requested you to follow up")
 
+;; Bot removed
+(def bot-removed-subject-copy "Slack bot was removed for the organization \"%s\"")
+(def bot-removed-subject-copy-no-name "Slack bot removed for your organization.")
+(def bot-removed-instructions "The Slack bot was removed for the organization named %s. If this was unintentional or if you want to add it back please visit %s.")
+(def bot-removed-instructions-no-name "The Slack bot was removed for your Carrot organization. If this was unintentional or if you want to add it back please visit %s.")
+
 (defn- preheader-spacer []
   (s/join (repeat 120 "&nbsp;&zwnj;")))
 
@@ -211,7 +217,7 @@
       :view_comment
       "View comment"
       :integrations_settings
-      "Integrations settings"
+      "Integration settings"
       ;; default "view_post"
       "View post")])
 
@@ -971,22 +977,26 @@
 ;; ----- Bot removed
 
  (defn bot-removed-subject [msg]
-  (str "Bot removed for org " (:org-name msg)))
+  (if (seq (:org-name msg))
+    (format bot-removed-subject-copy (:org-name msg))
+    bot-removed-subject-copy-no-name))
 
  (defn- bot-removed-content [msg]
   (let [add-bot-url (str config/web-url "/" (:org-slug msg) "/all-posts" "?org-settings=integrations")
-        par (str "The Slack bot was removed for the org named " (:org-name msg) ". To add it back visit " add-bot-url ".")
+        subline (if (seq (:org-name msg))
+                  (format bot-removed-instructions (:org-name msg) add-bot-url)
+                  (format bot-removed-instructions-no-name add-bot-url))
         logo? (not (s/blank? (:org-logo-url msg)))]
     [:td {:class "small-12 large-12 columns vertical-padding" :valign "middle" :align "center"}
       [:center
         (when logo? (org-logo (merge msg {:align "center"
                                           :class "small-12 large-12 first last columns"})))
         (when logo? (spacer 32))
-        (h1 (bot-removed-subject msg))
+        (h1 (bot-removed-subject msg) "center-align")
         (spacer 24)
-        (paragraph par)
+        (paragraph subline "center-align" "center-align")
         (spacer 24)
-        (left-button :integrations_settings add-bot-url)
+        (left-button :integrations_settings add-bot-url "integration-settings-button")
         (spacer 56)]]))
 
 ;; ----- General HTML, common to all emails -----

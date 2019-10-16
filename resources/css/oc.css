@@ -565,6 +565,12 @@ p.digest-post-footer span.new-comments {
   text-align: center;
 }
 
+a.green-button.integration-settings-button {
+  float: none;
+  margin: 0 auto;
+  max-width: 220px;
+}
+
 .view-reminders {
   display: block;
   margin: 0 auto;
