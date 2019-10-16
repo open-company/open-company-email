@@ -569,6 +569,7 @@ a.green-button.integration-settings-button {
   float: none;
   margin: 0 auto;
   max-width: 220px;
+  color: white;
 }
 
 .view-reminders {
@@ -788,6 +789,11 @@ table.body .column .column,
 table.body .column .columns {
   padding-left: 0 !important;
   padding-right: 0 !important;
+}
+
+.bot-removed-instructions a {
+  text-decoration: underline;
+  color: #2BA767;
 }
 
 /*

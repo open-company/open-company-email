@@ -298,7 +298,7 @@
         inline-file (str uuid-fragment ".inline.html")
         org-name (:org-name msg)
         org-slug (:org-slug msg)
-        subject (str "Bot removed for org " org-name)]
+        subject content/bot-removed-subject]
     (try
       (spit html-file (content/bot-removed-html msg)) ; create the email in a tmp file
       (inline-css html-file inline-file) ; inline the CSS
