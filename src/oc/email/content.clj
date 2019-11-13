@@ -8,7 +8,7 @@
             [hickory.core :as hickory]
             [oc.lib.auth :as auth]
             [oc.lib.jwt :as jwt]
-            [oc.lib.user :as user]
+            [oc.lib.user :as user-lib]
             [oc.lib.storage :as storage]
             [oc.email.config :as config]
             [jsoup.soup :as soup]))
@@ -44,14 +44,14 @@
 (def invite-message "Join your team on Carrot")
 (def invite-message-with-company "Join the %s team on Carrot")
 (def invite-instructions (str "%s has invited you to Carrot - " carrot-explainer-fragment))
-(def invite-link-instructions "Click here to join your team:")
+(def invite-link-instructions "Click here to join:")
 (def invite-button "accept_invitation")
 
 (def share-message "%s shared a post with you")
 (def share-cta "view_post")
 
-(def board-invite-title "You’ve been invited to a private section on Carrot")
-(def board-invite-message "%s has invited you to join a private section on Carrot called “")
+(def board-invite-title "You’ve been invited to a private section")
+(def board-invite-message "%s invited you to a private section")
 (def board-invite-message-2 (str "”. " carrot-explainer))
 (def board-invite-button "view_section")
 
@@ -61,7 +61,7 @@
 (def reset-button-text "reset_password")
 
 (def verify-message "Please verify your email")
-(def verify-instructions (str "Welcome to Carrot! " carrot-explainer))
+(def verify-instructions "Welcome to Carrot! Carrot helps leaders rise above noisy chat and email to keep teams aligned.")
 (def verify-instructions-2 "Please click the link below to verify your account:")
 (def verify-button-text "verify_email")
 
@@ -166,7 +166,7 @@
 
 (defn- paragraph
   ([content] (paragraph content ""))
-  ([content css-class] (paragraph content css-class "text-left"))
+  ([content css-class] (paragraph content css-class ""))
   ([content css-class content-css-class & [inner-th-class]]
   [:table {:class (str "row " css-class)}
     [:tr
@@ -177,24 +177,17 @@
   [:table {:class "row"}
     [:tr
       [:th {:class "small-12 large-12 columns"}
-        [:h1 {:class (or h1-class "text-left")} content]]]])
+        [:h1 {:class (or h1-class "")} content]]]])
 
 (defn- h2
   ([content entry-url] (h2 content entry-url "" ""))
-  ([content entry-url css-class] (h2 content entry-url css-class "text-left"))
+  ([content entry-url css-class] (h2 content entry-url css-class ""))
   ([content entry-url css-class h2-class]
   [:table {:class (str "row " css-class)}
     [:tr
       [:th {:class "small-12 large-12 columns"}
         [:a {:href entry-url}
           [:h2 {:class h2-class} content]]]]]))
-
-(defn- h2-no-link
-  ([content css-class h2-class]
-  [:table {:class (str "row " css-class)}
-    [:tr
-      [:th {:class "small-12 large-12 columns"}
-        [:h2 {:class h2-class} content]]]]))
 
 (defn- note-author [author & [avatar-url]]
   [:table {:class "row note-paragraph"}
@@ -237,7 +230,7 @@
       :verify_email
       "Verify email"
       :view_section
-      "View private section"
+      "View section"
       :view_comment
       "View comment"
       :integration_settings
@@ -267,8 +260,6 @@
                   (time-format/unparse date-format-year-comma (time/now))])]]]
         (vspacer (if (= type :digest) 16 24) "header-table" "header-table")]]])
 
-(declare reminder-notification-settings-footer)
-
 (defn- email-footer [data type]
   (let [digest? (= type :digest)]
     [:table {:class (str "row footer-table" (when digest? " digest-footer-table"))
@@ -276,8 +267,6 @@
              :align "center"}
       [:tr
         [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
-          (when (= type :reminder-notification)
-            (reminder-notification-settings-footer data))
           (vspacer 24 "footer-table" "footer-table")
           [:table {:class "row footer-table"}
             [:tr
@@ -324,20 +313,6 @@
     :else
     ""))
 
-(defn- post-attribution [entry]
-  (let [publisher-name (-> entry :publisher :name)
-        attribution (when (seq (:comment-count-label entry))
-                      [:span
-                        (str " " (:comment-count-label entry))
-                        (when (seq (:new-comment-label entry))
-                          [:label.new-comments
-                            (str " (" (:new-comment-label entry) ")")])])
-        paragraph-text [:span
-                         publisher-name " in " (:board-name entry)
-                         (board-access entry)
-                         attribution]]
-    (paragraph paragraph-text "" "text-left attribution")))
-
 (defn- post-headline
   ([entry]
     (post-headline entry false))
@@ -350,66 +325,13 @@
          " →"))]]))
 
 (defn- post-body [cleaned-body]
-  [:div
-    [:p.post-body
-      cleaned-body]])
-
-(defn- post-block
-  ([entry] (post-block entry (:url entry)))
-  ([entry entry-url]
-  (let [publisher (:publisher entry)
-        avatar-url (user/fix-avatar-url config/filestack-api-key (:avatar-url publisher) 128)
-        headline (post-headline entry)
-        vid (:video-id entry)
-        abstract (:abstract entry)
-        cleaned-body (if (clojure.string/blank? abstract) (text/truncated-body (:body entry)) abstract)
-        has-body (seq cleaned-body)]
-    [:table
-      {:cellpadding "0"
-       :cellspacing "0"
-       :border "0"
-       :class "row"}
-      [:tr
-        (when avatar-url
-          [:td
-            {:class "post-block-avatar"}
-            [:img.post-avatar
-              {:src avatar-url}]])
-        [:td
-          {:class (if avatar-url "post-block-avatar-right" "post-block-right")}
-          (h2 headline entry-url "")
-          (when has-body
-            (spacer 4 ""))
-          (when has-body
-            (post-body cleaned-body))
-          (spacer 8 "")
-          (when vid
-            [:table
-              {:class "row video-cover-table"}
-              [:tr
-                [:td
-                  [:a
-                    {:class "video-cover"
-                     :href entry-url
-                     :style (str "background-image: url(https://" (:video-image entry) ");")}
-                    [:img
-                      {:class "video-play"
-                       :src (str config/email-images-prefix "/email_images/video_play@2x.png")
-                       :width 40
-                       :height 40}]
-                    [:div
-                      {:class "video-duration-container"}
-                      [:span
-                        {:class "video-duration"}
-                        (:video-duration entry)]]]]]])
-          (when vid
-            (spacer 16 ""))
-          (post-attribution entry)]]])))
+  [:div.post-body
+    cleaned-body])
 
 (defn- digest-post-block
   [user entry]
   (let [publisher (:publisher entry)
-        avatar-url (user/fix-avatar-url config/filestack-api-key (:avatar-url publisher) 128)
+        avatar-url (user-lib/fix-avatar-url config/filestack-api-key (:avatar-url publisher) 128)
         vid (:video-id entry)
         abstract (:abstract entry)
         cleaned-body (if (clojure.string/blank? abstract) (text/truncated-body (:body entry)) abstract)
@@ -420,7 +342,7 @@
       {:cellpadding "0"
        :cellspacing "0"
        :border "0"
-       :class "row digest-post-block"}
+       :class "row digest-post-block text-left"}
       [:tr
         [:td
           (spacer 24)]]
@@ -444,7 +366,7 @@
             [:tr [:td 
                 (spacer 8)]]
             [:tr [:td
-              [:p.digest-post-footer 
+              [:p.digest-post-footer
                 (str
                  (:name (:publisher entry))
                  " in "
@@ -555,30 +477,22 @@
 (defn reminder-alert-headline [data]
   (str "Hi " (first-name (:assignee (:reminder (:notification data)))) ", it's time to update your team"))
 
-(defn reminder-alert-settings-footer [org-slug frequency]
-  [:table {:class "row reminders-footer"
-         :valign "middle"
-         :align "center"}
-  [:tr
-    [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
-      (vspacer 32 "" "settings-footer")
-      [:table {:class "row reminders-footer center-align"}
-        [:tr
-          [:th {:class "small-12 large-12"}
-            [:p {:class "settings-footer"}
-              (str
-              "This is a "
-              (case (s/lower-case frequency)
-                "quarter" "quarterly"
-                "month" "monthly"
-                "other week" "bi-weekly"
-                ;:else
-                "weekly")
-              " reminder. You can adjust or turn off reminders in ")
-              [:a {:href (profile-url org-slug)}
-                "Carrot"]
-              "."]]]]
-      (vspacer 16 "" "settings-footer")]]])
+(defn- frequency-string [f]
+  (case (s/lower-case f)
+    "weekly" "Weekly"
+    "biweekly" "Every other week"
+    "monthly" "Monthly"
+    "Quarterly"))
+
+(defn- reminder-due-date [timestamp]
+  (let [d (time-format/parse iso-format timestamp)
+        n (time/now)
+        same-year? (= (time/year n) (time/year d))
+        output-format (if same-year? reminder-date-format reminder-date-format-year)]
+    (time-format/unparse output-format d)))
+
+(defn reminder-notification-subline [reminder-data]
+  (str (frequency-string (:frequency reminder-data)) " starting " (reminder-due-date (:next-send reminder-data))))
 
 (defn- reminder-alert-content [reminder]
   (let [org (:org reminder)
@@ -590,70 +504,40 @@
         logo? (not (s/blank? logo-url))
         reminder-data (:reminder (:notification reminder))
         author (:author reminder-data)
-        title (:headline reminder-data)
         headline (reminder-alert-headline reminder)
-        create-post-url (str (s/join "/" [config/web-url org-slug "all-posts"]) "?new")]
+        create-post-url (str (s/join "/" [config/web-url org-slug "all-posts"]) "?new")
+        subline (reminder-notification-subline reminder-data)]
     [:td {:class "small-12 large-12 columns main-wrapper vertical-padding" :valign "middle" :align "center"}
       [:center
-        (when logo? (org-logo {:org-name org-name
-                               :org-logo-url logo-url
-                               :org-logo-width logo-width
-                               :org-logo-height logo-height
-                               :align "center"
-                               :class "small-12 large-12 first last columns"}))
-        (when logo? (spacer 32))
-        (spacer 80)
+        (spacer 40)
         (h1 headline "center-align")
-        (spacer 8)
-        (paragraph title "center-align" "center-align")
         (spacer 24)
+        
+        (spacer 24 "note-paragraph top-note-paragraph" "note-paragraph top-note-paragraph")
+        (paragraph (:headline reminder-data) "note-paragraph" "text-left reminder-headline" "note-x-margin")
+        (spacer 8 "note-paragraph" "note-paragraph")
+        (paragraph subline "note-paragraph" "text-left reminder-subline" "note-x-margin")
+        (spacer 16 "note-paragraph" "note-paragraph")
+        (paragraph [:span.note-paragraph
+                     "You can always adjust or turn off recurring updates in "
+                     [:a
+                       {:href (profile-url org-slug)}
+                       "Carrot"]]
+         "note-paragraph note-paragraph-footer" "text-left")
+        (spacer 24 "note-paragraph bottom-note-paragraph" "note-paragraph bottom-note-paragraph")
+        (spacer 16)
         [:table {:class "row"}
           [:tr
             [:th {:class "small-12 large-12 columns"}
               [:a.view-reminders
                 {:href create-post-url}
                 "Ok, let's do it"]]]]
-        (spacer 80)
-        (reminder-alert-settings-footer org-slug (:frequency reminder-data))]]))
+        (spacer 40)]]))
 
 ;; Reminder notification
 
-(defn- reminder-due-date [timestamp]
-  (let [d (time-format/parse iso-format timestamp)
-        n (time/now)
-        same-year? (= (time/year n) (time/year d))
-        output-format (if same-year? reminder-date-format reminder-date-format-year)]
-    (time-format/unparse output-format d)))
-
 (defn reminder-notification-headline [data]
   (str (first-name (:author (:reminder (:notification data)))) " created a new reminder for you"))
-
-(defn- frequency-string [f]
-  (case (s/lower-case f)
-    "weekly" "Weekly"
-    "biweekly" "Every other week"
-    "monthly" "Monthly"
-    "Quarterly"))
-
-(defn reminder-notification-subline [reminder-data]
-  (str (frequency-string (:frequency reminder-data)) " starting " (reminder-due-date (:next-send reminder-data))))
-
-(defn reminder-notification-settings-footer [data]
-  (let [org (:org data)]
-    [:table {:class "row reminders-footer"
-           :valign "middle"
-           :align "center"}
-    [:tr
-      [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
-        (vspacer 32 "" "reminders-footer")
-        [:table {:class "row reminders-footer center-align"}
-          [:tr
-            [:th {:class "small-12 large-12"}
-              [:p {:class "reminders-footer reminders-footer-paragraph"}
-                "You can always adjust or turn off reminders in "
-                [:a {:href (profile-url (:slug org))}
-                  "Carrot"]]]]]
-        (vspacer 32 "footer-table reminders-bottom-footer" "reminders-footer")]]]))
 
 (defn- reminder-notification-content [reminder]
   (let [org (:org reminder)
@@ -665,31 +549,42 @@
         logo? (not (s/blank? logo-url))
         reminder-data (:reminder (:notification reminder))
         author (:author reminder-data)
+        author-avatar-url (:avatar-url author)
+        is-default-avatar? (s/starts-with? author-avatar-url "/img")
         title (:headline reminder-data)
         headline (reminder-notification-headline reminder)
         subline (reminder-notification-subline reminder-data)
         reminders-url (str (s/join "/" [config/web-url org-slug "all-posts"]) "?reminders")]
     [:td {:class "small-12 large-12 columns main-wrapper vertical-padding" :valign "middle" :align "center"}
       [:center
-        (when logo? (org-logo {:org-name org-name
-                               :org-logo-url logo-url
-                               :org-logo-width logo-width
-                               :org-logo-height logo-height
-                               :align "center"
-                               :class "small-12 large-12 first last columns"}))
-        (when logo? (spacer 32))
+        (when (and (not is-default-avatar?)
+                   (seq author-avatar-url))
+          [:img.reminder-author
+            {:src (user-lib/fix-avatar-url config/filestack-api-key author-avatar-url 80)}])
+        (when (and (not is-default-avatar?)
+                   (seq author-avatar-url))
+          (spacer 24))
         (h1 headline "center-align")
-        (spacer 65)
-        (h2-no-link title "center-align" "reminder-headline")
-        (spacer 8)
-        (paragraph subline "center-align" "center-align")
+        (spacer 24)
+        (spacer 24 "note-paragraph top-note-paragraph" "note-paragraph top-note-paragraph")
+        (paragraph (:headline reminder-data) "note-paragraph" "text-left reminder-headline" "note-x-margin")
+        (spacer 8 "note-paragraph" "note-paragraph")
+        (paragraph subline "note-paragraph" "text-left reminder-subline" "note-x-margin")
+        (spacer 16 "note-paragraph" "note-paragraph")
+        (paragraph [:span.note-paragraph
+                     "You can always adjust or turn off recurring updates in "
+                     [:a
+                       {:href (profile-url org-slug)}
+                       "Carrot"]]
+         "note-paragraph note-paragraph-footer" "text-left")
+        (spacer 24 "note-paragraph bottom-note-paragraph" "note-paragraph bottom-note-paragraph")
         (spacer 16)
         [:table {:class "row"}
           [:tr
             [:th {:class "small-12 large-12 columns"}
               [:a.view-reminders
                 {:href reminders-url}
-                "View reminder"]]]]
+                "View recurring update"]]]]
         (spacer 40)]]))
 
 ;; ----- Transactional Emails -----
@@ -706,7 +601,9 @@
         first-name (-> notice :inviter :first-name)
         last-name (-> notice :inviter :last-name)
         from (s/join " " [first-name last-name])
-        fixed-from (if-not (s/blank? from) "Someone" from)
+        invite-header (if-not (s/blank? (s/trim from))
+                       (format board-invite-message from)
+                       board-invite-title)
         from-avatar (-> notice :inviter :avatar-url)
         from-avatar? (not (s/blank? from-avatar))
         note (:note notice)
@@ -714,21 +611,16 @@
         show-note? (and from-avatar? note?)]
     [:td {:class "small-12 large-12 columns main-wrapper vertical-padding" :valign "middle" :align "center"}
       (spacer 64)
-      (h1 board-invite-title)
+      (h1 invite-header)
       (spacer 16)
       [:table {:class "row"}
         [:tr
           [:th {:class "small-12 large-12 columns"}
-            [:p {:class "text-left"}
-              (format board-invite-message from)
-              [:a {:href board-url}
-                board-name]
-              board-invite-message-2]]]]
+            [:a {:href board-url}
+              (str board-name " (private)")]]]]
       (when show-note? (spacer 16))
       (when show-note? (spacer 24 "note-paragraph top-note-paragraph" "note-paragraph top-note-paragraph"))
-      (when show-note? (note-author from))
-      (when show-note? (spacer 8 "note-paragraph" "note-paragraph"))
-      (when show-note? (paragraph note "note-paragraph"))
+      (when show-note? (paragraph note "note-paragraph" "text-left" "note-x-margin"))
       (when show-note? (spacer 24 "note-paragraph bottom-note-paragraph" "note-paragraph bottom-note-paragraph"))
       (spacer 24)
       (left-button board-invite-button board-url)
@@ -740,11 +632,11 @@
         logo-height (:org-logo-height invite)
         logo? (not (s/blank? logo-url))
         org-name (:org-name invite)
-        from (if (s/blank? (:from invite)) "Someone" (:from invite))
-        from-avatar (:from-avatar invite)
-        from-avatar? (not (s/blank? from-avatar))
         note (:note invite)
         note? (not (s/blank? note))
+        from (:from invite)
+        prefix (if (s/blank? from) "You've been invited" (str from " has invited you"))
+        org (if (s/blank? org-name) "" (str org-name " on "))
         invite-message (if (s/blank? org-name)
                          invite-message
                          (format invite-message-with-company org-name))]
@@ -754,28 +646,26 @@
                              :org-logo-width logo-width
                              :org-logo-height logo-height
                              :class "small-12 large-12 first last columns"}))
-      (when logo? (spacer 32))
-      (h1 invite-message)
+      (when logo? (spacer 24))
+      (h1 (str prefix " to join " org "Carrot") "invite-header")
       (spacer 24)
-      (paragraph (format invite-instructions from))
-      (spacer 16)
       (when note? (spacer 24 "note-paragraph top-note-paragraph" "note-paragraph"))
       (when note? (note-author from))
       (when note? (spacer 8 "note-paragraph" "note-paragraph"))
       (when note? (paragraph note "note-paragraph"))
       (when note? (spacer 24 "note-paragraph bottom-note-paragraph" "note-paragraph"))
       (when note? (spacer 16))
-      (paragraph invite-link-instructions)
+      (paragraph invite-link-instructions "" "invite-link-instructions")
       [:a
         {:class "token-link"
          :href (:token-link invite)}
         (:token-link invite)]
-      (spacer 56)]))
+      (spacer 40)]))
 
 (defn follow-up-subject [data]
   (let [msg (keywordize-keys data)
         follow-up-author (-> data :notification :follow-up :author)
-        author-name (user/name-for follow-up-author)]
+        author-name (user-lib/name-for follow-up-author)]
     (format follow-up-subject-text author-name)))
 
 (defn- follow-up-post-block
@@ -804,7 +694,7 @@
             (when has-body
               (post-body cleaned-body))
             (spacer 12 "")
-            (paragraph paragraph-text "" "text-left attribution")]]]])))
+            (paragraph paragraph-text "" "attribution")]]]])))
 
 (defn- follow-up-notification-content [msg]
   (let [notification (:notification msg)
@@ -816,7 +706,7 @@
         org-name (:name org)
         follow-up (:follow-up notification)
         follow-up-author (:author follow-up)
-        author-name (user/name-for follow-up-author)
+        author-name (user-lib/name-for follow-up-author)
         post-data (get-post-data msg)
         message (follow-up-subject msg)
         entry-url (s/join "/" [config/web-url
@@ -833,7 +723,7 @@
                 [:tr {:class "small-12 large-12 columns"}
                   [:th {:class "small-12 large-12 columns"}
                     [:img.follow-up-author
-                      {:src (user/fix-avatar-url config/filestack-api-key (:avatar-url follow-up-author))}]]]]]]])
+                      {:src (user-lib/fix-avatar-url config/filestack-api-key (:avatar-url follow-up-author))}]]]]]]])
 
       (when (:avatar-url follow-up-author)
         (spacer 24))
@@ -879,12 +769,10 @@
       (when logo? (org-logo (assoc entry :class "small-12 large-12 first last columns")))
       (when logo? (spacer 32))
       (h1 (share-title entry))
-      (spacer 24)
-      (post-block entry entry-url)
+      (spacer 8)
+      (h2 (:headline entry) entry-url "post-title")
       (spacer 24)
       (when show-note? (spacer 24 "note-paragraph top-note-paragraph" "note-paragraph top-note-paragraph"))
-      (when show-note? (note-author from))
-      (when show-note? (spacer 8 "note-paragraph" "note-paragraph"))
       (when show-note? (paragraph note "note-paragraph"))
       (when show-note? (spacer 24 "note-paragraph bottom-note-paragraph" "note-paragraph bottom-note-paragraph"))
       (when show-note? (spacer 24))
@@ -900,11 +788,13 @@
         author (:author notification)]
     (if mention?
       (if comment?
-        (str "You were mentioned in a comment: ")
-        (str "You were mentioned in a post: "))
+        (str "You were mentioned in a comment")
+        (str "You were mentioned in a post"))
       (if (= (:user-id entry-publisher) user-id)
-        (str "There is a new comment on your post: ")
-        (str (:name author) " replied to a thread: ")))))
+        (if (seq author)
+          (str (:name author) " commented on your post")
+          (str "There is a new comment on your post"))
+        (str (:name author) " replied to a thread")))))
 
 (defn- notify-content [msg]
   (let [notification (:notification msg)
@@ -925,7 +815,8 @@
         intro (notify-intro msg)
         notification-author (:author notification)
         notification-author-name (:name notification-author)
-        notification-author-url (user/fix-avatar-url config/filestack-api-key (:avatar-url notification-author) 128)
+        is-default-avatar? (s/starts-with? (:avatar-url notification-author) "/img")
+        notification-author-url (user-lib/fix-avatar-url config/filestack-api-key (:avatar-url notification-author) 128)
         uuid (:entry-id notification)
         secure-uuid (:secure-uuid notification)
         origin-url config/web-url
@@ -945,21 +836,25 @@
         button-cta (if (or (not mention?) interaction-id)
                     "view_comment"
                     "view_post")
-        notification-html-content (-> (hickory/parse content) hickory/as-hiccup first (nth 3) rest rest)]
+        notification-html-content (-> (hickory/parse content) hickory/as-hiccup first (nth 3) rest rest)
+        post-data (get-post-data msg)]
     [:td {:class "small-12 large-12 columns vertical-padding" :valign "middle" :align "center"}
-      (spacer 64)
+      (spacer 40)
+      (when-not is-default-avatar?
+        [:img.notify-author-avatar
+         {:src notification-author-url}])
+      (when-not is-default-avatar?
+        (spacer 24))
       (h1 intro)
-      (spacer 24)
-      (post-block entry-data entry-url)
+      (spacer 8)
+      (h2 (:headline post-data) entry-url)
       (spacer 24)
       (spacer 24 "note-paragraph top-note-paragraph" "note-paragraph top-note-paragraph")
-      (note-author notification-author-name notification-author-url)
-      (spacer 8 "note-paragraph" "note-paragraph")
       (paragraph notification-html-content "note-paragraph note-left-padding" "text-left" "note-x-margin")
       (spacer 24 "note-paragraph bottom-note-paragraph" "note-paragraph bottom-note-paragraph")
       (spacer 24)
       (left-button button-cta entry-url)
-      (spacer 56)]))
+      (spacer 40)]))
 
 (defn- token-prep [token-type msg]
   {
@@ -979,13 +874,9 @@
 
 (defn- token-content [td-classes token-type msg]
   (let [message (token-prep token-type msg)
-        logo-url (:org-logo-url msg)
-        logo? (not (s/blank? logo-url))
         org-name (:org-name msg)]
     [:td {:class td-classes :valign "middle" :align "center"}
-      (when logo? (org-logo (assoc msg :class "small-12 large-12 first last columns")))
-      (when logo? (spacer 32))
-      (h1 (:message message))
+      (h1 (:message message) "token-headeer")
       (spacer 24)
       (paragraph (:instructions message))
       (when (:instructions-2 message)
@@ -996,7 +887,7 @@
         {:class "token-link"
          :href (:token-link msg)}
         (:token-link msg)]
-      (spacer 56)]))
+      (spacer 40)]))
 
 ;; ----- Bot removed
 
