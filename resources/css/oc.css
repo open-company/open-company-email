@@ -870,6 +870,10 @@ table.body .column .columns {
   padding-right: 0 !important;
 }
 
+.bot-removed-instructions {
+  text-align: left;
+}
+
 .bot-removed-instructions a {
   text-decoration: underline;
   color: #2BA767;
