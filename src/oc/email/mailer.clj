@@ -33,9 +33,10 @@
         text-body (if text {:text text} {})
         html (:html body)
         html-body (if html (assoc text-body :html html) text-body)
-        fixed-reply-to (or reply-to default-reply-to)]
+        fixed-reply-to (or reply-to default-reply-to)
+        fixed-to (if (sequential? to) to [to])]
     (ses/send-email creds
-      :destination {:to-addresses [to]}
+      :destination {:to-addresses fixed-to}
       :source source
       :reply-to-addresses [fixed-reply-to]
       :message {:subject subject
@@ -288,6 +289,31 @@
        (io/delete-file html-file true)
        (io/delete-file inline-file true)))))
 
+(defn send-bot-removed
+  "Creates an HTML email notifying user of being mentioned or replied to and sends it to the recipient."
+  [msg]
+  (timbre/info "Sending notification for:" msg)
+  (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
+        html-file (str uuid-fragment ".html")
+        inline-file (str uuid-fragment ".inline.html")
+        org-name (:org-name msg)
+        org-slug (:org-slug msg)
+        subject content/bot-removed-subject]
+    (try
+      (spit html-file (content/bot-removed-html msg)) ; create the email in a tmp file
+      (inline-css html-file inline-file) ; inline the CSS
+       ;; Email it to the recipient
+      (email {:to (:to msg)
+              :source default-source
+              :from default-from
+              :reply-to default-reply-to
+              :subject subject}
+             {:html (slurp inline-file)})
+      (finally
+       ;; remove the tmp files
+       (io/delete-file html-file true)
+       (io/delete-file inline-file true)))))
+
 (defn handle-data-change
   "
   Test to see if message is a board change and that it has notifications.
@@ -371,5 +397,8 @@
 
   (def carrot-follow-up (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/follow-up/carrot.json"))))
   (mailer/send-follow-up (assoc carrot-follow-up :to "change@me.com"))
+
+  (def bot-removed-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/bot-removed/carrot.json"))))
+  (mailer/send-bot-removed (asso bot-removed :to ["admin1@example.com" "admin2@example.com"]))
 
 )

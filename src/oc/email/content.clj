@@ -68,6 +68,36 @@
 ;; Follow-up notification
 (def follow-up-subject-text "%s requested you to follow up")
 
+;; Bot removed
+(def bot-removed-subject "Your Carrot bot for Slack was removed")
+(defn bot-removed-instructions [org-name integration-settings-url]
+  [:div.bot-removed-instructions
+    "Hi,"
+    [:br] [:br]
+    "You’re receiving this note because you’re a Carrot admin "
+    (when (seq org-name) 
+     "for ")
+    (when (seq org-name)
+      [:b org-name])
+    "."
+    [:br][:br]
+    "We noticed your Carrot bot for Slack was removed. If it was removed on purpose, please ignore this email. If not, you’ll want to "
+    [:a
+     {:href integration-settings-url}
+     "re-enable your bot"]
+    "."
+    [:br] [:br]
+    "The Carrot bot for Slack allows your Carrot posts, comments and notifications"
+    " to flow into Slack where it’s easy to see them."])
+(def bot-removed-button "integration_settings")
+
+(def bot-removed-footer
+  [:div.bot-removed-instructions
+    "If you have any questions or want help turning it back on, just reply to this email."
+    [:br][:br]
+    "Thanks,"[:br]
+    "The Carrot Team"])
+
 (defn- preheader-spacer []
   (s/join (repeat 120 "&nbsp;&zwnj;")))
 
@@ -203,6 +233,8 @@
       "View section"
       :view_comment
       "View comment"
+      :integration_settings
+      "Enable Carrot bot for Slack"
       ;; default "view_post"
       "View post")])
 
@@ -857,6 +889,26 @@
         (:token-link msg)]
       (spacer 40)]))
 
+;; ----- Bot removed
+
+ (defn- bot-removed-content [msg]
+  (let [add-bot-url (str config/web-url "/" (:org-slug msg) "/all-posts" "?org-settings=integrations")
+        subline (bot-removed-instructions (:org-name msg) add-bot-url)
+        logo? (not (s/blank? (:org-logo-url msg)))]
+    [:td {:class "small-12 large-12 columns vertical-padding" :valign "middle" :align "center"}
+      [:center
+        (when logo? (org-logo (merge msg {:align "center"
+                                          :class "small-12 large-12 first last columns"})))
+        (when logo? (spacer 32))
+        (h1 bot-removed-subject "center-align")
+        (spacer 24)
+        (paragraph subline)
+        (spacer 24)
+        (left-button bot-removed-button add-bot-url "integration-settings-button")
+        (spacer 24)
+        (paragraph bot-removed-footer)
+        (spacer 56)]]))
+
 ;; ----- General HTML, common to all emails -----
 
 (defn- body [data]
@@ -875,7 +927,8 @@
         :notify (preheader (notify-intro data))
         :reminder-notification (preheader (reminder-notification-headline data))
         :reminder-alert (preheader (reminder-alert-headline data))
-        :follow-up (preheader "A follow-up was created for you."))
+        :follow-up (preheader "A follow-up was created for you.")
+        :bot-removed (preheader bot-removed-subject))
       [:table {:class "body"
                :with "100%"}
         [:tr
@@ -904,7 +957,8 @@
                     :notify (notify-content data)
                     :reminder-notification (reminder-notification-content data)
                     :reminder-alert (reminder-alert-content data)
-                    :follow-up (follow-up-notification-content data))]]
+                    :follow-up (follow-up-notification-content data)
+                    :bot-removed (bot-removed-content data))]]
               (email-footer data type)]]]]]))
 
 (defn- head [data]
@@ -932,6 +986,9 @@
 
 (defn notify-html [msg]
   (html msg :notify))
+
+(defn bot-removed-html [msg]
+  (html msg :bot-removed))
 
 (defn share-link-html [entry]
   (html entry :share-link))
@@ -1129,6 +1186,12 @@
   (spit "./hiccup.html" (content/reminder-alert-html reminder-alert))
 
   ;; Follow-up notification
+
   (def follow-up-data (json/decode (slurp "./opt/samples/follow-up/carrot.json")))
   (spit "./hiccup.html" (content/follow-up-html follow-up-data))
+
+  ;; Bot removed email
+
+  (def bot-removed-data (json/decode (slurp "./opt/samples/bot-removed/carrot.json")))
+  (spit "./hiccup.html" (content/bot-removed-html bot-removed-data))
   )

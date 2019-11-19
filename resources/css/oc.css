@@ -526,6 +526,10 @@ span.oc-mention {
   border-bottom-right-radius: 6px;
 }
 
+.note-paragraph {
+  text-align: left;
+}
+
 .note-paragraph p {
   margin-left: 24px;
   margin-right: 24px;
@@ -606,16 +610,16 @@ p.digest-post-footer span.new-comments {
 
 .green-button {
   margin: 0 auto;
-  display: block;
+  display: inline-block;
   font-size: 14px;
   font-weight: bold;
   color: white;
   width: auto;
-  max-width: 140px;
+  max-width: 210px;
   background-color: #52C489;
   border-radius: 6px;
   text-align: center;
-  padding: 11px 0px;
+  padding: 11px 16px;
 }
 
 .auto-x-margin {
@@ -624,6 +628,13 @@ p.digest-post-footer span.new-comments {
 
 .center-align {
   text-align: center;
+}
+
+a.green-button.integration-settings-button {
+  float: none;
+  margin: 0 auto;
+  max-width: 220px;
+  color: white;
 }
 
 .view-reminders {
@@ -861,6 +872,15 @@ table.body .column .column,
 table.body .column .columns {
   padding-left: 0 !important;
   padding-right: 0 !important;
+}
+
+.bot-removed-instructions {
+  text-align: left;
+}
+
+.bot-removed-instructions a {
+  text-decoration: underline;
+  color: #2BA767;
 }
 
 .post-title h2 {
