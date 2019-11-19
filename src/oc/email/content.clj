@@ -74,14 +74,14 @@
   [:div.bot-removed-instructions
     "Hi,"
     [:br] [:br]
-    "You’re receiving this note because you’re an Admin "
+    "You’re receiving this note because you’re a Carrot admin "
     (when (seq org-name) 
      "for ")
     (when (seq org-name)
-      [:b (str org-name " ")])
-    "in the Carrot communication app."
+      [:b org-name])
+    "."
     [:br][:br]
-    "We just noticed that your Carrot bot for Slack was removed. If it was turned off on purpose, please ignore this email. If not, you’ll want to "
+    "We noticed your Carrot bot for Slack was removed. If it was removed on purpose, please ignore this email. If not, you’ll want to "
     [:a
      {:href integration-settings-url}
      "re-enable your bot"]
@@ -96,7 +96,7 @@
     "If you have any questions or want help turning it back on, just reply to this email."
     [:br][:br]
     "Thanks,"[:br]
-    "Team Carrot"])
+    "The Carrot Team"])
 
 (defn- preheader-spacer []
   (s/join (repeat 120 "&nbsp;&zwnj;")))
