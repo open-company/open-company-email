@@ -526,6 +526,10 @@ span.oc-mention {
   border-bottom-right-radius: 6px;
 }
 
+.note-paragraph {
+  text-align: left;
+}
+
 .note-paragraph p {
   margin-left: 24px;
   margin-right: 24px;
