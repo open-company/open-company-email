@@ -18,11 +18,11 @@
    :secret-key c/aws-secret-access-key
    :endpoint   c/aws-endpoint})
 
-(def default-reply-to (str "hello@" c/email-from-domain))
+(def default-reply-to (str "Carrot.No.Reply@" c/email-from-domain))
 (def default-from "Carrot")
 (def default-source (str default-from " <" default-reply-to ">"))
 
-(def digest-reply-to (str "digest@" c/email-from-domain))
+(def digest-reply-to (str "Carrot.No.Reply@" c/email-from-domain))
 (def digest-source (str default-from " <" digest-reply-to ">"))
 
 (defn- email
