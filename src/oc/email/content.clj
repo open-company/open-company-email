@@ -282,7 +282,7 @@
             (when digest?
               [:tr [:th {:class "small-12 lrge-12"}
                 [:p {:class "footer-paragraph bottom-footer"}
-                  (str "You received this digest because you are part f the " (:org-name data) " team.")]]])
+                  (str "You received this digest because you are part of the " (:org-name data) " team.")]]])
             (when digest?
               [:tr [:th {:class "small-12 lrge-12"}
                 [:p {:class "footer-paragraph bottom-footer underline-link"}
