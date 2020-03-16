@@ -540,7 +540,13 @@ span.oc-mention {
   text-align: left;
 }
 
-.note-paragraph p, .note-paragraph pre {
+.note-paragraph p {
+  margin-left: 24px;
+  margin-right: 24px;
+  text-align: left;
+}
+
+.note-paragraph pre {
   margin-left: 24px;
   margin-right: 24px;
   margin-top: 0;
