@@ -232,7 +232,7 @@
       :view_section
       "View section"
       :view_comment
-      "View comment"
+      "Reply"
       :integration_settings
       "Enable Carrot bot for Slack"
       ;; default "view_post"
