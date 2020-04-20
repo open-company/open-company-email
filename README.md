@@ -130,6 +130,56 @@ You will also need to subscribe the SQS queue to the storage SNS topic. To do th
 Go to the AWS SQS Console and select the email queue configured above. From the 'Queue Actions' dropdown, select 'Subscribe Queue to SNS Topic'. Select the SNS topic you've configured your Storage Service instance to publish to, and click the 'Subscribe' button.
 
 
+## Technical Design
+
+```
+┌─────────────────────┐ ┌─────────────────────┐ ┌─────────────────────┐ ┌─────────────────────┐ 
+│                     │ │                     │ │                     │ │                     │ 
+│     Auth Service    │ │    Notify Service   │ │   Storage Service   │ │   Digest Service    │ 
+│                     │ │                     │ │                     │ │                     │ 
+└─────────────────────┘ └─────────────────────┘ └─────────────────────┘ └─────────────────────┘ 
+           │                       │                       │                       │            
+           │                       │                       │                       │            
+           │                       │                       │                       │            
+           └───────────────────────┴──────────┬────────────┴───────────────────────┘            
+                                              │                                                 
+                                            HTTP                                                
+                                              │                                                 
+                                              ▼                                                 
+                          ┌──────────────────────────────────────┐                              
+                          │ SQS                                  │                              
+                          │               oc-email               │                              
+                          │                                      │                              
+                          └──────────────────────────────────────┘                              
+                                              ▲                                                 
+                                              │                                                 
+                                            HTTP                                                
+                                              │                            ┌───────────────────┐
+                          ┌─────────────────────────────────────┐          │ Node.js           │
+                          │                                     │          │   ┌───────────┐   │
+                          │                                     │───CLI───▶│   │   Juice   │   │
+                          │                                     │          │   └───────────┘   │
+                          │           Email Service             │          └─────────┬─────────┘
+                          │                                     │                    ▼          
+                          │                                     │           .─────────────────. 
+                          │                                     ├───I/O───▶(    File System    )
+                          └─────────────────────────────────────┘           `─────────────────' 
+                                             │                                                  
+                                             │                                                  
+                                           HTTP                                                 
+                                             │                                                  
+                                             ▼                                                  
+                          ┌─────────────────────────────────────┐                               
+                          │                                     │                               
+                          │                                     │                               
+                          │       AWS Simple Email Service      │                               
+                          │                                     │                               
+                          │                                     │                               
+                          │                                     │                               
+                          └─────────────────────────────────────┘                               
+```
+
+
 ## Usage
 
 Prospective users of [Carrot](https://carrot.io/) should get started by going to [Carrot.io](https://carrot.io/). The following usage is **for developers** wanting to work on the OpenCompany Email Service.
