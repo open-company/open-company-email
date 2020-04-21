@@ -18,8 +18,8 @@
 ;; ----- URLS ------
 
 (defonce auth-server-port (Integer/parseInt (or (env :auth-server-port) "3003")))
-(defonce change-server-port (Integer/parseInt (or (env :change-server-port) "3006")))
 (defonce auth-server-url (or (env :auth-server-url) (str "http://localhost:" auth-server-port)))
+(defonce change-server-port (Integer/parseInt (or (env :change-server-port) "3006")))
 (defonce change-server-url (or (env :change-server-url) (str "http://localhost:" change-server-port)))
 (defonce storage-server-port (Integer/parseInt (or (env :storage-server-port) "3001")))
 (defonce storage-server-url (or (env :storage-server-url) (str "http://localhost:" storage-server-port)))
