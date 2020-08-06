@@ -39,11 +39,11 @@
 ;; ----- Copy -----
 
 (def carrot-explainer-fragment "your company digest for the team news and updates no one should miss.")
-(def carrot-explainer (str "Carrot is " carrot-explainer-fragment))
+(def carrot-explainer (str "Wut is " carrot-explainer-fragment))
 
-(def invite-message "Join your team on Carrot")
-(def invite-message-with-company "Join the %s team on Carrot")
-(def invite-instructions (str "%s has invited you to Carrot - " carrot-explainer-fragment))
+(def invite-message "Join your team on Wut")
+(def invite-message-with-company "Join the %s team on Wut")
+(def invite-instructions (str "%s has invited you to Wut - " carrot-explainer-fragment))
 (def invite-link-instructions "Click here to join:")
 (def invite-button "accept_invitation")
 
@@ -61,7 +61,7 @@
 (def reset-button-text "reset_password")
 
 (def verify-message "Please verify your email")
-(def verify-instructions "Welcome to Carrot! Carrot helps leaders rise above noisy chat and email to keep teams aligned.")
+(def verify-instructions "Welcome to Wut! Wut helps leaders rise above noisy chat and email to keep teams aligned.")
 (def verify-instructions-2 "Please click the link below to verify your account:")
 (def verify-button-text "verify_email")
 
@@ -69,25 +69,25 @@
 (def follow-up-subject-text "%s requested you to follow up")
 
 ;; Bot removed
-(def bot-removed-subject "Your Carrot bot for Slack was removed")
+(def bot-removed-subject "Your Wut bot for Slack was removed")
 (defn bot-removed-instructions [org-name integration-settings-url]
   [:div.bot-removed-instructions
     "Hi,"
     [:br] [:br]
-    "You’re receiving this note because you’re a Carrot admin "
+    "You’re receiving this note because you’re a Wut admin "
     (when (seq org-name) 
      "for ")
     (when (seq org-name)
       [:b org-name])
     "."
     [:br][:br]
-    "We noticed your Carrot bot for Slack was removed. If it was removed on purpose, please ignore this email. If not, you’ll want to "
+    "We noticed your Wut bot for Slack was removed. If it was removed on purpose, please ignore this email. If not, you’ll want to "
     [:a
      {:href integration-settings-url}
      "re-enable your bot"]
     "."
     [:br] [:br]
-    "The Carrot bot for Slack allows your Carrot posts, comments and notifications"
+    "The Wut bot for Slack allows your Wut updates, comments and notifications"
     " to flow into Slack where it’s easy to see them."])
 (def bot-removed-button "integration_settings")
 
@@ -96,7 +96,7 @@
     "If you have any questions or want help turning it back on, just reply to this email."
     [:br][:br]
     "Thanks,"[:br]
-    "The Carrot Team"])
+    "The Wut Team"])
 
 (defn- preheader-spacer []
   (s/join (repeat 120 "&nbsp;&zwnj;")))
@@ -234,7 +234,7 @@
       :view_comment
       "Reply"
       :integration_settings
-      "Enable Carrot bot for Slack"
+      "Enable Wut bot for Slack"
       ;; default "view_post"
       "View post")])
 
@@ -250,10 +250,10 @@
             [:th {:class "small-6 large-6 columns header-icon"}
               [:a
                 {:href config/web-url}
-                [:img {:src (str config/email-images-prefix "/email_images/carrot_logo_with_copy_colors@2x.png")
-                       :width "95"
-                       :height "32"
-                       :alt "Carrot"}]]]
+                [:img {:src (str config/email-images-prefix "/email_images/wut_logo@2x.png")
+                       :width "55"
+                       :height "22"
+                       :alt "Wut!"}]]]
             [:th {:class "small-6 large-6 columns header-right"}
               (when (= type :digest)
                 [:div.digest-date
@@ -273,9 +273,9 @@
               [:th {:class "small-12 large-12"}
                 [:p {:class "footer-paragraph bottom-footer"}
                   [:a {:href config/web-url}
-                    [:span.footer-link
-                      {:style (str "background: url(" config/email-images-prefix "/email_images/carrot_grey@2x.png) no-repeat center / 10px 18px;")}]
-                    "Sent by Carrot"]]]]
+                    ; [:span.footer-link
+                    ;   {:style (str "background: url(" config/email-images-prefix "/email_images/carrot_grey@2x.png) no-repeat center / 10px 18px;")}]
+                    "Sent by Wut!"]]]]
             (when digest?
               [:tr [:th {:class "small-12 lrge-12"}
                 (vspacer 16 "footer-table" "footer-table")]])
@@ -294,11 +294,11 @@
             (when digest?
               [:tr [:th {:class "small-12 lrge-12"}
                 [:p {:class "footer-paragraph bottom-footer"}
-                  "Questions or ideas for Carrot?"]]])
+                  "Questions or ideas for Wut?"]]])
             (when digest?
               [:tr [:th {:class "small-12 lrge-12"}
                 [:p {:class "footer-paragraph bottom-footer underline-link"}
-                  [:a {:href "mailto:hello@carrot.io"}
+                  [:a {:href carrot-hello-mailto}
                     "Chat with us"]]]])]
           (vspacer 40 "footer-table" "footer-table")]]]))
 
@@ -389,7 +389,7 @@
 
 (defn digest-title [org-name]
   (let [date-str (time-format/unparse digest-subject-format (time/now))]
-    (str "Your " (or org-name "Carrot") " digest for " date-str)))
+    (str "Your " (or org-name "Wut") " digest for " date-str)))
 
 (defn- get-digest-url [digest-data]
   (s/join "/" [config/web-url (:org-slug digest-data) "all-posts"]))
@@ -522,7 +522,7 @@
                      "You can always adjust or turn off recurring updates in "
                      [:a
                        {:href (profile-url org-slug)}
-                       "Carrot"]]
+                       "Wut"]]
          "note-paragraph note-paragraph-footer" "text-left")
         (spacer 24 "note-paragraph bottom-note-paragraph" "note-paragraph bottom-note-paragraph")
         (spacer 16)
@@ -575,7 +575,7 @@
                      "You can always adjust or turn off recurring updates in "
                      [:a
                        {:href (profile-url org-slug)}
-                       "Carrot"]]
+                       "Wut"]]
          "note-paragraph note-paragraph-footer" "text-left")
         (spacer 24 "note-paragraph bottom-note-paragraph" "note-paragraph bottom-note-paragraph")
         (spacer 16)
@@ -647,7 +647,7 @@
                              :org-logo-height logo-height
                              :class "small-12 large-12 first last columns"}))
       (when logo? (spacer 24))
-      (h1 (str prefix " to join " org "Carrot") "invite-header")
+      (h1 (str prefix " to join " org "Wut") "invite-header")
       (spacer 24)
       (when note? (spacer 24 "note-paragraph top-note-paragraph" "note-paragraph"))
       (when note? (note-author from))
@@ -919,7 +919,7 @@
         (go-to-posts-script data))
       (case type
         :reset (preheader reset-message)
-        :verify (preheader "Welcome to Carrot!")
+        :verify (preheader "Welcome to Wut!")
         :invite (preheader invite-message)
         :board-notification (preheader board-invite-title)
         :share-link (preheader (share-title data))
@@ -982,7 +982,7 @@
         from (:from msg)
         prefix (if (s/blank? from) "You've been invited" (str from " has invited you"))
         org (if (s/blank? org-name) "" (str org-name " on "))]
-    (str prefix " to join " org "Carrot")))
+    (str prefix " to join " org "Wut")))
 
 (defn notify-html [msg]
   (html msg :notify))

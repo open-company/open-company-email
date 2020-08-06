@@ -50,7 +50,7 @@ h2 {
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 16px;
   font-weight: bold;
-  color: #3FBD7C;
+  color: #6833F1;
   margin: 0px;
   text-align: center;
 }
@@ -99,7 +99,7 @@ p.attribution {
 }
 
 p.attribution label.new-comments {
-  color: #3FBD7C;
+  color: #6833F1;
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 12px;
   font-weight: bold;
@@ -123,7 +123,7 @@ table.cta-button span.button-text {
 }
 
 table.post-button span.button-text {
-  color: #3FBD7C;
+  color: #6833F1;
 }
 
 table.footer p {
@@ -133,7 +133,7 @@ table.footer p {
 
 table.footer a {
   font-weight: bold;
-  color: #3FBD7C;
+  color: #6833F1;
 }
 
 center > table.header-table {
@@ -330,7 +330,7 @@ p.header-paragraph {
 p.header-paragraph a {
   color: lightgreen;
   font-size: 14px;
-  color: #3FBD7C;
+  color: #6833F1;
   text-decoration: underline;
 }
 
@@ -360,7 +360,7 @@ p.header-paragraph {
 
 p.footer-paragraph.bottom-footer, p.footer-paragraph.bottom-footer a {
   color: #888D94;
-  text-align: center;
+  text-align: left;
 }
 
 p.footer-paragraph.bottom-footer.underline-link a {
@@ -428,7 +428,7 @@ p.digest-help {
 }
 
 p.digest-help a{
-  color: #3FBD7C;
+  color: #6833F1;
   text-decoration: underline;
 }
 
@@ -454,7 +454,7 @@ img.read-post-image {
 span.read-post-text {
   float: left;
   margin-left: 8px;
-  color: #3FBD7C;
+  color: #6833F1;
   font-size: 14px;
 }
 
@@ -500,7 +500,7 @@ img.green-button {
 p.notification-link a {
   font-size: 14px;
   font-weight: bold;
-  color: #3FBD7C;
+  color: #6833F1;
 }
 
 span.notification-content, span.notification-content p, span.notification-content div {
@@ -557,7 +557,7 @@ span.oc-mention {
 a.learn-more {
   float: left;
   margin-left: 16px;
-  color: #3FBD7C;
+  color: #6833F1;
   font-size: 14px;
   font-weight: bold;
   margin-top: 10px;
@@ -605,7 +605,7 @@ p.digest-post-footer {
 }
 
 p.digest-post-footer span.new-comments {
-  color: #3fbd7c;
+  color: #6833F1;
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 12px;
   line-height: 18px;
@@ -615,7 +615,7 @@ p.digest-post-footer span.new-comments {
 }
 
 .token-link {
-  color: #3FBD7C;
+  color: #6833F1;
   font-size: 16px;
   text-align: center;
   cursor: pointer;
@@ -662,7 +662,7 @@ a.green-button.integration-settings-button {
   font-weight: bold;
   color: white !important;
   width: 200px;
-  background-color: #3FBD7C;
+  background-color: #6833F1;
   border-radius: 6px;
   text-align: center;
   padding: 11px 0px;
@@ -872,11 +872,11 @@ div.post-body, div.post-body p, div.post-body pre {
 }
 
 a {
-  color: #3FBD7C;
+  color: #6833F1;
 }
 
 a:hover {
-  color: #3FBD7C;
+  color: #6833F1;
   text-decoration: underline;
 }
 
@@ -905,7 +905,7 @@ table.body .column .columns {
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 12px;
   font-weight: bold;
-  color: #3fbd7c;
+  color: #6833F1;
 }
 
 h1.token-headeer {

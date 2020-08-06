@@ -75,8 +75,9 @@
       ;; (email-entry entry (content/share-link-text entry))
       (finally
         ;; remove the tmp files
-        (io/delete-file html-file true)
-        (io/delete-file inline-file true)))))
+        ; (io/delete-file html-file true)
+        ; (io/delete-file inline-file true)
+        ))))
 
 (defn send-reminder-notification
   "Create an HTML notification of a created reminder and email it to the specified recipient."
@@ -98,8 +99,9 @@
       (email reminder {:html (slurp inline-file)})
       (finally
         ;; remove the tmp files
-        (io/delete-file html-file true)
-        (io/delete-file inline-file true)))))
+        ; (io/delete-file html-file true)
+        ; (io/delete-file inline-file true)
+        ))))
 
 (defn send-reminder-alert
   "Create an HTML email to alert of an upcoming reminder and send it to the specified recipient"
@@ -120,8 +122,9 @@
       (email reminder {:html (slurp inline-file)})
       (finally
         ;; remove the tmp files
-        (io/delete-file html-file true)
-        (io/delete-file inline-file true)))))
+        ; (io/delete-file html-file true)
+        ; (io/delete-file inline-file true)
+        ))))
 
 (defn send-invite
   "Create an HTML and text invite and email it to the specified recipient."
@@ -141,8 +144,9 @@
                          :html (slurp inline-file)})
       (finally
         ;; remove the tmp files
-        (io/delete-file html-file true)
-        (io/delete-file inline-file true)))))
+        ; (io/delete-file html-file true)
+        ; (io/delete-file inline-file true)
+        ))))
 
 (defn send-follow-up
   "Create an HTML and text follow-up notification and email it to the specified recipient."
@@ -162,8 +166,9 @@
                              :html (slurp inline-file)})
       (finally
         ;; remove the tmp files
-        (io/delete-file html-file true)
-        (io/delete-file inline-file true)))))
+        ; (io/delete-file html-file true)
+        ; (io/delete-file inline-file true)
+        ))))
 
 (defn send-token
   "Create an HTML and text one-time-token email and email it to the specified recipient."
@@ -187,8 +192,9 @@
                   :html (slurp inline-file)})
       (finally
         ; remove the tmp files
-        (io/delete-file html-file true)
-        (io/delete-file inline-file true)))))
+        ; (io/delete-file html-file true)
+        ; (io/delete-file inline-file true)
+        ))))
 
 (defn send-digest
   "Create an HTML digest and email it to the specified recipient."
@@ -211,8 +217,9 @@
              {:html (slurp inline-file)})
       (finally
         ; remove the tmp files
-        (io/delete-file html-file true)
-        (io/delete-file inline-file true)))))
+        ; (io/delete-file html-file true)
+        ; (io/delete-file inline-file true)
+        ))))
 
 (defn send-private-board-notification
   "Creates an HTML private board invite email and sends it to the recipient."
@@ -234,8 +241,9 @@
              {:html (slurp inline-file)})
       (finally
        ;; remove the tmp files
-       (io/delete-file html-file true)
-       (io/delete-file inline-file true)))))
+       ; (io/delete-file html-file true)
+       ; (io/delete-file inline-file true)
+       ))))
 
 (defn- post-data-from-msg [msg]
   (let [notification (:notification msg)
@@ -286,8 +294,9 @@
              {:html (slurp inline-file)})
       (finally
        ;; remove the tmp files
-       (io/delete-file html-file true)
-       (io/delete-file inline-file true)))))
+       ; (io/delete-file html-file true)
+       ; (io/delete-file inline-file true)
+       ))))
 
 (defn send-bot-removed
   "Creates an HTML email notifying user of being mentioned or replied to and sends it to the recipient."
@@ -311,8 +320,9 @@
              {:html (slurp inline-file)})
       (finally
        ;; remove the tmp files
-       (io/delete-file html-file true)
-       (io/delete-file inline-file true)))))
+       ; (io/delete-file html-file true)
+       ; (io/delete-file inline-file true)
+       ))))
 
 (defn handle-data-change
   "
