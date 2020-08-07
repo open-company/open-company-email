@@ -337,7 +337,9 @@
         cleaned-body (if (clojure.string/blank? abstract) (text/truncated-body (:body entry)) abstract)
         has-body (seq cleaned-body)
         published-date (time-format/unparse date-format-no-dot (time-format/parse iso-format (:published-at entry)))
-        superuser-token (auth/user-token {:user-id (:user-id user)} config/auth-server-url config/passphrase "Email")]
+        superuser-token (auth/user-token {:user-id (:user-id user)} config/auth-server-url config/passphrase "Email")
+        comments? (or (:comment-count-label entry)
+                      (:new-comment-label entry))]
     [:table
       {:cellpadding "0"
        :cellspacing "0"
@@ -357,26 +359,38 @@
              :border "0"
              :class "row digest-post-block"}
             [:tr [:td
-              (h2 (str (:headline entry) " →") (:url entry) "" "digest-post-title")]]
-            (when has-body
-              [:tr [:td (spacer 4)]])
-            (when has-body
-              [:tr [:td
-                (post-body cleaned-body)]])
+              [:div.digest-post-row
+                [:a
+                  {:href (:url entry)}
+                  [:div.digest-post-headline-row
+                    {:class (when comments? "has-comments")}
+                    [:span.digest-post-attribution
+                      (str (:name (:publisher entry))
+                           " in "
+                           (:board-name entry))]
+                    [:span.digest-post-arrow
+                      "→"]
+                    [:span.digest-post-title
+                      (:headline entry)]
+                    ; (h2  (:url entry) "" "digest-post-title")
+                    ]
+                  (when comments?
+                    [:a
+                      {:href (:replies-url entry)}
+                      [:p.digest-post-footer-row
+                        (when (:comment-count-label entry)
+                          [:span.comments-label
+                            (str " " (:comment-count-label entry))])
+                        (when (:new-comment-label entry)
+                          [:span.new-comments
+                            (str "(" (:new-comment-label entry) ")")])]])]]]]
+            ; (when has-body
+            ;   [:tr [:td (spacer 4)]])
+            ; (when has-body
+            ;   [:tr [:td
+            ;     (post-body cleaned-body)]])
             [:tr [:td 
-                (spacer 8)]]
-            [:tr [:td
-              [:p.digest-post-footer
-                (str
-                 (:name (:publisher entry))
-                 " in "
-                 (:board-name entry)
-                 (board-access entry)
-                 (when (:comment-count-label entry)
-                   (str " " (:comment-count-label entry))))
-                (when (:new-comment-label entry)
-                  [:span.new-comments
-                    (str "(" (:new-comment-label entry) ")")])]]]]]]]))
+                (spacer 8)]]]]]]))
 
 (defn- posts-with-board-name [board]
   (let [board-name (:name board)]
@@ -392,7 +406,10 @@
     (str "Your " (or org-name "Wut") " digest for " date-str)))
 
 (defn- get-digest-url [digest-data]
-  (s/join "/" [config/web-url (:org-slug digest-data) "all-posts"]))
+  (s/join "/" [config/web-url (:org-slug digest-data) "home"]))
+
+(defn- get-replies-url [digest-data]
+  (s/join "/" [config/web-url (:org-slug digest-data) "replies"]))
 
 (defn- go-to-posts-script [data]
   [:script {:type "application/ld+json"}
@@ -413,40 +430,16 @@
   (let [boards (map posts-with-board-name (:boards digest))
         posts (mapcat posts-for-board boards)
         digest-url (get-digest-url digest)
+        replies-url (get-replies-url digest)
         boards (map posts-with-board-name (:boards digest))
         all-posts (mapcat :posts boards)
-        sorted-posts (sort-by (juxt :follow-up :board-name :published-at) all-posts)
-        follow-up-posts (filter :follow-up sorted-posts)
-        non-follow-up-posts (filter (comp not :follow-up) sorted-posts)
+        sorted-posts (sort-by (juxt :board-name :published-at) all-posts)
         user {:user-id (:user-id digest)
               :name (str (:first-name digest) " " (:last-name digest))}]
     [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
       [:center
         (spacer 40)
-        (when (seq follow-up-posts)
-          [:table
-            {:cellpadding "0"
-             :cellspacing "0"
-             :border "0"
-             :class "digest-content follow-up"}
-            [:tr
-              [:td
-                [:label.digest-group-title
-                  "FOLLOW-UP"]]]
-            [:tr
-              [:td
-                (for [p follow-up-posts]
-                  [:table
-                    {:cellpadding "0"
-                     :cellspacing "0"
-                     :border "0"
-                     :class "row digest-posts-container"}
-                    [:tr
-                      [:td {:class "small-12 large-12 columns"}
-                        (digest-post-block user p)]]])]]])
-        (when (seq follow-up-posts)
-          (spacer 32))
-        (when (seq non-follow-up-posts)
+        (when (seq sorted-posts)
           [:table
             {:cellpadding "0"
              :cellspacing "0"
@@ -455,10 +448,11 @@
             [:tr
               [:td
                 [:label.digest-group-title
-                  "NEW ACTIVITY"]]]
+                  "Home"]]]
             [:tr
               [:td
-                (for [p non-follow-up-posts]
+                (for [p sorted-posts
+                      :let [post (assoc p :replies-url replies-url)]]
                   [:table
                     {:cellpadding "0"
                      :cellspacing "0"
@@ -466,7 +460,23 @@
                      :class "row digest-posts-container"}
                     [:tr
                       [:td {:class "small-12 large-12 columns"}
-                        (digest-post-block user p)]]])]]])
+                        (digest-post-block user post)]]])]]
+            [:tr
+              [:td
+                (spacer 16)]]
+            [:tr
+              [:td
+                [:label.digest-group-title
+                  "Replies"]]]
+            [:tr
+              [:td
+                (spacer 16)]]
+            [:tr
+              [:td
+                [:a.digest-replies-section-link
+                  {:href replies-url}
+                  [:p.digest-replies-section
+                    "Since your last digest Sean Johnson, Stuart Levinson and 2 others left 6 replies on updates you care about. (static copy, for testing purpose)"]]]]])
         (spacer 40)]]))
 
 ;; Reminder alert
