@@ -697,11 +697,11 @@ p.digest-replies-section {
   text-align: left;
 }
 
-a.digest-replies-section-link:hover {
+a.digest-group-link:hover {
   text-decoration: none;
 }
 
-a.digest-replies-section-link {
+a.digest-group-link {
   text-decoration: none;
 }
 

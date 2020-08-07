@@ -411,6 +411,9 @@
 (defn- get-replies-url [digest-data]
   (s/join "/" [config/web-url (:org-slug digest-data) "replies"]))
 
+(defn- get-unfollow-url [digest-data]
+  (s/join "/" [config/web-url (:org-slug digest-data) "unfollowing"]))
+
 (defn- go-to-posts-script [data]
   [:script {:type "application/ld+json"}
 "
@@ -431,6 +434,7 @@
         posts (mapcat posts-for-board boards)
         digest-url (get-digest-url digest)
         replies-url (get-replies-url digest)
+        unfollow-url (get-unfollow-url digest)
         boards (map posts-with-board-name (:boards digest))
         all-posts (mapcat :posts boards)
         sorted-posts (sort-by (juxt :board-name :published-at) all-posts)
@@ -473,10 +477,26 @@
                 (spacer 16)]]
             [:tr
               [:td
-                [:a.digest-replies-section-link
+                [:a.digest-group-link
                   {:href replies-url}
                   [:p.digest-replies-section
-                    "Since your last digest Sean Johnson, Stuart Levinson and 2 others left 6 replies on updates you care about. (static copy, for testing purpose)"]]]]])
+                    "Since your last digest Sean Johnson, Stuart Levinson and 2 others left 6 replies on updates you care about. (static copy, for testing purpose)"]]]]
+            [:tr
+              [:td
+                (spacer 32)]]
+            [:tr
+              [:td
+                [:label.digest-group-title
+                  "Other things"]]]
+            [:tr
+              [:td
+                (spacer 16)]]
+            [:tr
+              [:td
+                [:a.digest-group-link
+                  {:href unfollow-url}
+                  [:p.digest-replies-section
+                    "Other 12 updates where published by 3 authors across 5 topics that you don't follow."]]]]])
         (spacer 40)]]))
 
 ;; Reminder alert
