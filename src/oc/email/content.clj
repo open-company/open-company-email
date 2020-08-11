@@ -414,6 +414,12 @@
 (defn- get-unfollow-url [digest-data]
   (s/join "/" [config/web-url (:org-slug digest-data) "unfollowing"]))
 
+(defn- get-explore-url [digest-data]
+  (s/join "/" [config/web-url (:org-slug digest-data) "topics"]))
+
+(defn- get-board-url [digest-data board-data]
+  (s/join "/" [config/web-url (:org-slug digest-data) (:slug board-data)]))
+
 (defn- go-to-posts-script [data]
   [:script {:type "application/ld+json"}
 "
@@ -435,6 +441,7 @@
         digest-url (get-digest-url digest)
         replies-url (get-replies-url digest)
         unfollow-url (get-unfollow-url digest)
+        explore-url (get-explore-url digest)
         boards (map posts-with-board-name (:boards digest))
         all-posts (mapcat :posts boards)
         sorted-posts (sort-by (juxt :board-name :published-at) all-posts)
@@ -481,6 +488,36 @@
                   {:href replies-url}
                   [:p.digest-replies-section
                     "Since your last digest Sean Johnson, Stuart Levinson and 2 others left 6 replies on updates you care about. (static copy, for testing purpose)"]]]]
+            [:tr
+              [:td
+                (spacer 16)]]
+            [:tr
+              [:td
+                [:label.digest-group-title
+                  "New topics"]]]
+            [:tr
+              [:td
+                (spacer 16)]]
+            [:tr
+              [:td
+                [:p.digest-new-boards-section
+                  "Since your last digest, "
+                  [:a
+                    {:href explore-url}
+                    "3 new topics"]
+                  " were created: "
+                  [:a
+                    {:href (get-board-url digest {:slug "marketing"})}
+                    "Marketing"]
+                  ", "
+                  [:a
+                    {:href (get-board-url digest {:slug "design"})}
+                    "Design"]
+                  " and "
+                  [:a
+                    {:href (get-board-url digest {:slug "development"})}
+                    "Development"]
+                  "."]]]
             [:tr
               [:td
                 (spacer 32)]]

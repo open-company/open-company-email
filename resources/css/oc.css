@@ -705,7 +705,17 @@ a.digest-group-link {
   text-decoration: none;
 }
 
+p.digest-new-boards-section {
+  color: #34414F;
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-size: 16px;
+  text-align: left; 
+}
 
+p.digest-new-boards-section a {
+  color: #34414F;
+  text-decoration: underline;
+}
 
 p.digest-post-date {
   float: left;
