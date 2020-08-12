@@ -23,7 +23,6 @@
         :notify (mailer/send-notification msg-body)
         :reminder-alert (mailer/send-reminder-alert msg-body)
         :reminder-notification (mailer/send-reminder-notification msg-body)
-        :follow-up (mailer/send-follow-up msg-body)
         :bot-removed (mailer/send-bot-removed msg-body)
         (timbre/error "Unrecognized message type" msg-type))))
   (sqs/ack done-channel msg))
