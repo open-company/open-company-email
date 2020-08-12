@@ -690,6 +690,14 @@ table.digest-post-block td.digest-post-avatar-td {
   width: 56px;
 }
 
+a.digest-group-link:hover {
+  text-decoration: none;
+}
+
+a.digest-group-link {
+  text-decoration: none;
+}
+
 p.digest-replies-section {
   color: #34414F;
   font-family: Helvetica, Arial, sans-serif !important;
@@ -697,12 +705,8 @@ p.digest-replies-section {
   text-align: left;
 }
 
-a.digest-group-link:hover {
-  text-decoration: none;
-}
-
-a.digest-group-link {
-  text-decoration: none;
+a.digest-group-link .digest-group-title {
+  cursor: pointer;
 }
 
 p.digest-new-boards-section {

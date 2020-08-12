@@ -65,9 +65,6 @@
 (def verify-instructions-2 "Please click the link below to verify your account:")
 (def verify-button-text "verify_email")
 
-;; Follow-up notification
-(def follow-up-subject-text "%s requested you to follow up")
-
 ;; Bot removed
 (def bot-removed-subject "Your Wut bot for Slack was removed")
 (defn bot-removed-instructions [org-name integration-settings-url]
@@ -304,15 +301,6 @@
 
 ;; ----- Posts common ----
 
-(defn- board-access [entry]
-  (cond
-    (= (:board-access entry) "private")
-    " (private)"
-    (= (:board-access entry) "public")
-    " (public)"
-    :else
-    ""))
-
 (defn- post-headline
   ([entry]
     (post-headline entry false))
@@ -408,18 +396,6 @@
 (defn- get-digest-url [digest-data]
   (s/join "/" [config/web-url (:org-slug digest-data) "home"]))
 
-(defn- get-replies-url [digest-data]
-  (s/join "/" [config/web-url (:org-slug digest-data) "replies"]))
-
-(defn- get-unfollow-url [digest-data]
-  (s/join "/" [config/web-url (:org-slug digest-data) "unfollowing"]))
-
-(defn- get-explore-url [digest-data]
-  (s/join "/" [config/web-url (:org-slug digest-data) "topics"]))
-
-(defn- get-board-url [digest-data board-data]
-  (s/join "/" [config/web-url (:org-slug digest-data) (:slug board-data)]))
-
 (defn- go-to-posts-script [data]
   [:script {:type "application/ld+json"}
 "
@@ -435,35 +411,32 @@
 }
 "])
 
-(defn- digest-content [digest]
-  (let [boards (map posts-with-board-name (:boards digest))
-        posts (mapcat posts-for-board boards)
-        digest-url (get-digest-url digest)
-        replies-url (get-replies-url digest)
-        unfollow-url (get-unfollow-url digest)
-        explore-url (get-explore-url digest)
-        boards (map posts-with-board-name (:boards digest))
-        all-posts (mapcat :posts boards)
-        sorted-posts (sort-by (juxt :board-name :published-at) all-posts)
-        user {:user-id (:user-id digest)
-              :name (str (:first-name digest) " " (:last-name digest))}]
+(defn- digest-content
+  [{:keys [following replies unfollowing new-boards] :as digest}]
+  (let [user (select-keys digest [:user-id :name :avatar-url])
+        following? (seq (:following-list following))
+        replies? (seq (:replies-label replies))
+        new-boards? (seq (:new-boards-label new-boards))
+        unfollowing? (seq (:unfollowing-label unfollowing))]
     [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
       [:center
         (spacer 40)
-        (when (seq sorted-posts)
-          [:table
-            {:cellpadding "0"
-             :cellspacing "0"
-             :border "0"
-             :class "digest-content"}
+        [:table
+          {:cellpadding "0"
+           :cellspacing "0"
+           :border "0"
+           :class "digest-content"}
+          (when following?
             [:tr
               [:td
-                [:label.digest-group-title
-                  "Home"]]]
+                [:a.digest-group-link {:href (:url following)}
+                  [:label.digest-group-title
+                    "Home"]]]])
+          (when following?
             [:tr
               [:td
-                (for [p sorted-posts
-                      :let [post (assoc p :replies-url replies-url)]]
+                (for [p (:following-list following)
+                      :let [post (assoc p :replies-url (:url replies))]]
                   [:table
                     {:cellpadding "0"
                      :cellspacing "0"
@@ -471,69 +444,68 @@
                      :class "row digest-posts-container"}
                     [:tr
                       [:td {:class "small-12 large-12 columns"}
-                        (digest-post-block user post)]]])]]
+                        (digest-post-block user post)]]])]])
+          (when following?
             [:tr
               [:td
-                (spacer 16)]]
+                (spacer 16)]])
+          (when replies?
             [:tr
               [:td
-                [:label.digest-group-title
-                  "Replies"]]]
+                [:a.digest-group-link {:href (:url replies)}
+                  [:label.digest-group-title
+                    "Replies"]]]])
+          (when replies?
             [:tr
               [:td
-                (spacer 16)]]
+                (spacer 16)]])
+          (when replies?
+            [:tr
+              [:td
+                [:a.digest-section-link
+                  {:href (:url replies)}
+                  [:p.digest-replies-section
+                    (:replies-label replies)]]]])
+          (when replies?
+            [:tr
+              [:td
+                (spacer 16)]])
+          (when new-boards?
             [:tr
               [:td
                 [:a.digest-group-link
-                  {:href replies-url}
+                  {:href (:url new-boards)}
+                  [:label.digest-group-title
+                    "New topics"]]]])
+          (when new-boards?
+            [:tr
+              [:td
+                (spacer 16)]])
+          (when new-boards?
+            [:tr
+              [:td
+                (:new-boards-label new-boards)]])
+          (when new-boards?
+            [:tr
+              [:td
+                (spacer 32)]])
+          (when unfollowing?
+            [:tr
+              [:td
+                [:a.digest-group-link {:href (:url unfollowing)}
+                  [:label.digest-group-title
+                    "Other things"]]]])
+          (when unfollowing?
+            [:tr
+              [:td
+                (spacer 16)]])
+          (when unfollowing?
+            [:tr
+              [:td
+                [:a.digest-section-link
+                  {:href (:url unfollowing)}
                   [:p.digest-replies-section
-                    "Since your last digest Sean Johnson, Stuart Levinson and 2 others left 6 replies on updates you care about. (static copy, for testing purpose)"]]]]
-            [:tr
-              [:td
-                (spacer 16)]]
-            [:tr
-              [:td
-                [:label.digest-group-title
-                  "New topics"]]]
-            [:tr
-              [:td
-                (spacer 16)]]
-            [:tr
-              [:td
-                [:p.digest-new-boards-section
-                  "Since your last digest, "
-                  [:a
-                    {:href explore-url}
-                    "3 new topics"]
-                  " were created: "
-                  [:a
-                    {:href (get-board-url digest {:slug "marketing"})}
-                    "Marketing"]
-                  ", "
-                  [:a
-                    {:href (get-board-url digest {:slug "design"})}
-                    "Design"]
-                  " and "
-                  [:a
-                    {:href (get-board-url digest {:slug "development"})}
-                    "Development"]
-                  "."]]]
-            [:tr
-              [:td
-                (spacer 32)]]
-            [:tr
-              [:td
-                [:label.digest-group-title
-                  "Other things"]]]
-            [:tr
-              [:td
-                (spacer 16)]]
-            [:tr
-              [:td
-                [:a.digest-group-link
-                  {:href unfollow-url}
-                  [:p.digest-replies-section
-                    "Other 12 updates where published by 3 authors across 5 topics that you don't follow."]]]]])
+                    (:unfollowing-label unfollowing)]]]])]
         (spacer 40)]]))
 
 ;; Reminder alert
@@ -729,86 +701,6 @@
         (:token-link invite)]
       (spacer 40)]))
 
-(defn follow-up-subject [data]
-  (let [msg (keywordize-keys data)
-        follow-up-author (-> data :notification :follow-up :author)
-        author-name (user-lib/name-for follow-up-author)]
-    (format follow-up-subject-text author-name)))
-
-(defn- follow-up-post-block
-  ([entry entry-url]
-  (let [publisher (:publisher entry)
-        headline (post-headline entry true)
-        abstract (:abstract entry)
-        cleaned-body (if (clojure.string/blank? abstract) (text/truncated-body (:body entry)) abstract)
-        has-body (seq cleaned-body)
-        publisher-name (-> entry :publisher :name)
-        paragraph-text [:span
-                         publisher-name " in " (:board-name entry)
-                         (board-access entry)]]
-    [:table
-      {:cellpadding "0"
-       :cellspacing "0"
-       :border "0"
-       :class "row"}
-      [:tr
-        [:td
-          [:div
-            {:class "follow-up-post-block"}
-            (h2 headline entry-url "")
-            (when has-body
-              (spacer 8 ""))
-            (when has-body
-              (post-body cleaned-body))
-            (spacer 12 "")
-            (paragraph paragraph-text "" "attribution")]]]])))
-
-(defn- follow-up-notification-content [msg]
-  (let [notification (:notification msg)
-        org (:org msg)
-        logo-url (:logo-url org)
-        logo-width (:logo-width org)
-        logo-height (:logo-height org)
-        logo? (not (s/blank? logo-url))
-        org-name (:name org)
-        follow-up (:follow-up notification)
-        follow-up-author (:author follow-up)
-        author-name (user-lib/name-for follow-up-author)
-        post-data (get-post-data msg)
-        message (follow-up-subject msg)
-        entry-url (s/join "/" [config/web-url
-                               (:slug org)
-                               (:board-slug post-data)
-                               "post"
-                               (:uuid post-data)])]
-    [:td {:class "small-12 large-12 columns main-wrapper vertical-padding" :valign "middle" :align "center"}
-      (when (:avatar-url follow-up-author)
-        [:table {:class "row"}
-          [:tr {:class "small-12 large-12 columns"}
-            [:th {:class "small-12 large-12 columns"}
-              [:table {:class "small-12 large-12 columns"}
-                [:tr {:class "small-12 large-12 columns"}
-                  [:th {:class "small-12 large-12 columns"}
-                    [:img.follow-up-author
-                      {:src (user-lib/fix-avatar-url config/filestack-api-key (:avatar-url follow-up-author))}]]]]]]])
-
-      (when (:avatar-url follow-up-author)
-        (spacer 24))
-      [:table {:class "row"}
-        [:tr
-          [:th {:class "small-12 large-12 columns"}
-            [:h1 {:class "follow-up-header"} message]]]]
-      (spacer 16)
-      (follow-up-post-block post-data entry-url)
-      (spacer 24)
-      [:table {:class "row"}
-        [:tr
-          [:th {:class "small-12 large-12 columns"}
-            [:a {:href entry-url
-                 :class "follow-up-button-cta"}
-              "View post"]]]]
-      (spacer 40)]))
-
 (defn- share-title [data]
   (let [sharer (:sharer-name data)
         from (if (s/blank? sharer) "Someone" sharer)]
@@ -823,7 +715,7 @@
         org-slug (:org-slug entry)
         sharer (:sharer-name entry)
         publisher (:publisher entry)
-        attribution (str (:name publisher) " posted to " (:board-name entry) (board-access entry))
+        attribution (str (:name publisher) " posted to " (:board-name entry))
         note (:note entry)
         note? (not (s/blank? note))
         from (if (s/blank? sharer) "Someone" sharer)
@@ -994,7 +886,6 @@
         :notify (preheader (notify-intro data))
         :reminder-notification (preheader (reminder-notification-headline data))
         :reminder-alert (preheader (reminder-alert-headline data))
-        :follow-up (preheader "A follow-up was created for you.")
         :bot-removed (preheader bot-removed-subject))
       [:table {:class "body"
                :with "100%"}
@@ -1005,7 +896,6 @@
               (email-header type)
               [:table {:class (str "row " (cond
                                             digest? "digest-email-content"
-                                            (= type :follow-up) "follow-up-email-content"
                                             :else "email-content"))
                        :valign "middle"
                        :align "center"}
@@ -1024,7 +914,6 @@
                     :notify (notify-content data)
                     :reminder-notification (reminder-notification-content data)
                     :reminder-alert (reminder-alert-content data)
-                    :follow-up (follow-up-notification-content data)
                     :bot-removed (bot-removed-content data))]]
               (email-footer data type)]]]]]))
 
@@ -1088,18 +977,6 @@
 (defn invite-text [invite]
   (let [link (:token-link (keywordize-keys invite))]
     (str (invite-subject invite false) ".\n\n"
-         carrot-explainer "\n\n"
-         "Open the link below to check it out.\n\n"
-         link "\n\n")))
-
-(defn follow-up-html [follow-up-data]
-  (html (-> follow-up-data
-          (assoc :subject (follow-up-subject follow-up-data))
-          (assoc :text (follow-up-subject follow-up-data))) :follow-up))
-
-(defn follow-up-text [follow-up-data]
-  (let [link (:url follow-up-data)]
-    (str (follow-up-subject follow-up-data) ".\n\n"
          carrot-explainer "\n\n"
          "Open the link below to check it out.\n\n"
          link "\n\n")))
@@ -1221,7 +1098,7 @@
   (def data (clean-html (slurp "./resources/digest/change-to.html")))
   (-> (hickory/parse data) hickory/as-hiccup first (nth 3) (nth 2))
 
-  (def digest (json/decode (slurp "./opt/samples/digests/carrot.json")))
+  (def digest (json/decode (slurp "./opt/samples/digests/wut.json")))
   (spit "./hiccup.html" (content/digest-html digest))
 
   (def digest (json/decode (slurp "./opt/samples/digests/apple.json")))
@@ -1251,11 +1128,6 @@
 
   (def reminder-alert (json/decode (slurp "./opt/samples/reminders/alert.json")))
   (spit "./hiccup.html" (content/reminder-alert-html reminder-alert))
-
-  ;; Follow-up notification
-
-  (def follow-up-data (json/decode (slurp "./opt/samples/follow-up/carrot.json")))
-  (spit "./hiccup.html" (content/follow-up-html follow-up-data))
 
   ;; Bot removed email
 

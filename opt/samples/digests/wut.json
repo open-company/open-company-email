@@ -1,0 +1,66 @@
+{
+  "digest-frequency": "daily",
+  "org-slug": "carrot",
+  "org-name": "Carrot",
+  "logo-url": "https://slack-files2.s3-us-west-2.amazonaws.com/avatars/2017-09-16/243287999207_9e662352c5c6175b971a_230.png",
+  "logo-height": 230,
+  "logo-width": 230,
+  "boards": [
+    {
+      "name": "General",
+      "slug": "general",
+      "posts": [
+        {
+          "headline": "Another again and again",
+          "url": "http://localhost:3000/carrot/general/post/dc68-4c26-b396",
+          "must-see": true,
+          "board-access": "public",
+          "publisher" : {
+            "avatar-url" : "https://cdn.filestackcontent.com/resize=height%3a72/UcLBPMzZRGeOGT7MWqWl",
+            "name" : "Iacopo Carraro",
+            "user-id" : "c8a5-4a10-b851"
+          },
+          "body": "<p>Asda das as</p>",
+          "comment-count-label": "",
+          "published-at": "2017-11-5T17:00:48.729Z"
+        }
+      ]
+    }, {
+      "name": "Above the line",
+      "slug": "above-the-line",
+      "posts": [
+        {
+          "headline": "One more here again",
+          "url": "http://localhost:3000/carrot/above-the-line/post/abe4-47e9-9be2",
+          "board-access": "public",
+          "publisher" : {
+            "avatar-url" : "https://cdn.filestackcontent.com/resize=height%3a72/UcLBPMzZRGeOGT7MWqWl",
+            "name" : "Iacopo Carraro",
+            "user-id" : "c8a5-4a10-b851"
+          },
+          "body": "<p>Kmkamdsklmalkdm aslkmdkl a</p>",
+          "comment-count-label": "3 new comments",
+          "published-at": "2020-08-07T12:35:57.193Z"
+        }
+      ]
+    }, {
+      "name": "Eng...elwood",
+      "slug": "above-the-line",
+      "posts": [
+        {
+          "headline": "Asd sad ad auhd ashiud haiush d ads aspokapso kdpsoak pkd soakpoaskd poaspdo jas pasjd oiash douihasoi dhoasi o",
+          "url": "http://localhost:3000/carrot/eng-elwood/post/0646-4c22-a8e0",
+          "board-access": "public",
+          "publisher" : {
+            "avatar-url" : "https://cdn.filestackcontent.com/resize=height%3a72/UcLBPMzZRGeOGT7MWqWl",
+            "name" : "Iacopo Carraro",
+            "user-id" : "c8a5-4a10-b851"
+          },
+          "body": "<p>asdasd asd asd as das das ds</p>",
+          "comment-count-label": "1 comment",
+          "published-at": "2017-11-5T17:00:48.729Z"
+        }
+      ]
+    }
+  ]
+}
