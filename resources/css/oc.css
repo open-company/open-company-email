@@ -74,11 +74,11 @@ p.digest-post-footer-row {
   vertical-align: middle;
 }
 
-p.digest-post-footer-row span.comments-label, p.digest-post-footer-row span.new-comments {
+p.digest-post-footer-row span.comments-label {
   color: #6833F1;
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 12px;
-  line-height: 18px;
+  line-height: 24px;
   font-weight: bold;
   margin-right: 4px;
   text-align: left;
@@ -89,7 +89,7 @@ div.digest-post-headline-row {
   display: flex;
   width: 100%;
   max-width: 508px;
-  /*height: 56px;*/
+  height: 56px;
   flex-flow: row nowrap;
   justify-content: flex-start;
   align-items: center;
@@ -106,8 +106,13 @@ div.digest-post-headline-row span.digest-post-arrow {
   text-align: center;
   color: #34414f;
   font-family: Helvetica, Arial, sans-serif !important;
+  line-height: 56px;
   font-weight: normal;
   text-decoration: none !important;
+}
+
+div.digest-post-headline-row.has-comments span.digest-post-arrow {
+  line-height: 32px;
 }
 
 a:hover div.digest-post-headline-row span.digest-post-arrow {
@@ -120,6 +125,7 @@ div.digest-post-headline-row span.digest-post-attribution {
   /*overflow: hidden;
   text-overflow: ellipsis;*/
   font-size: 12px;
+  line-height: 56px;
   color: rgb(52, 65, 79, 0.5);
   text-decoration: underline;
   font-family: Helvetica, Arial, sans-serif !important;
@@ -129,19 +135,36 @@ div.digest-post-headline-row span.digest-post-attribution {
   white-space: nowrap;
 }
 
-div.digest-post-headline-row span.digest-post-title a {
+div.digest-post-headline-row.has-comments span.digest-post-attribution {
+  line-height: 32px;
+}
+
+div.digest-post-headline-row span.digest-post-title {
   flex: 0 1 auto;
   margin-right: auto;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 16px;
-  color: #34414f;
-  text-decoration: underline;
-  font-family: Helvetica, Arial, sans-serif !important;
-  font-weight: normal;
   text-align: left;
   display: inline-block;
   white-space: nowrap;
+  height: 56px;
+}
+
+div.digest-post-headline-row span.digest-post-title a {
+  font-size: 16px;
+  color: #34414f;
+  line-height: 56px;
+  text-decoration: underline;
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-weight: normal;
+}
+
+div.digest-post-headline-row.has-comments span.digest-post-title {
+  height: 32px;
+}
+
+div.digest-post-headline-row.has-comments span.digest-post-title a {
+  line-height: 32px;
 }
 
 h2.digest-post-title {

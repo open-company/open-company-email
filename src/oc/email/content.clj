@@ -326,9 +326,8 @@
         has-body (seq cleaned-body)
         published-date (time-format/unparse date-format-no-dot (time-format/parse iso-format (:published-at entry)))
         superuser-token (auth/user-token {:user-id (:user-id user)} config/auth-server-url config/passphrase "Email")
-        comment-count (:comment-count-label entry)
-        comments? (and comment-count
-                       (pos? comment-count))]
+        comment-count-label (:comment-count-label entry)
+        comments? (seq comment-count-label)]
     [:table
       {:cellpadding "0"
        :cellspacing "0"
@@ -373,9 +372,8 @@
                       [:a
                         {:href (:replies-url entry)}
                         [:p.digest-post-footer-row
-                          (when (:comment-count-label entry)
-                            [:span.comments-label
-                              (str " " (:comment-count-label entry))])]]]])]]]
+                          [:span.comments-label
+                              comment-count-label]]]]])]]]
             ; (when has-body
             ;   [:tr [:td (spacer 4)]])
             ; (when has-body
