@@ -326,8 +326,9 @@
         has-body (seq cleaned-body)
         published-date (time-format/unparse date-format-no-dot (time-format/parse iso-format (:published-at entry)))
         superuser-token (auth/user-token {:user-id (:user-id user)} config/auth-server-url config/passphrase "Email")
-        comments? (or (:comment-count-label entry)
-                      (:new-comment-label entry))]
+        comment-count (:comment-count-label entry)
+        comments? (and comment-count
+                       (pos? comment-count))]
     [:table
       {:cellpadding "0"
        :cellspacing "0"
@@ -347,9 +348,12 @@
              :border "0"
              :class "row digest-post-block"}
             [:tr [:td
-              [:div.digest-post-row
-                [:a
-                  {:href (:url entry)}
+              [:table
+                {:cellpadding "0"
+                 :cellspacing "0"
+                 :border "0"
+                 :class "row digest-post-block"}
+                [:tr [:td
                   [:div.digest-post-headline-row
                     {:class (when comments? "has-comments")}
                     [:span.digest-post-attribution
@@ -359,19 +363,19 @@
                     [:span.digest-post-arrow
                       "→"]
                     [:span.digest-post-title
-                      (:headline entry)]
+                      [:a
+                        {:href (:url entry)}
+                        (:headline entry)]]
                     ; (h2  (:url entry) "" "digest-post-title")
-                    ]
+                    ]]]
                   (when comments?
-                    [:a
-                      {:href (:replies-url entry)}
-                      [:p.digest-post-footer-row
-                        (when (:comment-count-label entry)
-                          [:span.comments-label
-                            (str " " (:comment-count-label entry))])
-                        (when (:new-comment-label entry)
-                          [:span.new-comments
-                            (str "(" (:new-comment-label entry) ")")])]])]]]]
+                    [:tr [:td
+                      [:a
+                        {:href (:replies-url entry)}
+                        [:p.digest-post-footer-row
+                          (when (:comment-count-label entry)
+                            [:span.comments-label
+                              (str " " (:comment-count-label entry))])]]]])]]]
             ; (when has-body
             ;   [:tr [:td (spacer 4)]])
             ; (when has-body
@@ -488,24 +492,7 @@
           (when new-boards?
             [:tr
               [:td
-                (spacer 32)]])
-          (when unfollowing?
-            [:tr
-              [:td
-                [:a.digest-group-link {:href (:url unfollowing)}
-                  [:label.digest-group-title
-                    "Other things"]]]])
-          (when unfollowing?
-            [:tr
-              [:td
-                (spacer 16)]])
-          (when unfollowing?
-            [:tr
-              [:td
-                [:a.digest-section-link
-                  {:href (:url unfollowing)}
-                  [:p.digest-replies-section
-                    (:unfollowing-label unfollowing)]]]])]
+                (spacer 32)]])]
         (spacer 40)]]))
 
 ;; Reminder alert
