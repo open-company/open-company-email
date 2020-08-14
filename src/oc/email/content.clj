@@ -450,7 +450,7 @@
               [:td
                 [:a.digest-group-link {:href (:url replies)}
                   [:label.digest-group-title
-                    "Replies"]]]])
+                    "Comments"]]]])
           (when replies?
             [:tr
               [:td
