@@ -370,7 +370,7 @@
                   (when comments?
                     [:tr [:td
                       [:a
-                        {:href (:replies-url entry)}
+                        {:href (:url entry)}
                         [:p.digest-post-footer-row
                           [:span.comments-label
                               comment-count-label]]]]])]]]
@@ -428,12 +428,6 @@
            :cellspacing "0"
            :border "0"
            :class "digest-content"}
-          (when following?
-            [:tr
-              [:td
-                [:a.digest-group-link {:href (:url following)}
-                  [:label.digest-group-title
-                    "Home"]]]])
           (when following?
             [:tr
               [:td
