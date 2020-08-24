@@ -317,15 +317,9 @@
     cleaned-body])
 
 (defn- digest-post-block
-  [user entry]
+  [entry]
   (let [publisher (:publisher entry)
         avatar-url (user-lib/fix-avatar-url config/filestack-api-key (:avatar-url publisher) 128)
-        vid (:video-id entry)
-        abstract (:abstract entry)
-        cleaned-body (if (clojure.string/blank? abstract) (text/truncated-body (:body entry)) abstract)
-        has-body (seq cleaned-body)
-        published-date (time-format/unparse date-format-no-dot (time-format/parse iso-format (:published-at entry)))
-        superuser-token (auth/user-token {:user-id (:user-id user)} config/auth-server-url config/passphrase "Email")
         comment-count-label (:comment-count-label entry)
         comments? (seq comment-count-label)]
     [:table
@@ -335,11 +329,13 @@
        :class "row digest-post-block text-left"}
       [:tr
         [:td
-          (spacer 24)]]
+          (spacer 16)]]
       [:tr
         [:td.digest-post-avatar-td
-          [:img.digest-post-avatar
-            {:src avatar-url}]]
+          [:a
+            {:href (:url publisher)}
+            [:img.digest-post-avatar
+              {:src avatar-url}]]]
         [:td
           [:table
             {:cellpadding "0"
@@ -352,28 +348,20 @@
                  :cellspacing "0"
                  :border "0"
                  :class "row digest-post-block"}
-                [:tr [:td
-                  [:div.digest-post-headline-row
-                    {:class (when comments? "has-comments")}
+                [:tr
+                  [:td
                     [:span.digest-post-attribution
-                      (str (:name (:publisher entry))
-                           " in "
-                           (:board-name entry))]
-                    [:span.digest-post-arrow
-                      "→"]
-                    [:span.digest-post-title
-                      [:a
-                        {:href (:url entry)}
-                        (:headline entry)]]
-                    ; (h2  (:url entry) "" "digest-post-title")
-                    ]]]
-                  (when comments?
-                    [:tr [:td
-                      [:a
-                        {:href (:url entry)}
-                        [:p.digest-post-footer-row
-                          [:span.comments-label
-                              comment-count-label]]]]])]]]
+                     (str (:name (:publisher entry))
+                          " in "
+                          (:board-name entry))]]]
+                [:tr
+                  [:td
+                    [:a
+                      {:href (:url entry)}
+                      [:span.digest-post-headline-row
+                        (str (:headline entry) " →")
+                      ; (h2  (:url entry) "" "digest-post-title")
+                      ]]]]]]]
             ; (when has-body
             ;   [:tr [:td (spacer 4)]])
             ; (when has-body
@@ -382,14 +370,14 @@
             [:tr [:td 
                 (spacer 8)]]]]]]))
 
-(defn- posts-with-board-name [board]
-  (let [board-name (:name board)]
-    (assoc board :posts (map #(assoc % :board-name board-name) (:posts board)))))
+; (defn- posts-with-board-name [board]
+;   (let [board-name (:name board)]
+;     (assoc board :posts (map #(assoc % :board-name board-name) (:posts board)))))
 
-(defn- posts-for-board [board]
-  (let [pretext (:name board)
-        posts (:posts board)]
-    (concat [{:type :board :name pretext}] posts)))
+; (defn- posts-for-board [board]
+;   (let [pretext (:name board)
+;         posts (:posts board)]
+;     (concat [{:type :board :name pretext}] posts)))
 
 (defn digest-title [org-name]
   (let [date-str (time-format/unparse digest-subject-format (time/now))]
@@ -414,12 +402,13 @@
 "])
 
 (defn- digest-content
-  [{:keys [following replies unfollowing new-boards] :as digest}]
+  [{:keys [following replies unfollowing new-boards digest-label] :as digest}]
   (let [user (select-keys digest [:user-id :name :avatar-url])
         following? (seq (:following-list following))
-        replies? (seq (:replies-label replies))
-        new-boards? (seq (:new-boards-label new-boards))
-        unfollowing? (seq (:unfollowing-label unfollowing))]
+        ; replies? (seq (:replies-label replies))
+        ; new-boards? (seq (:new-boards-label new-boards))
+        ; unfollowing? (seq (:unfollowing-label unfollowing))
+        ]
     [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
       [:center
         (spacer 40)
@@ -428,6 +417,13 @@
            :cellspacing "0"
            :border "0"
            :class "digest-content"}
+          [:tr
+            [:td
+              digest-label]]
+          (when following?
+            [:tr
+             [:td
+              (spacer 8)]])
           (when following?
             [:tr
               [:td
@@ -440,51 +436,51 @@
                      :class "row digest-posts-container"}
                     [:tr
                       [:td {:class "small-12 large-12 columns"}
-                        (digest-post-block user post)]]])]])
-          (when following?
-            [:tr
-              [:td
-                (spacer 16)]])
-          (when replies?
-            [:tr
-              [:td
-                [:a.digest-group-link {:href (:url replies)}
-                  [:label.digest-group-title
-                    "Comments"]]]])
-          (when replies?
-            [:tr
-              [:td
-                (spacer 16)]])
-          (when replies?
-            [:tr
-              [:td
-                [:a.digest-section-link
-                  {:href (:url replies)}
-                  [:p.digest-replies-section
-                    (:replies-label replies)]]]])
-          (when replies?
-            [:tr
-              [:td
-                (spacer 16)]])
-          (when new-boards?
-            [:tr
-              [:td
-                [:a.digest-group-link
-                  {:href (:url new-boards)}
-                  [:label.digest-group-title
-                    "New topics"]]]])
-          (when new-boards?
-            [:tr
-              [:td
-                (spacer 16)]])
-          (when new-boards?
-            [:tr
-              [:td
-                (:new-boards-label new-boards)]])
-          (when new-boards?
-            [:tr
-              [:td
-                (spacer 32)]])]
+                        (digest-post-block post)]]])]])
+          [:tr
+            [:td
+              (spacer 16)]]
+          ; (when replies?
+          ;   [:tr
+          ;     [:td
+          ;       [:a.digest-group-link {:href (:url replies)}
+          ;         [:label.digest-group-title
+          ;           "Comments"]]]])
+          ; (when replies?
+          ;   [:tr
+          ;     [:td
+          ;       (spacer 16)]])
+          ; (when replies?
+          ;   [:tr
+          ;     [:td
+          ;       [:a.digest-section-link
+          ;         {:href (:url replies)}
+          ;         [:p.digest-replies-section
+          ;           (:replies-label replies)]]]])
+          ; (when replies?
+          ;   [:tr
+          ;     [:td
+          ;       (spacer 16)]])
+          ; (when new-boards?
+          ;   [:tr
+          ;     [:td
+          ;       [:a.digest-group-link
+          ;         {:href (:url new-boards)}
+          ;         [:label.digest-group-title
+          ;           "New topics"]]]])
+          ; (when new-boards?
+          ;   [:tr
+          ;     [:td
+          ;       (spacer 16)]])
+          ; (when new-boards?
+          ;   [:tr
+          ;     [:td
+          ;       (:new-boards-label new-boards)]])
+          ; (when new-boards?
+          ;   [:tr
+          ;     [:td
+          ;       (spacer 32)]])
+          ]
         (spacer 40)]]))
 
 ;; Reminder alert

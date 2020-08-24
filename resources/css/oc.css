@@ -85,96 +85,54 @@ p.digest-post-footer-row span.comments-label {
   cursor: pointer;
 }
 
-div.digest-post-headline-row {
-  display: flex;
-  width: 100%;
-  max-width: 508px;
-  height: 56px;
-  flex-flow: row nowrap;
-  justify-content: flex-start;
-  align-items: center;
-  margin-top: auto;
-  margin-bottom: auto;
-}
-
-div.digest-post-headline-row.has-comments {
-  height: 32px;
-}
-
-div.digest-post-headline-row span.digest-post-arrow {
-  margin: 0 6px;
-  text-align: center;
-  color: #34414f;
-  font-family: Helvetica, Arial, sans-serif !important;
-  line-height: 56px;
-  font-weight: normal;
-  text-decoration: none !important;
-}
-
-div.digest-post-headline-row.has-comments span.digest-post-arrow {
-  line-height: 32px;
-}
-
-a:hover div.digest-post-headline-row span.digest-post-arrow {
-  text-decoration: none !important;
-}
-
-div.digest-post-headline-row span.digest-post-attribution {
-  flex: 0 0 auto;
-  /*max-width: 30%;*/
-  /*overflow: hidden;
-  text-overflow: ellipsis;*/
-  font-size: 12px;
-  line-height: 56px;
-  color: rgb(52, 65, 79, 0.5);
-  text-decoration: underline;
-  font-family: Helvetica, Arial, sans-serif !important;
-  font-weight: normal;
-  text-align: left;
-  /*display: block;*/
-  white-space: nowrap;
-}
-
-div.digest-post-headline-row.has-comments span.digest-post-attribution {
-  line-height: 32px;
-}
-
-div.digest-post-headline-row span.digest-post-title {
-  flex: 0 1 auto;
-  margin-right: auto;
+span.digest-post-attribution {
   overflow: hidden;
   text-overflow: ellipsis;
-  text-align: left;
-  display: inline-block;
-  white-space: nowrap;
-  height: 56px;
-}
-
-div.digest-post-headline-row span.digest-post-title a {
-  font-size: 16px;
-  color: #34414f;
-  line-height: 56px;
-  text-decoration: underline;
+  font-size: 12px;
+  line-height: 32px;
+  color: rgb(52, 65, 79, 0.5);
+  text-decoration: none;
   font-family: Helvetica, Arial, sans-serif !important;
   font-weight: normal;
+  text-align: left;
+  white-space: nowrap;
 }
 
-div.digest-post-headline-row.has-comments span.digest-post-title {
-  height: 32px;
-}
-
-div.digest-post-headline-row.has-comments span.digest-post-title a {
-  line-height: 32px;
+span.digest-post-headline-row {
+  margin-top: 8px;
+  text-align: left;
+  font-size: 16px;
+  line-height: 18px;
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-weight: bold;
+  color: #34414F;
 }
 
 h2.digest-post-title {
   font-size: 16px;
   line-height: 20px;
-  color: #34414f;
+  color: #34414F;
   text-decoration: underline;
   font-family: Helvetica, Arial, sans-serif !important;
   font-weight: normal;
   text-align: left;
+}
+
+label.digest-label {
+  font-family: Helvetica, Arial, sans-serif !important;
+  line-height: 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #34414F;
+}
+
+label.digest-label a {
+  color: #6833F1;
+  font-family: Helvetica, Arial, sans-serif !important;
+  line-height: 20px;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
 }
 
 p {
@@ -331,14 +289,14 @@ center > table.footer-table {
 .follow-up-post-block h2 {
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 16px;
-  color: #34414f;
+  color: #34414F;
   font-weight: normal;
   line-height: 18px;
   text-align: left;
 }
 
 .follow-up-post-block h2 span.post-title {
-  color: #34414f;
+  color: #34414F;
   text-decoration: underline;
   text-align: left;
 }
@@ -369,7 +327,7 @@ h1.follow-up-header {
   font-weight: normal;
   font-size: 20px;
   line-height: 24px;
-  color: #34414f;
+  color: #34414F;
 }
 
 h1.invite-header {
@@ -378,7 +336,7 @@ h1.invite-header {
   font-weight: normal;
   font-size: 20px;
   line-height: 24px;
-  color: #34414f;
+  color: #34414F;
   text-align: center;
 }
 
@@ -399,20 +357,12 @@ table.email-content tr td.vertical-padding, table.email-content tr td.columns.ve
   border-top-right-radius: 8px;
 }
 
-.digest-content {
-  
-}
-
 .digest-content label.digest-group-title {
   font-family: Helvetica, Arial, sans-serif !important;
   font-weight: bold;
   font-size: 12px;
   text-transform: uppercase;
   color: rgba(52, 65, 79, 0.5);
-}
-
-.digest-content table, .digest-content table tr {
-  
 }
 
 .email-content > tr:last-child,
@@ -589,13 +539,13 @@ p.digest-footer-paragraph a {
 }
 
 p.invite-carrot-disclaimer {
-  color: #34414f;
+  color: #34414F;
   font-size: 16px;
   font-weight: 400;
 }
 
 p.invite-carrot-disclaimer a {
-  color: #34414f;
+  color: #34414F;
   font-size: 16px;
   text-decoration: underline;
   font-weight: 400;
@@ -699,6 +649,10 @@ img.digest-post-avatar {
 
 table.digest-post-block td.digest-post-avatar-td {
   width: 56px;
+}
+
+table.digest-post-block td.digest-post-avatar-td a {
+  text-decoration: none;
 }
 
 a.digest-group-link:hover {
