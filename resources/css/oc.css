@@ -98,6 +98,16 @@ span.digest-post-attribution {
   white-space: nowrap;
 }
 
+span.digest-post-attribution a {
+  font-size: 12px;
+  line-height: 32px;
+  color: rgb(52, 65, 79, 0.5);
+  text-decoration: none;
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-weight: normal;
+  text-align: left;
+}
+
 span.digest-post-headline-row {
   margin-top: 8px;
   text-align: left;

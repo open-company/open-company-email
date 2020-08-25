@@ -283,7 +283,7 @@
             (when digest?
               [:tr [:th {:class "small-12 lrge-12"}
                 [:p {:class "footer-paragraph bottom-footer underline-link"}
-                  [:a {:href (str config/web-url "/" (:org-slug data) "/all-posts?user-settings=notifications")}
+                  [:a {:href (str (:url (:following data)) "?user-settings=notifications")}
                     "Manage your digest settings"]]]])
             (when digest?
               [:tr [:th {:class "small-12 lrge-12"}
@@ -335,7 +335,8 @@
           [:a
             {:href (:url publisher)}
             [:img.digest-post-avatar
-              {:src avatar-url}]]]
+              {:src avatar-url
+               :alt (:name publisher)}]]]
         [:td
           [:table
             {:cellpadding "0"
@@ -351,9 +352,13 @@
                 [:tr
                   [:td
                     [:span.digest-post-attribution
-                     (str (:name (:publisher entry))
-                          " in "
-                          (:board-name entry))]]]
+                      [:a
+                        {:href (:url publisher)}
+                        (:name publisher)]
+                      " in "
+                      [:a
+                        {:href (:board-url publisher)}
+                        (:board-name entry)]]]]
                 [:tr
                   [:td
                     [:a
