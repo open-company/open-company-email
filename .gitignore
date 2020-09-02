@@ -9,6 +9,8 @@ pom.xml.asc
 /.nrepl-*
 .hgignore
 .hg/
+.calva/
+.idea/
 
 /hiccup.html
 /hiccup.inline.html
