@@ -23,6 +23,10 @@
     ;; NB: org.clojure/tools.reader is pulled in by oc.lib
     [org.clojure/tools.namespace "0.3.1" :exclusions [org.clojure/tools.reader]] 
 
+    ;; General data-binding functionality for Jackson: works on core streaming API https://github.com/FasterXML/jackson-databind
+    ;; Calva (Jackin extension for Visual Studio Code) needs jackson-databind dep explicit
+    [com.fasterxml.jackson.core/jackson-databind "2.11.2"]
+
     ;; Library for OC projects https://github.com/open-company/open-company-lib
     [open-company/lib "0.17.23"]
     ;; In addition to common functions, brings in the following common dependencies used by this project:
