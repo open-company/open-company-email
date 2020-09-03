@@ -7,22 +7,19 @@
   "logo-width": 230,
   "digest-label": [
     "label.digest-label",
-    "Since your last digest there are ",
-    ["a",
-     {"href": "http://localhost:3559/carrot/general"},
-     " new updates"],
-    " and ",
-    ["a",
-      {"href": "http://localhost:3559/carrot/comments"},
-      "a new comment"],
-    " for you."
+    "Hey Iacopo, here’s the latest digest. Check out the new updates and comments from your team."
   ],
+  "org-light-brand-color": {
+    "rgb": {"r": 104, "g": 51, "b": 241},
+    "hex": "blue",
+    "button-color": "orange"
+  },
   "following": {
     "url": "http://localhost:3559/carrot/home",
     "following-list": [
       {
         "headline": "Another again and again",
-        "url": "http://localhost:3000/carrot/above-the-line/post/dc68-4c26-b396",
+        "url": "http://localhost:3559/carrot/above-the-line/post/dc68-4c26-b396",
         "must-see": true,
         "board-access": "public",
         "board-name": "Above the line",
@@ -39,7 +36,7 @@
         "published-at": "2017-11-5T17:00:48.729Z"
       }, {
         "headline": "One more here again",
-        "url": "http://localhost:3000/carrot/under-the-line/post/abe4-47e9-9be2",
+        "url": "http://localhost:3559/carrot/under-the-line/post/abe4-47e9-9be2",
         "board-access": "public",
         "board-name": "Under the line",
         "board-slug": "under-the-line",
@@ -55,7 +52,7 @@
         "published-at": "2020-08-07T12:35:57.193Z"
       }, {
         "headline": "Asd sad ad auhd ashiud haiush d ads aspokapso kdpsoak pkd soakpoaskd poaspdo jas pasjd oiash douihasoi dhoasi o",
-        "url": "http://localhost:3000/carrot/design/post/0646-4c22-a8e0",
+        "url": "http://localhost:3559/carrot/design/post/0646-4c22-a8e0",
         "board-access": "public",
         "board-name": "Design",
         "board-slug": "design",
