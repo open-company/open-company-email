@@ -248,8 +248,8 @@
               [:a
                 {:href config/web-url}
                 [:img {:src (str config/email-images-prefix "/email_images/carrot_logo_with_copy_colors@2x.png")
-                       :width "55"
-                       :height "22"
+                       :width "95"
+                       :height "32"
                        :alt "Carrot!"}]]]
             [:th {:class "small-6 large-6 columns header-right"}
               (when (= type :digest)
@@ -991,6 +991,7 @@
   ;; For REPL testing and content development
 
   (require '[hickory.core :as hickory])
+  (require '[cheshire.core :as json])
   (require '[oc.email.content :as content] :reload)
 
   ;; Recreate hiccup from various HTML fragments
