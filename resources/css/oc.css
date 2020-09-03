@@ -145,7 +145,6 @@ a.digest-cta {
   font-size: 18px;
   line-height: 32px;
   padding: 0 16px;
-  border: 2px solid #6833F1;
   border-radius: 4px;
   background-color: #6833F1;
   color: white;
@@ -486,7 +485,16 @@ span.note-author-name {
 }
 
 table.horizontal-line {
-  border-top: 1px solid #F0F0F1;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+table.horizontal-line table.row {
+  max-width: 564px;
+  margin: 0 auto;
+  text-align: center;
+  background-color: #F0F0F1;
 }
 
 p.digest-help {

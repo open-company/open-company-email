@@ -54,3 +54,12 @@
 ;; ----- Filestack -----
 
 (defonce filestack-api-key (env :filestack-api-key))
+
+;; ----- Default brand color -----
+
+(defonce default-brand-color (or (:light (env :default-brand-color))
+                                 {:rgb {:r 104
+                                        :g 51
+                                        :b 241}
+                                  :hex "#6833F1"
+                                  :button-color "#FFFFFF"}))

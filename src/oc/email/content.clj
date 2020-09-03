@@ -179,10 +179,11 @@
 (defn- horizontal-line
   ([] (horizontal-line 1))
   ([height]
-   [:table.horizontal-line
-    [:tr
-     [:td
-      (spacer height)]]]))
+   [:table {:class "horizontal-line"}
+    [:tbody
+     [:tr
+      [:td
+       (spacer height)]]]]))
 
 (defn- h2
   ([content entry-url] (h2 content entry-url "" ""))
@@ -352,25 +353,21 @@
              :border "0"
              :class "row digest-post-block"}
             [:tr [:td
-              [:table
-                {:cellpadding "0"
-                 :cellspacing "0"
-                 :border "0"
-                 :class "row digest-post-block"}
-                [:tr
-                  [:td
-                    [:span.digest-post-attribution
-                      [:a
-                        {:href (:url publisher)}
-                        (:name publisher)]
-                      " in "
-                      [:a
-                        {:href (:board-url publisher)}
-                        (:board-name entry)]]]]
-                [:tr
-                  [:td
-                    [:a
-                      {:href (:url entry)}
+              [:a
+                {:href (:url entry)}
+                [:table
+                  {:cellpadding "0"
+                  :cellspacing "0"
+                  :border "0"
+                  :class "row digest-post-block"}
+                  [:tr
+                    [:td
+                      [:span.digest-post-attribution
+                        (:name publisher)
+                        " in "
+                        (:board-name entry)]]]
+                  [:tr
+                    [:td
                       [:span.digest-post-headline-row
                         (str (:headline entry) " →")
                       ; (h2  (:url entry) "" "digest-post-title")
@@ -415,9 +412,10 @@
 "])
 
 (defn- digest-content
-  [{:keys [following replies unfollowing new-boards digest-label] :as digest}]
+  [{:keys [following replies unfollowing new-boards digest-label org-light-brand-color] :as digest}]
   (let [user (select-keys digest [:user-id :name :avatar-url])
         following? (seq (:following-list following))
+        brand-color (or org-light-brand-color config/default-brand-color)
         ; replies? (seq (:replies-label replies))
         ; new-boards? (seq (:new-boards-label new-boards))
         ; unfollowing? (seq (:unfollowing-label unfollowing))
@@ -438,8 +436,10 @@
             [:td
              [:center
               [:a.digest-cta
-               {:href (:url following)}
-               "Open Carrot to see the latest"]]]]
+               {:href (:url following)
+                :style {:background-color (:hex brand-color)
+                        :color (:button-color brand-color)}}
+               "See the latest"]]]]
           [:tr [:td (spacer 32)]]
           [:tr [:td (horizontal-line)]]
           (when following?
@@ -1012,6 +1012,18 @@
       (s/replace "  " "")
       (s/replace "\n" "")
       (s/replace "\t" "")))
+
+  ;; Generate html file with inline style from a normal HTML file
+
+  (require '[clojure.java.shell :as shell])
+
+  (defn inline-css [html-file inline-file]
+    (shell/sh "juice"
+              "--web-resources-images" "false"
+              "--remove-style-tags" "true"
+              "--preserve-media-queries" "true"
+              "--preserve-font-faces" "false"
+              html-file inline-file))
 
   ;; Generate test email HTML content from sample data
 
