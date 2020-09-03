@@ -136,6 +136,21 @@ label.digest-label {
   color: #34414F;
 }
 
+a.digest-cta {
+  margin: 0 auto;
+  font-weight: bold;
+  width: auto;
+  display: inline-block;
+  height: 32px;
+  font-size: 18px;
+  line-height: 32px;
+  padding: 0 16px;
+  border: 2px solid #6833F1;
+  border-radius: 4px;
+  background-color: #6833F1;
+  color: white;
+}
+
 label.digest-label a {
   color: #6833F1;
   font-family: Helvetica, Arial, sans-serif !important;

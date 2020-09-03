@@ -425,6 +425,14 @@
           [:tr
             [:td
               digest-label]]
+          [:tr [:td (spacer 16)]]
+          [:tr
+            [:td
+             [:center
+              [:a.digest-cta
+               {:href (:url following)}
+               "Open Carrot to see the latest"]]]]
+           [:tr [:td (spacer 16)]]
           (when following?
             [:tr
              [:td
@@ -994,8 +1002,6 @@
       (s/replace "\t" "")))
 
   ;; Generate test email HTML content from sample data
-
-  (require '[oc.email.content :as content] :reload)
 
   ;; Carrot invites
 
