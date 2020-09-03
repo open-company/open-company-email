@@ -7,19 +7,15 @@
   "logo-width": 230,
   "digest-label": [
     "label.digest-label",
-    "Since your last digest there were ",
+    "Since your last digest there are ",
     ["a",
      {"href": "http://localhost:3559/carrot/general"},
-     "3 new updates"],
+     " new updates"],
     " and ",
     ["a",
-      {"href": "http://localhost:3559/carrot/topics"},
-      "2 new topics"],
-    ". There are also ",
-    ["a",
       {"href": "http://localhost:3559/carrot/comments"},
-      "6 new comments"],
-    " on updates you follow."
+      "a new comment"],
+    " for you."
   ],
   "following": {
     "following-list": [
