@@ -151,6 +151,12 @@ a.digest-cta {
   color: white;
 }
 
+a.digest-cta:hover {
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+}
+
 label.digest-label a {
   color: #6833F1;
   font-family: Helvetica, Arial, sans-serif !important;
@@ -232,10 +238,6 @@ table.footer a {
   color: #6833F1;
 }
 
-center > table.header-table {
-  border-bottom: 1px solid rgba(36, 45, 66, 0.1);
-}
-
 .header-table {
   background-color: white !important;
   max-width: 564px;
@@ -253,20 +255,12 @@ div.digest-date {
   line-height: 17px;
 }
 
-center > table.footer-table {
-  border-top: 1px solid rgba(36, 45, 66, 0.1);
-}
-
 .footer-table {
   background-color: white !important;
   max-width: 564px;
   width: 100%;
   text-align: center;
   vertical-align: middle;
-}
-
-.footer-table.digest-footer-table {
-  border-top: 1px solid rgba(36, 45, 66, 0.1);
 }
 
 .email-content {
@@ -284,8 +278,6 @@ center > table.footer-table {
   width: 100%;
   text-align: center;
   vertical-align: middle;
-  border-top: 1px solid rgba(36, 45, 66, 0.1);
-  border-bottom: 1px solid rgba(36, 45, 66, 0.1);
 }
 
 .follow-up-email-content a.follow-up-button-cta {
@@ -370,7 +362,6 @@ h1.invite-header {
   width: 100%;
   text-align: center;
   vertical-align: middle;
-  border-top: 1px solid rgba(36, 45, 66, 0.1);
 }
 
 table.email-content tr td.vertical-padding, table.email-content tr td.columns.vertical-padding {
@@ -401,14 +392,6 @@ table.email-content tr td.vertical-padding, table.email-content tr td.columns.ve
   background-color: white !important;
 }
 
-.header-bottom-border {
-  border-bottom: 1px solid #F0F0F1;
-}
-
-.footer-top-border {
-  border-top: 1px solid #F0F0F1;
-}
-
 p.header-paragraph {
   text-align: right;
   font-size: 14px;
@@ -420,10 +403,6 @@ p.header-paragraph a {
   font-size: 14px;
   color: #6833F1;
   text-decoration: underline;
-}
-
-table.header-bottom {
-  border-bottom: 1px solid #F0F0F1;
 }
 
 span.footer-link {

@@ -176,6 +176,14 @@
       [:th {:class "small-12 large-12 columns"}
         [:h1 {:class (or h1-class "")} content]]]])
 
+(defn- horizontal-line
+  ([] (horizontal-line 1))
+  ([height]
+   [:table.horizontal-line
+    [:tr
+     [:td
+      (spacer height)]]]))
+
 (defn- h2
   ([content entry-url] (h2 content entry-url "" ""))
   ([content entry-url css-class] (h2 content entry-url css-class ""))
@@ -425,14 +433,15 @@
           [:tr
             [:td
               digest-label]]
-          [:tr [:td (spacer 16)]]
+          [:tr [:td (spacer 32)]]
           [:tr
             [:td
              [:center
               [:a.digest-cta
                {:href (:url following)}
                "Open Carrot to see the latest"]]]]
-           [:tr [:td (spacer 16)]]
+          [:tr [:td (spacer 32)]]
+          [:tr [:td (horizontal-line)]]
           (when following?
             [:tr
              [:td
@@ -882,6 +891,7 @@
                 :align "center"}
             [:center
               (email-header type)
+              (horizontal-line)
               [:table {:class (str "row " (cond
                                             digest? "digest-email-content"
                                             :else "email-content"))
@@ -903,6 +913,7 @@
                     :reminder-notification (reminder-notification-content data)
                     :reminder-alert (reminder-alert-content data)
                     :bot-removed (bot-removed-content data))]]
+              (horizontal-line)
               (email-footer data type)]]]]]))
 
 (defn- head [data]

@@ -18,6 +18,7 @@
     " for you."
   ],
   "following": {
+    "url": "http://localhost:3559/carrot/home",
     "following-list": [
       {
         "headline": "Another again and again",
