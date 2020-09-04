@@ -437,8 +437,8 @@
              [:center
               [:a.digest-cta
                {:href (:url following)
-                :style {:background-color (:hex brand-color)
-                        :color (:button-color brand-color)}}
+                :style {:background-color (-> brand-color :primary :hex)
+                        :color (-> brand-color :secondary :hex)}}
                "See the latest"]]]]
           [:tr [:td (spacer 32)]]
           [:tr [:td (horizontal-line)]]

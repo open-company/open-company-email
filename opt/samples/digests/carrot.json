@@ -10,9 +10,18 @@
     "Hey Iacopo, here’s the latest digest. Check out the new updates and comments from your team."
   ],
   "org-light-brand-color": {
-    "rgb": {"r": 104, "g": 51, "b": 241},
-    "hex": "blue",
-    "button-color": "orange"
+    "primary": {
+      "rgb": {"r": 63,
+              "g": 189,
+              "b": 124},
+      "hex": "#3FBD7C"
+    },
+    "secondary": {
+      "rgb": {"r": 0,
+              "g": 0,
+              "b": 244},
+      "hex": "#0000FF"
+    }
   },
   "following": {
     "url": "http://localhost:3559/carrot/home",

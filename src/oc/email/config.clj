@@ -57,9 +57,11 @@
 
 ;; ----- Default brand color -----
 
-(defonce default-brand-color (or (:light (env :default-brand-color))
-                                 {:rgb {:r 104
-                                        :g 51
-                                        :b 241}
-                                  :hex "#6833F1"
-                                  :button-color "#FFFFFF"}))
+(defonce default-brand-color {:primary {:rgb {:r (or (env :primary-brand-color-r) 104)
+                                              :g (or (env :primary-brand-color-g) 51)
+                                              :b (or (env :primary-brand-color-b) 241)}
+                                        :hex (or (env :primary-brand-color-hex) "#6833F1")}
+                              :secondary {:rgb {:r (or (env :secondary-brand-color-r) 244)
+                                                :g (or (env :secondary-brand-color-g) 244)
+                                                :b (or (env :secondary-brand-color-b) 244)}
+                                          :hex (or (env :secondary-brand-color-hex) "#FFFFFF")}})
