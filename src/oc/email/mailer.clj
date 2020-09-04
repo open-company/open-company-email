@@ -177,7 +177,7 @@
         inline-file (str uuid-fragment ".inline.html")
         msg (keywordize-keys message)
         org-name (:org-name msg)
-        digest-email-subject (content/digest-title org-name)]
+        digest-email-subject (or (:digest-subject msg) (content/digest-title org-name))]
     (try
       (spit html-file (content/digest-html msg)) ; create the email in a tmp file
       (inline-css html-file inline-file) ; inline the CSS

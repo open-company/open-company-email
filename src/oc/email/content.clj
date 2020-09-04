@@ -402,7 +402,7 @@
 {
   \"@context\": \"http://schema.org\",
   \"@type\": \"EmailMessage\",
-  \"description\": \"" (digest-title (:org-name data)) "\",
+  \"description\": \"" (or (:digest-subject data) (content/digest-title org-name)) "\",
   \"potentialAction\": {
     \"@type\": \"ViewAction\",
     \"target\": \"" (get-digest-url data) "\",
