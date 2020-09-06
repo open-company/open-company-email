@@ -293,19 +293,7 @@
               [:tr [:th {:class "small-12 lrge-12"}
                 [:p {:class "footer-paragraph bottom-footer underline-link"}
                   [:a {:href (str (:url (:following data)) "?user-settings=notifications")}
-                    "Manage your digest settings"]]]])
-            (when digest?
-              [:tr [:th {:class "small-12 lrge-12"}
-                (vspacer 16 "footer-table" "footer-table")]])
-            (when digest?
-              [:tr [:th {:class "small-12 lrge-12"}
-                [:p {:class "footer-paragraph bottom-footer"}
-                  "Questions or ideas for Carrot?"]]])
-            (when digest?
-              [:tr [:th {:class "small-12 lrge-12"}
-                [:p {:class "footer-paragraph bottom-footer underline-link"}
-                  [:a {:href carrot-hello-mailto}
-                    "Chat with us"]]]])]
+                    "Manage your digest settings"]]]])]
           (vspacer 40 "footer-table" "footer-table")]]]))
 
 ;; ----- Posts common ----
@@ -439,7 +427,7 @@
                {:href (:url following)
                 :style {:background-color (-> brand-color :primary :hex)
                         :color (-> brand-color :secondary :hex)}}
-               "See the latest"]]]]
+               "View updates"]]]]
           [:tr [:td (spacer 32)]]
           [:tr [:td (horizontal-line)]]
           (when following?
