@@ -42,7 +42,11 @@
     "Email digest-prefix: " c/email-digest-prefix "\n"
     "Email images prefix: " c/email-images-prefix "\n"
     "FileStack: " (or c/filestack-api-key "false") "\n"
-    "Sentry: " c/dsn "\n\n"
+    "Sentry: " c/dsn "\n"
+    "  env: " c/sentry-env "\n"
+    (when-not (clojure.string/blank? c/sentry-release)
+      (str "  release: " c/sentry-release "\n"))
+    "\n"
     (when c/intro? "Ready to serve...\n"))))
 
 (defn start []
@@ -51,7 +55,8 @@
   (if c/dsn
     (timbre/merge-config!
       {:level (keyword c/log-level)
-       :appenders {:sentry (sentry/sentry-appender c/dsn)}})
+       :appenders {:sentry (sentry/sentry-appender c/dsn {:environment c/sentry-env
+                                                          :release c/sentry-release})}})
     (timbre/merge-config! {:level (keyword c/log-level)}))
 
   ;; Uncaught exceptions go to Sentry
