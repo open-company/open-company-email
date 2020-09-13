@@ -55,8 +55,7 @@
   (if c/dsn
     (timbre/merge-config!
       {:level (keyword c/log-level)
-       :appenders {:sentry (sentry/sentry-appender c/dsn {:environment c/sentry-env
-                                                          :release c/sentry-release})}})
+       :appenders {:sentry (sentry/sentry-appender c/dsn)}})
     (timbre/merge-config! {:level (keyword c/log-level)}))
 
   ;; Uncaught exceptions go to Sentry
