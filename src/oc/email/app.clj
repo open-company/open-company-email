@@ -3,8 +3,8 @@
   (:require [com.stuartsierra.component :as component]
             [manifold.stream :as stream]
             [taoensso.timbre :as timbre]
+            [oc.lib.sentry.core :as sentry-lib :refer (map->SentryCapturer)]
             [oc.email.config :as c]
-            [oc.lib.sentry-appender :as sentry]
             [oc.lib.sqs :as sqs]
             [oc.email.mailer :as mailer]))
 
@@ -28,16 +28,20 @@
   (sqs/ack done-channel msg))
 
 (defn system [config-options]
-  (let [{:keys [sqs-creds sqs-queue sqs-msg-handler]} config-options]
+  (let [{:keys [sqs-creds sqs-queue sqs-msg-handler sentry]} config-options]
+    (println "DBG system sentry:" sentry)
     (component/system-map
-      :sqs (sqs/sqs-listener sqs-creds sqs-queue sqs-msg-handler))))
+      :sentry-capturer (map->SentryCapturer sentry)
+      :sqs (component/using
+            (sqs/sqs-listener sqs-creds sqs-queue sqs-msg-handler)
+            [:sentry-capturer]))))
 
 (defn echo-config []
   (println (str "\n"
     "AWS SQS queue: " c/aws-sqs-email-queue "\n"
     "Storage URL: " c/storage-server-url "\n"
     "Auth URL: " c/auth-server-url "\n"
-    "Web URL: " c/web-url "\n"    
+    "Web URL: " c/web-url "\n"
     "Email from: " c/email-from-domain "\n"
     "Email digest-prefix: " c/email-digest-prefix "\n"
     "Email images prefix: " c/email-images-prefix "\n"
@@ -55,14 +59,8 @@
   (if c/dsn
     (timbre/merge-config!
       {:level (keyword c/log-level)
-       :appenders {:sentry (sentry/sentry-appender c/dsn)}})
+       :appenders {:sentry (sentry-lib/sentry-appender c/dsn)}})
     (timbre/merge-config! {:level (keyword c/log-level)}))
-
-  ;; Uncaught exceptions go to Sentry
-  (Thread/setDefaultUncaughtExceptionHandler
-   (reify Thread$UncaughtExceptionHandler
-     (uncaughtException [_ thread ex]
-       (timbre/error ex "Uncaught exception on" (.getName thread) (.getMessage ex)))))
 
   ;; Echo config information
   (println (str "\n"
@@ -71,7 +69,10 @@
   (echo-config)
 
   ;; Start the system, which will start long polling SQS
-  (component/start (system {:sqs-queue c/aws-sqs-email-queue
+  (component/start (system {:sentry {:dsn c/dsn
+                                     :release c/sentry-release
+                                     :environment c/sentry-env}
+                            :sqs-queue c/aws-sqs-email-queue
                             :sqs-msg-handler sqs-handler
                             :sqs-creds {:access-key c/aws-access-key-id
                                         :secret-key c/aws-secret-access-key}}))
@@ -85,7 +86,7 @@
 
   ;; SQS message payload
   (def entries (json/decode (slurp "./opt/samples/updates/green-labs.json")))
-  (def message 
+  (def message
     {:subject "GreenLabs Update"
      :to ["change@changeme.com" "change2@changeme.com"]
      :note "Howdy folks!"
@@ -94,7 +95,7 @@
      :entries entries})
 
   (require '[amazonica.aws.sqs :as sqs2])
-  
+
   ;; send a test SQS message
   (sqs2/send-message
      {:access-key c/aws-access-key-id
@@ -103,7 +104,7 @@
     message)
 
   ;; send a test message that will cause an exception
-  (sqs2/send-message 
+  (sqs2/send-message
      {:access-key c/aws-access-key-id
       :secret-key c/aws-secret-access-key}
     c/aws-sqs-email-queue
