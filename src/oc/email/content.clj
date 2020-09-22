@@ -25,8 +25,8 @@
 (def reminder-date-format (time-format/formatter "EEEE, MMMM d"))
 (def reminder-date-format-year (time-format/formatter "EEEE, MMMM d YYYY"))
 
-(defn- profile-url [org-slug]
-  (str (s/join "/" [config/web-url org-slug "all-posts"]) "?user-settings=notifications"))
+(defn- home-url [org-slug]
+  (str (s/join "/" [config/web-url org-slug "home"]) "?user-settings=notifications"))
 
 (def doc-type "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
 
@@ -259,7 +259,7 @@
                 [:img {:src (str config/email-images-prefix "/email_images/carrot_logo_with_copy_colors@2x.png")
                        :width "95"
                        :height "32"
-                       :alt "Carrot!"}]]]
+                       :alt "Carrot"}]]]
             [:th {:class "small-6 large-6 columns header-right"}
               (when (= type :digest)
                 [:div.digest-date
@@ -279,9 +279,9 @@
               [:th {:class "small-12 large-12"}
                 [:p {:class "footer-paragraph bottom-footer"}
                   [:a {:href config/web-url}
-                    ; [:span.footer-link
-                    ;   {:style (str "background: url(" config/email-images-prefix "/email_images/carrot_grey@2x.png) no-repeat center / 10px 18px;")}]
-                    "Sent by Carrot!"]]]]
+                    [:span.footer-link
+                      {:style (str "background: url(" config/email-images-prefix "/email_images/carrot_grey@2x.png) no-repeat center / 10px 18px;")}]
+                    "Sent by Carrot"]]]]
             (when digest?
               [:tr [:th {:class "small-12 lrge-12"}
                 (vspacer 16 "footer-table" "footer-table")]])
@@ -368,21 +368,9 @@
             [:tr [:td 
                 (spacer 8)]]]]]]))
 
-; (defn- posts-with-board-name [board]
-;   (let [board-name (:name board)]
-;     (assoc board :posts (map #(assoc % :board-name board-name) (:posts board)))))
-
-; (defn- posts-for-board [board]
-;   (let [pretext (:name board)
-;         posts (:posts board)]
-;     (concat [{:type :board :name pretext}] posts)))
-
 (defn digest-title [org-name]
   (let [date-str (time-format/unparse digest-subject-format (time/now))]
     (str "Your " (or org-name "Carrot") " digest for " date-str)))
-
-(defn- get-digest-url [digest-data]
-  (s/join "/" [config/web-url (:org-slug digest-data) "home"]))
 
 (defn- go-to-posts-script [data]
   [:script {:type "application/ld+json"}
@@ -393,7 +381,7 @@
   \"description\": \"" (or (:digest-subject data) (digest-title (:org-name data))) "\",
   \"potentialAction\": {
     \"@type\": \"ViewAction\",
-    \"target\": \"" (get-digest-url data) "\",
+    \"target\": \"" (-> data :following :url) "\",
     \"name\": \"Go to posts\"
   }
 }
@@ -403,11 +391,7 @@
   [{:keys [following replies unfollowing new-boards digest-label org-light-brand-color] :as digest}]
   (let [user (select-keys digest [:user-id :name :avatar-url])
         following? (seq (:following-list following))
-        brand-color (or org-light-brand-color config/default-brand-color)
-        ; replies? (seq (:replies-label replies))
-        ; new-boards? (seq (:new-boards-label new-boards))
-        ; unfollowing? (seq (:unfollowing-label unfollowing))
-        ]
+        brand-color (or org-light-brand-color config/default-brand-color)]
     [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
       [:center
         (spacer 40)
@@ -449,48 +433,7 @@
                         (digest-post-block post)]]])]])
           [:tr
             [:td
-              (spacer 16)]]
-          ; (when replies?
-          ;   [:tr
-          ;     [:td
-          ;       [:a.digest-group-link {:href (:url replies)}
-          ;         [:label.digest-group-title
-          ;           "Comments"]]]])
-          ; (when replies?
-          ;   [:tr
-          ;     [:td
-          ;       (spacer 16)]])
-          ; (when replies?
-          ;   [:tr
-          ;     [:td
-          ;       [:a.digest-section-link
-          ;         {:href (:url replies)}
-          ;         [:p.digest-replies-section
-          ;           (:replies-label replies)]]]])
-          ; (when replies?
-          ;   [:tr
-          ;     [:td
-          ;       (spacer 16)]])
-          ; (when new-boards?
-          ;   [:tr
-          ;     [:td
-          ;       [:a.digest-group-link
-          ;         {:href (:url new-boards)}
-          ;         [:label.digest-group-title
-          ;           "New topics"]]]])
-          ; (when new-boards?
-          ;   [:tr
-          ;     [:td
-          ;       (spacer 16)]])
-          ; (when new-boards?
-          ;   [:tr
-          ;     [:td
-          ;       (:new-boards-label new-boards)]])
-          ; (when new-boards?
-          ;   [:tr
-          ;     [:td
-          ;       (spacer 32)]])
-          ]
+              (spacer 16)]]]
         (spacer 40)]]))
 
 ;; Reminder alert
@@ -529,7 +472,7 @@
         reminder-data (:reminder (:notification reminder))
         author (:author reminder-data)
         headline (reminder-alert-headline reminder)
-        create-post-url (str (s/join "/" [config/web-url org-slug "all-posts"]) "?new")
+        create-post-url (str (s/join "/" [config/web-url org-slug "home"]) "?new")
         subline (reminder-notification-subline reminder-data)]
     [:td {:class "small-12 large-12 columns main-wrapper vertical-padding" :valign "middle" :align "center"}
       [:center
@@ -545,7 +488,7 @@
         (paragraph [:span.note-paragraph
                      "You can always adjust or turn off recurring updates in "
                      [:a
-                       {:href (profile-url org-slug)}
+                       {:href (home-url org-slug)}
                        "Carrot"]]
          "note-paragraph note-paragraph-footer" "text-left")
         (spacer 24 "note-paragraph bottom-note-paragraph" "note-paragraph bottom-note-paragraph")
@@ -578,7 +521,7 @@
         title (:headline reminder-data)
         headline (reminder-notification-headline reminder)
         subline (reminder-notification-subline reminder-data)
-        reminders-url (str (s/join "/" [config/web-url org-slug "all-posts"]) "?reminders")]
+        reminders-url (str (s/join "/" [config/web-url org-slug "home"]) "?reminders")]
     [:td {:class "small-12 large-12 columns main-wrapper vertical-padding" :valign "middle" :align "center"}
       [:center
         (when (and (not is-default-avatar?)
@@ -598,7 +541,7 @@
         (paragraph [:span.note-paragraph
                      "You can always adjust or turn off recurring updates in "
                      [:a
-                       {:href (profile-url org-slug)}
+                       {:href (home-url org-slug)}
                        "Carrot"]]
          "note-paragraph note-paragraph-footer" "text-left")
         (spacer 24 "note-paragraph bottom-note-paragraph" "note-paragraph bottom-note-paragraph")
@@ -836,7 +779,7 @@
 ;; ----- Bot removed
 
  (defn- bot-removed-content [msg]
-  (let [add-bot-url (str config/web-url "/" (:org-slug msg) "/all-posts" "?org-settings=integrations")
+  (let [add-bot-url (str config/web-url "/" (:org-slug msg) "/home" "?org-settings=integrations")
         subline (bot-removed-instructions (:org-name msg) add-bot-url)
         logo? (not (s/blank? (:org-logo-url msg)))]
     [:td {:class "small-12 large-12 columns vertical-padding" :valign "middle" :align "center"}
@@ -863,7 +806,7 @@
         (go-to-posts-script data))
       (case type
         :reset (preheader reset-message)
-        :verify (preheader "Welcome to Carrot!")
+        :verify (preheader "Welcome to Carrot")
         :invite (preheader invite-message)
         :board-notification (preheader board-invite-title)
         :share-link (preheader (share-title data))
