@@ -29,7 +29,6 @@
 
 (defn system [config-options]
   (let [{:keys [sqs-creds sqs-queue sqs-msg-handler sentry]} config-options]
-    (println "DBG system sentry:" sentry)
     (component/system-map
       :sentry-capturer (map->SentryCapturer sentry)
       :sqs (component/using
@@ -59,7 +58,7 @@
   (if c/dsn
     (timbre/merge-config!
       {:level (keyword c/log-level)
-       :appenders {:sentry (sentry-lib/sentry-appender c/dsn)}})
+       :appenders {:sentry (sentry-lib/sentry-appender c/sentry-config)}})
     (timbre/merge-config! {:level (keyword c/log-level)}))
 
   ;; Echo config information
@@ -69,9 +68,7 @@
   (echo-config)
 
   ;; Start the system, which will start long polling SQS
-  (component/start (system {:sentry {:dsn c/dsn
-                                     :release c/sentry-release
-                                     :environment c/sentry-env}
+  (component/start (system {:sentry c/sentry-config
                             :sqs-queue c/aws-sqs-email-queue
                             :sqs-msg-handler sqs-handler
                             :sqs-creds {:access-key c/aws-access-key-id
