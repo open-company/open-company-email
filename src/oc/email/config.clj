@@ -66,7 +66,7 @@
                                               :g (or (env :primary-brand-color-g) 51)
                                               :b (or (env :primary-brand-color-b) 241)}
                                         :hex (or (env :primary-brand-color-hex) "#6833F1")}
-                              :secondary {:rgb {:r (or (env :secondary-brand-color-r) 244)
-                                                :g (or (env :secondary-brand-color-g) 244)
-                                                :b (or (env :secondary-brand-color-b) 244)}
+                              :secondary {:rgb {:r (or (env :secondary-brand-color-r) 254)
+                                                :g (or (env :secondary-brand-color-g) 254)
+                                                :b (or (env :secondary-brand-color-b) 254)}
                                           :hex (or (env :secondary-brand-color-hex) "#FFFFFF")}})
