@@ -243,13 +243,9 @@
         parsed-title (.text (soup/parse title))
         updated-post-data (assoc post-data :parsed-headline parsed-title)
         msg-title (assoc-in msg [:notification :entry-data] updated-post-data)
-        pre-subject (if mention?
-                      (if comment?
-                        (str "You were mentioned in a comment: ")
-                        (str "You were mentioned in a post: "))
-                      (str "There is a new comment on your post: "))
+        pre-subject (content/notify-intro msg)
         subject-length 65
-        subject (str pre-subject (subs parsed-title 0 (min (count parsed-title) (- subject-length (count pre-subject)))))
+        subject (str pre-subject ": " (subs parsed-title 0 (min (count parsed-title) (- subject-length (count pre-subject)))))
         final-subject (if (= (count subject) subject-length)
                         (str (subs subject 0 (- (count subject) 3)) "...")
                         subject)]

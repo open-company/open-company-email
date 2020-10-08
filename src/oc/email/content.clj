@@ -61,7 +61,7 @@
 (def reset-button-text "reset_password")
 
 (def verify-message "Please verify your email")
-(def verify-instructions "Welcome to Carrot! Carrot helps leaders rise above noisy chat and email to keep teams aligned.")
+(def verify-instructions "Welcome to Carrot! Carrot is a personalized news feed that keeps your team in sync with fewer interruptions.")
 (def verify-instructions-2 "Please click the link below to verify your account:")
 (def verify-button-text "verify_email")
 
@@ -666,7 +666,7 @@
       (left-button share-cta entry-url)
       (spacer 56)]))
 
-(defn- notify-intro [msg]
+(defn notify-intro [msg]
   (let [notification (:notification msg)
         mention? (:mention? notification)
         comment? (:interaction-id notification)
