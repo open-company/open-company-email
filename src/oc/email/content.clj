@@ -61,7 +61,7 @@
 (def reset-button-text "reset_password")
 
 (def verify-message "Please verify your email")
-(def verify-instructions "Welcome to Carrot! Carrot is a personalized news feed that keeps your team in sync with fewer interruptions.")
+(def verify-instructions "Welcome to Carrot! Carrot is a personalized news feed for your team. With Carrot, it's easy to stay in sync with fewer interruptions.")
 (def verify-instructions-2 "Please click the link below to verify your account:")
 (def verify-button-text "verify_email")
 
