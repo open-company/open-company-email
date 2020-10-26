@@ -60,9 +60,9 @@
 (def reset-instructions-2 "Please click the link below to reset your password:")
 (def reset-button-text "reset_password")
 
-(def verify-message "Please verify your email")
+(def verify-message "Please verify your identity")
 (def verify-instructions "Welcome to Carrot! Carrot is a personalized news feed for your team. With Carrot, it's easy to stay in sync with fewer interruptions.")
-(def verify-instructions-2 "Please click the link below to verify your account:")
+(def verify-instructions-2 "Please click the link below to verify your identity:")
 (def verify-button-text "verify_email")
 
 ;; Bot removed
@@ -234,7 +234,7 @@
       :accept_invitation
       "Accept invite"
       :verify_email
-      "Verify email"
+      "Verify identity"
       :view_section
       "View section"
       :view_comment
