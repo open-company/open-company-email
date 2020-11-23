@@ -28,11 +28,11 @@
 
     ;; Library for OC projects https://github.com/open-company/open-company-lib
     ;; ************************************************************************
-    ;; ****************** NB: don't go under 0.17.29-alpha59 ******************
+    ;; ****************** NB: don't go under 0.17.29-alpha60 ******************
     ;; ***************** (JWT schema changes, more info here: *****************
     ;; ******* https://github.com/open-company/open-company-lib/pull/82) ******
     ;; ************************************************************************
-    [open-company/lib "0.17.29-alpha59" :exclusions [org.clojure/tools.logging]]
+    [open-company/lib "0.17.29-alpha60" :exclusions [org.clojure/tools.logging]]
     ;; ************************************************************************
     ;; In addition to common functions, brings in the following common dependencies used by this project:
     ;; Component - Component Lifecycle https://github.com/stuartsierra/component
