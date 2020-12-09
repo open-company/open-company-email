@@ -229,40 +229,41 @@
   "Creates an HTML email notifying user of being mentioned or replied to and sends it to the recipient."
   [msg]
   (timbre/info "Sending notification for:" msg)
-  (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
-        html-file (str uuid-fragment ".html")
-        inline-file (str uuid-fragment ".inline.html")
-        notification (:notification msg)
-        org (:org msg)
-        org-name (:name org)
-        org-name? (not (s/blank? org-name))
-        mention? (:mention? notification)
-        comment? (:interaction-id notification)
-        post-data (post-data-from-msg msg)
-        title (:headline post-data)
-        parsed-title (.text (soup/parse title))
-        updated-post-data (assoc post-data :parsed-headline parsed-title)
-        msg-title (assoc-in msg [:notification :entry-data] updated-post-data)
-        pre-subject (content/notify-intro msg)
-        subject-length 65
-        subject (str pre-subject ": " (subs parsed-title 0 (min (count parsed-title) (- subject-length (count pre-subject)))))
-        final-subject (if (= (count subject) subject-length)
-                        (str (subs subject 0 (- (count subject) 3)) "...")
-                        subject)]
-    (try
-      (spit html-file (content/notify-html msg-title)) ; create the email in a tmp file
-      (inline-css html-file inline-file) ; inline the CSS
-       ;; Email it to the recipient
-      (email {:to (:to msg)
-              :source default-source
-              :from default-from
-              :reply-to default-reply-to
-              :subject final-subject}
-             {:html (slurp inline-file)})
-      (finally
-       ;; remove the tmp files
-       (io/delete-file html-file true)
-       (io/delete-file inline-file true)))))
+  (if-let [post-data (post-data-from-msg msg)]
+    (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
+          html-file (str uuid-fragment ".html")
+          inline-file (str uuid-fragment ".inline.html")
+          notification (:notification msg)
+          org (:org msg)
+          org-name (:name org)
+          org-name? (not (s/blank? org-name))
+          mention? (:mention? notification)
+          comment? (:interaction-id notification)
+          title (:headline post-data)
+          parsed-title (.text (soup/parse title))
+          updated-post-data (assoc post-data :parsed-headline parsed-title)
+          msg-title (assoc-in msg [:notification :entry-data] updated-post-data)
+          pre-subject (content/notify-intro msg)
+          subject-length 65
+          subject (str pre-subject ": " (subs parsed-title 0 (min (count parsed-title) (- subject-length (count pre-subject)))))
+          final-subject (if (= (count subject) subject-length)
+                          (str (subs subject 0 (- (count subject) 3)) "...")
+                          subject)]
+      (try
+        (spit html-file (content/notify-html msg-title)) ; create the email in a tmp file
+        (inline-css html-file inline-file) ; inline the CSS
+        ;; Email it to the recipient
+        (email {:to (:to msg)
+                :source default-source
+                :from default-from
+                :reply-to default-reply-to
+                :subject final-subject}
+               {:html (slurp inline-file)})
+        (finally
+        ;; remove the tmp files
+          (io/delete-file html-file true)
+          (io/delete-file inline-file true))))
+    (timbre/warn (str "Could not get JWT for user: " (-> msg :notification :user-id) "."))))
 
 (defn send-bot-removed
   "Creates an HTML email notifying user of being mentioned or replied to and sends it to the recipient."

@@ -31,7 +31,7 @@
 
 ;; ----- Sentry -----
 
-(defonce dsn (or (env :sentry-dsn) false))
+(defonce dsn (or (env :sentry-dsn) (env :open-company-sentry-email) false))
 (defonce sentry-release (or (env :release) ""))
 (defonce sentry-env (or (env :environment) "local"))
 (defonce sentry-config {:dsn dsn
