@@ -1,0 +1,43 @@
+{
+  "last-name": "Carraro",
+  "timezone": "Europe/Rome",
+  "notification":{
+    "team?": true,
+    "mention?": false,
+    "content": "Iacopo Carraro just invited you to his team on Carrot.",
+    "admin?": false,
+    "org-id": "1e49-4e3d-9f9b",
+    "user-id": "a25b-4538-9f4f",
+    "team-action": "team-add",
+    "author": {
+      "name": "Iacopo Carraro",
+      "user-id": "8026-4cf2-ba2d",
+      "avatar-url": "https://avatars.slack-edge.com/2020-02-07/941506597396_a20e99e7e3ebc7b20e0f_512.jpg"
+    },
+    "refresh-token-at": "2020-12-11T13:30:00.502Z",
+    "org": {
+      "slug": "december-first-4",
+      "uuid": "1e49-4e3d-9f9b",
+      "name": "December First 4",
+      "logo-url": null,
+      "team-id": "8481-42ad-8fbf"
+    },
+    "notify-at": "2020-12-11T13:30:00.502Z",
+    "follow-up?": false,
+    "reminder?": false
+  },
+  "avatar-url": "/img/ML/happy_face_red.svg",
+  "type": "team",
+  "user-id": "a25b-4538-9f4f",
+  "first-name": "Iacopo",
+  "teams": ["d952-4c46-9311", "deb4-41e9-b890", "8481-42ad-8fbf"],
+  "org": {
+    "slug": "december-first-4",
+    "uuid": "1e49-4e3d-9f9b",
+    "name": "December First 4",
+    "logo-url": null,
+    "team-id": "8481-42ad-8fbf"
+  },
+  "status": "active",
+  "to": "example@example.com"
+}

@@ -9,23 +9,29 @@
             [oc.email.mailer :as mailer]))
 
 (defn sqs-handler [msg done-channel]
-  (doseq [msg-body (sqs/read-message-body (:body msg))]
-    (let [msg-type (or (when (:Message msg-body) :sns) (:type msg-body))]
-      (timbre/info "Received message from SQS.")
-      (timbre/debug "\nMessage (" msg-type ") from SQS:" msg-body "\n")
-      (case (keyword msg-type)
-        :reset (mailer/send-token :reset msg-body)
-        :verify (mailer/send-token :verify msg-body)
-        :invite (mailer/send-invite msg-body)
-        :share-entry (mailer/send-entry msg-body)
-        :digest (mailer/send-digest msg-body)
-        :sns (mailer/handle-data-change msg-body)
-        :notify (mailer/send-notification msg-body)
-        :reminder-alert (mailer/send-reminder-alert msg-body)
-        :reminder-notification (mailer/send-reminder-notification msg-body)
-        :bot-removed (mailer/send-bot-removed msg-body)
-        (timbre/error "Unrecognized message type" msg-type))))
-  (sqs/ack done-channel msg))
+  (try
+    (doseq [msg-body (sqs/read-message-body (:body msg))]
+      (let [msg-type (or (when (:Message msg-body) :sns) (:type msg-body))]
+        (timbre/info "Received message from SQS.")
+        (timbre/debug "\nMessage (" msg-type ") from SQS:" msg-body "\n")
+        (case (keyword msg-type)
+          :reset (mailer/send-token :reset msg-body)
+          :verify (mailer/send-token :verify msg-body)
+          :invite (mailer/send-invite msg-body)
+          :share-entry (mailer/send-entry msg-body)
+          :digest (mailer/send-digest msg-body)
+          :sns (mailer/handle-data-change msg-body)
+          :notify (mailer/send-entry-notification msg-body)
+          :team (when (= (:team-action msg-body) :team-add)
+                  (mailer/send-team-notification msg-body))
+          :reminder-alert (mailer/send-reminder-alert msg-body)
+          :reminder-notification (mailer/send-reminder-notification msg-body)
+          :bot-removed (mailer/send-bot-removed msg-body)
+          (timbre/error "Unrecognized message type" msg-type))))
+    (sqs/ack done-channel msg)
+    (catch Exception e
+      (timbre/warn e)
+      (sentry-lib/capture e))))
 
 (defn system [config-options]
   (let [{:keys [sqs-creds sqs-queue sqs-msg-handler sentry]} config-options]

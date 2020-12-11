@@ -241,6 +241,8 @@
       "Reply"
       :integration_settings
       "Enable Carrot bot for Slack"
+      :open
+      "Open"
       ;; default "view_post"
       "View post")])
 
@@ -666,7 +668,7 @@
       (left-button share-cta entry-url)
       (spacer 56)]))
 
-(defn notify-intro [msg]
+(defn notify-entry-intro [msg]
   (let [notification (:notification msg)
         mention? (:mention? notification)
         comment? (:interaction-id notification)
@@ -683,7 +685,11 @@
           (str "There is a new comment on your post"))
         (str (:name author) " replied to a thread")))))
 
-(defn- notify-content [msg]
+(defn notify-team-intro [msg]
+  (let [notification (:notification msg)]
+    (:content notification)))
+
+(defn- notify-entry-content [msg]
   (let [notification (:notification msg)
         content (:content notification)
         org (:org msg)
@@ -699,7 +705,7 @@
         first-name (:first-name msg)
         first-name? (not (s/blank? first-name))
         author (:author notification)
-        intro (notify-intro msg)
+        intro (notify-entry-intro msg)
         notification-author (:author notification)
         notification-author-name (:name notification-author)
         is-default-avatar? (s/starts-with? (:avatar-url notification-author) "/img")
@@ -741,6 +747,19 @@
       (spacer 24 "note-paragraph bottom-note-paragraph" "note-paragraph bottom-note-paragraph")
       (spacer 24)
       (left-button button-cta entry-url)
+      (spacer 40)]))
+
+(defn- notify-team-content [msg]
+  (let [org (:org msg)
+        org-slug (:slug org)
+        intro (notify-team-intro msg)
+        origin-url config/web-url
+        base-url (str (s/join "/" [origin-url org-slug "home"]) "?force-refresh-jwt=1")]
+    [:td {:class "small-12 large-12 columns vertical-padding" :valign "middle" :align "center"}
+      (spacer 40)
+      (h1 intro)
+      (spacer 8)
+      (left-button "open" base-url)
       (spacer 40)]))
 
 (defn- token-prep [token-type msg]
@@ -811,7 +830,8 @@
         :board-notification (preheader board-invite-title)
         :share-link (preheader (share-title data))
         :digest (preheader "See the latest updates and news from your team.")
-        :notify (preheader (notify-intro data))
+        :notify (preheader (notify-entry-intro data))
+        :team (preheader (notify-team-intro data))
         :reminder-notification (preheader (reminder-notification-headline data))
         :reminder-alert (preheader (reminder-alert-headline data))
         :bot-removed (preheader bot-removed-subject))
@@ -840,7 +860,8 @@
                     :board-notification (board-notification-content data)
                     :share-link (share-content data)
                     :digest (digest-content data)
-                    :notify (notify-content data)
+                    :notify (notify-entry-content data)
+                    :team (notify-team-content data)
                     :reminder-notification (reminder-notification-content data)
                     :reminder-alert (reminder-alert-content data)
                     :bot-removed (bot-removed-content data))]]

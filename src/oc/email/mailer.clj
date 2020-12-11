@@ -225,10 +225,10 @@
         user-data {:user-id (:user-id notification)}]
     (storage/post-data-for config user-data (:slug (:org msg)) (:board-id notification) (:entry-id notification))))
 
-(defn send-notification
+(defn send-entry-notification
   "Creates an HTML email notifying user of being mentioned or replied to and sends it to the recipient."
   [msg]
-  (timbre/info "Sending notification for:" msg)
+  (timbre/info "Sending entry notification for:" msg)
   (if-let [post-data (post-data-from-msg msg)]
     (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
           html-file (str uuid-fragment ".html")
@@ -243,7 +243,7 @@
           parsed-title (.text (soup/parse title))
           updated-post-data (assoc post-data :parsed-headline parsed-title)
           msg-title (assoc-in msg [:notification :entry-data] updated-post-data)
-          pre-subject (content/notify-intro msg)
+          pre-subject (content/notify-entry-intro msg)
           subject-length 65
           subject (str pre-subject ": " (subs parsed-title 0 (min (count parsed-title) (- subject-length (count pre-subject)))))
           final-subject (if (= (count subject) subject-length)
@@ -265,10 +265,33 @@
           (io/delete-file inline-file true))))
     (timbre/warn (str "Could not get JWT for user: " (-> msg :notification :user-id) "."))))
 
+(defn send-team-notification
+  "Creates an HTML email notifying user of being added or removed from a team"
+  [msg]
+  (timbre/info "Sending team notification for:" msg)
+  (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
+        html-file (str uuid-fragment ".html")
+        inline-file (str uuid-fragment ".inline.html")
+        subject (content/notify-team-intro msg)]
+    (try
+      (spit html-file (content/notify-html msg)) ; create the email in a tmp file
+      (inline-css html-file inline-file) ; inline the CSS
+        ;; Email it to the recipient
+      (email {:to (:to msg)
+              :source default-source
+              :from default-from
+              :reply-to default-reply-to
+              :subject subject}
+             {:html (slurp inline-file)})
+      (finally
+        ;; remove the tmp files
+        (io/delete-file html-file true)
+        (io/delete-file inline-file true)))))
+
 (defn send-bot-removed
   "Creates an HTML email notifying user of being mentioned or replied to and sends it to the recipient."
   [msg]
-  (timbre/info "Sending notification for:" msg)
+  (timbre/info "Sending Bot removed notification for:" msg)
   (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
         html-file (str uuid-fragment ".html")
         inline-file (str uuid-fragment ".inline.html")
@@ -340,13 +363,16 @@
   (mailer/send-digest (assoc digest-request :email "change@me.com"))
 
   (def notification-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/notifications/post-mention.json"))))
-  (mailer/send-notification (assoc notification-request :to "change@me.com"))
+  (mailer/send-entry-notification (assoc notification-request :to "change@me.com"))
 
-  (def notification-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/notifications/comment.json"))))
-  (mailer/send-notification (assoc notification-request :to "change@me.com"))
+  (def notification-comment-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/notifications/comment.json"))))
+  (mailer/send-entry-notification (assoc notification-comment-request :to "change@me.com"))
 
-  (def notification-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/notifications/comment-mention.json"))))
-  (mailer/send-notification (assoc notification-request :to "change@me.com"))
+  (def notification-comment-mention-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/notifications/comment-mention.json"))))
+  (mailer/send-entry-notification (assoc notification-comment-mention-request :to "change@me.com"))
+
+  (def notification-team-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/notifications/team-invite.json"))))
+  (mailer/send-tem-notification (assoc notification-request :to "change@me.com"))
 
   (def share-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/share/bago.json"))))
   (mailer/send-entry (merge share-request {
