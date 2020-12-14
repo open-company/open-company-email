@@ -891,8 +891,11 @@
         org (if (s/blank? org-name) "" (str org-name " on "))]
     (str prefix " to join " org "Carrot")))
 
-(defn notify-html [msg]
+(defn notify-entry-html [msg]
   (html msg :notify))
+
+(defn notify-team-html [msg]
+  (html msg :team))
 
 (defn bot-removed-html [msg]
   (html msg :bot-removed))

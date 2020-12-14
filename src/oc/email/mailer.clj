@@ -250,7 +250,7 @@
                           (str (subs subject 0 (- (count subject) 3)) "...")
                           subject)]
       (try
-        (spit html-file (content/notify-html msg-title)) ; create the email in a tmp file
+        (spit html-file (content/notify-entry-html msg-title)) ; create the email in a tmp file
         (inline-css html-file inline-file) ; inline the CSS
         ;; Email it to the recipient
         (email {:to (:to msg)
@@ -274,7 +274,7 @@
         inline-file (str uuid-fragment ".inline.html")
         subject (content/notify-team-intro msg)]
     (try
-      (spit html-file (content/notify-html msg)) ; create the email in a tmp file
+      (spit html-file (content/notify-team-html msg)) ; create the email in a tmp file
       (inline-css html-file inline-file) ; inline the CSS
         ;; Email it to the recipient
       (email {:to (:to msg)
