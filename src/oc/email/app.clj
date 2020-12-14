@@ -22,7 +22,7 @@
           :digest (mailer/send-digest msg-body)
           :sns (mailer/handle-data-change msg-body)
           :notify (mailer/send-entry-notification msg-body)
-          :team (when (= (:team-action msg-body) :team-add)
+          :team (when (-> msg-body :notification :team-action keyword (= :team-add))
                   (mailer/send-team-notification msg-body))
           :reminder-alert (mailer/send-reminder-alert msg-body)
           :reminder-notification (mailer/send-reminder-notification msg-body)
