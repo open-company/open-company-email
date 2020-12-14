@@ -12,7 +12,7 @@
   (try
     (doseq [msg-body (sqs/read-message-body (:body msg))]
       (let [msg-type (or (when (:Message msg-body) :sns) (:type msg-body))]
-        (timbre/info "Received message from SQS.")
+        (timbre/info "Received message from SQS:" (keyword msg-type))
         (timbre/debug "\nMessage (" msg-type ") from SQS:" msg-body "\n")
         (case (keyword msg-type)
           :reset (mailer/send-token :reset msg-body)
@@ -27,7 +27,7 @@
           :reminder-alert (mailer/send-reminder-alert msg-body)
           :reminder-notification (mailer/send-reminder-notification msg-body)
           :bot-removed (mailer/send-bot-removed msg-body)
-          (timbre/error "Unrecognized message type" msg-type))))
+          (timbre/warn "Unrecognized message type" msg-type))))
     (sqs/ack done-channel msg)
     (catch Exception e
       (timbre/warn e)
