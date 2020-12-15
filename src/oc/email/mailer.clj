@@ -240,7 +240,7 @@
           mention? (:mention? notification)
           comment? (:interaction-id notification)
           title (:headline post-data)
-          parsed-title (.text (soup/parse title))
+          parsed-title (if title (.text (soup/parse title)) "")
           updated-post-data (assoc post-data :parsed-headline parsed-title)
           msg-title (assoc-in msg [:notification :entry-data] updated-post-data)
           pre-subject (content/notify-entry-intro msg)
