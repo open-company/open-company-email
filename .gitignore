@@ -9,8 +9,13 @@ pom.xml.asc
 /.nrepl-*
 .hgignore
 .hg/
-.calva/
+
 .idea/
+.vscode/
+.calva/
+.lsp/
+.clj-kondo/
+.clojure-lsp/
 
 /hiccup.html
 /hiccup.inline.html
