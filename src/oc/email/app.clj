@@ -31,7 +31,8 @@
     (sqs/ack done-channel msg)
     (catch Exception e
       (timbre/warn e)
-      (sentry-lib/capture e))))
+      (sentry-lib/capture e)
+      (throw e))))
 
 (defn system [config-options]
   (let [{:keys [sqs-creds sqs-queue sqs-msg-handler sentry]} config-options]
@@ -61,11 +62,7 @@
 (defn start []
 
   ;; Log errors to Sentry
-  (if c/dsn
-    (timbre/merge-config!
-      {:level (keyword c/log-level)
-       :appenders {:sentry (sentry-lib/sentry-appender c/sentry-config)}})
-    (timbre/merge-config! {:level (keyword c/log-level)}))
+  (timbre/merge-config! {:level (keyword c/log-level)})
 
   ;; Echo config information
   (println (str "\n"
