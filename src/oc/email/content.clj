@@ -6,7 +6,6 @@
             [oc.lib.text :as text]
             [hiccup.core :as h]
             [hickory.core :as hickory]
-            [oc.lib.auth :as auth]
             [oc.lib.jwt :as jwt]
             [oc.lib.user :as user-lib]
             [oc.lib.storage :as storage]
@@ -318,9 +317,7 @@
 (defn- digest-post-block
   [entry]
   (let [publisher (:publisher entry)
-        avatar-url (user-lib/fix-avatar-url config/filestack-api-key (:avatar-url publisher) 128)
-        comment-count-label (:comment-count-label entry)
-        comments? (seq comment-count-label)]
+        avatar-url (user-lib/fix-avatar-url config/filestack-api-key (:avatar-url publisher) 128)]
     [:table
       {:cellpadding "0"
        :cellspacing "0"
@@ -390,7 +387,7 @@
 "])
 
 (defn- digest-content
-  [{:keys [following replies unfollowing new-boards digest-label org-light-brand-color] :as digest}]
+  [{:keys [following replies digest-label org-light-brand-color] :as digest}]
   (let [user (select-keys digest [:user-id :name :avatar-url])
         following? (seq (:following-list following))
         brand-color (or org-light-brand-color config/default-brand-color)]
