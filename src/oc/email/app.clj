@@ -52,6 +52,7 @@
     "Email digest-prefix: " c/email-digest-prefix "\n"
     "Email images prefix: " c/email-images-prefix "\n"
     "FileStack: " (or c/filestack-api-key "false") "\n"
+    "Log level: " c/log-level "\n"
     "Sentry: " c/dsn "\n"
     "  env: " c/sentry-env "\n"
     (when-not (clojure.string/blank? c/sentry-release)
@@ -62,7 +63,7 @@
 (defn start []
 
   ;; Log errors to Sentry
-  (timbre/merge-config! {:level (keyword c/log-level)})
+  (timbre/merge-config! {:min-level (keyword c/log-level)})
 
   ;; Echo config information
   (println (str "\n"
