@@ -53,10 +53,7 @@
     "Email images prefix: " c/email-images-prefix "\n"
     "FileStack: " (or c/filestack-api-key "false") "\n"
     "Log level: " c/log-level "\n"
-    "Sentry: " c/dsn "\n"
-    "  env: " c/sentry-env "\n"
-    (when-not (clojure.string/blank? c/sentry-release)
-      (str "  release: " c/sentry-release "\n"))
+    "Sentry: " c/sentry-config "\n"
     "\n"
     (when c/intro? "Ready to serve...\n"))))
 

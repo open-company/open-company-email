@@ -25,17 +25,21 @@
 (defonce storage-server-url (or (env :storage-server-url) (str "http://localhost:" storage-server-port)))
 (defonce web-url (or (env :oc-web-url) "http://localhost:3559"))
 
-;; ----- Logging -----
+;; ----- Logging (see https://github.com/ptaoussanis/timbre) -----
 
-(defonce log-level (or (env :log-level) :info))
+(defonce log-level (if-let [ll (env :log-level)] (keyword ll) :info))
 
 ;; ----- Sentry -----
 
 (defonce dsn (or (env :sentry-dsn) (env :open-company-sentry-email) false))
 (defonce sentry-release (or (env :release) ""))
+(defonce sentry-deploy (or (env :deploy) ""))
+(defonce sentry-debug  (boolean (or (bool (env :sentry-debug)) (#{:debug :trace} log-level))))
 (defonce sentry-env (or (env :environment) "local"))
 (defonce sentry-config {:dsn dsn
                         :release sentry-release
+                        :deploy sentry-deploy
+                        :debug sentry-debug
                         :environment sentry-env})
 
 ;; ----- AWS -----

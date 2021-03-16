@@ -32,14 +32,14 @@
     ;; ***************** (JWT schema changes, more info here: *****************
     ;; ******* https://github.com/open-company/open-company-lib/pull/82) ******
     ;; ************************************************************************
-    [open-company/lib "0.17.35-alpha" :exclusions [org.clojure/tools.logging]]
+    [open-company/lib "0.17.35-alpha2" :exclusions [org.clojure/tools.logging]]
     ;; ************************************************************************
     ;; In addition to common functions, brings in the following common dependencies used by this project:
     ;; Component - Component Lifecycle https://github.com/stuartsierra/component
     ;; Schema - Data validation https://github.com/Prismatic/schema
     ;; Timbre - Pure Clojure/Script logging library https://github.com/ptaoussanis/timbre
     ;; Amazonica - A comprehensive Clojure client for the AWS API https://github.com/mcohen01/amazonica
-    ;; Raven - Interface to Sentry error reporting https://github.com/sethtrain/raven-clj
+    ;; sentry-clj - Interface to Sentry error reporting https://github.com/getsentry/sentry-clj
     ;; Cheshire - JSON encoding / decoding https://github.com/dakrone/cheshire
     ;; clj-time - Date and time lib https://github.com/clj-time/clj-time
     ;; Environ - Get environment settings from different sources https://github.com/weavejester/environ
