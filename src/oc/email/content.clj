@@ -3,7 +3,6 @@
             [clojure.walk :refer (keywordize-keys)]
             [clj-time.core :as time]
             [clj-time.format :as time-format]
-            [oc.lib.text :as text]
             [hiccup.core :as h]
             [hickory.core :as hickory]
             [oc.lib.jwt :as jwt]
@@ -310,9 +309,18 @@
        (when add-arrow?
          " →"))]]))
 
-(defn- post-body [cleaned-body]
-  [:div.post-body
-    cleaned-body])
+(defn- label-block [label]
+  (let [bg-color-style {:background-color (:color label)}
+        color-style {:color (:color label)}]
+    [:div.oc-label
+     [:a.label-link
+      {:href (:url label)
+       :style bg-color-style}
+      [:span.oc-label-bg
+       {:style bg-color-style}]
+      [:span.oc-label-name
+       {:style color-style}
+       (:name label)]]]))
 
 (defn- digest-post-block
   [entry]
@@ -326,6 +334,18 @@
       [:tr
         [:td
           (spacer 16)]]
+     [:tr
+      [:td
+       {:colspan "2"}
+       [:table {:cell-padding "0"
+                :cell-spacing "0"
+                :border "0"
+                :class "row digest-labels-row text-left"}
+        [:tbody
+         [:tr
+          (for [label (:labels entry)]
+            [:tr
+             (label-block label)])]]]]]
       [:tr
         [:td.digest-post-avatar-td
           [:a
@@ -359,11 +379,6 @@
                         (str (:headline entry) " →")
                       ; (h2  (:url entry) "" "digest-post-title")
                       ]]]]]]]
-            ; (when has-body
-            ;   [:tr [:td (spacer 4)]])
-            ; (when has-body
-            ;   [:tr [:td
-            ;     (post-body cleaned-body)]])
             [:tr [:td 
                 (spacer 8)]]]]]]))
 
@@ -462,14 +477,8 @@
 
 (defn- reminder-alert-content [reminder]
   (let [org (:org reminder)
-        org-name (:name org)
         org-slug (:slug org)
-        logo-url (:logo-url org)
-        logo-width (:logo-width org)
-        logo-height (:logo-height org)
-        logo? (not (s/blank? logo-url))
         reminder-data (:reminder (:notification reminder))
-        author (:author reminder-data)
         headline (reminder-alert-headline reminder)
         create-post-url (str (s/join "/" [config/web-url org-slug "home"]) "?new")
         subline (reminder-notification-subline reminder-data)]
@@ -507,17 +516,11 @@
 
 (defn- reminder-notification-content [reminder]
   (let [org (:org reminder)
-        org-name (:name org)
         org-slug (:slug org)
-        logo-url (:logo-url org)
-        logo-width (:logo-width org)
-        logo-height (:logo-height org)
-        logo? (not (s/blank? logo-url))
         reminder-data (:reminder (:notification reminder))
         author (:author reminder-data)
         author-avatar-url (:avatar-url author)
         is-default-avatar? (s/starts-with? author-avatar-url "/img")
-        title (:headline reminder-data)
         headline (reminder-notification-headline reminder)
         subline (reminder-notification-subline reminder-data)
         reminders-url (str (s/join "/" [config/web-url org-slug "home"]) "?reminders")]
@@ -556,13 +559,7 @@
 ;; ----- Transactional Emails -----
 
 (defn- board-notification-content [notice]
-  (let [org (:org notice)
-        org-name (:name org)
-        logo-url (:logo-url org)
-        logo-width (:logo-width org)
-        logo-height (:logo-height org)
-        logo? (not (s/blank? logo-url))
-        board-url (:board-url notice)
+  (let [board-url (:board-url notice)
         board-name (-> notice :board :name)
         first-name (-> notice :inviter :first-name)
         last-name (-> notice :inviter :last-name)
@@ -602,10 +599,7 @@
         note? (not (s/blank? note))
         from (:from invite)
         prefix (if (s/blank? from) "You've been invited" (str from " has invited you"))
-        org (if (s/blank? org-name) "" (str org-name " on "))
-        invite-message (if (s/blank? org-name)
-                         invite-message
-                         (format invite-message-with-company org-name))]
+        org (if (s/blank? org-name) "" (str org-name " on "))]
     [:td {:class td-classes :valign "middle" :align "center"}
       (when logo? (org-logo {:org-name org-name
                              :org-logo-url logo-url
@@ -636,16 +630,9 @@
 (defn- share-content [entry]
   (let [logo-url (:org-logo-url entry)
         logo? (not (s/blank? logo-url))
-        org-name (:org-name entry)
-        org-name? (not (s/blank? org-name))
-        headline (.text (soup/parse (:headline entry)))
         org-slug (:org-slug entry)
-        sharer (:sharer-name entry)
-        publisher (:publisher entry)
-        attribution (str (:name publisher) " posted to " (:board-name entry))
         note (:note entry)
         note? (not (s/blank? note))
-        from (if (s/blank? sharer) "Someone" sharer)
         from-avatar (:sharer-avatar-url entry)
         from-avatar? (not (s/blank? from-avatar))
         show-note? (and note? from-avatar?)
@@ -692,19 +679,12 @@
         org (:org msg)
         entry-data (:entry-data notification)
         board-slug (:board-slug entry-data)
-        logo-url (:logo-url org)
-        logo? (not (s/blank? logo-url))
-        org-name (:name org)
-        org-name? (not (s/blank? org-name))
         org-slug (:slug org)
         mention? (:mention notification)
         interaction-id (:interaction-id notification)
         first-name (:first-name msg)
-        first-name? (not (s/blank? first-name))
-        author (:author notification)
         intro (notify-entry-intro msg)
         notification-author (:author notification)
-        notification-author-name (:name notification-author)
         is-default-avatar? (s/starts-with? (:avatar-url notification-author) "/img")
         notification-author-url (user-lib/fix-avatar-url config/filestack-api-key (:avatar-url notification-author) 128)
         uuid (:entry-id notification)
@@ -760,24 +740,22 @@
       (spacer 40)]))
 
 (defn- token-prep [token-type msg]
-  {
-    :message (case token-type
+  {:message (case token-type
               :reset reset-message
               :verify verify-message)
-    :instructions (case token-type
-                    :reset reset-instructions
-                    :verify verify-instructions)
-    :instructions-2 (case token-type
+   :instructions (case token-type
+                   :reset reset-instructions
+                   :verify verify-instructions)
+   :instructions-2 (case token-type
                      :verify verify-instructions-2
                      :reset reset-instructions-2)
-    :button-text (case token-type
-                    :reset reset-button-text
-                    :verify verify-button-text)
-    :link (:token-link (keywordize-keys msg))})
+   :button-text (case token-type
+                  :reset reset-button-text
+                  :verify verify-button-text)
+   :link (:token-link (keywordize-keys msg))})
 
 (defn- token-content [td-classes token-type msg]
-  (let [message (token-prep token-type msg)
-        org-name (:org-name msg)]
+  (let [message (token-prep token-type msg)]
     [:td {:class td-classes :valign "middle" :align "center"}
       (h1 (:message message) "token-headeer")
       (spacer 24)

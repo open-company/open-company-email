@@ -1015,6 +1015,43 @@ img.notify-author-avatar {
   margin: 0 auto;
 }
 
+a.label-link, a.label-link:hover, a.label-link:visited, a.label-link:active, a.label-link:focus {
+  text-decoration: none;
+}
+
+div.oc-label {
+  width: auto;
+  padding: 0 2px;
+  height: 16px;
+  position: relative;
+  margin-right: 4px;
+  display: inline-block;
+}
+
+div.oc-label span.oc-label-bg {
+  opacity: 0.16;
+  border-radius: 2px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+div.oc-label span.oc-label-name {
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.5px;
+  display: block;
+  z-index: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 150px;
+}
+
 /*
   Gmail doesn't like multiple media queries, if you need to use
   @media only screen and (max-width:596px)
