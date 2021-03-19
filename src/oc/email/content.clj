@@ -6,6 +6,7 @@
             [hiccup.core :as h]
             [hickory.core :as hickory]
             [oc.lib.jwt :as jwt]
+            [oc.lib.color :as lib-color]
             [oc.lib.user :as user-lib]
             [oc.lib.storage :as storage]
             [oc.email.config :as config]
@@ -310,17 +311,15 @@
          " →"))]]))
 
 (defn- label-block [label]
-  (let [bg-color-style {:background-color (:color label)}
-        color-style {:color (:color label)}]
-    [:div.oc-label
-     [:a.label-link
-      {:href (:url label)
-       :style bg-color-style}
-      [:span.oc-label-bg
-       {:style bg-color-style}]
-      [:span.oc-label-name
-       {:style color-style}
-       (:name label)]]]))
+  (let [rgb-color (lib-color/hex->rgb (:color label))
+        rgb-string (apply format (concat ["rgba(%d, %d, %d, %.2f)"] rgb-color [0.16]))
+        style {:background-color rgb-string
+               :color (:color label)}]
+    [:a.label-link
+     {:href (:url label)}
+     [:span.oc-label
+      {:style style}
+      (:name label)]]))
 
 (defn- digest-post-block
   [entry]
@@ -337,15 +336,20 @@
      [:tr
       [:td
        {:colspan "2"}
-       [:table {:cell-padding "0"
-                :cell-spacing "0"
-                :border "0"
-                :class "row digest-labels-row text-left"}
-        [:tbody
-         [:tr
-          (for [label (:labels entry)]
-            [:tr
-             (label-block label)])]]]]]
+      ;; ;; With a table
+      ;;  [:table {:cell-padding "0"
+      ;;           :cell-spacing "4"
+      ;;           :border "0"
+      ;;           :class "row digest-labels-row text-left"}
+      ;;   [:tbody
+      ;;    [:tr
+      ;;     (for [label (:labels entry)]
+      ;;       [:td
+      ;;        (label-block label)])]]]
+      ;; ;; With a flex block
+       [:div.oc-labels
+        (for [label (apply concat (repeat 10 (:labels entry)))]
+          (label-block label))]]]
       [:tr
         [:td.digest-post-avatar-td
           [:a
