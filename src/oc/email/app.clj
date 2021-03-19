@@ -1,8 +1,9 @@
 (ns oc.email.app
   (:gen-class)
   (:require [com.stuartsierra.component :as component]
-            [manifold.stream :as stream]
             [taoensso.timbre :as timbre]
+            [clojure.java.io :as jio]
+            [oc.lib.component.keep-alive :refer (map->KeepAlive)]
             [oc.lib.sentry.core :as sentry-lib :refer (map->SentryCapturer)]
             [oc.email.config :as c]
             [oc.lib.sqs :as sqs]
@@ -40,7 +41,10 @@
       :sentry-capturer (map->SentryCapturer sentry)
       :sqs (component/using
             (sqs/sqs-listener sqs-creds sqs-queue sqs-msg-handler)
-            [:sentry-capturer]))))
+            [:sentry-capturer])
+      :run-blocker (component/using
+                    (map->KeepAlive nil)
+                    [:sentry-capturer]))))
 
 (defn echo-config []
   (println (str "\n"
@@ -51,7 +55,7 @@
     "Email from: " c/email-from-domain "\n"
     "Email digest-prefix: " c/email-digest-prefix "\n"
     "Email images prefix: " c/email-images-prefix "\n"
-    "FileStack: " (or c/filestack-api-key "false") "\n"
+    "Filestack API Key: " (or c/filestack-api-key "false") "\n"
     "Log level: " c/log-level "\n"
     "Sentry: " c/sentry-config "\n"
     "\n"
@@ -64,7 +68,7 @@
 
   ;; Echo config information
   (println (str "\n"
-    (when c/intro? (str (slurp (clojure.java.io/resource "oc/assets/ascii_art.txt")) "\n"))
+    (when c/intro? (str (slurp (jio/resource "oc/assets/ascii_art.txt")) "\n"))
     "OpenCompany Email Service\n"))
   (echo-config)
 
@@ -73,9 +77,7 @@
                             :sqs-queue c/aws-sqs-email-queue
                             :sqs-msg-handler sqs-handler
                             :sqs-creds {:access-key c/aws-access-key-id
-                                        :secret-key c/aws-secret-access-key}}))
-
-  (deref (stream/take! (stream/stream)))) ; block forever
+                                        :secret-key c/aws-secret-access-key}})))
 
 (defn -main []
   (start))
