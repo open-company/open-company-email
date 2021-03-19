@@ -14,17 +14,15 @@
   ;; All profile dependencies
   :dependencies [
     ;; Lisp on the JVM http://clojure.org/documentation
-    [org.clojure/clojure "1.10.2-alpha4"]
+    [org.clojure/clojure "1.11.0-alpha1"]
     ;; HTML rendering https://github.com/weavejester/hiccup
     [hiccup "2.0.0-alpha2"]
-    ;; Async programming tools https://github.com/ztellman/manifold
-    [manifold "0.1.9-alpha4"]
     ;; Namespace management https://github.com/clojure/tools.namespace
     ;; NB: org.clojure/tools.reader is pulled in by oc.lib
-    [org.clojure/tools.namespace "1.0.0" :exclusions [org.clojure/tools.reader]] 
-                 
+    [org.clojure/tools.namespace "1.1.0" :exclusions [org.clojure/tools.reader]]
+
     ;; General data-binding functionality for Jackson: works on core streaming API https://github.com/FasterXML/jackson-databind
-    [com.fasterxml.jackson.core/jackson-databind "2.12.0-rc1"]
+    ;; [com.fasterxml.jackson.core/jackson-databind "2.12.0-rc1"]
 
     ;; Library for OC projects https://github.com/open-company/open-company-lib
     ;; ************************************************************************
@@ -32,7 +30,7 @@
     ;; ***************** (JWT schema changes, more info here: *****************
     ;; ******* https://github.com/open-company/open-company-lib/pull/82) ******
     ;; ************************************************************************
-    [open-company/lib "0.17.35-alpha3" :exclusions [org.clojure/tools.logging]]
+    [open-company/lib "0.18.0-alpha" :exclusions [org.clojure/tools.reader]] ;; org.clojure/tools.logging ring/ring-core ring/ring-codec
     ;; ************************************************************************
     ;; In addition to common functions, brings in the following common dependencies used by this project:
     ;; Component - Component Lifecycle https://github.com/stuartsierra/component
@@ -61,7 +59,7 @@
       }
       :plugins [
         ;; Linter https://github.com/jonase/eastwood
-        [jonase/eastwood "0.3.11"]
+        [jonase/eastwood "0.3.14"]
         ;; Static code search for non-idiomatic code https://github.com/jonase/kibit
         [lein-kibit "0.1.8" :exclusions [org.clojure/clojure]]
       ]
@@ -88,20 +86,20 @@
       :plugins [
         ;; Check for code smells https://github.com/dakrone/lein-bikeshed
         ;; NB: org.clojure/tools.cli is pulled in by lein-kibit
-        [lein-bikeshed "0.5.2" :exclusions [org.clojure/tools.cli]] 
+        [lein-bikeshed "0.5.2" :exclusions [org.clojure/tools.cli]]
         ;; Runs bikeshed, kibit and eastwood https://github.com/itang/lein-checkall
         [lein-checkall "0.1.1"]
         ;; pretty-print the lein project map https://github.com/technomancy/leiningen/tree/master/lein-pprint
         [lein-pprint "1.3.2"]
         ;; Check for outdated dependencies https://github.com/xsc/lein-ancient
-        [lein-ancient "0.6.15"]
+        [lein-ancient "1.0.0-RC3"]
         ;; Catch spelling mistakes in docs and docstrings https://github.com/cldwalker/lein-spell
         [lein-spell "0.1.0"]
         ;; Dead code finder https://github.com/venantius/yagni
         [venantius/yagni "0.1.7" :exclusions [org.clojure/clojure]]
         ;; Autotest https://github.com/jakemcc/lein-test-refresh
         [com.jakemccrary/lein-test-refresh "0.24.1"]
-      ]  
+      ]
     }]
 
     :repl-config [:dev {
