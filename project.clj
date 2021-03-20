@@ -14,7 +14,7 @@
   ;; All profile dependencies
   :dependencies [
     ;; Lisp on the JVM http://clojure.org/documentation
-    [org.clojure/clojure "1.11.0-alpha1"]
+    [org.clojure/clojure "1.10.3"]
     ;; HTML rendering https://github.com/weavejester/hiccup
     [hiccup "2.0.0-alpha2"]
     ;; Namespace management https://github.com/clojure/tools.namespace
@@ -30,7 +30,7 @@
     ;; ***************** (JWT schema changes, more info here: *****************
     ;; ******* https://github.com/open-company/open-company-lib/pull/82) ******
     ;; ************************************************************************
-    [open-company/lib "0.18.0-alpha" :exclusions [org.clojure/tools.reader]] ;; org.clojure/tools.logging ring/ring-core ring/ring-codec
+    [open-company/lib "0.18.0-alpha1" :exclusions [org.clojure/tools.reader]] ;; org.clojure/tools.logging ring/ring-core ring/ring-codec
     ;; ************************************************************************
     ;; In addition to common functions, brings in the following common dependencies used by this project:
     ;; Component - Component Lifecycle https://github.com/stuartsierra/component

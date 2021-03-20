@@ -333,9 +333,9 @@
       [:tr
         [:td
           (spacer 16)]]
-     [:tr
-      [:td
-       {:colspan "2"}
+    ;;  [:tr
+    ;;   [:td
+    ;;    {:colspan "2"}
       ;; ;; With a table
       ;;  [:table {:cell-padding "0"
       ;;           :cell-spacing "4"
@@ -347,9 +347,9 @@
       ;;       [:td
       ;;        (label-block label)])]]]
       ;; ;; With a flex block
-       [:div.oc-labels
-        (for [label (apply concat (repeat 10 (:labels entry)))]
-          (label-block label))]]]
+      ;;  [:div.oc-labels
+      ;;   (for [label (:labels entry)]
+      ;;     (label-block label))]]]
       [:tr
         [:td.digest-post-avatar-td
           [:a
@@ -371,6 +371,11 @@
                   :cellspacing "0"
                   :border "0"
                   :class "row digest-post-block"}
+                 [:tr
+                   [:td
+                     [:div.oc-labels
+                       (for [label (:labels entry)]
+                         (label-block label))]]]
                   [:tr
                     [:td
                       [:span.digest-post-attribution

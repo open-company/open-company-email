@@ -3,7 +3,7 @@
   (:require [com.stuartsierra.component :as component]
             [taoensso.timbre :as timbre]
             [clojure.java.io :as jio]
-            [oc.lib.component.keep-alive :refer (map->KeepAlive)]
+            [oc.lib.component.keep-alive :refer (->KeepAlive)]
             [oc.lib.sentry.core :as sentry-lib :refer (map->SentryCapturer)]
             [oc.email.config :as c]
             [oc.lib.sqs :as sqs]
@@ -38,13 +38,14 @@
 (defn system [config-options]
   (let [{:keys [sqs-creds sqs-queue sqs-msg-handler sentry]} config-options]
     (component/system-map
-      :sentry-capturer (map->SentryCapturer sentry)
-      :sqs (component/using
-            (sqs/sqs-listener sqs-creds sqs-queue sqs-msg-handler)
-            [:sentry-capturer])
-      :run-blocker (component/using
-                    (map->KeepAlive nil)
-                    [:sentry-capturer]))))
+     :sentry-capturer (map->SentryCapturer sentry)
+     :sqs (component/using
+           (sqs/sqs-listener sqs-creds sqs-queue sqs-msg-handler)
+           [:sentry-capturer])
+     ;; This must be last and needs all other components as dependency
+     :keep-alive (component/using
+                  (->KeepAlive)
+                  [:sentry-capturer :sqs]))))
 
 (defn echo-config []
   (println (str "\n"

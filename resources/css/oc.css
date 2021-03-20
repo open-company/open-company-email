@@ -89,7 +89,7 @@ span.digest-post-attribution {
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 12px;
-  line-height: 32px;
+  line-height: 24px;
   color: rgb(52, 65, 79, 0.5);
   text-decoration: none;
   font-family: Helvetica, Arial, sans-serif !important;
@@ -1042,7 +1042,7 @@ span.oc-label {
 div.oc-labels {
   display: flex;
   flex-flow: row wrap;
-  min-height: 16px;
+  height: 16px;
   width: 100%;
 }
 
