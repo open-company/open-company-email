@@ -371,11 +371,12 @@
                   :cellspacing "0"
                   :border "0"
                   :class "row digest-post-block"}
-                 [:tr
-                   [:td
-                     [:div.oc-labels
-                       (for [label (:labels entry)]
-                         (label-block label))]]]
+                 (when (seq (:labels entry))
+                   [:tr
+                     [:td
+                       [:div.oc-labels
+                         (for [label (:labels entry)]
+                           (label-block label))]]])
                   [:tr
                     [:td
                       [:span.digest-post-attribution
