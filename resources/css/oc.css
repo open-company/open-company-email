@@ -98,6 +98,14 @@ span.digest-post-attribution {
   white-space: nowrap;
 }
 
+span.digest-post-attribution-board {
+  text-decoration: underline;
+}
+
+span.digest-post-attribution-name {
+  text-decoration: underline;
+}
+
 span.digest-post-attribution a {
   font-size: 12px;
   line-height: 32px;
@@ -130,38 +138,74 @@ h2.digest-post-title {
 
 label.digest-label {
   font-family: Helvetica, Arial, sans-serif !important;
-  line-height: 20px;
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: normal;
   color: #34414F;
 }
 
-a.digest-cta {
+table.digest-cta-table {
+  display: inline;
+  text-align: center;
   margin: 0 auto;
+}
+
+th.digest-cta {
+  border-radius: 4px;
+  background-color: #6833F1;
+  vertical-align: middle;
+  height: 32px;
+  font-size: 32px;
+  line-height: 32px;
+  text-align: center;
+}
+
+a.digest-cta-link {
+  text-decoration: none;
+}
+
+a.digest-cta-link div.digest.cta-inner {
+  margin-top: 0;
+  margin-bottom: 0;
   font-weight: bold;
   width: auto;
-  display: inline-block;
+  display: block;
   height: 32px;
   font-size: 18px;
   line-height: 32px;
-  padding: 0 16px;
-  border-radius: 4px;
-  background-color: #6833F1;
+  text-align: center;
+  padding: 0 16px 8px;
   color: white;
 }
 
 a.digest-cta:hover {
-  color: white;
   text-decoration: none;
-  cursor: pointer;
+}
+
+a.view-more-link {
+  margin: 0 auto;
+  font-weight: normal;
+  width: auto;
+  display: inline-block;
+  height: 24px;
+  font-size: 14px;
+  line-height: 24px;
+  padding: 0;
+  vertical-align: middle;
+  color: #34414F !important;
+  text-decoration: underline;
+}
+
+a.view-more-link:hover {
+  text-decoration: none;
 }
 
 label.digest-label a {
   color: #6833F1;
   font-family: Helvetica, Arial, sans-serif !important;
-  line-height: 20px;
-  font-size: 16px;
-  font-weight: bold;
+  line-height: 16px;
+  font-size: 12px;
+  font-weight: normal;
   text-decoration: none;
 }
 
@@ -488,6 +532,9 @@ table.horizontal-line {
   width: 100%;
   margin: 0 auto;
   text-align: center;
+  height: 1px;
+  font-size: 1px;
+  line-height: 1px;
 }
 
 table.horizontal-line table.row {
@@ -495,6 +542,9 @@ table.horizontal-line table.row {
   margin: 0 auto;
   text-align: center;
   background-color: #F0F0F1;
+  height: 1px;
+  font-size: 1px;
+  line-height: 1px;
 }
 
 p.digest-help {
@@ -656,7 +706,7 @@ img.digest-post-avatar {
   object-fit: contain;
   border-radius: 50%;
   margin-right: 16px;
-  padding: 8px 0;
+  padding: 6px 0 10px;
 }
 
 table.digest-post-block td.digest-post-avatar-td {

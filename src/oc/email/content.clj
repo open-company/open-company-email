@@ -97,6 +97,9 @@
 (defn- preheader-spacer []
   (s/join (repeat 120 "&nbsp;&zwnj;")))
 
+(defn- vertical-space-style [height]
+  (str "font-size:" height "px; line-height:" height "px;"))
+
 ;; ----- Retrieve post data -----
 
 (defn get-post-data [payload]
@@ -140,7 +143,8 @@
     [:tr
       [:th {:class css-class
             :height (str pixels "px")
-            :style (str "font-size:" pixels "px; line-height:" pixels "px;")} " "]]])
+            :style (vertical-space-style pixels)}
+       " "]]])
 
 (defn- spacer
   ([pixels] (spacer pixels ""))
@@ -311,10 +315,7 @@
          " →"))]]))
 
 (defn- label-block [label]
-  (let [rgb-color (lib-color/hex->rgb (:color label))
-        rgb-string (apply format (concat ["rgba(%d, %d, %d, %.2f)"] rgb-color [0.16]))
-        style {:background-color rgb-string
-               :color (:color label)}]
+  (let [style {:color (:color label)}]
     [:a.label-link
      {:href (:url label)}
      [:span.oc-label
@@ -333,23 +334,6 @@
       [:tr
         [:td
           (spacer 16)]]
-    ;;  [:tr
-    ;;   [:td
-    ;;    {:colspan "2"}
-      ;; ;; With a table
-      ;;  [:table {:cell-padding "0"
-      ;;           :cell-spacing "4"
-      ;;           :border "0"
-      ;;           :class "row digest-labels-row text-left"}
-      ;;   [:tbody
-      ;;    [:tr
-      ;;     (for [label (:labels entry)]
-      ;;       [:td
-      ;;        (label-block label)])]]]
-      ;; ;; With a flex block
-      ;;  [:div.oc-labels
-      ;;   (for [label (:labels entry)]
-      ;;     (label-block label))]]]
       [:tr
         [:td.digest-post-avatar-td
           [:a
@@ -368,9 +352,11 @@
                 {:href (:url entry)}
                 [:table
                   {:cellpadding "0"
-                  :cellspacing "0"
-                  :border "0"
-                  :class "row digest-post-block"}
+                   :cellspacing "0"
+                   :border "0"
+                   :class "row digest-post-block"
+                   :height "16px"
+                   :style (vertical-space-style 16)}
                  (when (seq (:labels entry))
                    [:tr
                      [:td
@@ -380,9 +366,9 @@
                   [:tr
                     [:td
                       [:span.digest-post-attribution
-                        (:name publisher)
+                        [:span.digest-post-attribution-name (:name publisher)]
                         " in "
-                        (:board-name entry)]]]
+                        [:span.digest-post-attribution-board (:board-name entry)]]]]
                   [:tr
                     [:td
                       [:span.digest-post-headline-row
@@ -412,10 +398,12 @@
 "])
 
 (defn- digest-content
-  [{:keys [following replies digest-label org-light-brand-color] :as digest}]
+  [{:keys [following unfollowing view-more-url home-url replies-url digest-label org-light-brand-color] :as digest}]
   (let [user (select-keys digest [:user-id :name :avatar-url])
-        following? (seq (:following-list following))
-        brand-color (or org-light-brand-color config/default-brand-color)]
+        following? (seq following)
+        unfollowing? (seq unfollowing)
+        brand-color (or org-light-brand-color config/default-brand-color)
+        view-more? (seq view-more-url)]
     [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
       [:center
         (spacer 40)
@@ -431,11 +419,16 @@
           [:tr
             [:td
              [:center
-              [:a.digest-cta
-               {:href (:url following)
-                :style {:background-color (-> brand-color :primary :hex)
-                        :color (-> brand-color :secondary :hex)}}
-               "View updates"]]]]
+              [:table.digest-cta-table
+               {:cellpadding "0"
+                :cellspacing "0"
+                :border "0"}
+               [:tr [:th.digest-cta
+                 [:a.digest-cta-link
+                  {:href home-url}
+                  [:div.digest.cta-inner
+                   {:style (str "background-color:" (-> brand-color :primary :hex) "; color:" (-> brand-color :secondary :hex) ";")}
+                   "View updates"]]]]]]]]
           [:tr [:td (spacer 32)]]
           [:tr [:td (horizontal-line)]]
           (when following?
@@ -445,8 +438,8 @@
           (when following?
             [:tr
               [:td
-                (for [p (:following-list following)
-                      :let [post (assoc p :replies-url (:url replies))]]
+                (for [p following
+                      :let [post (assoc p :replies-url replies-url)]]
                   [:table
                     {:cellpadding "0"
                      :cellspacing "0"
@@ -455,6 +448,35 @@
                     [:tr
                       [:td {:class "small-12 large-12 columns"}
                         (digest-post-block post)]]])]])
+          (when unfollowing?
+            [:tr
+             [:td
+              (spacer 8)]])
+          (when unfollowing?
+            [:tr
+            [:td
+              (for [p unfollowing
+                    :let [post (assoc p :replies-url replies-url)]]
+                [:table
+                {:cellpadding "0"
+                  :cellspacing "0"
+                  :border "0"
+                  :class "row digest-posts-container"}
+                [:tr
+                  [:td {:class "small-12 large-12 columns"}
+                  (digest-post-block post)]]])]])
+          (when view-more?
+            [:tr
+             [:td
+              (spacer 16)]])
+          (when view-more?
+            [:tr
+             [:td
+              [:center
+               [:a.view-more-link
+                {:href view-more-url
+                 :style {:color (-> brand-color :secondary :hex)}}
+                "View more"]]]])
           [:tr
             [:td
               (spacer 16)]]]

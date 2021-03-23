@@ -23,78 +23,104 @@
       "hex": "#0000FF"
     }
   },
-  "following": {
-    "url": "http://staging.carrot.io/carrot/home",
-    "following-list": [
-      {
-        "headline": "Customer feedback from Acme LLC",
-        "url": "http://staging.carrot.io/carrot/above-the-line/post/dc68-4c26-b396",
-        "must-see": true,
-        "board-access": "public",
-        "board-name": "Above the line",
-        "board-slug": "above-the-line",
-        "board-uuid": "1234-1234-1234",
-        "publisher" : {
-          "avatar-url" : "https://cdn.filestackcontent.com/resize=height%3a72/UcLBPMzZRGeOGT7MWqWl",
-          "name" : "Iacopo Carraro",
-          "user-id" : "c8a5-4a10-b851",
-          "url": "http://staging.carrot.io/carrot/u/c8a5-4a10-b851"
-        },
-        "body": "<p>Asda das as</p>",
-        "comment-count-label": "",
-        "published-at": "2017-11-5T17:00:48.729Z",
-        "labels": [
-          {"name": "Customers",
-           "color": "#FDAB1D",
-           "url": "https://staging.carrot.io/carrot/l/customers"},
-          {"name": "Feedback",
-           "color": "#00FF00",
-           "url": "https://staging.carrot.io/carrot/l/feedback"},
-          {"name": "ACME LLC",
-           "color": "#0000FF",
-           "url": "https://staging.carrot.io/carrot/l/acme-llc"}]
-      }, {
-        "headline": "One more here again",
-        "url": "http://staging.carrot.io/carrot/under-the-line/post/abe4-47e9-9be2",
-        "board-access": "public",
-        "board-name": "Under the line",
-        "board-slug": "under-the-line",
-        "board-uuid": "4321-4321-4321",
-        "publisher" : {
-          "avatar-url" : "https://cdn.filestackcontent.com/resize=height%3a72/UcLBPMzZRGeOGT7MWqWl",
-          "name" : "Iacopo Carraro",
-          "user-id" : "c8a5-4a10-b851",
-          "url": "http://staging.carrot.io/carrot/u/c8a5-4a10-b851"
-        },
-        "body": "<p>Kmkamdsklmalkdm aslkmdkl a</p>",
-        "comment-count-label": "3 new comments",
-        "published-at": "2020-08-07T12:35:57.193Z",
-        "labels": [
-         {"name": "Carrot",
-          "color": "#FA6452",
-          "url": "https://staging.carrot.io/carrot/l/carrot"},
-         {"name": "Customers",
+  "home-url": "http://staging.carrot.io/carrot/home",
+  "unfollowing": [
+    {
+      "headline": "Testing and running Acme LLC",
+      "url": "http://staging.carrot.io/carrot/below-the-line/post/dc68-1255-b396",
+      "must-see": true,
+      "board-access": "public",
+      "board-name": "Below the line",
+      "board-slug": "below-the-line",
+      "board-uuid": "4321-4321-4321",
+      "publisher" : {
+        "avatar-url" : "https://cdn.filestackcontent.com/resize=height%3a72/UcLBPMzZRGeOGT7MWqWl",
+        "name" : "Iacopo Carraro",
+        "user-id" : "c8a5-4a10-b851",
+        "url": "http://staging.carrot.io/carrot/u/c8a5-4a10-b851"
+      },
+      "body": "<p>Asda das as</p>",
+      "comment-count-label": "",
+      "published-at": "2017-11-5T17:00:48.729Z",
+      "labels": [
+        {"name": "Customers",
           "color": "#FDAB1D",
-          "url": "https://staging.carrot.io/carrot/l/customers"}]
-      }, {
-        "headline": "Asd sad ad auhd ashiud haiush d ads aspokapso kdpsoak pkd soakpoaskd poaspdo jas pasjd oiash douihasoi dhoasi o",
-        "url": "http://staging.carrot.io/carrot/design/post/0646-4c22-a8e0",
-        "board-access": "public",
-        "board-name": "Design",
-        "board-slug": "design",
-        "board-uuid": "1357-1357-1357",
-        "publisher" : {
-          "avatar-url" : "https://cdn.filestackcontent.com/resize=height%3a72/UcLBPMzZRGeOGT7MWqWl",
-          "name" : "Iacopo Carraro",
-          "user-id" : "c8a5-4a10-b851",
-          "url": "http://staging.carrot.io/carrot/u/c8a5-4a10-b851"
-        },
-        "body": "<p>asdasd asd asd as das das ds</p>",
-        "comment-count-label": "1 comment",
-        "published-at": "2017-11-5T17:00:48.729Z"
-      }
-    ]
-  },
+          "url": "https://staging.carrot.io/carrot/l/customers"},
+        {"name": "Feedback",
+          "color": "#00FF00",
+          "url": "https://staging.carrot.io/carrot/l/feedback"}]
+    }
+  ],
+  "view-more-url": "http://staging.carrot.io/carrot/home",
+  "following": [
+    {
+      "headline": "Customer feedback from Acme LLC",
+      "url": "http://staging.carrot.io/carrot/above-the-line/post/dc68-4c26-b396",
+      "must-see": true,
+      "board-access": "public",
+      "board-name": "Above the line",
+      "board-slug": "above-the-line",
+      "board-uuid": "1234-1234-1234",
+      "publisher" : {
+        "avatar-url" : "https://cdn.filestackcontent.com/resize=height%3a72/UcLBPMzZRGeOGT7MWqWl",
+        "name" : "Iacopo Carraro",
+        "user-id" : "c8a5-4a10-b851",
+        "url": "http://staging.carrot.io/carrot/u/c8a5-4a10-b851"
+      },
+      "body": "<p>Asda das as</p>",
+      "comment-count-label": "",
+      "published-at": "2017-11-5T17:00:48.729Z",
+      "labels": [
+        {"name": "Customers",
+          "color": "#FDAB1D",
+          "url": "https://staging.carrot.io/carrot/l/customers"},
+        {"name": "Feedback",
+          "color": "#00FF00",
+          "url": "https://staging.carrot.io/carrot/l/feedback"},
+        {"name": "ACME LLC",
+          "color": "#0000FF",
+          "url": "https://staging.carrot.io/carrot/l/acme-llc"}]
+    }, {
+      "headline": "One more here again",
+      "url": "http://staging.carrot.io/carrot/under-the-line/post/abe4-47e9-9be2",
+      "board-access": "public",
+      "board-name": "Under the line",
+      "board-slug": "under-the-line",
+      "board-uuid": "4321-4321-4321",
+      "publisher" : {
+        "avatar-url" : "https://cdn.filestackcontent.com/resize=height%3a72/UcLBPMzZRGeOGT7MWqWl",
+        "name" : "Iacopo Carraro",
+        "user-id" : "c8a5-4a10-b851",
+        "url": "http://staging.carrot.io/carrot/u/c8a5-4a10-b851"
+      },
+      "body": "<p>Kmkamdsklmalkdm aslkmdkl a</p>",
+      "comment-count-label": "3 new comments",
+      "published-at": "2020-08-07T12:35:57.193Z",
+      "labels": [
+        {"name": "Carrot",
+        "color": "#FA6452",
+        "url": "https://staging.carrot.io/carrot/l/carrot"},
+        {"name": "Customers",
+        "color": "#FDAB1D",
+        "url": "https://staging.carrot.io/carrot/l/customers"}]
+    }, {
+      "headline": "Asd sad ad auhd ashiud haiush d ads aspokapso kdpsoak pkd soakpoaskd poaspdo jas pasjd oiash douihasoi dhoasi o",
+      "url": "http://staging.carrot.io/carrot/design/post/0646-4c22-a8e0",
+      "board-access": "public",
+      "board-name": "Design",
+      "board-slug": "design",
+      "board-uuid": "1357-1357-1357",
+      "publisher" : {
+        "avatar-url" : "https://cdn.filestackcontent.com/resize=height%3a72/UcLBPMzZRGeOGT7MWqWl",
+        "name" : "Iacopo Carraro",
+        "user-id" : "c8a5-4a10-b851",
+        "url": "http://staging.carrot.io/carrot/u/c8a5-4a10-b851"
+      },
+      "body": "<p>asdasd asd asd as das das ds</p>",
+      "comment-count-label": "1 comment",
+      "published-at": "2017-11-5T17:00:48.729Z"
+    }
+  ],
   "boards-label": [
     "div.test",
     "Since your digest ",
