@@ -423,8 +423,8 @@
                {:cellpadding "0"
                 :cellspacing "0"
                 :border "0"}
-               [:tr [:th.digest-cta
-                 [:a.digest-cta-link
+               [:tr [:th
+                 [:a.digest-cta
                   {:href home-url}
                   [:div.digest.cta-inner
                    {:style (str "background-color:" (-> brand-color :primary :hex) "; color:" (-> brand-color :secondary :hex) ";")}
