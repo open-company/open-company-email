@@ -1080,6 +1080,7 @@ span.oc-label {
   text-overflow: ellipsis;
   white-space: nowrap;
   max-width: 150px;
+  color: #34414F;
 }
 
 div.oc-labels {

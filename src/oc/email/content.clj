@@ -6,7 +6,6 @@
             [hiccup.core :as h]
             [hickory.core :as hickory]
             [oc.lib.jwt :as jwt]
-            [oc.lib.color :as lib-color]
             [oc.lib.user :as user-lib]
             [oc.lib.storage :as storage]
             [oc.email.config :as config]
@@ -315,12 +314,10 @@
          " →"))]]))
 
 (defn- label-block [label]
-  (let [style {:color (:color label)}]
-    [:a.label-link
-     {:href (:url label)}
-     [:span.oc-label
-      {:style style}
-      (:name label)]]))
+  [:a.label-link
+   {:href (:url label)}
+   [:span.oc-label
+    (:name label)]])
 
 (defn- digest-post-block
   [entry]
