@@ -3,7 +3,6 @@
             [clojure.walk :refer (keywordize-keys)]
             [clj-time.core :as time]
             [clj-time.format :as time-format]
-            [oc.lib.text :as text]
             [hiccup.core :as h]
             [hickory.core :as hickory]
             [oc.lib.jwt :as jwt]
@@ -12,15 +11,9 @@
             [oc.email.config :as config]
             [jsoup.soup :as soup]))
 
-(def max-logo 40)
-
 (def iso-format (time-format/formatters :date-time))
-(def date-format (time-format/formatter "MMM. d"))
-(def date-format-no-dot (time-format/formatter "MMM d"))
-(def date-format-year (time-format/formatter "MMM. d YYYY"))
 (def digest-subject-format (time-format/formatter "MMM d, YYYY"))
 (def date-format-year-comma (time-format/formatter "MMM. d, YYYY"))
-(def day-month-date-year (time-format/formatter "EEEE, MMM. dd, YYYY"))
 (def reminder-date-format (time-format/formatter "EEEE, MMMM d"))
 (def reminder-date-format-year (time-format/formatter "EEEE, MMMM d YYYY"))
 
@@ -29,12 +22,6 @@
 
 (def doc-type "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
 
-;; Links
-
-(def carrot-hello-mailto "mailto:hello@carrot.io")
-
-(def carrot-help "http://help.carrot.io")
-
 ;; ----- Copy -----
 
 (def carrot-explainer-fragment "your company digest for the team news and updates no one should miss.")
@@ -42,16 +29,13 @@
 
 (def invite-message "Join your team on Carrot")
 (def invite-message-with-company "Join the %s team on Carrot")
-(def invite-instructions (str "%s has invited you to Carrot - " carrot-explainer-fragment))
 (def invite-link-instructions "Click here to join:")
-(def invite-button "accept_invitation")
 
 (def share-message "%s shared a post with you")
 (def share-cta "view_post")
 
 (def board-invite-title "You’ve been invited to a private section")
 (def board-invite-message "%s invited you to a private section")
-(def board-invite-message-2 (str "”. " carrot-explainer))
 (def board-invite-button "view_section")
 
 (def reset-message "Password reset")
@@ -245,7 +229,7 @@
       ;; default "view_post"
       "View post")])
 
-(defn- email-header [is-digest?]
+(defn- email-header []
   [:table {:class "header-table"
            :valign "middle"
            :align "center"}
@@ -310,10 +294,6 @@
        (when add-arrow?
          " →"))]]))
 
-(defn- post-body [cleaned-body]
-  [:div.post-body
-    cleaned-body])
-
 (defn- digest-post-block
   [entry]
   (let [publisher (:publisher entry)
@@ -356,14 +336,7 @@
                   [:tr
                     [:td
                       [:span.digest-post-headline-row
-                        (str (:headline entry) " →")
-                      ; (h2  (:url entry) "" "digest-post-title")
-                      ]]]]]]]
-            ; (when has-body
-            ;   [:tr [:td (spacer 4)]])
-            ; (when has-body
-            ;   [:tr [:td
-            ;     (post-body cleaned-body)]])
+                        (str (:headline entry) " →")]]]]]]]
             [:tr [:td 
                 (spacer 8)]]]]]]))
 
@@ -387,9 +360,8 @@
 "])
 
 (defn- digest-content
-  [{:keys [following replies digest-label org-light-brand-color] :as digest}]
-  (let [user (select-keys digest [:user-id :name :avatar-url])
-        following? (seq (:following-list following))
+  [{:keys [following replies digest-label org-light-brand-color]}]
+  (let [following? (seq (:following-list following))
         brand-color (or org-light-brand-color config/default-brand-color)]
     [:td {:class "small-12 large-12 columns" :valign "middle" :align "center"}
       [:center
@@ -462,14 +434,8 @@
 
 (defn- reminder-alert-content [reminder]
   (let [org (:org reminder)
-        org-name (:name org)
         org-slug (:slug org)
-        logo-url (:logo-url org)
-        logo-width (:logo-width org)
-        logo-height (:logo-height org)
-        logo? (not (s/blank? logo-url))
         reminder-data (:reminder (:notification reminder))
-        author (:author reminder-data)
         headline (reminder-alert-headline reminder)
         create-post-url (str (s/join "/" [config/web-url org-slug "home"]) "?new")
         subline (reminder-notification-subline reminder-data)]
@@ -507,17 +473,11 @@
 
 (defn- reminder-notification-content [reminder]
   (let [org (:org reminder)
-        org-name (:name org)
         org-slug (:slug org)
-        logo-url (:logo-url org)
-        logo-width (:logo-width org)
-        logo-height (:logo-height org)
-        logo? (not (s/blank? logo-url))
         reminder-data (:reminder (:notification reminder))
         author (:author reminder-data)
         author-avatar-url (:avatar-url author)
         is-default-avatar? (s/starts-with? author-avatar-url "/img")
-        title (:headline reminder-data)
         headline (reminder-notification-headline reminder)
         subline (reminder-notification-subline reminder-data)
         reminders-url (str (s/join "/" [config/web-url org-slug "home"]) "?reminders")]
@@ -557,11 +517,6 @@
 
 (defn- board-notification-content [notice]
   (let [org (:org notice)
-        org-name (:name org)
-        logo-url (:logo-url org)
-        logo-width (:logo-width org)
-        logo-height (:logo-height org)
-        logo? (not (s/blank? logo-url))
         board-url (:board-url notice)
         board-name (-> notice :board :name)
         first-name (-> notice :inviter :first-name)
@@ -602,10 +557,7 @@
         note? (not (s/blank? note))
         from (:from invite)
         prefix (if (s/blank? from) "You've been invited" (str from " has invited you"))
-        org (if (s/blank? org-name) "" (str org-name " on "))
-        invite-message (if (s/blank? org-name)
-                         invite-message
-                         (format invite-message-with-company org-name))]
+        org (if (s/blank? org-name) "" (str org-name " on "))]
     [:td {:class td-classes :valign "middle" :align "center"}
       (when logo? (org-logo {:org-name org-name
                              :org-logo-url logo-url
@@ -636,16 +588,9 @@
 (defn- share-content [entry]
   (let [logo-url (:org-logo-url entry)
         logo? (not (s/blank? logo-url))
-        org-name (:org-name entry)
-        org-name? (not (s/blank? org-name))
-        headline (.text (soup/parse (:headline entry)))
         org-slug (:org-slug entry)
-        sharer (:sharer-name entry)
-        publisher (:publisher entry)
-        attribution (str (:name publisher) " posted to " (:board-name entry))
         note (:note entry)
         note? (not (s/blank? note))
-        from (if (s/blank? sharer) "Someone" sharer)
         from-avatar (:sharer-avatar-url entry)
         from-avatar? (not (s/blank? from-avatar))
         show-note? (and note? from-avatar?)
@@ -692,19 +637,12 @@
         org (:org msg)
         entry-data (:entry-data notification)
         board-slug (:board-slug entry-data)
-        logo-url (:logo-url org)
-        logo? (not (s/blank? logo-url))
-        org-name (:name org)
-        org-name? (not (s/blank? org-name))
         org-slug (:slug org)
         mention? (:mention notification)
         interaction-id (:interaction-id notification)
         first-name (:first-name msg)
-        first-name? (not (s/blank? first-name))
-        author (:author notification)
         intro (notify-entry-intro msg)
         notification-author (:author notification)
-        notification-author-name (:name notification-author)
         is-default-avatar? (s/starts-with? (:avatar-url notification-author) "/img")
         notification-author-url (user-lib/fix-avatar-url config/filestack-api-key (:avatar-url notification-author) 128)
         uuid (:entry-id notification)
@@ -776,8 +714,7 @@
     :link (:token-link (keywordize-keys msg))})
 
 (defn- token-content [td-classes token-type msg]
-  (let [message (token-prep token-type msg)
-        org-name (:org-name msg)]
+  (let [message (token-prep token-type msg)]
     [:td {:class td-classes :valign "middle" :align "center"}
       (h1 (:message message) "token-headeer")
       (spacer 24)
@@ -838,7 +775,7 @@
           [:td {:valign "middle"
                 :align "center"}
             [:center
-              (email-header type)
+              (email-header)
               (horizontal-line)
               [:table {:class (str "row " (cond
                                             digest? "digest-email-content"
@@ -876,7 +813,12 @@
     (body data)])
 
 (defn- html [data type]
-  (str doc-type (h/html (head (assoc (keywordize-keys data) :type type)))))
+  (str doc-type
+       (-> data
+           keywordize-keys
+           (assoc :type type)
+           head
+           h/html)))
 
 ;; ----- External -----
 
