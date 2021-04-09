@@ -663,7 +663,7 @@
                       :team-id (:team-id org)} ;; Let's read the team-id from the org to avoid problems on multiple org users
         id-token (jwt/generate-id-token token-claims config/passphrase)
         url-parts (cond-> [origin-url org-url-part]
-                    board-url-part (conj board-url-part)
+                    board-url-part (concat [board-url-part])
                     entry-uuid (concat ["post" entry-uuid])
                     interaction-id (concat ["comment" interaction-id]))
         base-url (s/join "/" url-parts)
