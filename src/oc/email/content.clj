@@ -616,16 +616,26 @@
         comment? (:interaction-id notification)
         entry-publisher (:entry-publisher notification)
         user-id (:user-id notification)
-        author (:author notification)]
-    (if mention?
-      (if comment?
-        (str "You were mentioned in a comment")
-        (str "You were mentioned in a post"))
-      (if (= (:user-id entry-publisher) user-id)
-        (if (seq author)
-          (str (:name author) " commented on your post")
-          (str "There is a new comment on your post"))
-        (str (:name author) " replied to a thread")))))
+        author (:author notification)
+        entry-author? (= (:user-id entry-publisher) user-id)
+        author-name? (seq (:name author))]
+    (cond (and mention?
+               comment?)
+          (if author-name?
+            (str (:name author) " mentioned you in a comment")
+            "You were mentioned in a comment")
+          mention?
+          (if author-name?
+            (str (:name author) " mentioned you in a post")
+            "You were mentioned in a post")
+          entry-author?
+          (if (seq (:name author))
+            (str (:name author) " commented on your post")
+            "There is a new comment on your post")
+          :else
+          (if (seq (:name author))
+            (str (:name author) " replied to a thread")
+            "There is a new reply on a thread" ))))
 
 (defn notify-team-intro [msg]
   (let [notification (:notification msg)]
