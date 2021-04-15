@@ -1,5 +1,6 @@
 :root {
   --default-primary-color: #21B268;
+  --text-color: #34414F;
 }
 
 body,
@@ -7,7 +8,7 @@ html,
 .body,
 table.body {
   background-color: white;
-  color: #34414F;
+  color: var(--text-color);
   width: 100%;
   height: 100%;
 }
@@ -45,7 +46,7 @@ h1 {
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 18px;
   font-weight: normal;
-  color: #34414F;
+  color: var(--text-color);
   margin: 0px;
   text-align: center;
 }
@@ -119,13 +120,13 @@ span.digest-post-headline-row {
   line-height: 18px;
   font-family: Helvetica, Arial, sans-serif !important;
   font-weight: bold;
-  color: #34414F;
+  color: var(--text-color);
 }
 
 h2.digest-post-title {
   font-size: 16px;
   line-height: 20px;
-  color: #34414F;
+  color: var(--text-color);
   text-decoration: underline;
   font-family: Helvetica, Arial, sans-serif !important;
   font-weight: normal;
@@ -137,7 +138,7 @@ label.digest-label {
   line-height: 20px;
   font-size: 16px;
   font-weight: bold;
-  color: #34414F;
+  color: var(--text-color);
 }
 
 a.digest-cta {
@@ -172,7 +173,7 @@ label.digest-label a {
 p {
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 16px;
-  color: #34414F;
+  color: var(--text-color);
   line-height: 1.5;
   margin: 0px;
   text-align: center;
@@ -181,7 +182,7 @@ p {
 pre {
   font-family: monospace !important;
   font-size: 14px;
-  color: #34414F;
+  color: var(--text-color);
   padding: 4px;
   border-radius: 6px;
   background-color: rgba(36, 45, 66, 0.08);
@@ -309,14 +310,14 @@ div.digest-date {
 .follow-up-post-block h2 {
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 16px;
-  color: #34414F;
+  color: var(--text-color);
   font-weight: normal;
   line-height: 18px;
   text-align: left;
 }
 
 .follow-up-post-block h2 span.post-title {
-  color: #34414F;
+  color: var(--text-color);
   text-decoration: underline;
   text-align: left;
 }
@@ -347,7 +348,7 @@ h1.follow-up-header {
   font-weight: normal;
   font-size: 20px;
   line-height: 24px;
-  color: #34414F;
+  color: var(--text-color);
 }
 
 h1.invite-header {
@@ -356,7 +357,7 @@ h1.invite-header {
   font-weight: normal;
   font-size: 20px;
   line-height: 24px;
-  color: #34414F;
+  color: var(--text-color);
   text-align: center;
 }
 
@@ -554,13 +555,13 @@ p.digest-footer-paragraph a {
 }
 
 p.invite-carrot-disclaimer {
-  color: #34414F;
+  color: var(--text-color);
   font-size: 16px;
   font-weight: 400;
 }
 
 p.invite-carrot-disclaimer a {
-  color: #34414F;
+  color: var(--text-color);
   font-size: 16px;
   text-decoration: underline;
   font-weight: 400;
@@ -582,7 +583,7 @@ p.notification-link a {
 }
 
 span.notification-content, span.notification-content p, span.notification-content div {
-  color: #34414F;
+  color: var(--text-color);
 }
 
 span.oc-mention {
@@ -679,7 +680,7 @@ a.digest-group-link {
 }
 
 p.digest-replies-section {
-  color: #34414F;
+  color: var(--text-color);
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 16px;
   text-align: left;
@@ -690,14 +691,14 @@ a.digest-group-link .digest-group-title {
 }
 
 p.digest-new-boards-section {
-  color: #34414F;
+  color: var(--text-color);
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 16px;
   text-align: left; 
 }
 
 p.digest-new-boards-section a {
-  color: #34414F;
+  color: var(--text-color);
   text-decoration: underline;
 }
 
@@ -950,7 +951,7 @@ h2.reminder-headline {
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 16px;
   font-weight: bold;
-  color: #34414F;
+  color: var(--text-color);
   margin: 0px;
 }
 
@@ -959,7 +960,7 @@ span.post-title {
 }
 
 div.post-body, div.post-body p, div.post-body pre {
-  color: #34414f;
+  color: var(--text-color);
   font-size: 14px;
   line-height: 17px;
   font-weight: normal;
@@ -1008,7 +1009,7 @@ h1.token-headeer {
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 20px;
   font-weight: normal;
-  color: #34414f;
+  color: var(--text-color);
 }
 
 img.notify-author-avatar {
