@@ -1,14 +1,9 @@
-:root {
-  --default-primary-color: #21B268;
-  --text-color: #34414F;
-}
-
 body,
 html,
 .body,
 table.body {
   background-color: white;
-  color: var(--text-color);
+  color: #34414F;
   width: 100%;
   height: 100%;
 }
@@ -46,7 +41,7 @@ h1 {
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 18px;
   font-weight: normal;
-  color: var(--text-color);
+  color: #34414F;
   margin: 0px;
   text-align: center;
 }
@@ -55,7 +50,7 @@ h2 {
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 16px;
   font-weight: bold;
-  color: var(--default-primary-color);
+  color: #21B268;
   margin: 0px;
   text-align: center;
 }
@@ -80,7 +75,7 @@ p.digest-post-footer-row {
 }
 
 p.digest-post-footer-row span.comments-label {
-  color: var(--default-primary-color);
+  color: #21B268;
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 12px;
   line-height: 24px;
@@ -120,13 +115,13 @@ span.digest-post-headline-row {
   line-height: 18px;
   font-family: Helvetica, Arial, sans-serif !important;
   font-weight: bold;
-  color: var(--text-color);
+  color: #34414F;
 }
 
 h2.digest-post-title {
   font-size: 16px;
   line-height: 20px;
-  color: var(--text-color);
+  color: #34414F;
   text-decoration: underline;
   font-family: Helvetica, Arial, sans-serif !important;
   font-weight: normal;
@@ -162,7 +157,7 @@ a.digest-cta:hover {
 }
 
 label.digest-label a {
-  color: var(--default-primary-color);
+  color: #21B268;
   font-family: Helvetica, Arial, sans-serif !important;
   line-height: 20px;
   font-size: 16px;
@@ -173,7 +168,7 @@ label.digest-label a {
 p {
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 16px;
-  color: var(--text-color);
+  color: #34414F;
   line-height: 1.5;
   margin: 0px;
   text-align: center;
@@ -182,7 +177,7 @@ p {
 pre {
   font-family: monospace !important;
   font-size: 14px;
-  color: var(--text-color);
+  color: #34414F;
   padding: 4px;
   border-radius: 6px;
   background-color: rgba(36, 45, 66, 0.08);
@@ -205,7 +200,7 @@ p.attribution {
 }
 
 p.attribution label.new-comments {
-  color: var(--default-primary-color);
+  color: #21B268;
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 12px;
   font-weight: bold;
@@ -229,7 +224,7 @@ table.cta-button span.button-text {
 }
 
 table.post-button span.button-text {
-  color: var(--default-primary-color);
+  color: #21B268;
 }
 
 table.footer p {
@@ -239,7 +234,7 @@ table.footer p {
 
 table.footer a {
   font-weight: bold;
-  color: var(--default-primary-color);
+  color: #21B268;
 }
 
 .header-table {
@@ -290,7 +285,7 @@ div.digest-date {
   font-size: 14px;
   font-weight: bold;
   color: white;
-  background-color: var(--default-primary-color);
+  background-color: #21B268;
   border-radius: 6px;
   text-align: center;
   padding: 11px 0px 11px 0px;
@@ -310,14 +305,14 @@ div.digest-date {
 .follow-up-post-block h2 {
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 16px;
-  color: var(--text-color);
+  color: #34414F;
   font-weight: normal;
   line-height: 18px;
   text-align: left;
 }
 
 .follow-up-post-block h2 span.post-title {
-  color: var(--text-color);
+  color: #34414F;
   text-decoration: underline;
   text-align: left;
 }
@@ -348,7 +343,7 @@ h1.follow-up-header {
   font-weight: normal;
   font-size: 20px;
   line-height: 24px;
-  color: var(--text-color);
+  color: #34414F;
 }
 
 h1.invite-header {
@@ -357,7 +352,7 @@ h1.invite-header {
   font-weight: normal;
   font-size: 20px;
   line-height: 24px;
-  color: var(--text-color);
+  color: #34414F;
   text-align: center;
 }
 
@@ -404,7 +399,7 @@ p.header-paragraph {
 
 p.header-paragraph a {
   font-size: 14px;
-  color: var(--default-primary-color);
+  color: #21B268;
   text-decoration: underline;
 }
 
@@ -507,7 +502,7 @@ p.digest-help {
 }
 
 p.digest-help a{
-  color: var(--default-primary-color);
+  color: #21B268;
   text-decoration: underline;
 }
 
@@ -533,7 +528,7 @@ img.read-post-image {
 span.read-post-text {
   float: left;
   margin-left: 8px;
-  color: var(--default-primary-color);
+  color: #21B268;
   font-size: 14px;
 }
 
@@ -555,13 +550,13 @@ p.digest-footer-paragraph a {
 }
 
 p.invite-carrot-disclaimer {
-  color: var(--text-color);
+  color: #34414F;
   font-size: 16px;
   font-weight: 400;
 }
 
 p.invite-carrot-disclaimer a {
-  color: var(--text-color);
+  color: #34414F;
   font-size: 16px;
   text-decoration: underline;
   font-weight: 400;
@@ -579,11 +574,11 @@ img.green-button {
 p.notification-link a {
   font-size: 14px;
   font-weight: bold;
-  color: var(--default-primary-color);
+  color: #21B268;
 }
 
 span.notification-content, span.notification-content p, span.notification-content div {
-  color: var(--text-color);
+  color: #34414F;
 }
 
 span.oc-mention {
@@ -636,7 +631,7 @@ span.oc-mention {
 a.learn-more {
   float: left;
   margin-left: 16px;
-  color: var(--default-primary-color);
+  color: #21B268;
   font-size: 14px;
   font-weight: bold;
   margin-top: 10px;
@@ -680,7 +675,7 @@ a.digest-group-link {
 }
 
 p.digest-replies-section {
-  color: var(--text-color);
+  color: #34414F;
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 16px;
   text-align: left;
@@ -691,14 +686,14 @@ a.digest-group-link .digest-group-title {
 }
 
 p.digest-new-boards-section {
-  color: var(--text-color);
+  color: #34414F;
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 16px;
   text-align: left; 
 }
 
 p.digest-new-boards-section a {
-  color: var(--text-color);
+  color: #34414F;
   text-decoration: underline;
 }
 
@@ -712,7 +707,7 @@ p.digest-post-date {
 }
 
 .token-link {
-  color: var(--default-primary-color);
+  color: #21B268;
   font-size: 16px;
   text-align: center;
   cursor: pointer;
@@ -731,7 +726,7 @@ p.digest-post-date {
   color: white;
   width: auto;
   max-width: 210px;
-  background-color: var(--default-primary-color);
+  background-color: #21B268;
   border-radius: 6px;
   text-align: center;
   padding: 11px 16px;
@@ -759,7 +754,7 @@ a.green-button.integration-settings-button {
   font-weight: bold;
   color: white !important;
   width: 200px;
-  background-color: var(--default-primary-color);
+  background-color: #21B268;
   border-radius: 6px;
   text-align: center;
   padding: 11px 0px;
@@ -951,7 +946,7 @@ h2.reminder-headline {
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 16px;
   font-weight: bold;
-  color: var(--text-color);
+  color: #34414F;
   margin: 0px;
 }
 
@@ -960,7 +955,7 @@ span.post-title {
 }
 
 div.post-body, div.post-body p, div.post-body pre {
-  color: var(--text-color);
+  color: #34414F;
   font-size: 14px;
   line-height: 17px;
   font-weight: normal;
@@ -969,11 +964,11 @@ div.post-body, div.post-body p, div.post-body pre {
 }
 
 a {
-  color: var(--default-primary-color);
+  color: #21B268;
 }
 
 a:hover {
-  color: var(--default-primary-color);
+  color: #21B268;
   text-decoration: underline;
 }
 
@@ -1002,14 +997,14 @@ table.body .column .columns {
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 12px;
   font-weight: bold;
-  color: var(--default-primary-color);
+  color: #21B268;
 }
 
 h1.token-headeer {
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 20px;
   font-weight: normal;
-  color: var(--text-color);
+  color: #34414F;
 }
 
 img.notify-author-avatar {
