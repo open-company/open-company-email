@@ -44,11 +44,9 @@
       "published-at": "2017-11-5T17:00:48.729Z",
       "labels": [
         {"name": "Customers",
-          "color": "#FDAB1D",
-          "url": "https://staging.carrot.io/carrot/l/customers"},
+         "url": "https://staging.carrot.io/carrot/l/customers"},
         {"name": "Feedback",
-          "color": "#00FF00",
-          "url": "https://staging.carrot.io/carrot/l/feedback"}]
+         "url": "https://staging.carrot.io/carrot/l/feedback"}]
     }
   ],
   "view-more-url": "http://staging.carrot.io/carrot/home",
@@ -72,14 +70,11 @@
       "published-at": "2017-11-5T17:00:48.729Z",
       "labels": [
         {"name": "Customers",
-          "color": "#FDAB1D",
-          "url": "https://staging.carrot.io/carrot/l/customers"},
+         "url": "https://staging.carrot.io/carrot/l/customers"},
         {"name": "Feedback",
-          "color": "#00FF00",
-          "url": "https://staging.carrot.io/carrot/l/feedback"},
+         "url": "https://staging.carrot.io/carrot/l/feedback"},
         {"name": "ACME LLC",
-          "color": "#0000FF",
-          "url": "https://staging.carrot.io/carrot/l/acme-llc"}]
+         "url": "https://staging.carrot.io/carrot/l/acme-llc"}]
     }, {
       "headline": "One more here again",
       "url": "http://staging.carrot.io/carrot/under-the-line/post/abe4-47e9-9be2",
@@ -98,11 +93,9 @@
       "published-at": "2020-08-07T12:35:57.193Z",
       "labels": [
         {"name": "Carrot",
-        "color": "#FA6452",
-        "url": "https://staging.carrot.io/carrot/l/carrot"},
+         "url": "https://staging.carrot.io/carrot/l/carrot"},
         {"name": "Customers",
-        "color": "#FDAB1D",
-        "url": "https://staging.carrot.io/carrot/l/customers"}]
+         "url": "https://staging.carrot.io/carrot/l/customers"}]
     }, {
       "headline": "Asd sad ad auhd ashiud haiush d ads aspokapso kdpsoak pkd soakpoaskd poaspdo jas pasjd oiash douihasoi dhoasi o",
       "url": "http://staging.carrot.io/carrot/design/post/0646-4c22-a8e0",
