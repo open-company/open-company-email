@@ -629,11 +629,11 @@
             (str (:name author) " mentioned you in a post")
             "You were mentioned in a post")
           entry-author?
-          (if (seq (:name author))
+          (if author-name?
             (str (:name author) " commented on your post")
             "There is a new comment on your post")
           :else
-          (if (seq (:name author))
+          (if author-name?
             (str (:name author) " replied to a thread")
             "There is a new reply on a thread" ))))
 
