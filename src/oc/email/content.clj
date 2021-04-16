@@ -379,7 +379,7 @@
 
 (defn- digest-content
   [{:keys [following unfollowing view-more-url home-url replies-url digest-label org-light-brand-color]}]
-  (let [following? (seq (:following-list following))
+  (let [following? (seq following)
         unfollowing? (seq unfollowing)
         brand-color (or org-light-brand-color config/default-brand-color)
         view-more? (seq view-more-url)]
