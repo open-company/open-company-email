@@ -11,15 +11,9 @@
             [oc.email.config :as config]
             [jsoup.soup :as soup]))
 
-(def max-logo 40)
-
 (def iso-format (time-format/formatters :date-time))
-(def date-format (time-format/formatter "MMM. d"))
-(def date-format-no-dot (time-format/formatter "MMM d"))
-(def date-format-year (time-format/formatter "MMM. d YYYY"))
 (def digest-subject-format (time-format/formatter "MMM d, YYYY"))
 (def date-format-year-comma (time-format/formatter "MMM. d, YYYY"))
-(def day-month-date-year (time-format/formatter "EEEE, MMM. dd, YYYY"))
 (def reminder-date-format (time-format/formatter "EEEE, MMMM d"))
 (def reminder-date-format-year (time-format/formatter "EEEE, MMMM d YYYY"))
 
@@ -28,12 +22,6 @@
 
 (def doc-type "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
 
-;; Links
-
-(def carrot-hello-mailto "mailto:hello@carrot.io")
-
-(def carrot-help "http://help.carrot.io")
-
 ;; ----- Copy -----
 
 (def carrot-explainer-fragment "your company digest for the team news and updates no one should miss.")
@@ -41,16 +29,13 @@
 
 (def invite-message "Join your team on Carrot")
 (def invite-message-with-company "Join the %s team on Carrot")
-(def invite-instructions (str "%s has invited you to Carrot - " carrot-explainer-fragment))
 (def invite-link-instructions "Click here to join:")
-(def invite-button "accept_invitation")
 
 (def share-message "%s shared a post with you")
 (def share-cta "view_post")
 
 (def board-invite-title "You’ve been invited to a private section")
 (def board-invite-message "%s invited you to a private section")
-(def board-invite-message-2 (str "”. " carrot-explainer))
 (def board-invite-button "view_section")
 
 (def reset-message "Password reset")
@@ -248,7 +233,7 @@
       ;; default "view_post"
       "View post")])
 
-(defn- email-header [is-digest?]
+(defn- email-header []
   [:table {:class "header-table"
            :valign "middle"
            :align "center"}
@@ -369,9 +354,7 @@
                   [:tr
                     [:td
                       [:span.digest-post-headline-row
-                        (str (:headline entry) " →")
-                      ; (h2  (:url entry) "" "digest-post-title")
-                      ]]]]]]]
+                        (str (:headline entry) " →")]]]]]]]
             [:tr [:td 
                 (spacer 8)]]]]]]))
 
@@ -395,9 +378,8 @@
 "])
 
 (defn- digest-content
-  [{:keys [following unfollowing view-more-url home-url replies-url digest-label org-light-brand-color] :as digest}]
-  (let [user (select-keys digest [:user-id :name :avatar-url])
-        following? (seq following)
+  [{:keys [following unfollowing view-more-url home-url replies-url digest-label org-light-brand-color]}]
+  (let [following? (seq (:following-list following))
         unfollowing? (seq unfollowing)
         brand-color (or org-light-brand-color config/default-brand-color)
         view-more? (seq view-more-url)]
@@ -687,16 +669,26 @@
         comment? (:interaction-id notification)
         entry-publisher (:entry-publisher notification)
         user-id (:user-id notification)
-        author (:author notification)]
-    (if mention?
-      (if comment?
-        (str "You were mentioned in a comment")
-        (str "You were mentioned in a post"))
-      (if (= (:user-id entry-publisher) user-id)
-        (if (seq author)
-          (str (:name author) " commented on your post")
-          (str "There is a new comment on your post"))
-        (str (:name author) " replied to a thread")))))
+        author (:author notification)
+        entry-author? (= (:user-id entry-publisher) user-id)
+        author-name? (seq (:name author))]
+    (cond (and mention?
+               comment?)
+          (if author-name?
+            (str (:name author) " mentioned you in a comment")
+            "You were mentioned in a comment")
+          mention?
+          (if author-name?
+            (str (:name author) " mentioned you in a post")
+            "You were mentioned in a post")
+          entry-author?
+          (if author-name?
+            (str (:name author) " commented on your post")
+            "There is a new comment on your post")
+          :else
+          (if author-name?
+            (str (:name author) " replied to a thread")
+            "There is a new reply on a thread" ))))
 
 (defn notify-team-intro [msg]
   (let [notification (:notification msg)]
@@ -706,9 +698,14 @@
   (let [notification (:notification msg)
         content (:content notification)
         org (:org msg)
+        board (:board msg)
         entry-data (:entry-data notification)
-        board-slug (:board-slug entry-data)
         org-slug (:slug org)
+        org-uuid (or (:uuid org) (:org-uuid entry-data) (:org-id notification))
+        org-url-part (or org-slug org-uuid)
+        board-slug (or (:board-slug entry-data) (:slug board))
+        board-uuid (or (:board-uuid entry-data) (:uuid board) (:board-id notification))
+        board-url-part (or board-slug board-uuid)
         mention? (:mention notification)
         interaction-id (:interaction-id notification)
         first-name (:first-name msg)
@@ -716,8 +713,8 @@
         notification-author (:author notification)
         is-default-avatar? (s/starts-with? (:avatar-url notification-author) "/img")
         notification-author-url (user-lib/fix-avatar-url config/filestack-api-key (:avatar-url notification-author) 128)
-        uuid (:entry-id notification)
-        secure-uuid (:secure-uuid notification)
+        entry-uuid (or (:entry-id notification) (:uuid entry-data))
+        secure-uuid (or (:secure-uuid notification) (:secure-uuid entry-data))
         origin-url config/web-url
         token-claims {:org-uuid (:org-id notification)
                       :secure-uuid secure-uuid
@@ -728,10 +725,12 @@
                       :avatar-url (:avatar-url msg)
                       :team-id (:team-id org)} ;; Let's read the team-id from the org to avoid problems on multiple org users
         id-token (jwt/generate-id-token token-claims config/passphrase)
-        base-url (if (seq interaction-id)
-                   (s/join "/" [origin-url org-slug board-slug "post" uuid "comment" interaction-id])
-                   (s/join "/" [origin-url org-slug board-slug "post" uuid]))
-        entry-url (str base-url "?id=" id-token)
+        url-parts (cond-> [origin-url org-url-part]
+                    board-url-part (concat [board-url-part])
+                    entry-uuid (concat ["post" entry-uuid])
+                    interaction-id (concat ["comment" interaction-id]))
+        base-url (s/join "/" url-parts)
+        final-url (str base-url "?id=" id-token)
         button-cta (if (or (not mention?) interaction-id)
                     "view_comment"
                     "view_post")
@@ -746,13 +745,13 @@
         (spacer 24))
       (h1 intro)
       (spacer 8)
-      (h2 (:headline post-data) entry-url)
+      (h2 (:headline post-data) final-url)
       (spacer 24)
       (spacer 24 "note-paragraph top-note-paragraph" "note-paragraph top-note-paragraph")
       (paragraph notification-html-content "note-paragraph note-left-padding" "text-left" "note-x-margin")
       (spacer 24 "note-paragraph bottom-note-paragraph" "note-paragraph bottom-note-paragraph")
       (spacer 24)
-      (left-button button-cta entry-url)
+      (left-button button-cta final-url)
       (spacer 40)]))
 
 (defn- notify-team-content [msg]
@@ -845,7 +844,7 @@
           [:td {:valign "middle"
                 :align "center"}
             [:center
-              (email-header type)
+              (email-header)
               (horizontal-line)
               [:table {:class (str "row " (cond
                                             digest? "digest-email-content"
@@ -883,7 +882,12 @@
     (body data)])
 
 (defn- html [data type]
-  (str doc-type (h/html (head (assoc (keywordize-keys data) :type type)))))
+  (str doc-type
+       (-> data
+           keywordize-keys
+           (assoc :type type)
+           head
+           h/html)))
 
 ;; ----- External -----
 

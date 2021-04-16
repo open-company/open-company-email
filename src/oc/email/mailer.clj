@@ -11,8 +11,6 @@
             [oc.email.content :as content]
             [oc.lib.storage :as storage]))
 
-(def size-limit 100000) ; 100KB size limit of HTML content in GMail
-
 (def creds
   {:access-key c/aws-access-key-id
    :secret-key c/aws-secret-access-key
@@ -84,7 +82,6 @@
   (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
         html-file (str uuid-fragment ".html")
         inline-file (str uuid-fragment ".inline.html")
-        reminder-data (:reminder (:notification message))
         reminder (-> message 
                   (keywordize-keys)
                   (assoc :source default-source)
@@ -199,7 +196,6 @@
   (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
         html-file (str uuid-fragment ".html")
         inline-file (str uuid-fragment ".inline.html")
-        org-name (:name (:org msg))
         subject "You’ve been invited to a private section on Carrot"]
     (try
       (spit html-file (content/board-notification-html msg)) ; create the email in a tmp file
@@ -233,12 +229,6 @@
     (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
           html-file (str uuid-fragment ".html")
           inline-file (str uuid-fragment ".inline.html")
-          notification (:notification msg)
-          org (:org msg)
-          org-name (:name org)
-          org-name? (not (s/blank? org-name))
-          mention? (:mention? notification)
-          comment? (:interaction-id notification)
           title (:headline post-data)
           parsed-title (if title (.text (soup/parse title)) "")
           updated-post-data (assoc post-data :parsed-headline parsed-title)
@@ -295,8 +285,6 @@
   (let [uuid-fragment (subs (str (java.util.UUID/randomUUID)) 0 4)
         html-file (str uuid-fragment ".html")
         inline-file (str uuid-fragment ".inline.html")
-        org-name (:org-name msg)
-        org-slug (:org-slug msg)
         subject content/bot-removed-subject]
     (try
       (spit html-file (content/bot-removed-html msg)) ; create the email in a tmp file

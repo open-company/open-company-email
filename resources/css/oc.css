@@ -50,7 +50,7 @@ h2 {
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 16px;
   font-weight: bold;
-  color: #6833F1;
+  color: #21B268;
   margin: 0px;
   text-align: center;
 }
@@ -75,7 +75,7 @@ p.digest-post-footer-row {
 }
 
 p.digest-post-footer-row span.comments-label {
-  color: #6833F1;
+  color: #21B268;
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 12px;
   line-height: 24px;
@@ -194,7 +194,7 @@ a.view-more-link:hover {
 }
 
 label.digest-label a {
-  color: #6833F1;
+  color: #21B268;
   font-family: Helvetica, Arial, sans-serif !important;
   line-height: 16px;
   font-size: 12px;
@@ -237,7 +237,7 @@ p.attribution {
 }
 
 p.attribution label.new-comments {
-  color: #6833F1;
+  color: #21B268;
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 12px;
   font-weight: bold;
@@ -261,7 +261,7 @@ table.cta-button span.button-text {
 }
 
 table.post-button span.button-text {
-  color: #6833F1;
+  color: #21B268;
 }
 
 table.footer p {
@@ -271,7 +271,7 @@ table.footer p {
 
 table.footer a {
   font-weight: bold;
-  color: #6833F1;
+  color: #21B268;
 }
 
 .header-table {
@@ -322,7 +322,7 @@ div.digest-date {
   font-size: 14px;
   font-weight: bold;
   color: white;
-  background-color: #52C489;
+  background-color: #21B268;
   border-radius: 6px;
   text-align: center;
   padding: 11px 0px 11px 0px;
@@ -435,9 +435,8 @@ p.header-paragraph {
 }
 
 p.header-paragraph a {
-  color: lightgreen;
   font-size: 14px;
-  color: #6833F1;
+  color: #21B268;
   text-decoration: underline;
 }
 
@@ -546,7 +545,7 @@ p.digest-help {
 }
 
 p.digest-help a{
-  color: #6833F1;
+  color: #21B268;
   text-decoration: underline;
 }
 
@@ -572,7 +571,7 @@ img.read-post-image {
 span.read-post-text {
   float: left;
   margin-left: 8px;
-  color: #6833F1;
+  color: #21B268;
   font-size: 14px;
 }
 
@@ -618,7 +617,7 @@ img.green-button {
 p.notification-link a {
   font-size: 14px;
   font-weight: bold;
-  color: #6833F1;
+  color: #21B268;
 }
 
 span.notification-content, span.notification-content p, span.notification-content div {
@@ -675,7 +674,7 @@ span.oc-mention {
 a.learn-more {
   float: left;
   margin-left: 16px;
-  color: #6833F1;
+  color: #21B268;
   font-size: 14px;
   font-weight: bold;
   margin-top: 10px;
@@ -751,7 +750,7 @@ p.digest-post-date {
 }
 
 .token-link {
-  color: #6833F1;
+  color: #21B268;
   font-size: 16px;
   text-align: center;
   cursor: pointer;
@@ -770,7 +769,7 @@ p.digest-post-date {
   color: white;
   width: auto;
   max-width: 210px;
-  background-color: #52C489;
+  background-color: #21B268;
   border-radius: 6px;
   text-align: center;
   padding: 11px 16px;
@@ -798,7 +797,7 @@ a.green-button.integration-settings-button {
   font-weight: bold;
   color: white !important;
   width: 200px;
-  background-color: #6833F1;
+  background-color: #21B268;
   border-radius: 6px;
   text-align: center;
   padding: 11px 0px;
@@ -999,7 +998,7 @@ span.post-title {
 }
 
 div.post-body, div.post-body p, div.post-body pre {
-  color: #34414f;
+  color: #34414F;
   font-size: 14px;
   line-height: 17px;
   font-weight: normal;
@@ -1008,11 +1007,11 @@ div.post-body, div.post-body p, div.post-body pre {
 }
 
 a {
-  color: #6833F1;
+  color: #21B268;
 }
 
 a:hover {
-  color: #6833F1;
+  color: #21B268;
   text-decoration: underline;
 }
 
@@ -1041,14 +1040,14 @@ table.body .column .columns {
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 12px;
   font-weight: bold;
-  color: #6833F1;
+  color: #21B268;
 }
 
 h1.token-headeer {
   font-family: Helvetica, Arial, sans-serif !important;
   font-size: 20px;
   font-weight: normal;
-  color: #34414f;
+  color: #34414F;
 }
 
 img.notify-author-avatar {
