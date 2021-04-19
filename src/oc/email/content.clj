@@ -339,18 +339,18 @@
                    :class "row digest-post-block"
                    :height "16px"
                    :style (vertical-space-style 16)}
-                 (when (seq (:labels entry))
-                   [:tr
-                     [:td
-                       [:div.oc-labels
-                         (for [label (:labels entry)]
-                           (label-block label))]]])
                   [:tr
                     [:td
                       [:span.digest-post-attribution
                         [:span.digest-post-attribution-name (:name publisher)]
                         " in "
                         [:span.digest-post-attribution-board (:board-name entry)]]]]
+                  (when (seq (:labels entry))
+                    [:tr
+                     [:td
+                      [:div.oc-labels
+                       (for [label (:labels entry)]
+                         (label-block label))]]])
                   [:tr
                     [:td
                       [:span.digest-post-headline-row
