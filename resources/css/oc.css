@@ -705,15 +705,13 @@ table.digest-post-block td.digest-post-avatar-td {
   width: 56px;
 }
 
-table.digest-post-block td.digest-post-avatar-td a {
-  text-decoration: none;
-}
-
-a.digest-group-link:hover {
-  text-decoration: none;
-}
-
-a.digest-group-link {
+table.digest-post-block td.digest-post-avatar-td a,
+table.digest-post-block td.digest-post-avatar-td a.digest-post-link,
+table.digest-post-block td.digest-post-avatar-td a.digest-post-link:hover,
+table.digest-post-block td.digest-post-avatar-td a.digest-post-link:active,
+table.digest-post-block td.digest-post-avatar-td a.digest-post-link:focus,
+a.digest-post-link:hover,
+a.digest-post-link {
   text-decoration: none;
 }
 
@@ -1061,38 +1059,66 @@ a.label-link, a.label-link:hover, a.label-link:visited, a.label-link:active, a.l
   text-decoration: none;
   display: inline-block!important;
   padding: 0;
-  height: 16px;
+  height: 12px;
   margin: 0;
-  font-size: 12px;
+  font-size: 11px;
 }
 
-span.oc-label {
+span.oc-label-separator {
+  display: inline-block!important;
+  width: 3px;
+  height: 3px;
+  vertical-align: middle;
+  margin: 8px 3px 0 3px;
+  border-radius: 50%;
+  background-color: #34414F;
+  opacity: 0.2;
+  text-decoration: none;
+}
+
+span.oc-label,
+span.oc-label-headline {
   display: inline-block!important;
   padding: 0 2px;
-  height: 16px;
+  height: 12px;
   border-radius: 2px;
   font-family: Helvetica, Arial, sans-serif !important;
-  font-size: 12px;
-  line-height: 16px;
+  font-size: 11px;
+  line-height: 12px;
   letter-spacing: 0.5px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   max-width: 150px;
   color: #34414F;
+  opacity: 0.7;
+  text-decoration: none!important;
+}
+
+span.oc-label-headline, span.oc-label-headline:hover,
+span.oc-label-headline:active, span.oc-label-headline:focus {
+  text-decoration: none;
+  opacity: 0.4;
+}
+
+span.oc-label-headline {
+  margin: 4px 4px 4px 0;
+  /* margin-bottom: 4px;
+  margin-left: 0;
+  margin-right: 4px; */
 }
 
 div.oc-labels {
   display: flex;
   flex-flow: row wrap;
-  height: 16px;
+  height: 18px;
   width: 100%;
 }
 
 div.oc-labels a.label-link {
-  margin-right: 4px;
   flex: 0 0 auto;
-  margin-bottom: 4px;
+  /* margin-bottom: 4px; */
+  margin: 4px 0 4px;
 }
 
 /*

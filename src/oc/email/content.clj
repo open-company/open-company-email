@@ -330,7 +330,7 @@
              :border "0"
              :class "row digest-post-block"}
             [:tr [:td
-              [:a
+              [:a.digest-post-link
                 {:href (:url entry)}
                 [:table
                   {:cellpadding "0"
@@ -345,16 +345,20 @@
                         [:span.digest-post-attribution-name (:name publisher)]
                         " in "
                         [:span.digest-post-attribution-board (:board-name entry)]]]]
-                  (when (seq (:labels entry))
-                    [:tr
-                     [:td
-                      [:div.oc-labels
-                       (for [label (:labels entry)]
-                         (label-block label))]]])
                   [:tr
                     [:td
                       [:span.digest-post-headline-row
-                        (str (:headline entry) " →")]]]]]]]
+                        (str (:headline entry) " →")]]]
+                 (when (seq (:labels entry))
+                   [:tr
+                    [:td
+                     [:div.oc-labels
+                      [:span.oc-label-headline "Labels:"]
+                      (for [idx (range (count (:labels entry)))
+                            :let [label (get (:labels entry) idx)]]
+                        (list (label-block label)
+                              (when (-> entry :labels count (= idx) not)
+                                [:span.oc-label-separator])))]]])]]]]
             [:tr [:td 
                 (spacer 8)]]]]]]))
 
