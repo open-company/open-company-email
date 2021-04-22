@@ -354,11 +354,10 @@
                     [:td
                      [:div.oc-labels
                       [:span.oc-label-headline "Labels:"]
-                      (for [idx (range (count (:labels entry)))
-                            :let [label (get (:labels entry) idx)]]
-                        (list (label-block label)
-                              (when (-> entry :labels count (= idx) not)
-                                [:span.oc-label-separator])))]]])]]]]
+                      (for [label (interpose {:content-type :separator} (:labels entry))]
+                        (if (= (:content-type label) :separator)
+                          [:span.oc-label-separator]
+                          (label-block label)))]]])]]]]
             [:tr [:td 
                 (spacer 8)]]]]]]))
 
