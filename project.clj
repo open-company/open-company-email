@@ -21,7 +21,19 @@
     ;; NB: org.clojure/tools.reader is pulled in by oc.lib
     [org.clojure/tools.namespace "1.1.0" :exclusions [org.clojure/tools.reader]]
 
-    ;; General data-binding functionality for Jackson: works on core streaming API https://github.com/FasterXML/jackson-databind
+    ;; DynamoDB client https://github.com/ptaoussanis/faraday
+    ;; NB: com.amazonaws/aws-java-sdk-dynamodb is pulled in by amazonica
+    ;; NB: joda-time is pulled in by clj-time
+    ;; NB: encore pulled in from oc.lib
+    [com.taoensso/faraday "1.11.1" :exclusions [com.amazonaws/aws-java-sdk-dynamodb joda-time com.taoensso/encore]]
+    ;; Faraday dependency, not pulled in? https://hc.apache.org/
+    [org.apache.httpcomponents/httpclient "4.5.13"]
+
+    ;; ;; General data-binding functionality for Jackson: works on core streaming API https://github.com/FasterXML/jackson-databind
+    ;; ;; ------------ Do not use 2.12.0-rc1 deps issues ----------------------------
+    ;; [com.fasterxml.jackson.core/jackson-databind "2.11.3"]
+    ;; ;; ---------------------------------------------------------------------
+    ;; ;; General data-binding functionality for Jackson: works on core streaming API https://github.com/FasterXML/jackson-databind
     ;; [com.fasterxml.jackson.core/jackson-databind "2.12.0-rc1"]
 
     ;; Library for OC projects https://github.com/open-company/open-company-lib
@@ -30,7 +42,7 @@
     ;; ***************** (JWT schema changes, more info here: *****************
     ;; ******* https://github.com/open-company/open-company-lib/pull/82) ******
     ;; ************************************************************************
-    [open-company/lib "0.19.0-alpha5"]
+    [open-company/lib "0.20.0-alpha"]
     ;; ************************************************************************
     ;; In addition to common functions, brings in the following common dependencies used by this project:
     ;; Component - Component Lifecycle https://github.com/stuartsierra/component
@@ -133,13 +145,16 @@
     :welcome (println (str "\n" (slurp (clojure.java.io/resource "oc/assets/ascii_art.txt")) "\n"
                       "OpenCompany Email Service REPL\n"))
     :init-ns dev
+    :timeout 120000
   }
 
   :aliases {
+    "create-migration" ["run" "-m" "oc.email.db.migrations" "create"] ; create a data migration
+    "migrate-db" ["run" "-m" "oc.email.db.migrations" "migrate"] ; run pending data migrations
     "build" ["with-profile" "prod" "do" "clean," "uberjar"] ; clean and build code
-    "repl" ["with-profile" "+repl-config" "repl"]
-    "start" ["run" "-m" "oc.email.app"] ; start a development server
+    "start" ["do" "migrate-db," "run" "-m" "oc.email.app"] ; start a development server
     "start!" ["with-profile" "prod" "do" "start"] ; start a server in production
+    "repl" ["with-profile" "+repl-config" "repl"] ; start a repl server and connect to it
     "spell!" ["spell" "-n"] ; check spelling in docs and docstrings
     "bikeshed!" ["bikeshed" "-v" "-m" "120"] ; code check with max line length warning of 120 characters
     "ancient" ["ancient" ":all" ":allow-qualified"] ; check for out of date dependencies

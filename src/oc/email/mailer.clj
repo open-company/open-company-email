@@ -1,8 +1,11 @@
 (ns oc.email.mailer
-  (:require [clojure.string :as s]
+  (:require [defun.core :refer (defun-)]
+            [clojure.string :as s]
+            [clojure.set :as clj-set]
             [clojure.java.shell :as shell]
             [clojure.java.io :as io]
             [clojure.walk :refer (keywordize-keys)]
+            [oc.lib.email.resources.bounced-email :as bounced-email]
             [taoensso.timbre :as timbre]
             [amazonica.aws.simpleemail :as ses]
             [cheshire.core :as json]
@@ -16,12 +19,27 @@
    :secret-key c/aws-secret-access-key
    :endpoint   c/aws-endpoint})
 
-(def default-reply-to (str "Carrot.No.Reply@" c/email-from-domain))
-(def default-from "Carrot")
-(def default-source (str default-from " <" default-reply-to ">"))
+(defn- env-origination []
+  (if (= c/sentry-env "production")
+    ""
+    (str "+" c/sentry-env)))
 
-(def digest-reply-to (str "Carrot.No.Reply@" c/email-from-domain))
-(def digest-source (str default-from " <" digest-reply-to ">"))
+(defn- default-reply-to []
+  (format "Carrot.No.Reply%s@%s" (env-origination) c/email-from-domain))
+
+(def default-from "Carrot")
+
+(defn- default-source []
+  (str default-from " <" (default-reply-to) ">"))
+
+(defun- can-send-to?
+  ([to-addresses :guard sequential?]
+   (filter can-send-to? to-addresses))
+  ([to-address :guard string?]
+   (some-> c/dynamodb-opts
+           (bounced-email/retrieve-email to-address)
+           map?
+           not)))
 
 (defn- email
   "Send an email."
@@ -31,21 +49,29 @@
         text-body (if text {:text text} {})
         html (:html body)
         html-body (if html (assoc text-body :html html) text-body)
-        fixed-reply-to (or reply-to default-reply-to)
-        fixed-to (if (sequential? to) to [to])]
-    (ses/send-email creds
-      :destination {:to-addresses fixed-to}
-      :source source
-      :reply-to-addresses [fixed-reply-to]
-      :message {:subject subject
-                :body html-body})))
+        fixed-reply-to (or reply-to (default-reply-to))
+        fixed-to (if (sequential? to) to [to])
+        filtered-to (can-send-to? fixed-to)
+        skip-to (clj-set/difference fixed-to filtered-to)
+        error-msg (when (seq skip-to)
+                    (format "Skipping %d recipients because of hard bounce: %s" (count skip-to) (s/join ", " skip-to)))]
+    (when (seq filtered-to)
+      (ses/send-email creds
+        :destination {:to-addresses filtered-to}
+        :source source
+        :reply-to-addresses [fixed-reply-to]
+        :message {:subject subject
+                  :body html-body}))
+    (when error-msg
+      (timbre/warn error-msg)
+      (slack-lib/message-webhook c/slack-customer-support-webhook error-msg))))
 
 (defn- email-entry
   "Send emails to all to recipients in parallel."
   [{:keys [to reply-to subject org-slug org-name]} body]
   (doall (pmap #(email {:to %
                         :source (str org-name " <" org-slug "@" c/email-from-domain ">")
-                        :reply-to (if (s/blank? reply-to) default-reply-to reply-to)
+                        :reply-to (if (s/blank? reply-to) (default-reply-to) reply-to)
                         :subject subject}
                   {:html body})
             to)))
@@ -84,9 +110,9 @@
         inline-file (str uuid-fragment ".inline.html")
         reminder (-> message 
                   (keywordize-keys)
-                  (assoc :source default-source)
+                  (assoc :source (default-source))
                   (assoc :from default-from)
-                  (assoc :reply-to default-reply-to)
+                  (assoc :reply-to (default-reply-to))
                   (assoc :subject (str "🔔 " (content/reminder-notification-headline message))))]
     (try
       (spit html-file (content/reminder-notification-html reminder)) ; create the email in a tmp file
@@ -106,9 +132,9 @@
         inline-file (str uuid-fragment ".inline.html")
         reminder (-> message 
                   (keywordize-keys)
-                  (assoc :source default-source)
+                  (assoc :source (default-source))
                   (assoc :from default-from)
-                  (assoc :reply-to default-reply-to)
+                  (assoc :reply-to (default-reply-to))
                   (assoc :subject (str "🔔 Reminder about your " (:name (:org message)) " post")))]
     (try
       (spit html-file (content/reminder-alert-html reminder)) ; create the email in a tmp file
@@ -128,7 +154,7 @@
         inline-file (str uuid-fragment ".inline.html")
         invitation (-> message 
                     (keywordize-keys)
-                    (assoc :source default-source)
+                    (assoc :source (default-source))
                     (assoc :subject (content/invite-subject message false)))]
     (try
       (spit html-file (content/invite-html invitation)) ; create the email in a tmp file
@@ -149,9 +175,9 @@
         inline-file (str uuid-fragment ".inline.html")
         msg (-> message 
               (keywordize-keys)
-              (assoc :source default-source)
+              (assoc :source (default-source))
               (assoc :from default-from)
-              (assoc :reply-to default-reply-to)
+              (assoc :reply-to (default-reply-to))
               (assoc :subject (case token-type
                                   :reset "Reset your password"
                                   :verify "Please verify your email")))]
@@ -180,9 +206,9 @@
       (inline-css html-file inline-file) ; inline the CSS
       ;; Email it to the recipient
       (email {:to (:email msg)
-              :source digest-source
+              :source (default-source)
               :from default-from
-              :reply-to default-reply-to
+              :reply-to (default-reply-to)
               :subject digest-email-subject}
              {:html (slurp inline-file)})
       (finally
@@ -202,9 +228,9 @@
       (inline-css html-file inline-file) ; inline the CSS
        ;; Email it to the recipient
       (email {:to (-> msg :user :email)
-              :source default-source
+              :source (default-source)
               :from default-from
-              :reply-to default-reply-to
+              :reply-to (default-reply-to)
               :subject (str c/email-digest-prefix subject)}
              {:html (slurp inline-file)})
       (finally
@@ -244,9 +270,9 @@
         (inline-css html-file inline-file) ; inline the CSS
         ;; Email it to the recipient
         (email {:to (:to msg)
-                :source default-source
+                :source (default-source)
                 :from default-from
-                :reply-to default-reply-to
+                :reply-to (default-reply-to)
                 :subject final-subject}
                {:html (slurp inline-file)})
         (finally
@@ -268,9 +294,9 @@
       (inline-css html-file inline-file) ; inline the CSS
         ;; Email it to the recipient
       (email {:to (:to msg)
-              :source default-source
+              :source (default-source)
               :from default-from
-              :reply-to default-reply-to
+              :reply-to (default-reply-to)
               :subject subject}
              {:html (slurp inline-file)})
       (finally
@@ -291,9 +317,9 @@
       (inline-css html-file inline-file) ; inline the CSS
        ;; Email it to the recipient
       (email {:to (:to msg)
-              :source default-source
+              :source (default-source)
               :from default-from
-              :reply-to default-reply-to
+              :reply-to (default-reply-to)
               :subject subject}
              {:html (slurp inline-file)})
       (finally
@@ -386,6 +412,8 @@
   (mailer/send-reminder-alert (assoc reminder-alert-request :to "change@me.com"))
 
   (def bot-removed-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/bot-removed/carrot.json"))))
-  (mailer/send-bot-removed (asso bot-removed :to ["admin1@example.com" "admin2@example.com"]))
+  (mailer/send-bot-removed (assoc bot-removed :to ["admin1@example.com" "admin2@example.com"]))
 
-)
+  ;; Test hard bounce of email address: just send a random email to 
+  (def notification-team-request (clojure.walk/keywordize-keys (json/decode (slurp "./opt/samples/notifications/team-invite.json"))))
+  (mailer/send-bot-removed (assoc notification-team-request :to "bounce@simulator.amazonses.com")))

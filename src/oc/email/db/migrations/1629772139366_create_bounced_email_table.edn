@@ -1,0 +1,30 @@
+(ns oc.email.db.migrations.create-bounced-email-table
+  (:require [taoensso.faraday :as far]
+            [oc.lib.db.migrations :as m]
+            [oc.lib.dynamo.common :refer (gsi-exists-on-table?)]
+            [oc.lib.email.resources.bounced-email :as bounced-email]
+            [oc.email.config :as config]))
+
+;; NB: The fact that these migrations have been run already does not currently persist, so the up method
+;; needs to be idempotent
+(defn up [dynamodb-opts]
+  (let [table-name (bounced-email/table-name dynamodb-opts)]
+    (println
+     (far/ensure-table dynamodb-opts
+                       table-name
+                       [:email :s]
+                       {:range-keydef [:resource_type :s]
+                        :billing-mode :pay-per-request
+                        :block? true}))
+    (let [gsi-name (bounced-email/resource-type-gsi-name dynamodb-opts)
+          gsi-exists? (gsi-exists-on-table? dynamodb-opts gsi-name table-name)]
+      (if gsi-exists?
+        (format "%s index already exists on %s, skipping" gsi-name table-name)
+        @(far/update-table dynamodb-opts
+          table-name
+          {:gsindexes {:operation :create
+                       :name gsi-name
+                       :hash-keydef [:resource_type :s]
+                       :range-keydef [:email :s]
+                       :projection :all}}))))
+  true) ; return true on success

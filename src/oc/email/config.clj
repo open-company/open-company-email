@@ -53,6 +53,7 @@
 ;; ----- AWS SQS -----
 
 (defonce aws-sqs-email-queue (env :aws-sqs-email-queue))
+(defonce aws-sqs-ses-monitor-queue (env :aws-sqs-ses-monitor-queue))
 
 ;; ----- Email -----
 
@@ -64,6 +65,10 @@
 
 (defonce filestack-api-key (env :filestack-api-key))
 
+;; ----- Bot/App uninstall reporting -----
+
+(defonce slack-customer-support-webhook (env :open-company-slack-customer-support-webhook))
+
 ;; ----- Default brand color -----
 
 (defonce default-brand-color {:primary {:rgb {:r (or (env :primary-brand-color-r) 33)
@@ -74,3 +79,17 @@
                                                 :g (or (env :secondary-brand-color-g) 254)
                                                 :b (or (env :secondary-brand-color-b) 254)}
                                           :hex (or (env :secondary-brand-color-hex) "#FFFFFF")}})
+
+;; ----- DynamoDB -----
+
+(defonce migrations-dir "./src/oc/email/db/migrations")
+(defonce migration-template "./src/oc/email/assets/migration.template.edn")
+
+(defonce dynamodb-end-point (or (env :dynamodb-end-point) "http://localhost:8000"))
+
+(defonce dynamodb-table-prefix (or (env :dynamodb-table-prefix) "local"))
+
+(defonce dynamodb-opts {:access-key (env :aws-access-key-id)
+                        :secret-key (env :aws-secret-access-key)
+                        :endpoint dynamodb-end-point
+                        :table-prefix dynamodb-table-prefix})
