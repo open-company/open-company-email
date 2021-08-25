@@ -9,12 +9,12 @@
 
 (def system nil)
 
-(defn init [] (alter-var-root #'system (constantly (email-comp/system {:sqs-queue c/aws-sqs-email-queue
-                                                                       :sqs-msg-handler sqs-handler/handler
-                                                                       :sqs-creds {:access-key c/aws-access-key-id
-                                                                                   :secret-key c/aws-secret-access-key}
-                                                                       :ses-monitor-sqs-queue c/aws-sqs-ses-monitor-queue
-                                                                       :ses-monitor-sqs-msg-handler ses-monitor/sqs-handler}))))
+(defn init [] (alter-var-root #'system (constantly (email-comp/email-system {:sqs-queue c/aws-sqs-email-queue
+                                                                             :sqs-msg-handler sqs-handler/handler
+                                                                             :sqs-creds {:access-key c/aws-access-key-id
+                                                                                         :secret-key c/aws-secret-access-key}
+                                                                             :ses-monitor-sqs-queue c/aws-sqs-ses-monitor-queue
+                                                                             :ses-monitor-sqs-msg-handler ses-monitor/sqs-handler}))))
 
 (defn start []
   (alter-var-root #'system component/start))
