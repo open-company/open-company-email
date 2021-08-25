@@ -99,14 +99,26 @@
          (map? (:bounce msg)))))
 
 (defn- get-origination [msg]
-  (-> msg                       ;; {:parsed-headers {:reply-to {:value "Carrot.No.Reply+staging@staging.carrot.io"}}}
-      :parsed-headers           ;; {:reply-to {:value "Carrot.No.Reply+staging@staging.carrot.io"}}
-      :reply-to                 ;; {:value "Carrot.No.Reply+staging@staging.carrot.io"}
-      :value                    ;; "Carrot.No.Reply+staging@staging.carrot.io"
-      (cstr/split #"@")         ;; ["Carrot.No.Reply+staging" "staging.carrot.io"]
-      first                     ;; "Carrot.No.Reply+staging"
-      (cstr/split #"\+")         ;; ["Carrot.No.Reply" "staging"]
-      (get 1 "production")))    ;; "staging"
+  (-> msg
+      ;; {:parsed-headers {:reply-to {:value "Carrot.No.Reply+staging@staging.carrot.io"}}}
+      :parsed-headers
+      ;; {:reply-to {:value "Carrot.No.Reply+staging@staging.carrot.io"}}
+      :from
+      ;; {:value "Carrot.No.Reply+staging@staging.carrot.io"}
+      :value
+      ;; "Carrot.No.Reply+staging@staging.carrot.io"
+      str
+      ;; * Make sure it's a string
+      (cstr/split #"@")
+      ;; ["Carrot.No.Reply+staging" "staging.carrot.io"]
+      first
+      ;; "Carrot.No.Reply+staging"
+      str
+      ;; * again, make sure it's a string
+      (cstr/split #"\+")
+      ;; ["Carrot.No.Reply" "staging"]
+      (get 1 "production")))
+      ;; fallback to "production" since it doesn't have the +production part
 
 (defn- environment-matches? [msg]
   (= (get-origination msg) c/sentry-env))
