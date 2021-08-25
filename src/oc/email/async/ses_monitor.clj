@@ -55,15 +55,14 @@
   (some-> email-rec :bounce-count (> 1)))
 
 (defn- bounce-msg [email email-rec]
-  (let [msg-type (if (repeated-bounce? email-rec) :info :warn)]
-    (cond (some-> email-rec :bounce-count (> 0))
-          (bounce-warn-msg email-rec)
+  (cond (repeated-bounce? email-rec)
+        (bounce-warn-msg email-rec)
 
-          (map? email-rec)
-          (bounce-info-msg email-rec)
+        (map? email-rec)
+        (bounce-info-msg email-rec)
 
-          :else
-          (first-bounce-info-msg email))))
+        :else
+        (first-bounce-info-msg email)))
 
 (defn- flag-recipients!
   [recipients]
@@ -72,7 +71,7 @@
     (timbre/debugf "Lookup user with email %s" recipient)
     (let [email-rec (bounced-email/retrieve-email c/dynamodb-opts recipient)
           msg (bounce-msg recipient email-rec)]
-      (when (bounced-email/store-hard-bounce! recipient)
+      (when (bounced-email/store-hard-bounce! c/dynamodb-opts recipient)
         (if (repeated-bounce? email-rec)
           (timbre/info msg)
           (timbre/warn msg))
