@@ -99,26 +99,22 @@
          (map? (:bounce msg)))))
 
 (defn- get-origination [msg]
+  ;; {:parsed-headers {:from {:value "Carrot.No.Reply+staging@staging.carrot.io"}}}
   (-> msg
-      ;; {:parsed-headers {:reply-to {:value "Carrot.No.Reply+staging@staging.carrot.io"}}}
-      :parsed-headers
-      ;; {:reply-to {:value "Carrot.No.Reply+staging@staging.carrot.io"}}
-      :from
-      ;; {:value "Carrot.No.Reply+staging@staging.carrot.io"}
-      :value
       ;; "Carrot.No.Reply+staging@staging.carrot.io"
-      str
+      (get-header :from)
       ;; * Make sure it's a string
-      (cstr/split #"@")
-      ;; ["Carrot.No.Reply+staging" "staging.carrot.io"]
-      first
-      ;; "Carrot.No.Reply+staging"
       str
+      ;; ["Carrot.No.Reply+staging" "staging.carrot.io"]
+      (cstr/split #"@")
+      ;; "Carrot.No.Reply+staging"
+      first
       ;; * again, make sure it's a string
-      (cstr/split #"\+")
+      str
       ;; ["Carrot.No.Reply" "staging"]
-      (get 1 "production")))
+      (cstr/split #"\+")
       ;; fallback to "production" since it doesn't have the +production part
+      (get 1 "production")))
 
 (defn- environment-matches? [msg]
   (= (get-origination msg) c/sentry-env))
