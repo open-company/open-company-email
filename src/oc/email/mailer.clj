@@ -11,6 +11,7 @@
             [cheshire.core :as json]
             [jsoup.soup :as soup]
             [oc.email.config :as c]
+            [oc.lib.slack :as slack-lib]
             [oc.email.content :as content]
             [oc.lib.storage :as storage]))
 
