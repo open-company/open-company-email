@@ -44,11 +44,11 @@
   (format "Email %s got hard bounced!" email))
 
 (defn- bounce-info-msg [email-rec]
-  (format "Bounced email %s already present! Current counter is %d (resource-type %s, updated-at %s)"
+  (format "Bounced email %s already present! Current counter is %s (resource-type %s, updated-at %s)"
           (:email email-rec) (:bounce-count email-rec) (:resource-type email-rec) (:updated-at email-rec)))
 
 (defn- bounce-warn-msg [email-rec]
-  (format "<!here> Multiple hard bounce for email %s! Current bounce %d (resource-type %s, last bounce: %s)"
+  (format "<!here> Multiple hard bounce for email %s! Current bounce %s (resource-type %s, last bounce: %s)"
           (:email email-rec) (:bounce-count email-rec) (:resource-type email-rec) (:updated-at email-rec)))
 
 (defn- repeated-bounce? [email-rec]
@@ -86,9 +86,9 @@
 ;;     recipients-from-headers))
 
 (defn- get-receipt-recipients [msg]
-  (timbre/debug "get-receipt-recipients")
+  (timbre/debug "Retrieving recipients from message...")
   (let [dest (-> msg :mail :destination)]
-    (timbre/debugf "Destination from receipt: %s" (cstr/join ", " dest))
+    (timbre/debug (cstr/join ", " dest))
     dest))
 
 (defn- is-hard-bounce-receipt? [msg]
