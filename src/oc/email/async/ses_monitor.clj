@@ -70,7 +70,7 @@
   (timbre/debug "About to flag for hard bounce:" recipients)
   (doseq [recipient recipients]
     (timbre/debugf "Lookup user with email %s" recipient)
-    (let [email-rec (bounced-email/retrieve-email recipient)
+    (let [email-rec (bounced-email/retrieve-email c/dynamodb-opts recipient)
           msg (bounce-msg recipient email-rec)]
       (when (bounced-email/store-hard-bounce! recipient)
         (if (repeated-bounce? email-rec)
