@@ -76,7 +76,7 @@
         (if (repeated-bounce? email-rec)
           (timbre/info msg)
           (timbre/warn msg))
-        (slack-lib/message-webhook c/slack-customer-support-webhook msg)))))
+        (slack-lib/slack-report msg)))))
 
 ;; Do not use the :to header, it couldcontain multiple emails but not all were bounced
 ;; (defn- get-receipt-to [msg]

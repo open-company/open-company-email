@@ -65,9 +65,9 @@
 
 (defonce filestack-api-key (env :filestack-api-key))
 
-;; ----- Bot/App uninstall reporting -----
+;; ----- Email hard bounce reporting -----
 
-(defonce slack-customer-support-webhook (env :open-company-slack-customer-support-webhook))
+(defonce open-company-slack-alerts-webhook (env :open-company-slack-alerts-webhook))
 
 ;; ----- Default brand color -----
 
