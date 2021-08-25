@@ -37,15 +37,14 @@
   ([to-addresses :guard sequential?]
    (filter can-send-to? to-addresses))
   ([to-address :guard string?]
-   (some-> c/dynamodb-opts
-           (bounced-email/retrieve-email to-address)
-           map?
-           not)))
+   (-> c/dynamodb-opts
+       (bounced-email/retrieve-email to-address)
+       map?
+       not)))
 
 (defn- email
   "Send an email."
   [{:keys [to source reply-to subject]} body]
-  (timbre/info "Sending email: " to)
   (let [text (:text body)
         text-body (if text {:text text} {})
         html (:html body)
@@ -57,6 +56,7 @@
         error-msg (when (seq skip-to)
                     (format "Skipping %d recipients because of hard bounce: %s" (count skip-to) (s/join ", " skip-to)))]
     (when (seq filtered-to)
+      (timbre/info "Sending email: " to)
       (ses/send-email creds
         :destination {:to-addresses filtered-to}
         :source source
