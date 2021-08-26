@@ -33,9 +33,9 @@
 (defn- default-source []
   (str default-from " <" (default-reply-to) ">"))
 
-(defun- can-send-to?
+(defun- filter-bounced-recipients
   ([to-addresses :guard sequential?]
-   (filter can-send-to? to-addresses))
+   (filter filter-bounced-recipients to-addresses))
   ([to-address :guard string?]
    (-> c/dynamodb-opts
        (bounced-email/retrieve-email to-address)
@@ -51,8 +51,8 @@
         html-body (if html (assoc text-body :html html) text-body)
         fixed-reply-to (or reply-to (default-reply-to))
         fixed-to (if (sequential? to) to [to])
-        filtered-to (can-send-to? fixed-to)
-        skip-to (clj-set/difference fixed-to filtered-to)
+        filtered-to (filter-bounced-recipients fixed-to)
+        skip-to (clj-set/difference (set fixed-to) (set filtered-to))
         error-msg (when (seq skip-to)
                     (format "Skipping %d recipients because of hard bounce: %s" (count skip-to) (s/join ", " skip-to)))]
     (when (seq filtered-to)
