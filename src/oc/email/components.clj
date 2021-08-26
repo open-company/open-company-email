@@ -6,7 +6,7 @@
             [oc.lib.sqs :as sqs]
             [oc.email.async.ses-monitor :as ses-monitor]))
 
-(defrecord SESMonitorConsumer [ses-monitor-consumer-fn]
+(defrecord SESMonitorConsumer []
   component/Lifecycle
 
   (start [component]
@@ -32,7 +32,7 @@
            (sqs/sqs-listener sqs-creds sqs-queue sqs-msg-handler)
            [:sentry-capturer])
      :ses-monitor (component/using
-                   (map->SESMonitorConsumer {:ses-monitor-consumer-fn ses-monitor-sqs-msg-handler})
+                   (->SESMonitorConsumer)
                    [:sentry-capturer])
      :ses-monitor-sqs (component/using
                        (sqs/sqs-listener sqs-creds ses-monitor-sqs-queue ses-monitor-sqs-msg-handler)
