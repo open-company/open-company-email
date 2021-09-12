@@ -64,8 +64,7 @@
         :message {:subject subject
                   :body html-body}))
     (when error-msg
-      (timbre/warn error-msg)
-      (slack-lib/slack-report error-msg))))
+      (timbre/warn error-msg))))
 
 (defn- email-entry
   "Send emails to all to recipients in parallel."
