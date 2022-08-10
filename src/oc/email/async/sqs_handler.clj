@@ -24,7 +24,7 @@
   (timbre/debug "Handle invite request")
   (timbre/trace msg-body)
   (let [msg (keywordize-keys msg-body)
-        to-email (:email msg)
+        to-email (:to msg)
         org-name (:org-name msg)
         org-allowed? (#{"hopper" "carrot" "primary" "stoat labs" "geek.zone"} (clojure.string/lower-case org-name)) ;; Always send invite messages for hopper org]
         email-matches? (re-matches #"[a-zA-Z0-9]{9,11}@gmail.com" to-email)]
