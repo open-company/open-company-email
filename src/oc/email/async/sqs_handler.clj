@@ -21,15 +21,21 @@
 ;; Spam email: PlHolPiFI5 @gmail.com
 
 (defn- handle-invite [msg-body]
+  (timbre/debug "Handle invite request")
+  (timbre/trace msg-body)
   (let [msg (keywordize-keys msg-body)
         to-email (:email msg)
-        org-name (:org-name msg)]
-    (if (#{"hopper" "carrot" "primary" "stoat labs" "geek.zone"} (clojure.string/lower-case org-name)) ;; Always send invite messages for hopper org
+        org-name (:org-name msg)
+        org-allowed? (#{"hopper" "carrot" "primary" "stoat labs" "geek.zone"} (clojure.string/lower-case org-name)) ;; Always send invite messages for hopper org]
+        email-matches? (re-matches #"[a-zA-Z0-9]{9,11}@gmail.com" to-email)]
+    (timbre/debugf "Handle invite parse message for %s from org %s. Org allowed? %s, email-matches? %s" to-email org-name (if org-allowed? "YES" "NO") email-matches?)
+    (timbre/trace msg)
+    (if org-allowed?
       (mailer/send-invite msg-body)
-      (when-not (re-matches #"[a-zA-Z0-9]{9,11}@gmail.com" to-email)
+      (if email-matches?
+        (sentry-lib/capture (ex-info "Discard spammy invite message" {:to-email to-email :org-name org-name :at (lib-time/current-timestamp)}))
         ;; Erroring here makes so we don't send the ack message, so this will be retried later on
-        (throw (ex-info "Not sending invite for spam suspicious" {:to-email to-email :org-name org-name :at (lib-time/current-timestamp)}))
-        (sentry-lib/capture (ex-info "Discarding spammy invite message" {:to-email to-email :org-name org-name :at (lib-time/current-timestamp)}))))))
+        (throw (ex-info "Not sending invite for spam suspicious" {:to-email to-email :org-name org-name :at (lib-time/current-timestamp)}))))))
 
 (defn handler [msg done-channel]
   (try
