@@ -2,7 +2,34 @@
   (:require [taoensso.timbre :as timbre]
             [oc.lib.sqs :as sqs]
             [oc.lib.sentry.core :as sentry-lib]
-            [oc.email.mailer :as mailer]))
+            [oc.email.mailer :as mailer]
+            [oc.lib.time :as lib-time]
+            [clojure.string :as clojure.string]
+            [clojure.walk :refer (keywordize-keys)]))
+;; {
+;;   "from": "iacopo@staging.carrot.io",
+;;   "from-avatar": "https://secure.gravatar.com/avatar/866a6350e399e67e749c6f2aef0b96c0.jpg?s=512&d=https%3A%2F%2Fa.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0020-512.png",
+;;   "note": "This is the note we used to show the user hahah",
+;;   "reply-to": "team@carrot.io",
+;;   "email": "iacopo@carrot.io",
+;;   "org-name": "BaGo",
+;;   "org-logo-url": "https://open-company-assets.s3.amazonaws.com/bago.png",
+;;   "org-logo-width": 300,
+;;   "org-logo-height": 96,
+;;   "token-link": "http://localhost:3000/invite?token=dd7c0bfe-2068-4de0-aa3c-4913eeeaa360"
+;; }
+;; Spam email: PlHolPiFI5 @gmail.com
+
+(defn- handle-invite [msg-body]
+  (let [msg (keywordize-keys msg-body)
+        to-email (:email msg)
+        org-name (:org-name msg)]
+    (if (#{"hopper" "carrot" "primary" "stoat labs" "geek.zone"} (clojure.string/lower-case org-name)) ;; Always send invite messages for hopper org
+      (mailer/send-invite msg-body)
+      (when-not (re-matches #"[a-zA-Z0-9]{9,11}@gmail.com" to-email)
+        ;; Erroring here makes so we don't send the ack message, so this will be retried later on
+        (throw (ex-info "Not sending invite for spam suspicious" {:to-email to-email :org-name org-name :at (lib-time/current-timestamp)}))
+        (sentry-lib/capture (ex-info "Discarding spammy invite message" {:to-email to-email :org-name org-name :at (lib-time/current-timestamp)}))))))
 
 (defn handler [msg done-channel]
   (try
@@ -13,7 +40,7 @@
         (case (keyword msg-type)
           :reset (mailer/send-token :reset msg-body)
           :verify (mailer/send-token :verify msg-body)
-          :invite (mailer/send-invite msg-body)
+          :invite (handle-invite msg-body)
           :share-entry (mailer/send-entry msg-body)
           :digest (mailer/send-digest msg-body)
           :sns (mailer/handle-data-change msg-body)
